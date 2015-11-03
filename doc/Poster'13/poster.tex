@@ -1,0 +1,83 @@
+\documentclass[conference]{IEEEtran}
+%\documentclass[9pt]{acmieeeSC}
+%\documentclass[9pt]{acmsiggraph}      % review
+%\documentclass{acmsiggraph}      % review
+%\documentclass[widereview]{acmsiggraph}  % wide-spaced review
+%\documentclass[preprint]{acmsiggraph}    % preprint
+
+%% Uncomment one of the four lines above depending on where your paper is
+%% in the conference process. ``review'' and ``widereview'' are for review
+%% submission, ``preprint'' is for pre-publication, and ``final'' is for
+%% the version to be printed.
+
+%% These two line bring in essential packages: ``mathptmx'' for Type 1 
+%% typefaces, and ``graphicx'' for inclusion of EPS figures.
+
+\usepackage{mathptmx}
+\usepackage{graphicx}
+%\usepackage{psfig}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\usepackage{subfigure}% for multiple figures in one big figure env
+
+%% use this for zero \parindent and non-zero \parskip, intelligently.
+
+\usepackage{parskip}
+\usepackage{cite}
+
+%% If you are submitting a paper to the annual conference, please replace 
+%% the value ``0'' below with your OnlineID. If you are not submitting this
+%% paper to the annual conference, you may safely leave it at ``0'' -- it 
+%% will not be included in the output.
+
+%% need to document this!
+
+%\acmformat{print}
+
+%% Paper title.
+
+\begin{document}
+
+\title{
+UniDQP: Making MapReduce Scheduling Decisions with an Awareness of the Cached Data Location 
+\thanks{This research was supported by UNIST Supercomputing Center and 
+the National Research Foundation of Korea(NRF) 
+funded by the Ministry of Education, Science and Technology (2011-001475)}
+}
+
+%% Author and Affiliation (multiple authors).
+%\author{\IEEEauthorblockN{Deukyeon Hwang, Jaewon Kwak, Wok-Ki Jeong, Beomseok Nam}
+%        \IEEEauthorblockA{ School of Electrical andComputer Engineering\\
+\author{{Vicente Bolea Sanchez and Beomseok Nam} \\
+        School of Electrical andComputer Engineering\\
+        Ulsan National Institute of Science and Technology  \\
+        Ulsan, Korea, 689-798 \\
+        Email: vicente.bolea@gmail.com, bsnam@unist.ac.kr
+}
+
+
+%%%%%% START OF THE PAPER %%%%%%
+
+
+%% The ``\maketitle'' command must be the first command after the
+%% ``\begin{document}'' command. It prepares and prints the title block.
+
+\maketitle
+
+%% Abstract section.
+
+\input{abstract}
+\input{intro}
+\input{architecture}
+\input{experiments}
+\input{conclusion}
+
+%\nocite{*} 
+% This causes all the item in bib file to be included in the reference - BSNAM
+%\bibliographystyle{acmsiggraph}
+
+\bibliographystyle{IEEEtran}
+\bibliography{/home/bsnam/doc/bib/bsnam.bib}
+
+\end{document}

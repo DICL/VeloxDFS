@@ -1,0 +1,79 @@
+
+1. Abstract
+
+2. Introduction
+
+Motivation: 
+1. Scientific datasets are commonly take the benefits of semantic caches. 
+2. MapReduce framework is now widely used for data intensive applications.
+
+Problem: The existing MapReduce framework makes scheduling decisions based on
+         datasets file location. But the data can be accessed in a skewed distribution.
+         Thus, the load balancing becomes a problem. 
+
+Proposed idea:
+   - We design a framework that utilizes distributed semantic caches.
+   - The framework makes decisions considering the cached data location. The cached data
+     location is not static as in the other MapReduce framework, but they are dynamically
+     adjustable based on the job request distribution for better load balancing and cache hit.  
+
+
+3. Architecture 
+
+1. DHT File system
+   - (We will assume audiences are familiar with DHT p2p systems)
+   - We need to say DHT is as robust as HDFS. 
+
+2. Distributed Semantic Cache layer
+   - The semantic cache boundaries are determined by front-end scheduler
+   - The boundaries are moving as the job request ditribution is moving.
+   - the jobs are scheduled based on the ranges of the back-end servers so that each
+     server receives similar jobs, which will improve cache hit ratio.
+   - The number of jobs will be adjusted by increasing or decreasing the boundary 
+     range of each server.
+     
+4. Data Migration
+
+   - Why? If boundarie have changed, then some cached data in that region will not be necessary
+     by the region's server but it can be useful by its neighbor server.
+
+   - Which data should be migrated?
+    --> 1) every data in the region
+    --> 2) the farthest one from the center of the range
+    --> 3) ..
+
+5. Experiments
+
+    no migration vs migrating the farthest one vs ..
+
+   execution time |
+                  |
+                  |
+                  +--------------------
+                  # of queries
+
+   hit ratio |
+             |
+             |
+             +--------------------
+                  # of queries
+
+   execution time |
+                  |
+                  |
+                  +--------------------
+                  # of back-end servers
+
+   hit ratio |
+             |
+             |
+             +--------------------
+                  # of back-end servers
+
+
+
+
+6. Conclusion
+
+
+

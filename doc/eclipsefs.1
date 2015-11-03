@@ -1,0 +1,62 @@
+.TH eclipsefs 1 "June 2015"
+.\" vim : ft=groff
+
+.SH NAME 
+eclipsefs \- Distributed MapReduce experimental middle-ware
+
+.SH SYNOPSIS
+The framework is mainly governed by ecfs:
+
+.I ecfs 
+.B [-v|--help] launch|close|status 
+
+ecfs will intelligently call the inner binaries:
+
+.I client master cacheserver and eclipse
+
+.SH REQUIREMENTS
+ Due to the nature of the simulator, eclipsefs is expected to be executed in a cluster 
+ with a NFS common partition among all the nodes 
+
+ + A shared partition in all the nodes (usually home partition).
+ + Individual partiton in each node (usually called scratch by convention).
+ + A ruby interpreter (version >= 2.0.0) with the next gems:
+   - awesome_print
+   - pry 
+   - ffi
+ + [OPTIONAL] UnitTest++ installed for running the tests
+
+.SH FILES
+.B ~/.eclipse.json 
+or 
+.B /etc/eclipse.json 
+for multi-user install
+    {
+     "port"                 : 8004,
+     "dhtport"              : 8005,
+     "max_job"              : 1024,
+     "config_relative_path" : "/etc/eclipse.json",
+     "headers_path"         : "/home/vicente/sandbox/include",
+     "libs_path"            : "/home/vicente/sandbox/lib",
+     "fs_path"              : "/home/vicente/mr_storage",
+     "localdir"             : "/scratch/vicente",
+     "fs_scratch_path"      : "/scratch/vicente/mr_storage",
+     "IPC_path"             : "/scratch/vicente/socket",
+     "master_address"       : "192.168.1.201",
+     "nodes"                : [
+       "192.168.1.1",
+       "192.168.1.2",
+       "192.168.1.3",
+       "192.168.1.4",
+       "192.168.1.5",
+       "192.168.1.6",
+       "192.168.1.7",
+       "192.168.1.8",
+       "192.168.1.9",
+       "192.168.1.10"
+     ]
+    }
+
+
+
+

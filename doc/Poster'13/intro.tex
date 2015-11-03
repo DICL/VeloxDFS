@@ -1,0 +1,44 @@
+\section{Introduction}
+
+Distributed and parallel query processing middleware systems have been used for
+decades to solve large and complicated scientific problems as substantial
+performance gains can be achieved by exploiting data and computation
+parallelism.  MapReduce framework has recently gained tremendous popularity as
+a key distributed and parallel query processing framework due to its
+scalability and easy programming model~\cite{}. However, MapReduce framework is
+not designed to leverage the large amount of memory space available in the
+back-end distributed servers since its target applications are mostly
+performing one time data analysis.  Unlike the web data processing applications
+scientific datasets are often reused by multiple jobs and semantic caching
+plays an important role in improving the system throughput and job response
+time.  Another design decision that we have to make concerens is the data skew
+challenge in MapReduce framework. In~\cite{IBRAHIM10, KWON10, LIN09} it has
+been reported that some map tasks (stragglers) take significantly longer than
+the average execution time of other map tasks. In order to mitigate the
+stragglers problem, MapReduce framework runs some backup tasks to alleviate the
+problem, however the back-up tasks do not help when the input datasets are not
+well balanced. 
+  
+In this work, we present a distributed and parallel query processing middleware
+framework - {\em Orthrus} which takes into account the large memory space in
+back-end servers and makes scheduling decisions based on the cached data
+objects in the memory instead of data file location. Orthrus is a two layer
+architecture as it deploys a layer of distributed semantic caches on top of a
+distributed file system layer. In order to balance the system load and to
+improve data reuse rate, the front-end scheduler of Orthrus needs to estimate
+the cached contents in distributed semantic cache layer for data reuse, and
+assign equal amout of jobs to each server for load balancing.  A challenge in
+estimating the remote cache contents in distributed query processing framework
+is that the front-end scheduler should exchange large amount of information
+about remote caches as the cached objects in each server change very fast as
+they process jobs. Capturing a global snapshot of remote servers' cache
+contents is certainly a very expensive operation especially in a large scale
+system. Another challenge in designing cache-aware query scheduling policies is
+that the scheduling algorithm must be light-weight so that it doesn't
+bottleneck the front-end scheduler. 
+
+In this poster presentation, we present the two layer architecture of
+our distributed and parallel query processing framework, its scheduling
+algorithms, data migration policies, and preliminary results of performance 
+evaluation.
+
