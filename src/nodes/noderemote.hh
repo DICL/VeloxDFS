@@ -6,27 +6,27 @@
 #include <memory>
 #include <boost/asio.hpp>
 
-
 namespace Nodes {
-  class NodeRemote: public Node {
-    public:
-    typedef boost::asio::io_service io_ptr;
+using namespace network;
+using namespace boost::asio;
+using boost::asio::ip::tcp;
 
-    NodeRemote(io_ptr&, std::string, int, int);
+class NodeRemote: public Node {
+  public:
+    NodeRemote(io_service&, std::string, int, int);
     ~NodeRemote() = default;
 
     bool connect() ;
     void close() ;
-    virtual void send(network::Message*) = 0;
-    virtual std::string get_ip() const override;
+    std::string get_ip() const override;
 
-    protected:
-//    io_ptr io_service;
-    boost::asio::io_service&    ioservice;
+    virtual void send (Message*) = 0;
 
-    std::unique_ptr<boost::asio::ip::tcp::socket> socket;
+  protected:
+    io_service& ioservice;
+
+    u_ptr<tcp::socket> socket;
     std::string host;
     int port;
-
-  };
+};
 }

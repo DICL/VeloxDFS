@@ -6,15 +6,6 @@ using namespace network;
 using namespace std;
 
 namespace Nodes {
-// Constructor & destructor {{{
-PeerRemote::PeerRemote (io_ptr& io, string host_, int p, int id) : 
-  NodeRemote(io, host_, p, id) 
-{
-
-}
-// 
-PeerRemote::~PeerRemote () { }
-// }}}
 // insert {{{
 //void PeerRemote::insert (string k, string v) {
   //Serialize Key/value
@@ -27,16 +18,17 @@ PeerRemote::~PeerRemote () { }
   //Dumb
 //}
 // }}}
-//za on_write_lookup {{{
-//zzaavoid PeerRemote::on_write_lookup (.. , .. ) {
+// on_write_lookup {{{
+// void PeerRemote::on_write_lookup (.. , .. ) {
 
 
 //}
 // }}}
-
+// send {{{
 void PeerRemote::send(Message* m) {
   string tosend;
   tosend << m;
   socket->send (boost::asio::buffer(tosend));
 }
+// }}}
 } /* nodes */

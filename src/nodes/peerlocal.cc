@@ -18,7 +18,6 @@ using namespace Nodes;
 using namespace boost::asio;
 using namespace std;
 
-using boost::asio::ip::tcp;
 using vec_str    = std::vector<std::string>;
 using vec_node   = std::vector<NodeRemote*>;
 using PAIR       = std::pair<int, NodeRemote*>;
@@ -26,29 +25,28 @@ using PAIR       = std::pair<int, NodeRemote*>;
 
 namespace Nodes {
 // Auxiliar functions {{{
-auto range_of = [] (multimap<int, NodeRemote* >& m, int type) -> vec_node {
-  vec_node vec;
+static auto range_of = [] (multimap<int, NodeRemote* >& m, int type) -> vec_node {
   auto it = m.equal_range (type);
-  std::transform (it.first, it.second, back_inserter(vec), [] (PAIR p) {
-              return p.second;
-            });
-  return vec;
+  vector<PAIR> vec {it.first, it.second};
+  return vec | boost::adaptors::map_values;
+//boost::copy 
+
+//std::transform (it.first, it.second, back_inserter(vec), [] (PAIR p) {
+//////return p.second;
+//////});
+//////return vec;
 };
 // }}}
 // Constructor & destructor {{{
-PeerLocal::PeerLocal() : 
-  NodeLocal(), cache (new lru_cache<string,string> (CACHESIZE))
-{ 
+PeerLocal::PeerLocal() : NodeLocal() { 
   Settings setted = Settings().load();
 
   vec_str nodes = setted.get<vec_str> ("network.nodes");
-  port      = setted.get<int> ("network.port_cache");
+  port          = setted.get<int> ("network.port_cache");
 
   int i = 0;
-  for (auto& n : nodes) {
-    auto p = new PeerRemote (io_service, n, port, ++i);
-    universe.insert (make_pair(PEER, p));
-  }
+  for (auto& n : nodes)
+    universe.insert ({PEER, new PeerRemote (io_service, n, port, ++i)});
 
   histogram.reset (new Histogram (nodes.size(), NUMBIN));
 }
@@ -72,7 +70,7 @@ void PeerLocal::do_accept() {
   using namespace std::placeholders;
   static size_t i = 0;
   if (++i < range_of (universe, PEER).size()) {
-    ip::tcp::socket* sock_ = new ip::tcp::socket(io_service);
+    auto sock_ = new ip::tcp::socket(io_service);
     sockets_list[i] = sock_;
     acceptor->async_accept(*sock_, bind(&PeerLocal::on_accept, this, sock_, _1));
   }
@@ -83,9 +81,6 @@ void PeerLocal::on_accept(ip::tcp::socket* s,
     const boost::system::error_code& error)
 {
   if (!error) {
-    //for (auto& peer : range_of(universe, PEER)) {
-
-    //}
     do_accept();
   }
 }

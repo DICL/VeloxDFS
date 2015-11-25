@@ -1,28 +1,11 @@
 #include "messages/boost_impl.hh"
+#include "messages/factory.hh"
 
 #include <iostream>
 #include <sstream>
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
 
 using namespace std;
 using namespace network;
-using namespace boost::archive;
-
-stringstream ss;
-
-void send_message (Message* in, stringstream& s) {
-  xml_oarchive oa(s, no_header);
-  string type = in->get_type();
-  oa << BOOST_SERIALIZATION_NVP(in);
-}
-
-Message* load_message(stringstream& s) {
-  xml_iarchive ia(s, no_header);
-  Message* p = nullptr;
-  ia >> BOOST_SERIALIZATION_NVP(p);
-  return p;
-}
 
 SUITE(MESSAGES) {
   TEST(basic) {
@@ -33,12 +16,11 @@ SUITE(MESSAGES) {
     b->set_origin ("myself");
     b->set_destination ("you");
     
-    send_message (a, ss);
-    send_message (b, ss);
+    string a_out = save_message(a);
+    string b_out = save_message(b);
 
-    auto b_ = static_cast<Boundaries*>(load_message (ss));
-    auto k_ = static_cast<KeyValue*>(load_message (ss));
-    cout << "SD: " << CONTROL << endl;
+    auto b_ = static_cast<Boundaries*>(load_message (a_out));
+    auto k_ = static_cast<KeyValue*>(load_message (b_out));
 
     CHECK(b_->get_origin() == "myself");
     CHECK(b_->data[0] == 1);

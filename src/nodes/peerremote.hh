@@ -10,8 +10,8 @@ namespace Nodes {
       void on_write (); 
 
     public:
-      PeerRemote (io_ptr&, std::string, int, int); 
-      ~PeerRemote ();
+      using NodeRemote::NodeRemote;
+      ~PeerRemote () = default;
 
       void do_read (); 
       void do_write (); 

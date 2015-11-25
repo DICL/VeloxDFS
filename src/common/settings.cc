@@ -35,11 +35,11 @@ class Settings::SettingsImpl {
   protected:
     ptree pt;
     string config_path, given_path;
-    bool hardcoded_path;
+    bool hardcoded_path = false;
     bool get_project_path ();
 
   public:
-    SettingsImpl() : hardcoded_path(false) { }
+    SettingsImpl() = default;
     SettingsImpl(string in) : given_path (in), hardcoded_path (true) { }
     bool load ();
 

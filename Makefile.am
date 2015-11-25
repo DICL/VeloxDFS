@@ -1,7 +1,7 @@
 SUBDIRS             = . tests
 
 AM_CPPFLAGS         = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
-AM_CXXFLAGS         = -Wall -std=gnu++11 -ggdb3
+AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3
 
 bin_PROGRAMS        = slave
 

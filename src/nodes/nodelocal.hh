@@ -17,7 +17,7 @@ struct NodeLocal: public Node {
 
   std::multimap<int, NodeRemote*> universe;
   boost::asio::io_service io_service;
-  std::unique_ptr<Logger, decltype(&Logger::disconnect)> logger;
+  std::unique_ptr<Logger, decltype(&Logger::disconnect)> logger {nullptr, Logger::disconnect};
   std::string ip_of_this;
 };
 

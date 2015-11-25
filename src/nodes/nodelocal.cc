@@ -8,9 +8,7 @@ using namespace std;
 
 namespace Nodes {
 // Constructor & destructor {{{
-NodeLocal::NodeLocal() :
-  logger (nullptr, Logger::disconnect)
-{
+NodeLocal::NodeLocal() {
   Settings setted = Settings().load();
 
   string logname = setted.get<string> ("log.name");

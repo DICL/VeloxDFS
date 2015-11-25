@@ -3,18 +3,14 @@
 #include "../messages/factory.hh"
 
 using boost::lexical_cast;
-using boost::asio::ip::tcp;
 using namespace boost::asio;
 using namespace std;
 
 namespace Nodes {
 // constructor & destructor {{{
 NodeRemote::NodeRemote(io_ptr& io, string host_, int p, int id) :
- Node(id), ioservice (io) 
+ Node(id), ioservice (io), host(host_), port(p)
 {
-  //io_service.reset (&io);
-  host = host_;
-  port = p;
 }
 // }}}
 // connect {{{
@@ -24,7 +20,8 @@ bool NodeRemote::connect() {
   tcp::resolver::iterator endpoint_iterator (resolver.resolve(query));
 
   socket.reset (new tcp::socket (ioservice));
-  boost::asio::connect (*socket, endpoint_iterator);
+  connect (*socket, endpoint_iterator);
+  return true;
 }
 // }}}
 // close {{{
