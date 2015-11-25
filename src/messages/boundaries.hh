@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 
-namespace network {
+namespace messages {
 
 struct Boundaries: public Message {
   Boundaries() = default;

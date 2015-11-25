@@ -3,7 +3,7 @@
 #include "message.hh"
 #include <string>
 
-namespace network {
+namespace messages {
   struct KeyValue: public Message {
     KeyValue () = default;
     KeyValue (std::string, std::string);

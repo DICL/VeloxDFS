@@ -4,6 +4,6 @@
 #include <boost/archive/xml_oarchive.hpp>
 
 //! 4) Also here
-BOOST_CLASS_EXPORT(network::Boundaries);
-BOOST_CLASS_EXPORT(network::KeyValue);
-BOOST_CLASS_EXPORT(network::Control);
+BOOST_CLASS_EXPORT(messages::Boundaries);
+BOOST_CLASS_EXPORT(messages::KeyValue);
+BOOST_CLASS_EXPORT(messages::Control);

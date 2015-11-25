@@ -7,6 +7,7 @@ namespace network {
 class Communication {
   public:
     virtual bool connect (std::string, int) = 0;
+    virtual bool accept (std::string, int) = 0;
     virtual bool listen (int)               = 0;
     virtual bool close ()                   = 0;
     virtual bool send (const Message*)      = 0;

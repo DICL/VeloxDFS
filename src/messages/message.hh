@@ -9,7 +9,7 @@
 
 #include <string>
 
-namespace network {
+namespace messages {
   struct Message {
     Message() = default;
     Message(std::string, std::string);

@@ -7,7 +7,7 @@
 #include <functional>
 #include <boost/asio/streambuf.hpp>
 
-namespace network {
+namespace messages {
   void load_n (boost::asio::streambuf&, std::function<void(Message*)>);
 
   void operator<< (std::string, Message*);
@@ -17,4 +17,4 @@ namespace network {
 
   Message* load_message (std::string);
   std::string save_message (Message*);
-} /* network */ 
+} /* messages */ 

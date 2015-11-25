@@ -10,7 +10,7 @@ using namespace boost::asio;
 using namespace boost::archive;
 using namespace std;
 
-namespace network {
+namespace messages {
 
 void load_n (boost::asio::streambuf& data_, function<void(Message*)> f) {
   istream is (&data_);
@@ -61,4 +61,4 @@ std::string save_message (Message* m) {
   return ss.str();
 }
 
-} /* network */
+} /* messages */

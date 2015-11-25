@@ -15,15 +15,16 @@ using std::string;
 using std::thread;
 using std::map;
 using boost::asio::ip::tcp;
+using cache;
 
 class PeerLocal: public NodeLocal {
   protected:
-    u_ptr<cache::lru_cache<string, string> > cache {
-      new cache::lru_cache<string, string> (CACHESIZE) };
-
+    u_ptr<lru_cache<string, string> > cache { new lru_cache<string, string> (CACHESIZE) };
     u_ptr<thread> detached;
     u_ptr<tcp::acceptor> acceptor;
     u_ptr<Histogram> histogram;
+
+    Communication* com; 
     map<int, tcp::socket*> sockets_list;
     int port;
 
@@ -31,7 +32,7 @@ class PeerLocal: public NodeLocal {
     void on_accept (tcp::socket*, const boost::system::error_code&); 
 
   public:
-    PeerLocal ();
+    PeerLocal (Communication*);
     ~PeerLocal ();
 
     void listen ();

@@ -70,6 +70,7 @@ void PeerLocal::do_accept() {
   using namespace std::placeholders;
   static size_t i = 0;
   if (++i < range_of (universe, PEER).size()) {
+    auto sock_ = comm->socket()
     auto sock_ = new ip::tcp::socket(io_service);
     sockets_list[i] = sock_;
     acceptor->async_accept(*sock_, bind(&PeerLocal::on_accept, this, sock_, _1));

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace network {
+namespace messages {
   Message::Message(string o, string d) :
     origin(o), destination(d) { }
 

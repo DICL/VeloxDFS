@@ -25,37 +25,37 @@
 #endif
 
 //! 2) Also here
-namespace network {
+namespace messages {
   template <typename Archive>
-    void serialize (Archive& ar, network::Message& m, unsigned int) {
+    void serialize (Archive& ar, messages::Message& m, unsigned int) {
       ar & BOOST_SERIALIZATION_NVP(m.origin);
       ar & BOOST_SERIALIZATION_NVP(m.destination);
     }
 
   template <typename Archive>
-    void serialize (Archive& ar, network::Boundaries& b, unsigned int) {
+    void serialize (Archive& ar, messages::Boundaries& b, unsigned int) {
       ar & BASE_OBJECT(Message, b);
       ar & BOOST_SERIALIZATION_NVP(b.data);
     }
 
   template <typename Archive>
-    void serialize (Archive& ar, network::KeyValue& k, unsigned int) {
+    void serialize (Archive& ar, messages::KeyValue& k, unsigned int) {
       ar & BASE_OBJECT(Message, k);
       ar & BOOST_SERIALIZATION_NVP(k.key);
       ar & BOOST_SERIALIZATION_NVP(k.value);
     }
 
   template <typename Archive>
-    void serialize (Archive& ar, network::Control& c, unsigned int) {
+    void serialize (Archive& ar, messages::Control& c, unsigned int) {
       ar & BASE_OBJECT(Message, c);
       ar & BOOST_SERIALIZATION_NVP(c.type);
     }
 }
 
-BOOST_SERIALIZATION_ASSUME_ABSTRACT(network::Message);
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(messages::Message);
 
 //! 3) Also here
-BOOST_CLASS_TRACKING(network::Message,    boost::serialization::track_never);
-BOOST_CLASS_TRACKING(network::Boundaries, boost::serialization::track_never);
-BOOST_CLASS_TRACKING(network::KeyValue,   boost::serialization::track_never);
-BOOST_CLASS_TRACKING(network::Control,    boost::serialization::track_never);
+BOOST_CLASS_TRACKING(messages::Message,    boost::serialization::track_never);
+BOOST_CLASS_TRACKING(messages::Boundaries, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(messages::KeyValue,   boost::serialization::track_never);
+BOOST_CLASS_TRACKING(messages::Control,    boost::serialization::track_never);

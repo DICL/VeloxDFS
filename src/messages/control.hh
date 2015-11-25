@@ -3,7 +3,7 @@
 #include "message.hh"
 #include <string>
 
-namespace network {
+namespace messages {
   enum {
     SHUTDOWN = 0,
     RESTART  = 1,
@@ -19,4 +19,4 @@ namespace network {
       int type;
   };
 
-} /* network */ 
+} /* messages */ 
