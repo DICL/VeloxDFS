@@ -1,4 +1,4 @@
-[![Build Status](https://magnum.travis-ci.com/DICL/Eclipse.svg?token=MaWCP2sHsbC2FaU6ztsx)](https://magnum.travis-ci.com/DICL/Eclipse)
+[![Build Status](https://travis-ci.com/DICL/Eclipse2.svg?token=MaWCP2sHsbC2FaU6ztsx)](https://magnum.travis-ci.com/DICL/Eclipse2)
 
 BRIEFING
 ========

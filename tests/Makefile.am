@@ -5,13 +5,13 @@ AM_CXXFLAGS      = -std=c++14 -ggdb3 -Wall
 AM_LDFLAGS       = -static
 LDADD            = ../libecfs.la -lboost_serialization -lboost_system -lboost_coroutine -lboost_context -l:libUnitTest++.a
 
-check_PROGRAMS   = settings cache_test messages_test nodes_test #dht_test
+check_PROGRAMS   = settings cache_test messages_test #nodes_test #dht_test
 #check_SCRIPTS    = integration
 check_DATA       = @top_srcdir@/doc/eclipse.json
 CLEANFILES       = eclipse.json #integration 
 
 # Input your tests files here
-TESTS            = cache_test messages_test nodes_test #dht_test
+TESTS            = cache_test messages_test #nodes_test #dht_test
 
 messages_files   = @top_srcdir@/src/messages/boundaries.cc \
                    @top_srcdir@/src/messages/message.cc    \
