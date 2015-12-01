@@ -1,31 +1,35 @@
 #pragma once
 
 #include "node.hh"
+#include "nodelocal.hh"
 #include "../messages/message.hh"
 
 #include <memory>
 #include <boost/asio.hpp>
+#include <boost/asio/error.hpp>
 
-namespace Nodes {
-using namespace network;
-using namespace boost::asio;
-using boost::asio::ip::tcp;
+namespace eclipse {
+
+using namespace messages;
+class NodeLocal; // <- Forward initialization
 
 class NodeRemote: public Node {
   public:
-    NodeRemote(io_service&, std::string, int, int);
+    NodeRemote(NodeLocal*);
+    NodeRemote(NodeLocal*, int, std::string, int);
     ~NodeRemote() = default;
 
-    bool connect() ;
-    void close() ;
+    bool do_connect();
+    void close();
     std::string get_ip() const override;
 
-    virtual void send (Message*) = 0;
-
   protected:
-    io_service& ioservice;
+    virtual void on_connect (boost::system::error_code&) = 0;
 
-    u_ptr<tcp::socket> socket;
+    NodeLocal& owner;
+    boost::asio::io_service& ioservice;
+
+    u_ptr<boost::asio::ip::tcp::socket> socket;
     std::string host;
     int port;
 };

@@ -12,9 +12,8 @@
 #include <algorithm>
 #include <iterator>
 
-using namespace cache;
-using namespace network;
-using namespace Nodes;
+using namespace eclipse;
+using namespace eclipse::messages;
 using namespace boost::asio;
 using namespace std;
 
@@ -23,7 +22,7 @@ using vec_node   = std::vector<NodeRemote*>;
 using PAIR       = std::pair<int, NodeRemote*>;
 // }}}
 
-namespace Nodes {
+namespace eclipse {
 // Auxiliar functions {{{
 static auto range_of = [] (multimap<int, NodeRemote* >& m, int type) -> vec_node {
   auto it = m.equal_range (type);
@@ -39,16 +38,9 @@ static auto range_of = [] (multimap<int, NodeRemote* >& m, int type) -> vec_node
 // }}}
 // Constructor & destructor {{{
 PeerLocal::PeerLocal() : NodeLocal() { 
-  Settings setted = Settings().load();
+  int numbin = Settings().load().get<int> ("cache.numbin");
 
-  vec_str nodes = setted.get<vec_str> ("network.nodes");
-  port          = setted.get<int> ("network.port_cache");
-
-  int i = 0;
-  for (auto& n : nodes)
-    universe.insert ({PEER, new PeerRemote (io_service, n, port, ++i)});
-
-  histogram.reset (new Histogram (nodes.size(), NUMBIN));
+  histogram.reset (new Histogram (nodes.size(), numbin));
 }
 
 PeerLocal::~PeerLocal() {
@@ -170,11 +162,11 @@ template<> void PeerLocal::process_message (KeyValue* m) {
 // process_message (Control* m) {{{
 template<> void PeerLocal::process_message (Control* m) {
   switch (m->type) {
-    case network::SHUTDOWN:
+    case messages::SHUTDOWN:
       this->close();
       break;
 
-    case network::RESTART:
+    case messages::RESTART:
       break;
 
       //    case PING:
@@ -184,7 +176,7 @@ template<> void PeerLocal::process_message (Control* m) {
 }
 // }}}
 // process_message (Message*) {{{
-template<> void PeerLocal::process_message (network::Message* m) {
+template<> void PeerLocal::process_message (Message* m) {
   string type = m->get_type();
   if (type == "Boundaries") {
     auto m_ = dynamic_cast<Boundaries*>(m);

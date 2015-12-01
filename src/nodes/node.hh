@@ -2,7 +2,7 @@
 #include <string>
 #include <memory>
 
-namespace Nodes {
+namespace eclipse {
 enum NodeTypes { PEER, MASTER, APP, EXECUTOR };
 const int header_length = 8;
 

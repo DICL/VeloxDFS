@@ -25,37 +25,40 @@
 #endif
 
 //! 2) Also here
+namespace eclipse {
 namespace messages {
-  template <typename Archive>
-    void serialize (Archive& ar, messages::Message& m, unsigned int) {
-      ar & BOOST_SERIALIZATION_NVP(m.origin);
-      ar & BOOST_SERIALIZATION_NVP(m.destination);
-    }
 
-  template <typename Archive>
-    void serialize (Archive& ar, messages::Boundaries& b, unsigned int) {
-      ar & BASE_OBJECT(Message, b);
-      ar & BOOST_SERIALIZATION_NVP(b.data);
-    }
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::Message& m, unsigned int) {
+    ar & BOOST_SERIALIZATION_NVP(m.origin);
+    ar & BOOST_SERIALIZATION_NVP(m.destination);
+  }
 
-  template <typename Archive>
-    void serialize (Archive& ar, messages::KeyValue& k, unsigned int) {
-      ar & BASE_OBJECT(Message, k);
-      ar & BOOST_SERIALIZATION_NVP(k.key);
-      ar & BOOST_SERIALIZATION_NVP(k.value);
-    }
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::Boundaries& b, unsigned int) {
+    ar & BASE_OBJECT(Message, b);
+    ar & BOOST_SERIALIZATION_NVP(b.data);
+  }
 
-  template <typename Archive>
-    void serialize (Archive& ar, messages::Control& c, unsigned int) {
-      ar & BASE_OBJECT(Message, c);
-      ar & BOOST_SERIALIZATION_NVP(c.type);
-    }
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::KeyValue& k, unsigned int) {
+    ar & BASE_OBJECT(Message, k);
+    ar & BOOST_SERIALIZATION_NVP(k.key);
+    ar & BOOST_SERIALIZATION_NVP(k.value);
+  }
+
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::Control& c, unsigned int) {
+    ar & BASE_OBJECT(Message, c);
+    ar & BOOST_SERIALIZATION_NVP(c.type);
+  }
+}
 }
 
-BOOST_SERIALIZATION_ASSUME_ABSTRACT(messages::Message);
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(eclipse::messages::Message);
 
 //! 3) Also here
-BOOST_CLASS_TRACKING(messages::Message,    boost::serialization::track_never);
-BOOST_CLASS_TRACKING(messages::Boundaries, boost::serialization::track_never);
-BOOST_CLASS_TRACKING(messages::KeyValue,   boost::serialization::track_never);
-BOOST_CLASS_TRACKING(messages::Control,    boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::Message, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::Boundaries, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::KeyValue, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::Control, boost::serialization::track_never);

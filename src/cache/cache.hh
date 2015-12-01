@@ -13,7 +13,7 @@
 #include <cstddef>
 #include <stdexcept>
 
-namespace cache {
+namespace eclipse {
 
 template<typename key_t, typename value_t>
 class lru_cache {

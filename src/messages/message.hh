@@ -9,20 +9,24 @@
 
 #include <string>
 
+namespace eclipse {
 namespace messages {
-  struct Message {
-    Message() = default;
-    Message(std::string, std::string);
-    virtual ~Message () {}
 
-    virtual std::string get_type() const;
+struct Message {
+  Message() = default;
+  Message(std::string, std::string);
+  virtual ~Message () {}
 
-    std::string get_origin() const;
-    std::string get_destination() const;
+  virtual std::string get_type() const;
 
-    Message& set_origin(std::string);
-    Message& set_destination(std::string);
+  std::string get_origin() const;
+  std::string get_destination() const;
 
-    std::string origin, destination;
-  };
+  Message& set_origin(std::string);
+  Message& set_destination(std::string);
+
+  std::string origin, destination;
+};
+
+}
 }

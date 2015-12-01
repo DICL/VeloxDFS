@@ -2,27 +2,39 @@
 #include "../messages/factory.hh"
 #include <string>
 
-using namespace network;
+using namespace eclipse::messages;
 using namespace std;
+using namespace std::placeholders;
 
-namespace Nodes {
-// insert {{{
-//void PeerRemote::insert (string k, string v) {
-  //Serialize Key/value
-  //send
-//  async_write (*socket, buffer(data), bind(&PeerRemote::on_write, this, _1, _2));
-//}
+namespace eclipse {
+// on_connect {{{
+bool NodeRemote::on_connect(boost::system::error& ec) {
+  if (!ec) {
+    do_read();
+  }
+}
 // }}}
-// on_write_insertion {{{
-//void PeerRemote::on_write_insertion (.. , ..) {
-  //Dumb
-//}
+// do_read {{{
+void PeerRemote::do_read () {
+  async_read (*socket, buffer(data), bind(&PeerRemote::on_read, this, _1, _2));
+}
 // }}}
-// on_write_lookup {{{
-// void PeerRemote::on_write_lookup (.. , .. ) {
+// on_read {{{
+void PeerRemote::on_read (boost::system::error_code& ec, size_t s) {
+  if (!ec) {
+  
+  }
+}
+// }}}
+// do_write {{{
+void PeerRemote::do_write (Message* m) {
 
+}
+// }}}
+// on_read {{{
+void PeerRemote::on_write (boost::system::error_code& ec, size_t s) {
 
-//}
+}
 // }}}
 // send {{{
 void PeerRemote::send(Message* m) {

@@ -5,7 +5,7 @@
 #include <sstream>
 
 using namespace std;
-using namespace network;
+using namespace eclipse::messages;
 
 SUITE(MESSAGES) {
   TEST(basic) {

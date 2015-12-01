@@ -3,23 +3,20 @@
 #include "noderemote.hh"
 #include "../messages/message.hh"
 
-namespace Nodes {
-  class PeerRemote: public NodeRemote {
-    protected:
-      void on_read (); 
-      void on_write (); 
+namespace eclipse {
 
-    public:
-      using NodeRemote::NodeRemote;
-      ~PeerRemote () = default;
+class PeerRemote: public NodeRemote {
+  public:
+    using NodeRemote::NodeRemote;
+    ~PeerRemote () = default;
 
-      void do_read (); 
-      void do_write (); 
+    void on_connect (boost::system::error_code&) override;
+    void do_read ();
+    void on_read (boost::system::error_code&, size_t); 
+    void do_write (messages::Message*); 
+    void on_write (boost::system::error_code&, size_t); 
 
-      //void insert (std::string, std::string);
-      //std::string lookup (std::string);
-      //bool exist (std::string);
+    void send (messages::Message*);
+};
 
-      void send (network::Message*) override;
-  };
 }

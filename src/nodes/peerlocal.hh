@@ -9,13 +9,12 @@
 #include <thread>
 #include <boost/asio.hpp>
 
-namespace Nodes {
+namespace eclipse {
 
 using std::string;
 using std::thread;
 using std::map;
 using boost::asio::ip::tcp;
-using cache;
 
 class PeerLocal: public NodeLocal {
   protected:
@@ -24,7 +23,6 @@ class PeerLocal: public NodeLocal {
     u_ptr<tcp::acceptor> acceptor;
     u_ptr<Histogram> histogram;
 
-    Communication* com; 
     map<int, tcp::socket*> sockets_list;
     int port;
 
@@ -32,7 +30,7 @@ class PeerLocal: public NodeLocal {
     void on_accept (tcp::socket*, const boost::system::error_code&); 
 
   public:
-    PeerLocal (Communication*);
+    PeerLocal ();
     ~PeerLocal ();
 
     void listen ();

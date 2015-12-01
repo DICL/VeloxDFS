@@ -10,6 +10,7 @@ using namespace boost::asio;
 using namespace boost::archive;
 using namespace std;
 
+namespace eclipse {
 namespace messages {
 
 void load_n (boost::asio::streambuf& data_, function<void(Message*)> f) {
@@ -62,3 +63,4 @@ std::string save_message (Message* m) {
 }
 
 } /* messages */
+}

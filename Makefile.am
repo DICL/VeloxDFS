@@ -3,7 +3,7 @@ SUBDIRS             = . tests
 AM_CPPFLAGS         = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
 AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3
 
-bin_PROGRAMS        = slave
+#bin_PROGRAMS        = slave
 
 # libs -----
 lib_LTLIBRARIES     = libecfs.la
@@ -16,12 +16,12 @@ AM_LDFLAGS          = -static
 LDADD               = libecfs.la -lboost_system -lboost_thread -lboost_serialization -lboost_system -lboost_coroutine -lboost_context
 
 
-slave_SOURCES       = src/targets/slave_main.cc src/nodes/node.cc src/nodes/nodelocal.cc \
-                      src/nodes/peerlocal.cc src/nodes/peerremote.cc \
-                      src/nodes/noderemote.cc \
-                      src/messages/boost_impl.cc src/messages/boundaries.cc \
-                      src/messages/control.cc src/messages/factory.cc \
-                      src/messages/keyvalue.cc src/messages/message.cc
+#slave_SOURCES       = src/targets/slave_main.cc src/nodes/node.cc src/nodes/nodelocal.cc \
+#                      src/nodes/peerlocal.cc src/nodes/peerremote.cc \
+#                      src/nodes/noderemote.cc \
+#                      src/messages/boost_impl.cc src/messages/boundaries.cc \
+#                      src/messages/control.cc src/messages/factory.cc \
+#                      src/messages/keyvalue.cc src/messages/message.cc
 
 #master_SOURCES      = src/master/master.cc 
 

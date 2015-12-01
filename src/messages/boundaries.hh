@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 
+namespace eclipse {
 namespace messages {
 
 struct Boundaries: public Message {
@@ -15,4 +16,5 @@ struct Boundaries: public Message {
   std::string get_type() const override;
 };
 
+}
 }

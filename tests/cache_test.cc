@@ -4,9 +4,11 @@ const int NUM_OF_TEST1_RECORDS = 100;
 const int NUM_OF_TEST2_RECORDS = 100;
 const int TEST2_CACHE_CAPACITY = 50;
 
+using namespace eclipse;
+
 SUITE(CACHE_TEST) {
   TEST(SimplePut) {
-    cache::lru_cache<int, int> cache(1);
+    lru_cache<int, int> cache(1);
     cache.put(7, 777);
     CHECK(cache.exists(7));
     CHECK_EQUAL(777, cache.get(7));
@@ -14,12 +16,12 @@ SUITE(CACHE_TEST) {
   }
 
   TEST(MissingValue) {
-    cache::lru_cache<int, int> cache(1);
+    lru_cache<int, int> cache(1);
     CHECK_THROW(cache.get(7), std::range_error);
   }
 
   TEST(KeepsAllValuesWithinCapacity) {
-    cache::lru_cache<int, int> cache(TEST2_CACHE_CAPACITY);
+    lru_cache<int, int> cache(TEST2_CACHE_CAPACITY);
 
     for (int i = 0; i < NUM_OF_TEST2_RECORDS; ++i) {
       cache.put(i, i);
