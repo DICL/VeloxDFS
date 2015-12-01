@@ -7,8 +7,13 @@ using namespace std;
 using namespace std::placeholders;
 
 namespace eclipse {
+NodeRemote::NodeRemote(NodeLocal* n, int id, string host_, int p) :
+   Node(id), owner(*n), ioservice (n->io_service), host(host_), port(p)
+{
+}
 // on_connect {{{
-bool NodeRemote::on_connect(boost::system::error& ec) {
+bool NodeRemote::on_connect(boost::system::error_code& ec,
+        boost::asio::ip::tcp::resolver::iterator iterator) {
   if (!ec) {
     do_read();
   }

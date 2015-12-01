@@ -23,8 +23,10 @@ class NodeRemote: public Node {
     void close();
     std::string get_ip() const override;
 
+    virtual void on_connect (const boost::system::error_code&,
+        boost::asio::ip::tcp::resolver::iterator ) = 0;
+
   protected:
-    virtual void on_connect (boost::system::error_code&) = 0;
 
     NodeLocal& owner;
     boost::asio::io_service& ioservice;
