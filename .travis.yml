@@ -1,8 +1,9 @@
 #
 #
 #
-language: cpp
+sudo: required
 dist: trusty
+language: cpp
 
 addons:
   apt:
