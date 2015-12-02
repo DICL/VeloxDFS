@@ -4,7 +4,7 @@ AM_INIT_AUTOMAKE([foreign subdir-objects])
 AM_SILENT_RULES([yes])
 LT_INIT([dlopen])
 
-AC_CONFIG_MACRO_DIRS([./m4/])
+AC_CONFIG_MACRO_DIR([./m4/])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile tests/Makefile])
 AC_CONFIG_FILES([src/fs/eclipsed],      [chmod +x src/fs/eclipsed])

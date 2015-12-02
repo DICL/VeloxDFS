@@ -2,13 +2,21 @@
 #
 #
 language: cpp
+dist: trusty
+
+addons:
+  apt:
+    packages:
+      - libboost-all-dev
+      - build-essential
 
 before_script:
-  - sudo apt-get update && sudo apt-get install -y libboost-all-dev 
+  #- sudo dpkg -r --force-depends libc6-dev
+  #- sudo apt-get install libc6-dev
   - mkdir build
 
 script: 
-  - autoreconf -i
+  - sh autogen.sh
   - cd build
   - sh ../configure --prefix=`pwd`
   - make -j16

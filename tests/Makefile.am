@@ -28,6 +28,7 @@ nodes_test_SOURCES    = nodes_test.cc \
                         @top_srcdir@/src/nodes/node.cc \
                         @top_srcdir@/src/nodes/nodelocal.cc \
                         @top_srcdir@/src/nodes/noderemote.cc \
+                        @top_srcdir@/src/nodes/peerremote.cc \
                         $(messages_files)
 
 messages_test_SOURCES = messages_test.cc $(messages_files)
