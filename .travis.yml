@@ -1,19 +1,20 @@
-#
-#
-#
 sudo: required
 dist: trusty
 language: cpp
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
+
     packages:
       - libboost-all-dev
       - build-essential
+      - gcc-4.9
+      - g++-4.9
 
 before_script:
-  #- sudo dpkg -r --force-depends libc6-dev
-  #- sudo apt-get install libc6-dev
+  - export CXX=g++-4.9
   - mkdir build
 
 script: 
