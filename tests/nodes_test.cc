@@ -1,7 +1,6 @@
 #include <nodes/nodelocal.hh>
 #include <nodes/noderemote.hh>
 
-
 using namespace eclipse;
 int main() {
   //Node n;

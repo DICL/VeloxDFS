@@ -10,28 +10,30 @@
 
 namespace eclipse {
 
+using boost::asio::ip::tcp;
 using namespace messages;
+using namespace boost::asio;
+using namespace boost::system;
+
 class NodeLocal; // <- Forward initialization
 
 class NodeRemote: public Node {
   public:
-    NodeRemote(NodeLocal*);
-    NodeRemote(NodeLocal*, int, std::string, int);
-    ~NodeRemote() = default;
+    NodeRemote (NodeLocal&);
+    NodeRemote (NodeLocal&, int, std::string, int);
+    ~NodeRemote () = default;
 
-    bool do_connect();
-    void close();
+    void do_connect ();
+    void close ();
     std::string get_ip() const override;
 
-    virtual void on_connect (const boost::system::error_code&,
-        boost::asio::ip::tcp::resolver::iterator ) = 0;
+    virtual void on_connect (const error_code&, tcp::resolver::iterator) = 0;
 
   protected:
-
     NodeLocal& owner;
-    boost::asio::io_service& ioservice;
+    io_service& ioservice;
 
-    u_ptr<boost::asio::ip::tcp::socket> socket;
+    u_ptr<tcp::socket> socket;
     std::string host;
     int port;
 };

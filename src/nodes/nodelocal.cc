@@ -28,7 +28,7 @@ NodeLocal::NodeLocal() {
 
   int i = 0;
   for (auto& node : nodes)
-    universe.insert ({PEER, new PeerRemote (this, ++i, node, port)});
+    universe.insert ({PEER, new PeerRemote (*this, ++i, node, port)});
 }
 
 NodeLocal::~NodeLocal() { }

@@ -1,10 +1,11 @@
 #include "peerremote.hh"
 #include "../messages/factory.hh"
 #include <string>
+#include <boost/bind.hpp>
 
-using namespace eclipse::messages;
 using namespace std;
 using namespace std::placeholders;
+namespace ph = boost::asio::placeholders;
 
 namespace eclipse {
 // on_connect {{{
@@ -17,13 +18,19 @@ void PeerRemote::on_connect(const boost::system::error_code& ec,
 // }}}
 // do_read {{{
 void PeerRemote::do_read () {
-  //async_read (*socket, buffer(data), bind(&PeerRemote::on_read, this, _1, _2));
+  async_read (*socket, buffer(msg_inbound), 
+      boost::bind(&PeerRemote::on_read, this, ph::error, ph::bytes_transferred));
 }
 // }}}
 // on_read {{{
-void PeerRemote::on_read (boost::system::error_code& ec, size_t s) {
-  if (!ec) {
+void PeerRemote::on_read (const boost::system::error_code& ec, size_t s) {
+  if (ec) return;
   
+  std::string str(msg_inbound.begin(), msg_inbound.end());
+  Message* msg = load_message (str);
+
+  if (msg->get_type() == "Boundaries") {
+  //  owner.set_boundaries (msg);
   }
 }
 // }}}
