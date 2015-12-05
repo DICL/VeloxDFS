@@ -41,11 +41,17 @@ For the configuration refer to the manpage:
 
 AUTHOR
 ======
- - __AUTHOR:__ [Young Moon Eun] [ym]
+
  - __AUTHOR:__ [Vicente Adolfo Bolea Sanchez] [vicente]
+ - __AUTHOR:__ [Moo Hyeong Nam] [mh]
+ - __AUTHOR:__ [Won Bae Kim] [wb]
+ - __AUTHOR:__ [Ki Beom Jin] [kb]
  - __INSTITUTION:__ [DICL laboratory] [dicl] at [UNIST]
 
 <!-- Links -->
 [vicente]:  https://github.com/vicentebolea
 [ym]:       https://github.com/youngmoon01
 [dicl]:     http://dicl.unist.ac.kr
+[mh]:       https://github.com/nammh 
+[wb]:       https://github.com/zwigul
+[kb]:       https://github.com/kbjin
