@@ -43,7 +43,7 @@ AUTHOR
 ======
 
  - __AUTHOR:__ [Vicente Adolfo Bolea Sanchez] [vicente]
- - __AUTHOR:__ [Moo Hyeong Nam] [mh]
+ - __AUTHOR:__ [Moo Hyeon Nam] [mh]
  - __AUTHOR:__ [Won Bae Kim] [wb]
  - __AUTHOR:__ [Ki Beom Jin] [kb]
  - __INSTITUTION:__ [DICL laboratory] [dicl] at [UNIST]
