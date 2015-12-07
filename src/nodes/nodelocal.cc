@@ -27,8 +27,9 @@ NodeLocal::NodeLocal() {
   logger.reset (Logger::connect(logname, logtype));
 
   int i = 0;
+  // topology initialization
   for (auto& node : nodes)
-    universe.insert ({PEER, new PeerRemote (*this, ++i, node, port)});
+    universe.insert ({PEER, new PeerRemote (this, ++i)});
 }
 
 NodeLocal::~NodeLocal() { }

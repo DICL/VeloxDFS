@@ -1,7 +1,7 @@
 #pragma once
 
 #include "noderemote.hh"
-#include "nodelocal.hh"
+#include "peerlocal.hh"
 #include "../messages/message.hh"
 #include <string>
 #include <vector>
@@ -9,8 +9,11 @@
 namespace eclipse {
 
 class PeerRemote: public NodeRemote {
+  protected:
+    PeerLocal* owner_peer = nullptr;
+    
   public:
-    using NodeRemote::NodeRemote;
+    PeerRemote(NodeLocal*, int);
 
     std::vector<char> msg_inbound;
 
@@ -19,7 +22,7 @@ class PeerRemote: public NodeRemote {
     void do_read ();
     void on_read (const boost::system::error_code&, size_t); 
     void do_write (messages::Message*); 
-    void on_write (boost::system::error_code&, size_t); 
+    void on_write (const boost::system::error_code&, size_t); 
 
     void send (messages::Message*);
 };

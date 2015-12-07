@@ -2,6 +2,7 @@
 
 #include "node.hh"
 #include "nodelocal.hh"
+#include "../network/channel.hh"
 #include "../messages/message.hh"
 
 #include <memory>
@@ -14,27 +15,24 @@ using boost::asio::ip::tcp;
 using namespace messages;
 using namespace boost::asio;
 using namespace boost::system;
+using namespace network;
 
 class NodeLocal; // <- Forward initialization
 
 class NodeRemote: public Node {
   public:
-    NodeRemote (NodeLocal&);
-    NodeRemote (NodeLocal&, int, std::string, int);
+    NodeRemote (NodeLocal*);
+    NodeRemote (NodeLocal*, int);
     ~NodeRemote () = default;
 
     void do_connect ();
     void close ();
-    std::string get_ip() const override;
+    std::string get_ip () const override;
 
     virtual void on_connect (const error_code&, tcp::resolver::iterator) = 0;
 
   protected:
-    NodeLocal& owner;
+    Channel* channel;
     io_service& ioservice;
-
-    u_ptr<tcp::socket> socket;
-    std::string host;
-    int port;
 };
 }

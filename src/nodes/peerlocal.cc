@@ -38,44 +38,24 @@ static auto range_of = [] (multimap<int, NodeRemote* >& m, int type) -> vec_node
 // }}}
 // Constructor & destructor {{{
 PeerLocal::PeerLocal() : NodeLocal() { 
-  int numbin = Settings().load().get<int> ("cache.numbin");
+  Settings& setted = Settings().load();
+  int numbin    = setted.get<int> ("cache.numbin");
+  int cachesize = setted.get<int> ("cache.size");
+  string tType  = setted.get<int> ("network.topology");
 
-  histogram.reset (new Histogram (nodes.size(), numbin));
+  histogram = make_unique<Histogram> (nodes.sizes(), numbin);
+  cache     = make_unique<lru_cache<string, string> (cachesize);
+
+  if (tType == "mesh") {
+    topology = make_unique<MeshTopology>(nodes);
+  
+  } else if (tType == "ring") {
+    topology = make_unique<RingTopology>(nodes);
+  }
 }
 
 PeerLocal::~PeerLocal() {
 
-}
-// }}}
-// listen {{{
-void PeerLocal::listen () {
-  acceptor.reset(new tcp::acceptor (io_service, tcp::endpoint (tcp::v4(), port)));
-}
-// }}}
-// accept {{{
-void PeerLocal::accept () {
-  do_accept();
-}
-// }}}
-// do_accept {{{
-void PeerLocal::do_accept() {
-  using namespace std::placeholders;
-  static size_t i = 0;
-  if (++i < range_of (universe, PEER).size()) {
-    auto sock_ = comm->socket()
-    auto sock_ = new ip::tcp::socket(io_service);
-    sockets_list[i] = sock_;
-    acceptor->async_accept(*sock_, bind(&PeerLocal::on_accept, this, sock_, _1));
-  }
-}
-// }}}
-// on_accept {{{
-void PeerLocal::on_accept(ip::tcp::socket* s, 
-    const boost::system::error_code& error)
-{
-  if (!error) {
-    do_accept();
-  }
 }
 // }}}
 // insert {{{
@@ -112,13 +92,6 @@ bool PeerLocal::exist (std::string) {
 // }}}
 // close {{{
 void PeerLocal::close() { exit(EXIT_SUCCESS); }
-// }}}
-// on_read {{{
-//void PeerLocal::on_read (boost::system::error_code ec, 
-//    size_t bytes_received) 
-//{
-//  load_n (inbound_data_, process_message)
-//}
 // }}}
 // process_message (Boundaries* m) {{{
 template<> void PeerLocal::process_message (Boundaries* m) {
