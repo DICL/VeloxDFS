@@ -11,6 +11,7 @@ namespace eclipse {
 class PeerRemote: public NodeRemote {
   protected:
     PeerLocal* owner_peer = nullptr;
+    boost::asio::ip::tcp::socket* socket;
     
   public:
     PeerRemote(NodeLocal*, int);
@@ -25,6 +26,7 @@ class PeerRemote: public NodeRemote {
     void on_write (const boost::system::error_code&, size_t); 
 
     void send (messages::Message*);
+    void start () override;
 };
 
 }

@@ -27,6 +27,7 @@ cache_test_LDFLAGS    = -static
 nodes_test_SOURCES    = nodes_test.cc \
                         @top_srcdir@/src/nodes/node.cc \
                         @top_srcdir@/src/nodes/nodelocal.cc \
+                        @top_srcdir@/src/nodes/peerlocal.cc \
                         @top_srcdir@/src/nodes/noderemote.cc \
                         @top_srcdir@/src/nodes/peerremote.cc \
                         $(messages_files)

@@ -11824,7 +11824,7 @@ if test -z "$DEFAULT_CXXFLAGS_TRUE"; then :
   CXXFLAGS='-g -O0 -march=native'
 fi
 
-CXXFLAGS="$CXXFLAGS -std=gnu++11" #make sure the compiler support GNU extensions of C++11
+CXXFLAGS="$CXXFLAGS -std=c++14" #make sure the compiler support GNU extensions of C++11
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'

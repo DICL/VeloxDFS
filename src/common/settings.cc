@@ -50,8 +50,8 @@ class Settings::SettingsImpl {
 // get_project_path {{{
 bool Settings::SettingsImpl::get_project_path ()
 {
-  string home_location   = string(getenv("HOME")) + "/.eclipse.json";
-  string system_location = "/etc/eclipse.json";
+  const string home_location   = string(getenv("HOME")) + "/.eclipse.json";
+  const string system_location = "/etc/eclipse.json";
 
   if (hardcoded_path) {
     config_path = given_path;                                           // Frist the from constructor

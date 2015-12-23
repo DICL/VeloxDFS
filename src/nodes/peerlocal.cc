@@ -11,6 +11,7 @@
 #include <boost/asio.hpp>
 #include <algorithm>
 #include <iterator>
+#include <memory>
 
 using namespace eclipse;
 using namespace eclipse::messages;
@@ -26,36 +27,42 @@ namespace eclipse {
 // Auxiliar functions {{{
 static auto range_of = [] (multimap<int, NodeRemote* >& m, int type) -> vec_node {
   auto it = m.equal_range (type);
-  vector<PAIR> vec {it.first, it.second};
-  return vec | boost::adaptors::map_values;
-//boost::copy 
+  vector<NodeRemote*> vec;
 
-//std::transform (it.first, it.second, back_inserter(vec), [] (PAIR p) {
-//////return p.second;
-//////});
-//////return vec;
+  std::transform (it.first, it.second, back_inserter(vec), [] (PAIR p) {
+    return p.second;
+  });
+  return vec;
 };
 // }}}
 // Constructor & destructor {{{
 PeerLocal::PeerLocal() : NodeLocal() { 
-  Settings& setted = Settings().load();
-  int numbin    = setted.get<int> ("cache.numbin");
-  int cachesize = setted.get<int> ("cache.size");
-  string tType  = setted.get<int> ("network.topology");
+  Settings setted = Settings().load();
 
-  histogram = make_unique<Histogram> (nodes.sizes(), numbin);
-  cache     = make_unique<lru_cache<string, string> (cachesize);
+  int numbin     = setted.get<int> ("cache.numbin");
+  int cachesize  = setted.get<int> ("cache.size");
+  string tType   = setted.get<string> ("network.topology");
+  vec_str nodes  = setted.get<vec_str> ("network.nodes");
+
+  histogram = make_unique<Histogram> (nodes.size(), numbin);
+  cache     = make_unique<lru_cache<string, string>> (cachesize);
 
   if (tType == "mesh") {
-    topology = make_unique<MeshTopology>(nodes);
+    //topology = make_unique<MeshTopology>(nodes);
   
   } else if (tType == "ring") {
-    topology = make_unique<RingTopology>(nodes);
+    //topology = make_unique<RingTopology>(nodes);
   }
 }
 
 PeerLocal::~PeerLocal() {
 
+}
+// }}}
+// establish {{{
+bool peerlocal::establish ( ) {
+  for (auto node : range_of(universe, PEER))
+    node->start();
 }
 // }}}
 // insert {{{
@@ -105,7 +112,7 @@ template<> void PeerLocal::process_message (Boundaries* m) {
         });
 
     if (it != peers.end()) {
-      (*it)->send(m);
+      //(*it)->send(m);
     }
   }
 }
@@ -127,7 +134,7 @@ template<> void PeerLocal::process_message (KeyValue* m) {
         });
 
     if (it != peers.end()) {
-      (*it)->send(m);
+      //(*it)->send(m);
     }
   }
 }

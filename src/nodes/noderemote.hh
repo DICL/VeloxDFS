@@ -25,14 +25,15 @@ class NodeRemote: public Node {
     NodeRemote (NodeLocal*, int);
     ~NodeRemote () = default;
 
-    void do_connect ();
     void close ();
     std::string get_ip () const override;
 
     virtual void on_connect (const error_code&, tcp::resolver::iterator) = 0;
+    virtual void start () = 0;
 
   protected:
     Channel* channel;
+    NodeLocal* owner;
     io_service& ioservice;
 };
 }

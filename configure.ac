@@ -13,7 +13,7 @@ AC_CONFIG_FILES([tests/integration],    [chmod +x tests/integration])
 AM_CONDITIONAL([DEFAULT_CXXFLAGS], [test -z "$CXXFLAGS"])
 AM_COND_IF([DEFAULT_CXXFLAGS], [CXXFLAGS='-g -O0 -march=native'])
 
-CXXFLAGS="$CXXFLAGS -std=gnu++11" #make sure the compiler support GNU extensions of C++11
+CXXFLAGS="$CXXFLAGS -std=c++14" #make sure the compiler support GNU extensions of C++11
 AC_PROG_CXX
 AC_LANG([C++])
 

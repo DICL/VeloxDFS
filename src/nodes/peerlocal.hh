@@ -20,9 +20,11 @@ class PeerLocal: public NodeLocal {
     PeerLocal ();
     ~PeerLocal ();
 
+    bool establish() override;
     void insert (string, string);
     string lookup (string);
     bool exist (string);
+    void close ();
 
     template <typename T> void process_message (T);
 

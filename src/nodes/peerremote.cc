@@ -8,6 +8,7 @@ using namespace std::placeholders;
 namespace ph = boost::asio::placeholders;
 
 namespace eclipse {
+class PeerLocal;
 // constructor {{{
 PeerRemote::PeerRemote(NodeLocal* p, int i) : NodeRemote(p, i) {
  owner_peer = dynamic_cast<PeerLocal*>(p);
@@ -19,6 +20,10 @@ void PeerRemote::on_connect(const boost::system::error_code& ec,
   if (!ec) {
     this->do_read();
   }
+}
+// }}}
+// start {{{
+void PeerRemote::start () {
 }
 // }}}
 // do_read {{{
@@ -35,7 +40,7 @@ void PeerRemote::on_read (const boost::system::error_code& ec, size_t s) {
   Message* msg = load_message (str);
 
   if (msg->get_type() == "Boundaries") {
-    owner_peer->set_boundaries (msg);
+//    owner_peer->set_boundaries (msg);
   }
 }
 // }}}
@@ -53,7 +58,7 @@ void PeerRemote::on_write (const boost::system::error_code& ec, size_t s) {
 void PeerRemote::send(Message* m) {
   string tosend;
   tosend << m;
-  socket->send (boost::asio::buffer(tosend));
+ // socket->send (boost::asio::buffer(tosend));
 }
 // }}}
-} /* nodes */
+} /* nodes  */

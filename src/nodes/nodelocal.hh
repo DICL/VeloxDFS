@@ -18,6 +18,7 @@ class NodeLocal: public Node {
     ~NodeLocal();
 
     std::string get_ip () const override;
+    virtual bool establish() = 0;
 
   protected:
     int port;
