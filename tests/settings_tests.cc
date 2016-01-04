@@ -26,7 +26,3 @@ SUITE(SETTING_TESTS) {
     }
   }
 }
-
-int main () {
-  return UnitTest::RunAllTests();
-}

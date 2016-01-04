@@ -60,9 +60,11 @@ PeerLocal::~PeerLocal() {
 }
 // }}}
 // establish {{{
-bool peerlocal::establish ( ) {
+bool PeerLocal::establish () {
+  int i = 0;
+  topology->establish();
   for (auto node : range_of(universe, PEER))
-    node->start();
+    node->set_channel (topology->get_channel(++i));
 }
 // }}}
 // insert {{{

@@ -36,7 +36,3 @@ SUITE(MESSAGES) {
     delete k_;
   }
 }
-
-int main () {
-  return UnitTest::RunAllTests();
-}

@@ -1,4 +1,4 @@
-SUBDIRS             = . tests
+include tests/Makefile.am
 
 AM_CPPFLAGS         = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
 AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3

@@ -31,6 +31,8 @@ class NodeRemote: public Node {
     virtual void on_connect (const error_code&, tcp::resolver::iterator) = 0;
     virtual void start () = 0;
 
+    void set_channel(Channel*);
+
   protected:
     Channel* channel;
     NodeLocal* owner;

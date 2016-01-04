@@ -24,4 +24,9 @@ void NodeRemote::close() {
 // get_ip {{{
 string NodeRemote::get_ip() const { return "placeholder"; }
 // }}}
+// set_channel {{{
+void NodeRemote::set_channel (Channel* c) {
+  channel = c;
+}
+// }}}
 }

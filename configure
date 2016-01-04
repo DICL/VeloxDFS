@@ -11805,8 +11805,9 @@ CC="$lt_save_CC"
 
 ac_config_headers="$ac_config_headers config.h"
 
-ac_config_files="$ac_config_files Makefile tests/Makefile"
+ac_config_files="$ac_config_files Makefile"
 
+#AC_CONFIG_FILES([Makefile tests/Makefile])
 ac_config_files="$ac_config_files src/fs/eclipsed"
 
 ac_config_files="$ac_config_files tests/integration"
@@ -17249,7 +17250,6 @@ do
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
     "src/fs/eclipsed") CONFIG_FILES="$CONFIG_FILES src/fs/eclipsed" ;;
     "tests/integration") CONFIG_FILES="$CONFIG_FILES tests/integration" ;;
 

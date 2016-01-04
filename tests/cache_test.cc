@@ -40,7 +40,3 @@ SUITE(CACHE_TEST) {
     CHECK_EQUAL(TEST2_CACHE_CAPACITY, size);
   }
 }
-
-int main () {
-  return UnitTest::RunAllTests();
-}
