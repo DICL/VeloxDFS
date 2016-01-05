@@ -12,7 +12,7 @@ using vec_str = std::vector<std::string>;
 
 class Topology {
   public:
-    Topology (vec_str&, int);
+    Topology (boost::asio::io_service&, vec_str, int, int);
     virtual ~Topology () { };
 
     virtual bool establish () = 0;
@@ -22,8 +22,9 @@ class Topology {
 
   protected:
     vec_str nodes;
-    int port;
+    int port, id;
     std::vector<std::unique_ptr<Channel> > channels;
+    boost::asio::io_service& ioservice;
 };
 
 } /* network */ 

@@ -22,9 +22,10 @@ units_SOURCES      = tests/main.cc \
 										 tests/settings_tests.cc \
 										 tests/cache_test.cc \
 										 tests/messages_test.cc \
-										 $(messages_files)
-#                         src/network/topology.cc \
-#                         src/network/ringtopology.cc
+	 									 $(messages_files) \
+										 tests/topology_test.cc \
+                     src/network/topology.cc \
+                     src/network/ringtopology.cc
 
 #nodes_test_SOURCES    = nodes_test.cc \
 #                        $(top_srcdir)/src/nodes/node.cc \
