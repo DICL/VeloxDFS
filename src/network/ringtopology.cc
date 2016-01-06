@@ -15,21 +15,23 @@ bool RingTopology::establish () {
 
   client_sock = make_unique<tcp::socket> (ioservice);
   server_sock = make_unique<tcp::socket> (ioservice);
+  client = make_unique<Channel> (*client_sock);
+  client = make_unique<Channel> (*server_sock);
 
-  tcp::resolver resolver(ioservice);
-  tcp::resolver::query query(to_connect, to_string(port));
-  tcp::resolver::iterator endpoint_iterator = 
-    resolver.resolve(query);
+  tcp::resolver resolver (ioservice);
+  tcp::resolver::query query (to_connect, to_string(port));
+  endpoint_iterator = make_unique<tcp::resolver::iterator> (
+    resolver.resolve(query));
 
-  async_connect (*client_sock, endpoint_iterator, 
+  async_connect (*client_sock, *endpoint_iterator, 
       boost::bind (&RingTopology::on_connect, this, 
         boost::asio::placeholders::error,
         boost::asio::placeholders::iterator));
 
-  tcp::acceptor acceptor
+  acceptor = make_unique<tcp::acceptor> 
     (ioservice, tcp::endpoint(tcp::v4(), port) );
 
-  acceptor.async_accept(*server_sock, 
+  acceptor->async_accept(*server_sock, 
       boost::bind (&RingTopology::on_accept, this,
         boost::asio::placeholders::error));
 
@@ -46,11 +48,21 @@ bool RingTopology::close () {
 void RingTopology::on_connect (
     const boost::system::error_code& ec, 
     boost::asio::ip::tcp::resolver::iterator it) {
+
+  if (ec) {
+  async_connect (*client_sock, *endpoint_iterator, 
+      boost::bind (&RingTopology::on_connect, this, 
+        boost::asio::placeholders::error,
+        boost::asio::placeholders::iterator));
+    // An error occurred.
+  }
+
 }
 // }}}
 // on_accept {{{
 void RingTopology::on_accept (
-    const boost::system::error_code&) {
+    const boost::system::error_code& ec) {
+
 }
 // }}}
 // organize {{{

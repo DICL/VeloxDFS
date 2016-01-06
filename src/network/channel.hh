@@ -24,11 +24,11 @@ using boost::asio::ip::tcp;
   
 class Channel {
   public:
-    Channel (boost::asio::io_service&, std::string s, int port);
-    virtual ~Channel () { };
-
-    virtual bool establish () = 0;
-    virtual void close () = 0;
+    Channel (tcp::socket&);
+//    virtual ~Channel () { };
+//
+//    virtual bool establish () = 0;
+//    virtual void close () = 0;
 
 //    template <typename class_name = Channel>
 //    virtual void on_read (std::string&, size_t, handler<class_name>) = 0;
@@ -39,10 +39,7 @@ class Channel {
     tcp::socket* get_socket();
 
   protected:
-    std::string endpoint;
-    int port;
-    boost::asio::io_service& io_service;
-    std::unique_ptr<tcp::socket> socket;
+    tcp::socket& socket;
 };
 
 } /* network */ 

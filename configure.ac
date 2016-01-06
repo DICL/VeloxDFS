@@ -10,6 +10,7 @@ AC_CONFIG_FILES([Makefile ])
 #AC_CONFIG_FILES([Makefile tests/Makefile])
 AC_CONFIG_FILES([src/fs/eclipsed],      [chmod +x src/fs/eclipsed])
 AC_CONFIG_FILES([tests/integration],    [chmod +x tests/integration])
+AC_CONFIG_FILES([tests/network_executor],    [chmod +x tests/network_executor])
 
 AM_CONDITIONAL([DEFAULT_CXXFLAGS], [test -z "$CXXFLAGS"])
 AM_COND_IF([DEFAULT_CXXFLAGS], [CXXFLAGS='-g -O0 -march=native'])

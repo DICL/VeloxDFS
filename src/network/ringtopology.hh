@@ -26,8 +26,13 @@ class RingTopology: public Topology {
     void on_accept (const boost::system::error_code&);
     std::tuple<std::string, std::string> organize();
 
+    std::unique_ptr<tcp::acceptor> acceptor;
+    std::unique_ptr<tcp::resolver::iterator> endpoint_iterator; 
     std::unique_ptr<tcp::socket> client_sock;
     std::unique_ptr<tcp::socket> server_sock;
+
+    std::unique_ptr<Channel> client;
+    std::unique_ptr<Channel> server;
 };
 
 } /* network */ 

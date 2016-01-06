@@ -2,9 +2,11 @@ AM_CPPFLAGS_T    = $(AM_CPPFLAGS) -include UnitTest++/UnitTest++/UnitTest++.h
 LDADD_T          = $(LDADD) -l:libUnitTest++.a
 
 # Input your tests files here
-check_PROGRAMS   = units #settings cache_test messages_test topology
+check_PROGRAMS   = units network
 
-TESTS            = $(check_PROGRAMS)
+TESTS            = units tests/network_executor
+check_SCRIPTS    = tests/network_executor.in
+
 check_DATA       = $(top_srcdir)/doc/eclipse.json
 CLEANFILES       = eclipse.json
 
@@ -25,7 +27,15 @@ units_SOURCES      = tests/main.cc \
 	 									 $(messages_files) \
 										 tests/topology_test.cc \
                      src/network/topology.cc \
-                     src/network/ringtopology.cc
+                     src/network/ringtopology.cc \
+                     src/network/channel.cc 
+
+network_LDADD     = $(LDADD_T)
+network_CPPFLAGS  = $(AM_CPPFLAGS_T)
+network_SOURCES   = tests/network.cc \
+                    src/network/topology.cc \
+                    src/network/ringtopology.cc \
+                    src/network/channel.cc 
 
 #nodes_test_SOURCES    = nodes_test.cc \
 #                        $(top_srcdir)/src/nodes/node.cc \

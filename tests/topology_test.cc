@@ -26,6 +26,7 @@ SUITE(TOPOLOGY) {
       io.run();
     });
   
+    sleep(10);
     t1.join();
   }
 
