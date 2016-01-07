@@ -1,5 +1,6 @@
 #include "network/topology.hh"
 #include "network/ringtopology.hh"
+#include "network/meshtopology.hh"
 #include <boost/asio.hpp>
 #include <thread>
 
@@ -12,22 +13,19 @@ const std::vector<std::string> net_ {
 };
 
 SUITE(TOPOLOGY) {
-
   TEST(RING) {
     boost::asio::io_service io;
-    RingTopology rt1 (io, net_, 9000, 0);
-    RingTopology rt2 (io, net_, 9000, 1);
-    RingTopology rt3 (io, net_, 9000, 2);
+    RingTopology rt1 (io, net_, 9001, 0);
     rt1.establish();
-    rt2.establish();
-    rt3.establish();
 
-    auto t1 = std::thread([&]() {
-      io.run();
-    });
-  
-    sleep(10);
-    t1.join();
+//    rt1.close();
+
   }
+  TEST(MESH) {
+    boost::asio::io_service io;
+    MeshTopology mt1 (io, net_, 9010, 0);
+    mt1.establish();
 
+    mt1.close();
+  }
 }

@@ -28,6 +28,7 @@ units_SOURCES      = tests/main.cc \
 										 tests/topology_test.cc \
                      src/network/topology.cc \
                      src/network/ringtopology.cc \
+                     src/network/meshtopology.cc \
                      src/network/channel.cc 
 
 network_LDADD     = $(LDADD_T)
@@ -35,6 +36,7 @@ network_CPPFLAGS  = $(AM_CPPFLAGS_T)
 network_SOURCES   = tests/network.cc \
                     src/network/topology.cc \
                     src/network/ringtopology.cc \
+                    src/network/meshtopology.cc \
                     src/network/channel.cc 
 
 #nodes_test_SOURCES    = nodes_test.cc \

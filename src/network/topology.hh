@@ -9,6 +9,7 @@ namespace eclipse {
 namespace network {
 
 using vec_str = std::vector<std::string>;
+template <typename T> using u_ptr = std::unique_ptr<T>;
 
 class Topology {
   public:

@@ -1,10 +1,13 @@
 #include "ringtopology.hh"
 #include <boost/bind.hpp>
+#include <iostream>
 
 namespace eclipse {
 namespace network {
 
 using namespace std;
+using boost::bind;
+namespace ph = boost::asio::placeholders;
 
 // establish {{{
 bool RingTopology::establish () {
@@ -13,7 +16,7 @@ bool RingTopology::establish () {
 
   tie(to_accept, to_connect) = organize();
 
-  client_sock = make_unique<tcp::socket> (ioservice);
+  client_sock = make_unique<tcp::socket> (ioservice); 
   server_sock = make_unique<tcp::socket> (ioservice);
   client = make_unique<Channel> (*client_sock);
   client = make_unique<Channel> (*server_sock);
@@ -23,10 +26,9 @@ bool RingTopology::establish () {
   endpoint_iterator = make_unique<tcp::resolver::iterator> (
     resolver.resolve(query));
 
-  async_connect (*client_sock, *endpoint_iterator, 
-      boost::bind (&RingTopology::on_connect, this, 
-        boost::asio::placeholders::error,
-        boost::asio::placeholders::iterator));
+  async_connect (*client_sock, *endpoint_iterator, bind (
+      &RingTopology::on_connect, this, ph::error,
+      ph::iterator));
 
   acceptor = make_unique<tcp::acceptor> 
     (ioservice, tcp::endpoint(tcp::v4(), port) );
@@ -40,8 +42,12 @@ bool RingTopology::establish () {
 // }}}
 // close {{{
 bool RingTopology::close () {
-  client_sock->close();
-  server_sock->close();
+  try {
+    client_sock->close();
+    server_sock->close();
+  } catch (...) {
+  
+  }
 }
 // }}}
 // on_connect {{{
@@ -50,13 +56,13 @@ void RingTopology::on_connect (
     boost::asio::ip::tcp::resolver::iterator it) {
 
   if (ec) {
-  async_connect (*client_sock, *endpoint_iterator, 
-      boost::bind (&RingTopology::on_connect, this, 
-        boost::asio::placeholders::error,
-        boost::asio::placeholders::iterator));
+    async_connect (*client_sock, *endpoint_iterator, bind (
+        &RingTopology::on_connect, this, ph::error,
+        ph::iterator));
     // An error occurred.
+  } else {
+    cout << "Network established" << endl;
   }
-
 }
 // }}}
 // on_accept {{{
