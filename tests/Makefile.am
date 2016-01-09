@@ -21,11 +21,11 @@ messages_files   = src/messages/boundaries.cc \
 units_LDADD        = $(LDADD_T)
 units_CPPFLAGS     = $(AM_CPPFLAGS_T)
 units_SOURCES      = tests/main.cc \
-										 tests/settings_tests.cc \
-										 tests/cache_test.cc \
-										 tests/messages_test.cc \
-	 									 $(messages_files) \
-										 tests/topology_test.cc \
+                     tests/settings_tests.cc \
+                     tests/cache_test.cc \
+                     tests/messages_test.cc \
+                     $(messages_files) \
+                     tests/topology_test.cc \
                      src/network/topology.cc \
                      src/network/ringtopology.cc \
                      src/network/meshtopology.cc \

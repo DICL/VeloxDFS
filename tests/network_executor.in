@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# vim: ft=ruby : fileencoding=utf-8 : foldmethod=marker : set autoindent
+
+NODES = ['ferrari', 'ferrari01', 'ferrari02']
+PATH = "#{Dir.pwd}/network"
+
+i = 0
+NODES.each do |n|
+  system "ssh #{n} '#{PATH} #{i} '&"
+  i = i + 1
+end

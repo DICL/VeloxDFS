@@ -15,7 +15,6 @@ libecfs_la_LDFLAGS  = -version-info 0:0:0
 AM_LDFLAGS          = -static
 LDADD               = libecfs.la -lboost_system -lboost_thread -lboost_serialization -lboost_system -lboost_coroutine -lboost_context
 
-
 #slave_SOURCES       = src/targets/slave_main.cc src/nodes/node.cc src/nodes/nodelocal.cc \
 #                      src/nodes/peerlocal.cc src/nodes/peerremote.cc \
 #                      src/nodes/noderemote.cc \
