@@ -21,13 +21,13 @@ class MeshTopology: public Topology {
     bool close () override;
 
   private:
-    int net_size, clients_connected = 1, servers_connected = 1;
-    void on_connect (tcp::socket*,  
-        tcp::resolver::iterator*,
-        const boost::system::error_code&,
-        tcp::resolver::iterator);
-    void on_accept (tcp::socket*,
-        const boost::system::error_code&);
+    int net_size, clients_connected = 1;
+
+    void on_connect (const boost::system::error_code&,
+        tcp::socket*, tcp::endpoint*);
+
+    void on_accept (const boost::system::error_code&,
+        tcp::socket*);
 
     std::unique_ptr<tcp::acceptor> acceptor;
     std::vector< std::unique_ptr<tcp::socket> > servers_sock;

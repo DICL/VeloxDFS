@@ -14,30 +14,31 @@ bool MeshTopology::establish () {
   net_size = static_cast<int> (nodes.size());
   
   tcp::resolver resolver (ioservice);
-
   string myself = nodes[id];
+
   for (auto node : nodes) {
     if (node == myself) continue;
-    tcp::socket* client_ = new tcp::socket (ioservice);
-  
-    tcp::resolver::query query (node, to_string(port));
-    auto * endpoint_iterator = new tcp::resolver::iterator(
-        resolver.resolve(query));
 
-    async_connect (*client_, *endpoint_iterator, bind (
-          &MeshTopology::on_connect, this, client_, 
-          endpoint_iterator, ph::error, ph::iterator));
-    clients_sock.emplace_back(client_);
+    tcp::resolver::query query (node, to_string(port));
+    tcp::resolver::iterator it (resolver.resolve(query));
+
+    auto endpoint = new tcp::endpoint (*it);
+    auto client = new tcp::socket (ioservice);
+
+    client->async_connect (*endpoint, bind (
+          &MeshTopology::on_connect, this, ph::error, client, 
+          endpoint));
+
+    clients_sock.emplace_back(client);
   }
 
   acceptor = make_unique<tcp::acceptor> 
     (ioservice, tcp::endpoint(tcp::v4(), port) );
 
-  tcp::socket* server_ =  new tcp::socket(ioservice);
-  acceptor->async_accept(*server_, 
-      boost::bind (&MeshTopology::on_accept, this,
-        server_,
-        boost::asio::placeholders::error));
+  auto server = new tcp::socket(ioservice);
+  acceptor->async_accept (*server, 
+      bind (&MeshTopology::on_accept, this, ph::error, server));
+
   return true;
 }
 // }}}
@@ -47,21 +48,16 @@ bool MeshTopology::close () {
 }
 // }}}
 // on_connect {{{
-void MeshTopology::on_connect (tcp::socket* client_,
-    tcp::resolver::iterator* it,
+void MeshTopology::on_connect (
     const boost::system::error_code& ec,
-    tcp::resolver::iterator it_out) 
+    tcp::socket* client,
+    tcp::endpoint* it) 
 {
-    tcp::resolver::iterator end;
 
-    cout << "error connect: " << ec.message() << " id " << id;
-    cout <<endl;
-
-    if (ec or it_out == end) {
-      async_connect (*client_, *it, bind (
-            &MeshTopology::on_connect, this, client_, it, 
-            ph::error,
-            ph::iterator));
+    if (ec) {
+      client->async_connect (*it, bind (
+            &MeshTopology::on_connect, this, ph::error, 
+            client, it));
 
     } else {
       delete it;
@@ -69,13 +65,15 @@ void MeshTopology::on_connect (tcp::socket* client_,
 }
 // }}}
 // on_accept {{{
-void MeshTopology::on_accept (tcp::socket* sock,
-    const boost::system::error_code& ec) {
+void MeshTopology::on_accept (
+    const boost::system::error_code& ec,
+    tcp::socket* sock) 
+{
   if (ec) {
     if ( clients_connected < net_size ) {
       acceptor->async_accept(*sock, 
           bind (&MeshTopology::on_accept, this, 
-            sock, ph::error));
+            ph::error, sock));
     }
 
   } else {
@@ -83,10 +81,10 @@ void MeshTopology::on_accept (tcp::socket* sock,
     servers_sock.emplace_back (sock);
 
     if ( clients_connected < net_size ) {
-      tcp::socket* server_ = new tcp::socket(ioservice);
-      acceptor->async_accept(*server_,
+      auto server = new tcp::socket(ioservice);
+      acceptor->async_accept(*server,
           bind (&MeshTopology::on_accept, this,
-            server_, ph::error));
+            ph::error, server));
     } else {
       cout << "Network established with id " << id << endl;
     }
