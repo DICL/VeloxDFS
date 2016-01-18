@@ -3,6 +3,6 @@
 load 'tests/eclipse_debug'
 
 RANGE = 3
-PATH = "#{Dir.pwd}/network"
+PATH = "#{Dir.pwd}/nodes"
 
 EclipseDaemon::CLI_driver.new file: PATH, range: RANGE, input: ARGV

@@ -16,6 +16,7 @@ bool MeshTopology::establish () {
   tcp::resolver resolver (ioservice);
   string myself = nodes[id];
 
+  int i = 0;
   for (auto node : nodes) {
     if (node == myself) continue;
 
@@ -29,7 +30,8 @@ bool MeshTopology::establish () {
           &MeshTopology::on_connect, this, ph::error, client, 
           endpoint));
 
-    clients_sock.emplace_back(client);
+    auto channel = new Channel(*client);
+    channels.insert (make_pair(i++, channel));
   }
 
   acceptor = make_unique<tcp::acceptor> 
@@ -78,7 +80,16 @@ void MeshTopology::on_accept (
 
   } else {
     clients_connected++;
-    servers_sock.emplace_back (sock);
+    auto ep = sock->remote_endpoint();
+    auto address = ep.address().to_string();
+
+    int index = 0;
+    for (auto node : nodes) {
+      if (node == address) break;
+      index++;
+    }
+
+    servers_sock.emplace_back(sock);
 
     if ( clients_connected < net_size ) {
       auto server = new tcp::socket(ioservice);
@@ -86,9 +97,18 @@ void MeshTopology::on_accept (
           bind (&MeshTopology::on_accept, this,
             ph::error, server));
     } else {
-      cout << "Network established with id " << id << endl;
+      logger->info ("Network established with id=%d",id);
+      auto server = new tcp::socket(ioservice);
+      acceptor->async_accept(*server,
+          bind (&MeshTopology::on_accept, this,
+            ph::error, server));
     }
   }
+}
+// }}}
+// is_online {{{
+bool MeshTopology::is_online () {
+  return (net_size == clients_connected);
 }
 // }}}
 

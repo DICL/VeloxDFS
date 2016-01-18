@@ -15,8 +15,8 @@ using vec_node   = std::vector<NodeRemote*>;
 using PAIR       = std::pair<int, NodeRemote*>;
 
 // Constructor & destructor {{{
-NodeLocal::NodeLocal() {
-  Settings setted = Settings().load();
+NodeLocal::NodeLocal(Settings& setted) {
+  setted.load();
 
   string logname = setted.get<string> ("log.name");
   string logtype = setted.get<string> ("log.type");
@@ -26,10 +26,13 @@ NodeLocal::NodeLocal() {
 
   logger.reset (Logger::connect(logname, logtype));
 
-  int i = 0;
   // topology initialization
-  for (auto& node : nodes)
-    universe.insert ({PEER, new PeerRemote (this, ++i)});
+  int i = 0;
+  for (auto& node : nodes) {
+    if (node == ip_of_this) 
+      id = i;
+    universe.insert ({PEER, new PeerRemote (this, i++)});
+  }
 }
 
 NodeLocal::~NodeLocal() { }

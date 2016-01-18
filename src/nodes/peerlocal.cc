@@ -6,6 +6,8 @@
 #include "../common/definitions.hh"
 #include "../messages/factory.hh"
 #include "../messages/boost_impl.hh"
+#include "../network/meshtopology.hh"
+#include "../network/ringtopology.hh"
 
 #include <boost/range/adaptor/map.hpp>
 #include <boost/asio.hpp>
@@ -36,35 +38,49 @@ static auto range_of = [] (multimap<int, NodeRemote* >& m, int type) -> vec_node
 };
 // }}}
 // Constructor & destructor {{{
-PeerLocal::PeerLocal() : NodeLocal() { 
-  Settings setted = Settings().load();
+PeerLocal::PeerLocal(Settings& setted) : NodeLocal(setted) { 
+  setted.load();
 
   int numbin     = setted.get<int> ("cache.numbin");
   int cachesize  = setted.get<int> ("cache.size");
   string tType   = setted.get<string> ("network.topology");
   vec_str nodes  = setted.get<vec_str> ("network.nodes");
+  concurrency    = setted.get<int> ("cache.concurrency");
 
   histogram = make_unique<Histogram> (nodes.size(), numbin);
   cache     = make_unique<lru_cache<string, string>> (cachesize);
 
   if (tType == "mesh") {
-    //topology = make_unique<MeshTopology>(nodes);
+    topology = make_unique<MeshTopology>
+      (io_service, logger.get(), nodes, port, id);
   
   } else if (tType == "ring") {
-    //topology = make_unique<RingTopology>(nodes);
+    topology = make_unique<RingTopology>
+      (io_service, logger.get(), nodes, port, id);
   }
 }
 
 PeerLocal::~PeerLocal() {
-
+  //for (auto t : threads)
+  //  t->join();
 }
 // }}}
 // establish {{{
 bool PeerLocal::establish () {
   int i = 0;
+
+  logger->info ("Running Eclipse network id=%d ip=%s", 
+      id, ip_of_this.c_str());
   topology->establish();
-  for (auto node : range_of(universe, PEER))
-    node->set_channel (topology->get_channel(++i));
+  for (auto node : range_of(universe, PEER)) {
+    if (i == id) continue;
+    node->set_channel (topology->get_channel(i++));
+  }
+
+ // while (not topology->is_online()) 
+ //   sleep(1); 
+ //
+ return true;
 }
 // }}}
 // insert {{{
@@ -171,6 +187,17 @@ template<> void PeerLocal::process_message (Message* m) {
   } else if (type == "Control") {
     Control* m_ = dynamic_cast<Control*>(m);
     process_message(m_);
+  }
+}
+// }}}
+// run {{{
+void PeerLocal::run () {
+  for (int i = 0; i < concurrency; i++ ) {
+    auto t = new std::thread ( [this] {
+        this->io_service.run();
+        });
+
+  threads.emplace_back (t);
   }
 }
 // }}}

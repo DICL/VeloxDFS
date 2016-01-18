@@ -3,6 +3,7 @@
 #include "node.hh"
 #include "noderemote.hh"
 #include "../common/logger.hh"
+#include "settings.hh"
 
 #include <map>
 #include <memory>
@@ -14,7 +15,7 @@ class NodeRemote;
 class NodeLocal: public Node {
   friend class NodeRemote;
   public:
-    NodeLocal();
+    NodeLocal(Settings&);
     ~NodeLocal();
 
     std::string get_ip () const override;

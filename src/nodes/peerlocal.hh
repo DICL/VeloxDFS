@@ -17,7 +17,7 @@ using std::map;
 
 class PeerLocal: public NodeLocal {
   public:
-    PeerLocal ();
+    PeerLocal (Settings&);
     ~PeerLocal ();
 
     bool establish() override;
@@ -26,6 +26,8 @@ class PeerLocal: public NodeLocal {
     bool exist (string);
     void close ();
 
+    void run ();
+
     template <typename T> void process_message (T);
 
   protected:
@@ -33,6 +35,8 @@ class PeerLocal: public NodeLocal {
     u_ptr<thread> detached;
     u_ptr<Histogram> histogram;
     u_ptr<Topology> topology;
+    int concurrency;
+    std::vector<std::unique_ptr<std::thread>> threads;
 };
 
 }

@@ -93,6 +93,11 @@ std::tuple<string,string> RingTopology::organize () {
   return make_tuple(to_accept, to_connect);
 }
 // }}}
+// is_online {{{
+bool RingTopology::is_online () {
+  return true;
+}
+// }}}
 
 } /* network */ 
 } /* eclipse */ 

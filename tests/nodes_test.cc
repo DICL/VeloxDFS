@@ -2,10 +2,16 @@
 #include <nodes/noderemote.hh>
 
 using namespace eclipse;
-int main() {
-  //Node n;
-  PeerLocal nl;
-  boost::asio::io_service io;
-  //NodeRemote nr (io, "localhost", 10, 0);
-  return 0;
+
+SUITE(NODES) {
+  TEST(BASIC) {
+    //Node n;
+    
+    Settings setted;
+    PeerLocal nl (setted);
+
+    sleep (1);
+    //NodeRemote nr (io, "localhost", 10, 0);
+  }
 }
+

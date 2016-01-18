@@ -21,6 +21,7 @@
 #include <sys/ioctl.h>
 #include <netinet/in.h>
 #include <net/if.h>
+#include <sstream>
 
 #define FINAL_PATH "/eclipse.json"
 
@@ -34,13 +35,13 @@ using namespace boost::property_tree;
 class Settings::SettingsImpl {
   protected:
     ptree pt;
-    string config_path, given_path;
-    bool hardcoded_path = false;
+    string config_path, input;
+    bool nofile = false;
     bool get_project_path ();
 
   public:
     SettingsImpl() = default;
-    SettingsImpl(string in) : given_path (in), hardcoded_path (true) { }
+    SettingsImpl(string in) : input (in), nofile (true) { }
     bool load ();
 
     template <typename T> T get (string&) ;
@@ -53,10 +54,7 @@ bool Settings::SettingsImpl::get_project_path ()
   const string home_location   = string(getenv("HOME")) + "/.eclipse.json";
   const string system_location = "/etc/eclipse.json";
 
-  if (hardcoded_path) {
-    config_path = given_path;                                           // Frist the from constructor
-
-  } else if (access(home_location.c_str(), F_OK) == EXIT_SUCCESS) {     // Then at home
+  if (access(home_location.c_str(), F_OK) == EXIT_SUCCESS) {     // Then at home
     config_path = home_location;
 
   } else if (access(system_location.c_str(), F_OK) == EXIT_SUCCESS) {   // Then at /etc
@@ -77,8 +75,14 @@ bool Settings::SettingsImpl::get_project_path ()
 //
 bool Settings::SettingsImpl::load ()
 {
-  get_project_path();
-  json_parser::read_json (config_path, pt);
+  if (not nofile) {
+    get_project_path();
+    json_parser::read_json (config_path, pt);
+
+  } else {
+    std::stringstream ss; ss << input;
+    json_parser::read_json (ss, pt);
+  }
 
   return true;
 }

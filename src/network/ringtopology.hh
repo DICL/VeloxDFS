@@ -19,6 +19,7 @@ class RingTopology: public Topology {
 
     bool establish () override;
     bool close () override;
+    bool is_online() override;
 
   private:
     void on_connect (const boost::system::error_code&,

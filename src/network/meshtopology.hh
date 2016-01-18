@@ -19,6 +19,7 @@ class MeshTopology: public Topology {
 
     bool establish () override;
     bool close () override;
+    bool is_online() override;
 
   private:
     int net_size, clients_connected = 1;
@@ -31,7 +32,6 @@ class MeshTopology: public Topology {
 
     std::unique_ptr<tcp::acceptor> acceptor;
     std::vector< std::unique_ptr<tcp::socket> > servers_sock;
-    std::vector< u_ptr<tcp::socket> > clients_sock;
 };
 
 } /* network */ 

@@ -42,7 +42,7 @@ void Logger::disconnect (Logger* in) {
   in = nullptr;
 }
 
-Logger::Logger (string& title, string& type) { 
+Logger::Logger (string title, string type) { 
   int type_ = syslog_facilities[type];
   openlog (title.c_str() , LOG_CONS, type_); 
 }
