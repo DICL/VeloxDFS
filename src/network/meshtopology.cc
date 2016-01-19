@@ -18,7 +18,7 @@ bool MeshTopology::establish () {
 
   int i = 0;
   for (auto node : nodes) {
-    if (node == myself) continue;
+    if (node != myself) {
 
     tcp::resolver::query query (node, to_string(port));
     tcp::resolver::iterator it (resolver.resolve(query));
@@ -31,7 +31,9 @@ bool MeshTopology::establish () {
           endpoint));
 
     auto channel = new Channel(*client);
-    channels.insert (make_pair(i++, channel));
+    channels.insert (make_pair(i, channel));
+    }
+    i++;
   }
 
   acceptor = make_unique<tcp::acceptor> 
@@ -77,6 +79,11 @@ void MeshTopology::on_accept (
           bind (&MeshTopology::on_accept, this, 
             ph::error, sock));
     }
+    sleep (1);
+
+      acceptor->async_accept(*sock, 
+          bind (&MeshTopology::on_accept, this, 
+            ph::error, sock));
 
   } else {
     clients_connected++;
@@ -101,7 +108,7 @@ void MeshTopology::on_accept (
       auto server = new tcp::socket(ioservice);
       acceptor->async_accept(*server,
           bind (&MeshTopology::on_accept, this,
-            ph::error, server));
+            ph::error, server)); sleep (1);
     }
   }
 }

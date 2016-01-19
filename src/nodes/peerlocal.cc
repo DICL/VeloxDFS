@@ -36,6 +36,10 @@ static auto range_of = [] (multimap<int, NodeRemote* >& m, int type) -> vec_node
   });
   return vec;
 };
+
+auto corresponding_node = [] (string k, int  size) -> int {
+   return h(k.c_str(), size);
+};
 // }}}
 // Constructor & destructor {{{
 PeerLocal::PeerLocal(Settings& setted) : NodeLocal(setted) { 
@@ -61,38 +65,41 @@ PeerLocal::PeerLocal(Settings& setted) : NodeLocal(setted) {
 }
 
 PeerLocal::~PeerLocal() {
-  //for (auto t : threads)
-  //  t->join();
+  for (auto& t : threads) t->join();
 }
 // }}}
 // establish {{{
 bool PeerLocal::establish () {
   int i = 0;
 
-  logger->info ("Running Eclipse network id=%d ip=%s", 
-      id, ip_of_this.c_str());
+  logger->info ("Running Eclipse id=%d ip=%s size=%d", 
+      id, ip_of_this.c_str(), universe.size());
   topology->establish();
-  for (auto node : range_of(universe, PEER)) {
-    if (i == id) continue;
-    node->set_channel (topology->get_channel(i++));
+
+  for (auto& node : range_of(universe, PEER)) {
+    if (i != id)  {
+      node->set_channel (topology->get_channel(i));
+    } 
+    i++;
+    if (node->get_id() == 23) continue;
   }
 
- // while (not topology->is_online()) 
- //   sleep(1); 
- //
  return true;
 }
 // }}}
 // insert {{{
 void PeerLocal::insert (std::string k, std::string v) {
-  //int idx = correspoding_node(k);
-  //if (idx == id_of_this) {
-  //  cache.insert (k, v);
+  int idx = corresponding_node (k, universe.size()) % universe.size(); 
 
-  //} else {
-  //  PeerRemote& peer = range_of(universe, PEER)[idx]; 
-  //    peer->insert(k, v);
-  //}
+  logger->info ("Inserting [%10s]:[%10s] -> %d", k.c_str(),v.c_str(), idx);
+  if (idx == this->id) {
+    cache->put (k, v);
+
+  } else {
+    auto peer = range_of (universe, PEER)[idx]; 
+    auto msg  = new KeyValue (k, v);
+    peer->do_write (msg);
+  }
 }
 // }}}
 // lookup {{{
@@ -197,8 +204,13 @@ void PeerLocal::run () {
         this->io_service.run();
         });
 
-  threads.emplace_back (t);
+    threads.emplace_back (t);
   }
+}
+// }}}
+// join {{{
+void PeerLocal::join () {
+  for (auto& t : threads) t->join();
 }
 // }}}
 }

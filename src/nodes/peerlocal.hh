@@ -27,16 +27,16 @@ class PeerLocal: public NodeLocal {
     void close ();
 
     void run ();
+    void join ();
 
     template <typename T> void process_message (T);
 
   protected:
     u_ptr<lru_cache<string, string> > cache;
-    u_ptr<thread> detached;
     u_ptr<Histogram> histogram;
     u_ptr<Topology> topology;
     int concurrency;
-    std::vector<std::unique_ptr<std::thread>> threads;
+    std::vector<u_ptr<std::thread>> threads;
 };
 
 }

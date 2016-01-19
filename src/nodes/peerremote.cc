@@ -28,28 +28,35 @@ void PeerRemote::start () {
 // }}}
 // do_read {{{
 void PeerRemote::do_read () {
-  async_read (*socket, buffer(msg_inbound), 
+  async_read (*channel->get_socket(), buffer(msg_inbound), 
       boost::bind(&PeerRemote::on_read, this, ph::error, ph::bytes_transferred));
 }
 // }}}
 // on_read {{{
 void PeerRemote::on_read (const boost::system::error_code& ec, size_t s) {
-  if (ec) return;
-  
-  std::string str(msg_inbound.begin(), msg_inbound.end());
-  Message* msg = load_message (str);
+  if (!ec)  {
 
-  if (msg->get_type() == "Boundaries") {
-//    owner_peer->set_boundaries (msg);
+    logger->info ("Message arrived");
+    std::string str(msg_inbound.begin(), msg_inbound.end());
+    Message* msg = load_message (str);
+    owner_peer->process_message(msg);
   }
+
+  do_read();
 }
 // }}}
 // do_write {{{
 void PeerRemote::do_write (Message* m) {
+  string str = save_message (m);
+  string *tosend = new string(str);
 
+  async_write (*channel->get_socket(), 
+      boost::asio::buffer(*tosend), boost::bind (
+      &PeerRemote::on_write, this, 
+      ph::error, ph::bytes_transferred));
 }
 // }}}
-// on_read {{{
+// on_write {{{
 void PeerRemote::on_write (const boost::system::error_code& ec, size_t s) {
 
 }

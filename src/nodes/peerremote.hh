@@ -20,9 +20,9 @@ class PeerRemote: public NodeRemote {
 
     void on_connect (const boost::system::error_code&,
         boost::asio::ip::tcp::resolver::iterator) override;
-    void do_read ();
+    void do_read () override;
     void on_read (const boost::system::error_code&, size_t); 
-    void do_write (messages::Message*); 
+    void do_write (messages::Message*) override; 
     void on_write (const boost::system::error_code&, size_t); 
 
     void send (messages::Message*);

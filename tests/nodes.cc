@@ -13,12 +13,9 @@ int main (int argc, char ** argv) {
   PeerLocal nl (setted);
 
   nl.establish();
-
   nl.run();
 
-
-  while (true) 
-    sleep (1); 
+  nl.insert ("KEY", "VALUE");
 
   return 0;
 }

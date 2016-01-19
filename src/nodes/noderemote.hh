@@ -4,6 +4,7 @@
 #include "nodelocal.hh"
 #include "../network/channel.hh"
 #include "../messages/message.hh"
+#include "../common/logger.hh"
 
 #include <memory>
 #include <boost/asio.hpp>
@@ -28,14 +29,18 @@ class NodeRemote: public Node {
     void close ();
     std::string get_ip () const override;
 
-    virtual void on_connect (const error_code&, tcp::resolver::iterator) = 0;
+    virtual void on_connect (const error_code&, 
+        tcp::resolver::iterator) = 0;
     virtual void start () = 0;
+    virtual void do_read () = 0;
+    virtual void do_write (messages::Message*) = 0; 
 
     void set_channel(Channel*);
 
   protected:
-    Channel* channel;
+    Channel* channel = nullptr;
     NodeLocal* owner;
     io_service& ioservice;
+    Logger* logger;
 };
 }
