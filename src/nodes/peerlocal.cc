@@ -54,6 +54,14 @@ PeerLocal::PeerLocal(Settings& setted) : NodeLocal(setted) {
   histogram = make_unique<Histogram> (nodes.size(), numbin);
   cache     = make_unique<lru_cache<string, string>> (cachesize);
 
+  int i = 0;
+  for (auto& node : nodes) {
+    if (node == ip_of_this) 
+      id = i;
+    universe.insert ({PEER, new PeerRemote (this, i++)});
+  }
+
+  // topology initialization
   if (tType == "mesh") {
     topology = make_unique<MeshTopology>
       (io_service, logger.get(), nodes, port, id);
@@ -89,6 +97,16 @@ bool PeerLocal::establish () {
 // }}}
 // insert {{{
 void PeerLocal::insert (std::string k, std::string v) {
+
+  while (not topology->is_online() ) sleep(1);
+
+  int i = 0;
+  for (auto& node : range_of(universe, PEER)) {
+    if (i != id)  {
+      node->start();
+    }
+    i++;
+  }
   int idx = corresponding_node (k, universe.size()) % universe.size(); 
 
   logger->info ("Inserting [%10s]:[%10s] -> %d", k.c_str(),v.c_str(), idx);

@@ -56,6 +56,22 @@ module EclipseDaemon
     end 
 
     #}}}
+    # debug_at {{{
+    def debug_at(index) 
+      i = 0
+      @nodelist.each do |node|
+        if i != index.to_i then
+          cmd = "ssh #{node} 'nohup #{@file} #{JSON.generate(@configfile).dump} </dev/null &>/dev/null & exit'"
+          puts cmd
+          system cmd
+        end
+        i = i + 1
+      end
+      cmd  = "ssh #{@nodelist[index.to_i]} \'gdb --args #{@file} #{JSON.generate(@configfile).dump}\'"
+      puts cmd 
+      exec cmd
+    end 
+    #}}}
     # unique {{{
     def unique 
       @nodelist.each do |node|
@@ -108,6 +124,7 @@ module EclipseDaemon
       when 'launch' then launch 
       when 'unique' then unique 
       when 'debug' then debug
+      when 'debug_at' then debug_at input[0]
       when 'close' then  close
       when 'status' then show
       when 'kill' then   kill input

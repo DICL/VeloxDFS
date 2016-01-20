@@ -12,6 +12,7 @@ class PeerRemote: public NodeRemote {
   protected:
     PeerLocal* owner_peer = nullptr;
     boost::asio::ip::tcp::socket* socket;
+    boost::asio::streambuf inbound_data;
     
   public:
     PeerRemote(NodeLocal*, int);
@@ -23,7 +24,7 @@ class PeerRemote: public NodeRemote {
     void do_read () override;
     void on_read (const boost::system::error_code&, size_t); 
     void do_write (messages::Message*) override; 
-    void on_write (const boost::system::error_code&, size_t); 
+    void on_write (const boost::system::error_code&, size_t, Message*); 
 
     void send (messages::Message*);
     void start () override;

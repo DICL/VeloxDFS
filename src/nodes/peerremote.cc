@@ -1,6 +1,8 @@
 #include "peerremote.hh"
 #include "../messages/factory.hh"
 #include <string>
+#include <sstream>
+#include <istream>
 #include <boost/bind.hpp>
 
 using namespace std;
@@ -24,20 +26,31 @@ void PeerRemote::on_connect(const boost::system::error_code& ec,
 // }}}
 // start {{{
 void PeerRemote::start () {
+do_read();
 }
 // }}}
 // do_read {{{
 void PeerRemote::do_read () {
-  async_read (*channel->get_socket(), buffer(msg_inbound), 
+
+  async_read_until (*channel->recv_socket(), inbound_data, 
+      "\r\r",
       boost::bind(&PeerRemote::on_read, this, ph::error, ph::bytes_transferred));
 }
 // }}}
 // on_read {{{
 void PeerRemote::on_read (const boost::system::error_code& ec, size_t s) {
+
+  logger->info ("Message arrived l=%d", s);
   if (!ec)  {
 
-    logger->info ("Message arrived");
-    std::string str(msg_inbound.begin(), msg_inbound.end());
+    std::istream buffer(&inbound_data);
+     stringstream ss;
+     buffer >> ss.rdbuf(); 
+    std::string str = ss.str();
+    //str << ss; // (msg_inbound.begin(), msg_inbound.end());
+    str = str.substr(0, str.find("\r\r"));
+    logger->info ("Message arrived %d:%s", str.length(), str.c_str());
+    sleep(1);
     Message* msg = load_message (str);
     owner_peer->process_message(msg);
   }
@@ -48,17 +61,25 @@ void PeerRemote::on_read (const boost::system::error_code& ec, size_t s) {
 // do_write {{{
 void PeerRemote::do_write (Message* m) {
   string str = save_message (m);
-  string *tosend = new string(str);
+  string tosend = str + "\r\r";
 
-  async_write (*channel->get_socket(), 
-      boost::asio::buffer(*tosend), boost::bind (
+  async_write (*channel->send_socket(), 
+      boost::asio::buffer(tosend), boost::bind (
       &PeerRemote::on_write, this, 
-      ph::error, ph::bytes_transferred));
+      ph::error, ph::bytes_transferred, m));
 }
 // }}}
 // on_write {{{
-void PeerRemote::on_write (const boost::system::error_code& ec, size_t s) {
-
+void PeerRemote::on_write (const boost::system::error_code& ec, 
+    size_t s, Message* m) {
+  if (ec) {
+    logger->info ("Message could not reach err=%s", 
+        ec.message().c_str());
+    do_write(m);
+  } else  {
+    logger->info ("Message delivered: %s", 
+        ec.message().c_str());
+  }
 }
 // }}}
 // send {{{

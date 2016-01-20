@@ -21,18 +21,10 @@ NodeLocal::NodeLocal(Settings& setted) {
   string logname = setted.get<string> ("log.name");
   string logtype = setted.get<string> ("log.type");
   ip_of_this     = setted.getip ();
-  vec_str nodes  = setted.get<vec_str> ("network.nodes");
   port           = setted.get<int> ("network.port_cache");
 
   logger.reset (Logger::connect(logname, logtype));
 
-  // topology initialization
-  int i = 0;
-  for (auto& node : nodes) {
-    if (node == ip_of_this) 
-      id = i;
-    universe.insert ({PEER, new PeerRemote (this, i++)});
-  }
 }
 
 NodeLocal::~NodeLocal() { }

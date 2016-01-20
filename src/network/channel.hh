@@ -24,7 +24,7 @@ using boost::asio::ip::tcp;
   
 class Channel {
   public:
-    Channel (tcp::socket&);
+    Channel (tcp::socket*);
 //    virtual ~Channel () { };
 //
 //    virtual bool establish () = 0;
@@ -36,10 +36,13 @@ class Channel {
 //    template <typename class_name = Channel>
 //    virtual void on_write (std::string&, size_t, handler<class_name>) = 0;
 
-    tcp::socket* get_socket();
+    tcp::socket* send_socket();
+    tcp::socket* recv_socket();
+
+    void set_recv_socket(tcp::socket*);
 
   protected:
-    tcp::socket& socket;
+    tcp::socket* send_, *recv_;
 };
 
 } /* network */ 

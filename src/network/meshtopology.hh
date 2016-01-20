@@ -22,7 +22,7 @@ class MeshTopology: public Topology {
     bool is_online() override;
 
   private:
-    int net_size, clients_connected = 1;
+    int net_size, clients_connected = 1, server_connected = 1;
 
     void on_connect (const boost::system::error_code&,
         tcp::socket*, tcp::endpoint*);
@@ -31,7 +31,6 @@ class MeshTopology: public Topology {
         tcp::socket*);
 
     std::unique_ptr<tcp::acceptor> acceptor;
-    std::vector< std::unique_ptr<tcp::socket> > servers_sock;
 };
 
 } /* network */ 

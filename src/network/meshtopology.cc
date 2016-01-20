@@ -30,7 +30,7 @@ bool MeshTopology::establish () {
           &MeshTopology::on_connect, this, ph::error, client, 
           endpoint));
 
-    auto channel = new Channel(*client);
+    auto channel = new Channel(client);
     channels.insert (make_pair(i, channel));
     }
     i++;
@@ -64,6 +64,7 @@ void MeshTopology::on_connect (
             client, it));
 
     } else {
+      server_connected++;
       delete it;
     }
 }
@@ -86,7 +87,6 @@ void MeshTopology::on_accept (
             ph::error, sock));
 
   } else {
-    clients_connected++;
     auto ep = sock->remote_endpoint();
     auto address = ep.address().to_string();
 
@@ -96,8 +96,9 @@ void MeshTopology::on_accept (
       index++;
     }
 
-    servers_sock.emplace_back(sock);
-
+    channels[index]->set_recv_socket(sock);
+    clients_connected++;
+    logger->info ("Accepted client id=%d", index);
     if ( clients_connected < net_size ) {
       auto server = new tcp::socket(ioservice);
       acceptor->async_accept(*server,

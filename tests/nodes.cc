@@ -15,7 +15,9 @@ int main (int argc, char ** argv) {
   nl.establish();
   nl.run();
 
+  sleep(2);
   nl.insert ("KEY", "VALUE");
+  nl.join();
 
   return 0;
 }

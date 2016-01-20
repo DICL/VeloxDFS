@@ -18,8 +18,8 @@ bool RingTopology::establish () {
 
   client_sock = make_unique<tcp::socket> (ioservice); 
   server_sock = make_unique<tcp::socket> (ioservice);
-  client = make_unique<Channel> (*client_sock);
-  client = make_unique<Channel> (*server_sock);
+  client = make_unique<Channel> (client_sock.get());
+  client = make_unique<Channel> (server_sock.get());
 
   tcp::resolver resolver (ioservice);
   tcp::resolver::query query (to_connect, to_string(port));

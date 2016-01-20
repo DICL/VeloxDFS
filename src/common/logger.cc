@@ -28,8 +28,12 @@ std::unordered_map<string, int> syslog_facilities {
 Logger* Logger::singleton = nullptr;
 
 Logger* Logger::connect (string title, string type) {
+
+  static char t [16];
+  title.copy(t, 16);
+  t[15] = '\0';
   if (singleton == nullptr)
-    singleton = new Logger(title, type);
+    singleton = new Logger(t, type);
 
   return singleton;
 }
@@ -42,9 +46,9 @@ void Logger::disconnect (Logger* in) {
   in = nullptr;
 }
 
-Logger::Logger (string title, string type) { 
+Logger::Logger (char* title, const string& type) { 
   int type_ = syslog_facilities[type];
-  openlog (title.c_str() , LOG_CONS, type_); 
+  openlog (title, LOG_CONS, type_); 
 }
 
 Logger::~Logger () { closelog (); }
