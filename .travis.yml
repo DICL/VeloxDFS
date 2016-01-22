@@ -1,0 +1,25 @@
+sudo: required
+dist: trusty
+language: cpp
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+
+    packages:
+      - libboost-all-dev
+      - build-essential
+      - gcc-4.9
+      - g++-4.9
+
+before_script:
+  - export CXX=g++-4.9
+  - mkdir build
+
+script: 
+  - sh autogen.sh
+  - cd build
+  - sh ../configure --prefix=`pwd`
+  - make -j16
+  - make install 
