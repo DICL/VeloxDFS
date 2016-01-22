@@ -1,0 +1,22 @@
+\begin{thebibliography}{1}
+
+\bibitem{dean2008mapreduce}
+Jeffrey Dean and Sanjay Ghemawat.
+\newblock Mapreduce: simplified data processing on large clusters.
+\newblock {\em Communications of the ACM}, 51(1):107--113, 2008.
+
+\bibitem{shinnar2012m3r}
+Avraham Shinnar, David Cunningham, Vijay Saraswat, and Benjamin Herta.
+\newblock M3r: increased performance for in-memory hadoop jobs.
+\newblock {\em Proceedings of the VLDB Endowment}, 5(12):1736--1747, 2012.
+
+\bibitem{Stoica:2001:CSP:383059.383071}
+Ion Stoica, Robert Morris, David Karger, M.~Frans Kaashoek, and Hari
+  Balakrishnan.
+\newblock Chord: A scalable peer-to-peer lookup service for internet
+  applications.
+\newblock In {\em Proceedings of the 2001 Conference on Applications,
+  Technologies, Architectures, and Protocols for Computer Communications},
+  SIGCOMM '01, pages 149--160, New York, NY, USA, 2001. ACM.
+
+\end{thebibliography}

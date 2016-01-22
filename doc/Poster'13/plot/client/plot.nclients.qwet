@@ -1,0 +1,24 @@
+#   set terminal latex
+#   set output "eg2.tex"
+   set terminal postscript eps solid enhanced 20 
+   set output "nclients.qwet.eps"
+   set size 6/5., 1/1.
+   set title "AVG Query Response Time" font "Times,40"
+   set pointsize 2.5
+   set xlabel "Number of Clients" font "Times,40"
+   set ylabel "Time (msec)" font "Times,40"
+
+   set xtics ( "2" 0, "8" 1, "14" 2, "20" 3, "26" 4, "32" 5) font "Time,30"
+   #set key 2, 80 
+   set logscale y
+   set ytics (2000,3000,4000,5000,6000) font "Time,28"
+	
+plot [-1:6] [2000:7000] \
+	"dema.dat" title "{/Times=28 DEMA}"  with linespoints 8 4, \
+	"bmdema.dat" title "{/Times=28 BM-DEMA}"  with linespoints 7 5, \
+	"round.dat" title "{/Times=28 Load Based}"  with linespoints 4 10
+
+#	"plusone.dat" title "DEMA+n"  with linespoints 5 6, \
+#	"fixed.dat" title "FIXED"  with linespoints 9 11
+#	"sma.dat" title "DSMA"  with linespoints 7 5, \
+#	"plusrr.dat" title "DEMA+r"  with linespoints 10 8, \

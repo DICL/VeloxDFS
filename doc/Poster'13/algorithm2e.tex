@@ -1,0 +1,1319 @@
+%  algorithm2e.tex --- doc of the package file for algorithms
+%  
+%  (c) 1996 Christophe Fiorio, Tu-Berlin, Germany
+%  
+%  Report bugs and comments to:
+%  fiorio@math.tu-berlin.de
+%
+%  $Id: algorithm2e.tex,v 1.1 2008/07/11 03:54:11 bsnam Exp $
+%
+\documentclass[a4paper]{article}
+
+\usepackage{a4wide}
+\usepackage{varioref}
+\usepackage{makeidx}
+\usepackage[boxed]{algorithm2e}
+
+
+\def\no{n$^\circ$}
+\def\No{N$^\circ$}
+
+%% macros for the macros !!
+\newcommand\macind[1]{\index{#1@\texttt{$\protect\backslash$#1}|textit}}
+
+\newcommand\almac[1]{$\backslash$\texttt{#1}\index{#1@\texttt{$\protect\backslash$#1}|textit}}
+\newcommand\almacp[2]{$\backslash$\texttt{#1\{#2\}}\index{#1@\texttt{$\protect\backslash$#1}|textit}}
+\newcommand\almacpp[3]{$\backslash$\texttt{#1\{#2\}\{#3\}}\index{#1@\texttt{$\protect\backslash$#1}|textit}}
+\newcommand\almacppp[4]{$\backslash$\texttt{#1\{#2\}\{#3\}\{#4\}}\index{#1@\texttt{$\protect\backslash$#1}|textit}}
+\newcommand\almacpppp[5]{$\backslash$\texttt{#1\{#2\}\{#3\}\{#4\}\{#5\}}\index{#1@\texttt{$\protect\backslash$#1}|textit}}
+\newcommand\almacpsix[7]{$\backslash$\texttt{#1\{#2\}\{#3\}\{#4\}\{#5\}\{#6\}\{#7\}}\index{#1@\texttt{$\protect\backslash$#1}|textit}}
+\newcommand\almacphuit[9]{$\backslash$\texttt{#1\{#2\}\{#3\}\{#4\}\{#5\}\{#6\}\{#7\}\{#8\}\{#9\}}\index{#1@\texttt{$\protect\backslash$#1}|textit}}
+\newcommand\Almac[1]{$\backslash$\texttt{#1}\index{#1@\texttt{$\protect\backslash$#1}|textbf}}
+\newcommand\Almacp[2]{$\backslash$\texttt{#1\{#2\}}\index{#1@\texttt{$\protect\backslash$#1}|textbf}}
+\newcommand\Almacpp[3]{$\backslash$\texttt{#1\{#2\}\{#3\}}\index{#1@\texttt{$\protect\backslash$#1}|textbf}}
+\newcommand\Almacppp[4]{$\backslash$\texttt{#1\{#2\}\{#3\}\{#4\}}\index{#1@\texttt{$\protect\backslash$#1}|textbf}}
+\newcommand\Almacpppp[5]{$\backslash$\texttt{#1\{#2\}\{#3\}\{#4\}\{#5\}}\index{#1@\texttt{$\protect\backslash$#1}|textbf}}
+\newcommand\Almacpsix[7]{$\backslash$\texttt{#1\{#2\}\{#3\}\{#4\}\{#5\}\{#6\}\{#7\}}\index{#1@\texttt{$\protect\backslash$#1}|textbf}}
+\newcommand\Almacpseven[8]{$\backslash$\texttt{#1\{#2\}\{#3\}\{#4\}\{#5\}\{#6\}\{#7\}\{#8\}}\index{#1@\texttt{$\protect\backslash$#1}|textbf}}
+\newcommand\Almacphuit[9]{$\backslash$\texttt{#1\{#2\}\{#3\}\{#4\}\{#5\}\{#6\}\{#7\}\{#8\}\{#9\}}\index{#1@\texttt{$\protect\backslash$#1}|textbf}}
+
+%% macro for the options !!
+% 2.40
+\newcommand{\optalgopart}{\textsf{algopart}\index{french@\textsf{algopart}|textit}\xspace}
+\newcommand{\optalgochapter}{\textsf{algopart}\index{french@\textsf{algochapter}|textit}\xspace}
+\newcommand{\optalgosection}{\textsf{algopart}\index{french@\textsf{algosection}|textit}\xspace}
+%
+\newcommand{\optslide}{\textsf{slide}\index{french@\textsf{slide}|textit}\xspace}
+\newcommand{\optalgoe}{\textsf{algo2e}\index{french@\textsf{algo2e}|textit}\xspace}
+\newcommand{\optfrench}{\textsf{french}\index{french@\textsf{french}|textit}\xspace}
+\newcommand{\optenglish}{\textsf{english}\index{english@\textsf{english}|textit}\xspace}
+\newcommand{\optgerman}{\textsf{german}\index{german@\textsf{german}|textit}\xspace}
+\newcommand{\optportuguese}{\textsf{portuguese}\index{portuguese@\textsf{portuguese}|textit}\xspace}
+\newcommand{\optczech}{\textsf{czech}\index{czech@\textsf{czech}|textit}\xspace}
+\newcommand{\optboxed}{\textsf{boxed}\index{boxed@\textsf{boxed}|textit}\xspace}
+\newcommand{\optruled}{\textsf{ruled}\index{ruled@\textsf{ruled}|textit}\xspace}
+\newcommand{\optalgoruled}{\textsf{algoruled}\index{algoruled@\textsf{algoruled}|textit}\xspace}
+\newcommand{\optplain}{\textsf{plain}\index{plain@\textsf{plain}|textit}\xspace}
+\newcommand{\optlined}{\textsf{lined}\index{lined@\textsf{lined}|textit}\xspace}
+\newcommand{\optvlined}{\textsf{vlined}\index{vlined@\textsf{vlined}|textit}\xspace}
+\newcommand{\optnoline}{\textsf{noline}\index{noline@\textsf{noline}|textit}\xspace}
+\newcommand{\opttitlenumbered}{\textsf{titlenumbered}\index{titlenumbered@\textsf{titlenumbered}|textit}\xspace}
+\newcommand{\opttitlenotnumbered}{\textsf{titlenotnumbered}\index{titlenotnumbered@\textsf{titlenotnumbered}|textit}\xspace}
+\newcommand{\optresetcount}{\textsf{resetcount}\index{resetcount@\textsf{resetcount}|textit}\xspace}
+\newcommand{\optnoresetcount}{\textsf{noresetcount}\index{noresetcount@\textsf{noresetcount}|textit}\xspace}
+\newcommand{\optalgonl}{\textsf{algonl}\index{algonl@\textsf{algonl}|textit}\xspace}
+\newcommand{\optlongend}{\textsf{longend}\index{longend@\textsf{longend}|textit}\xspace}
+\newcommand{\optshortend}{\textsf{shortend}\index{shortend@\textsf{shortend}|textit}\xspace}
+\newcommand{\optnoend}{\textsf{noend}\index{noend@\textsf{noend}|textit}\xspace}
+\newcommand{\optfigure}{\textsf{figure}\index{figure@\textsf{figure}|textit}\xspace}
+%
+\newcommand{\Optfrench}{\textsf{french}\index{french@\textsf{french}|textbf}\xspace}
+\newcommand{\Optenglish}{\textsf{english}\index{english@\textsf{english}|textbf}\xspace}
+\newcommand{\Optgerman}{\textsf{german}\index{german@\textsf{german}|textit}\xspace}
+\newcommand{\Optportuguese}{\textsf{portuguese}\index{portuguese@\textsf{portuguese}|textit}\xspace}
+\newcommand{\Optczech}{\textsf{czech}\index{czech@\textsf{french}|textbf}\xspace}
+\newcommand{\Optboxed}{\textsf{boxed}\index{boxed@\textsf{boxed}|textbf}\xspace}
+\newcommand{\Optruled}{\textsf{ruled}\index{ruled@\textsf{ruled}|textbf}\xspace}
+\newcommand{\Optalgoruled}{\textsf{algoruled}\index{algoruled@\textsf{algoruled}|textbf}\xspace}
+\newcommand{\Optplain}{\textsf{plain}\index{plain@\textsf{plain}|textbf}\xspace}
+\newcommand{\Optlined}{\textsf{lined}\index{lined@\textsf{lined}|textbf}\xspace}
+\newcommand{\Optvlined}{\textsf{vlined}\index{vlined@\textsf{vlined}|textbf}\xspace}
+\newcommand{\Optnoline}{\textsf{noline}\index{noline@\textsf{noline}|textbf}\xspace}
+\newcommand{\Opttitlenumbered}{\textsf{titlenumbered}\index{titlenumbered@\textsf{titlenumbered}|textbf}\xspace}
+\newcommand{\Opttitlenotnumbered}{\textsf{titlenotnumbered}\index{titlenotnumbered@\textsf{titlenotnumbered}|textbf}\xspace}
+\newcommand{\Optresetcount}{\textsf{resetcount}\index{resetcount@\textsf{resetcount}|textbf}\xspace}
+\newcommand{\Optnoresetcount}{\textsf{noresetcount}\index{noresetcount@\textsf{noresetcount}|textbf}\xspace}
+\newcommand{\Optalgonl}{\textsf{algonl}\index{algonl@\textsf{algonl}|textbf}\xspace}
+\newcommand{\Optlongend}{\textsf{longend}\index{longend@\textsf{longend}|textbf}\xspace}
+\newcommand{\Optshortend}{\textsf{shortend}\index{shortend@\textsf{shortend}|textbf}\xspace}
+\newcommand{\Optnoend}{\textsf{noend}\index{noend@\textsf{noend}|textbf}\xspace}
+\newcommand{\Optfigure}{\textsf{figure}\index{figure@\textsf{figure}|textbf}\xspace}
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+\title{algorithm2e.sty --- package for algorithms\\ {\large release 2.51}}
+\author{ (c) 1996--2003 Christophe Fiorio, LIRM Montpellier, France\\ \\
+  Report bugs and comments to fiorio@lirmm.fr\\
+  algorithm2esty-annonce@lirmm.fr mailing list for announcements\\
+  algorithm2esty-discussion@lirmm.fr mailing list for discussion\thanks{The author is very grateful
+    to Pascal Jappy (jappy@lirmm.fr) for his great help in the english
+    writing} \thanks{Martin Blais (blais@IRO.UMontreal.CA) for his
+    suggestions} \thanks{David A. Bader (dbader@eece.unm.edu) for his new option
+    \texttt{noend}} \thanks{Gilles Geeraerts (gigeerae@ulb.ac.be) for his new
+    command \texttt{SetKwIfElseIf}} \thanks{Ricardo Fukasawa (fukasawa@globo.com)
+  for the portuguese keywords} \thanks{Jean-Baptiste Rouquier
+  (jean-baptiste.rouquier@ens-lyon.fr) for his remarks} \thanks{Christian Icking 
+  (christian.icking@fernuni-hagen.de) for the german translation of keywords}} \date{October 2003}
+
+\makeindex
+
+\begin{document}
+\maketitle
+\vspace{1cm}
+
+\tableofcontents
+\clearpage
+
+\section{Introduction}
+
+Algorithm2e is an environment for writing algorithms in \LaTeX2e{}.  An
+algorithm is defined as a floating object like figures.  It provides
+macros that allow you to create different sorts of key words, thus a
+set of predefined key word is given. You can also change the typography
+of the keywords.
+
+
+You can subscribe to \texttt{algorithm2e-announce} mailing list to receive
+announcements about revisions of the package and to
+\texttt{algorithm2e-discussion} to discuss, send comments,
+ask questions about the package.
+\makeatletter
+In order to subscribe to the mailing lists you have to send an email to
+\texttt{sympa@lirmm.fr} with \texttt{subscribe algorithm2e-announce Firstname
+  Name} or \texttt{subscribe algorithm2e-discussion Firstname
+  Name} in the body of the message.\makeatother
+
+\section{How to use it: abstract}
+
+You must set
+\texttt{$\backslash$usepackage[\emph{options}]\{algorithm2e\}} before 
+\texttt{$\backslash$begin\{document\}} command. The available options
+are described in section~\ref{sec_options}.
+
+
+The optional arguments [Hhtbp] works like those of figure environment.
+The \textbf{H} argument comes from the float environment and forces the
+algorithm to stay in place. If used, an algorithm is no more a floating
+object.  Caution: algorithms cannot be cut, so if there is not enough
+place to put an algorithm at a given spot, \LaTeX\ will place a blank and 
+put the algorithm on the following page.
+
+
+Here is a quick example\footnote{For longer and more complexe examples
+  see Section~\protect\ref{longexample}}:
+
+\begin{verbatim}
+\begin{algorithm}[H]
+  \SetLine
+  \AlgData{this text}
+  \AlgResult{how to write algorithm with \LaTeX2e }
+  
+  initialization\;
+  \While{not at end of this document}{
+    read current\;
+    \eIf{understand}{
+      go to next section\;
+      current section becomes this one\;
+      }{
+      go back to the beginning of current section\;
+      }
+    }
+  \caption{How to write algorithms}
+\end{algorithm}
+\end{verbatim}
+
+which gives
+
+\begin{algorithm}[H]
+  \SetLine
+  \KwData{this text}
+  \KwResult{how to write algorithm with \LaTeX2e }
+  
+  initialization\;
+  \While{not at end of this document}{
+    read current section\;
+    \eIf{understand}{
+      go to next section\;
+      current section becomes this one\;
+      }{
+      go back to the beginning of current section\;
+      }
+    }
+  \caption{How to write algorithms}
+\end{algorithm}
+
+\textsc{Very Important} : each line \textbf{MUST} end with \almac{;}
+only those with a macro beginning a block should not end with \almac{;}.
+Note then that you can always use the \almac{;} command in math mode
+to set a small space.
+
+The caption works as in a figure environment and is used by
+\almac{listofalgorithms} as a reference name for the list of
+algorithms. You can also use the title macro given with the package, but
+this macro doesn't insert an entry in the list of algorithms. 
+\bigskip
+
+There are six text types in an algorithm environment:
+\begin{enumerate}
+\item The keywords (\textbf{Kw}): Macros which usually indicate words
+  of the language. Some are predefined and given with \emph{the
+    algorithm package}. 
+
+  The user can define his own language keywords by using the
+  different macros presented in section~\ref{sec_deflanguage} (see
+  below for a short, non exhaustive list). He can also define simple
+  keywords with the \almacpp{SetKw}{Kw}{thetext} macro.
+\item The Functions: (\textbf{Func}) Macros defined by the user which
+  denote local functions or other algorithms defined in the text. 
+
+  They are defined using \almacpp{SetKwFunction}{KwFn}{Fn} where
+  $\backslash$KwFn will be the macro and \FuncSty{Fn} the text
+  printed.
+\item The Arguments (\textbf{Arg}): The arguments of the \emph{Kw} or
+  \emph{Func} macros.
+\item The procedure and function name environment style (\textbf{ProcNameSty}):
+  The type style of the caption of \emph{procedure} and \emph{function}
+  environment.
+\item The arguments of procedure and function environments style
+  (\textbf{ProcArgSty}): the type style of the argument of \emph{procedure} and
+  \emph{funciton} environments.
+\item Data (\textbf{Data}): A type of text different from the default.
+  You can use it as you want, and can be useful for example to emphasize a Data
+  structure or denotes some important variables.
+
+  They are defined with the help of the
+  \almacpp{SetKwData}{KwDat}{data} macro, where $\backslash$KwDat will
+  be the macro and \DataSty{data} the text printed.
+\item The text (the default): All the remaining text of the algorithm.
+\end{enumerate}
+
+Note that if you define macros outside the algorithm environment they
+are available in all the document and, in particular, you can use them
+inside all algorithms without redefining them. Be careful you can't
+use macros beginning a block outside an algorithm environment.
+\bigskip
+
+Here are some language keywords predefined in the package\footnote{See
+  Section~\protect\ref{predefkeywords} for a complete list of all
+  predefined macros such as $\backslash$\texttt{uIf}, ...}:
+
+\begin{itemize}
+\item $\backslash$KwData\{input\}\macind{KwData},
+  $\backslash$KwResult\{output\}\macind{KwResult},
+  $\backslash$KwIn\{input\}\macind{KwIn},
+  $\backslash$KwOut\{output\}\macind{KwOut}
+\item $\backslash$KwTo\macind{KwTo},
+  $\backslash$KwRet\{[value]\}\macind{KwRet}
+\item $\backslash$Begin\{block inside\}\macind{Begin}
+\item $\backslash$eIf\{condition\}\{then block\}\{else block\}\macind{eIf}, 
+  $\backslash$If\{condition\}\{then block\}\macind{If}
+\item $\backslash$Switch\{condition\}\{Switch block\}\macind{Switch},
+  $\backslash$Case\{a case\}\{case block\}\macind{Case},
+  $\backslash$Other\{otherwise block\}\macind{Other}
+\item $\backslash$For\{condition\}\{text loop\}\macind{For}
+\item $\backslash$While\{condition\}\{text loop\}\macind{While}
+\item $\backslash$Repeat\{end condition\}\{text loop\}\macind{Repeat}
+\end{itemize}
+%%%%%%%%%%%%%
+
+\section{The environments of the package\label{sec_envi}}
+
+This package provides 4 environments :
+\begin{description}
+\item[algorithm :] the main environment, the one you will used most of the
+  time. 
+\item[algorithm* :] same as the precedent, but used in a two columns text, puts
+  the algorithm across the two columns.
+\item[procedure :] This environment works like algorithm environment but:
+  \begin{itemize}
+  \item the \texttt{ruled} (or \texttt{algoruled}) style is recommended.
+  \item the caption now writes \textbf{Procedure name...}
+  \item the syntax of the $\backslash$\texttt{caption} command is restricted as
+    follow: you MUST put a name followed by 2 braces like this
+    ``\emph{Name()}''.  You can put arguments inside the braces and text after.
+    If no argument is given, the braces will be removed in the title.
+  \item label now puts the name (the text before the braces in the caption) of
+    the procedure or function as reference (not the number like a classic
+    algorithm environment).
+  \end{itemize}
+\item[procedure* :] same as the precedent, but used in a two columns text outs the
+  procedure across the two columns.
+\item[function :] as the precedent but with \textbf{Function} instead of
+  procedure in the title.
+\item[function* :] same as the precedent, but used in a two columns text outs the
+  function across the two columns.
+\end{description}
+
+%%%%%%%%%%%%%
+
+\section{The options of the package\label{sec_options}}
+
+\begin{description}
+\item[\optalgoe :] changes the name of environment algorithm into algorithm2e
+  and so allows to use the package with some journal style which already define
+  an algorithm environment.
+\item[\optslide :] require package color. Hack for slide class in order to have
+  correct margins.
+\item[\Optenglish :] the default.
+\item[\Optfrench :] to have for example \textsl{algorithme\ :} instead of
+  \textsl{algorithm:}.
+\item[\Optgerman :] to have for example \textsl{Prozedur\ :} instead of
+  \textsl{procedure:}.
+\medskip
+\item[\Optportuguese :] to have for example \textsl{Algoritmo:} instead of
+  \textsl{algorithm:}.
+\medskip
+\item[\Optczech :] to have for example \textsl{Algoritmus:} instead of
+  \textsl{algorithm:}.
+\medskip
+
+\item[\Optfigure :] algorithms are put in classical figures and so are numbered as
+  figures and putted in the $\backslash$\texttt{listoffigures}.\par
+  Important Note: this option is not compatible with \texttt{floatflt} package
+  (see note in Known Bugs section~\vref{sec_bugs}).
+\medskip
+
+\item[\optalgopart :] algorithms are numbered within part numbers.
+\item[\optalgochapter :] algorithms are numbered within chapter numbers.
+\item[\optalgosection :] (default) algorithms are numbered within section numbers.
+\medskip
+
+\item[\Optboxed :] to have algorithms enclosed in a box\footnote{Comes from the
+  float package.}.
+\item[\Optruled :] to have algorithms with a line at the top and the
+  bottom\footnote{Comes also from the float package}. Note that the
+  caption is not centered under the algorithm anymore but is set at
+  the beginning of the algorithm.
+\item[\Optalgoruled :] as above but with extra spaces after the rules.
+\item[\Optplain :] the default, with no feature.
+\medskip
+
+\item[\Optlined:] \almac{SetLine} becomes the default, see
+  section~\ref{sec_styleoptions} for explanations about the
+  \almac{SetLine} macros.
+\item[\Optvlined:] \almac{SetVline} becomes the default, see
+  section~\ref{sec_styleoptions} for explanations about the
+  \almac{SetVline} macros.
+\item[\Optnoline:]  \almac{SetNoline} becomes the default, see
+  section~\ref{sec_styleoptions} for explanations about the
+  \almac{SetNoline} macros.
+\medskip
+
+\item[\Opttitlenumbered :] \almacp{Titleofalgo}{title}
+  prints \textsl{Algorithm n: thetitle} where \emph{n} is the counter
+  of the algo.\\
+  \textbf{Beware}: \almac{Titleofalgo} don't insert an entry in the
+  list of algorithms.  So do not use \almac{Titleofalgo} with a caption.
+  Both increment the counter of the algorithms.
+\item[\Opttitlenotnumbered (default)] the macro
+  \texttt{$\backslash$Titleofalgo\{title\}} doesn't number the algorithm.
+\medskip
+
+\item[\Optresetcount] the line numbers are reset to 0 at the beginning of
+  each algorithm (by default).
+\item[\Optnoresetcount] the contreverse of the precedent. To reset
+  the line counter to 0 do:\\
+  \texttt{$\backslash$setcounter\{AlgoLine\}\{0\}}
+\item[\Optalgonl:] the line numbers will be prefixed with the number of the
+  current algorithm. \textbf{Take care} to set the caption of the
+  algorithm at the beginning of the environnement, else you will have
+  the precedent algorithm number as the current one.
+\item[\Optlongend:] the end keyword are longer and different for
+  each macro. For example \emph{endif} for a if-then-else macro.
+\item[\Optshortend:] the ``end keyword'' of the macros is just
+  \emph{end} (default).
+\item[\Optnoend:] the ``end keyword'' of the macros is not printed.
+\end{description}
+
+
+%%%%%%%%%%%%%
+
+\section{The macros provided with the package}
+
+%----------
+\subsection{Typesetting macros}
+
+\begin{description}
+\item[\Almac{;}] marks the end of a line. \textbf{Don't forget it !}. By
+  default, it prints a `;'. You can change this with \almac{dontprintsemicolon}.
+\item[\Almacp{Titleofalgo}{thetitle}] prints: ``Algorithm \no:
+  thetitle'' in the typography and size defined by \almac{SetTitleSty}.
+  Puts a vertical space below.\\ 
+  Beware: \almac{Titleofalgo} doesn't insert an entry in the list of
+  algorithms.  So don't use \almac{Titleofalgo} with \almac{caption}. Both
+  increment the counter of the algorithms.\\ 
+  {\small note:\emph{with the \optfrench option prints
+      \emph{Algorithme \no :}}}
+\item[\Almac{listofalgorithms}] inserts the list of all algorithms
+  having a \emph{caption}.
+\item[\Almac{BlankLine}] prints a blank line. In fact puts a
+  vertical space of one \texttt{ex}.
+\item[\Almac{Indp}] indents plus $\rightarrow$ the text is shifted to the right.
+\item[\Almac{Indm}] indents minus $\rightarrow$ the text is shifted to the left.
+\item[\Almac{nl}]   numbers the line: must \textsc{begin} the line.
+\item[\Almacp{lnl}{label}] numbers and labels the line : must
+  \textsc{begin} the line. So you can refer to the number of the line by
+  the following command: \almacp{ref}{label}
+\item[\Almacp{nlset}{} and \almacpp{lnlset}{}{}] work as \almac{nl}
+  and \almacp{lnl}{} except that the additional argument is the
+  number (text) to put at the begin of the line.
+\item[\Almacp{KwSty}{$<$text$>$}] set $<$text$>$ in keyword type style.
+\item[\Almacp{FuncSty}{$<$text$>$}] set $<$text$>$ in function type style.
+\item[\Almacp{ArgSty}{$<$text$>$}] set $<$text$>$ in argument type
+  style.
+\item[\Almacp{DataSty}{$<$text$>$}] sets $<$text$>$ in data typography.
+\item[\Almacp{CommentSty}{$<$text$>$}] sets $<$text$>$ in comment typography.
+\item[\Almac{AlFnt}] is used at the beginning of the caption and the body of
+  algorithm in order to define the fonts used for typesetting algorithms. You
+  can use it elsewhere you want to typeset text as algorithm. For example you
+  can do \verb+\SetAlFnt{\small\sf}+ to have algorithms typeset in small sf
+  font. Default is nothing so algorithm is typeset as the text of the document.
+\item[\Almacp{AlTitleFnt}{$<$text$>$}] is used to typeset \{Algorithm: \} in the
+  caption. You can use it to have text typeset as \{Algorithm:\} of captions.
+  Default is textbf.\par Default can be redefined by
+  \verb+\SetAlTitleFnt{font}+.
+\end{description}
+
+%----------
+\subsection{Text restyling macros\label{sec_styleoptions}}
+
+\begin{description}
+\item[\Almac{dontprintsemicolon}] the `;' are no more printed at the
+  end of each line.
+\item[\Almac{printsemicolon}] prints a `; ' at the end of each
+  line (by default)
+\item[\Almac{SetVline}] prints a vertical line followed by a little
+  horizontal line between the start and the end of each block. Looks
+  like that : \rule{0.4pt}{3mm}\rule{0.5mm}{0.4pt}
+\item[\Almac{SetNoline}] Doesn't print vertical lines (by default).
+  The block is marked with keywords such as \emph{begin}, \emph{end}.
+\item[\Almac{SetLine}] prints vertical lines between bloc start-end
+  keywords as \emph{begin}, \emph{end}.
+\item[\Almacp{SetKwSty}{$<$font$>$}] sets the Kw typography to $<$font$>$ (by
+  default: \textbf{textbf}).
+\item[\Almacp{SetFuncSty}{$<$font$>$}]  sets the function typography 
+(by default:  \textbf{texttt}).
+\item[\Almacp{SetArgSty}{$<$font$>$}]  sets the argument typography (by
+  default: \textbf{emph}).
+\item[\Almacp{SetProcNameSty}{$<$font$>$}] sets caption typography of procedure
+  and function environment (by default the same as \Almacp{FuncSty}).
+\item[\Almacp{SetProcArgSty}{$<$font$>$}] sets argument typography of procedure
+  and function environment (by default the same as \Almacp{ArgSty}).
+\item[\Almacp{SetDataSty}{$<$font$>$}]  sets the data typography (by
+  default: \textbf{textsf}).
+\item[\Almacp{SetCommentSty}{$<$font$>$}]  sets the comment text typography (by
+  default: \textbf{texttt}).
+\item[\Almacp{SetAlFnt}{$<$font$>$}] sets the font used by algorithm text and
+  caption/title.
+\item[\Almacp{SetAlTitleFnt}{$<$font$>$}] sets the font used for \{algorithm: \}
+  in caption or tile of algorithm (default is set to \texttt{textbf}).
+\item[\Almacppp{Setnlsty}{$<$font$>$}{$<$txt before$>$}{$<$txt after$>$}]
+  defines how to print line numbers:\\ will print \{$<$font$>$ $<$txt
+  bef$>$ thelinenumber $<$txt aft$>$\}. \\ By default
+  \almacppp{SetnlSty}{textbf}{}{}.
+\item[\Almacpp{SetTitleSty}{type style}{type size}] sets the
+  typography and size of the titles defined with the macro
+  \almacp{Titleofalgo}{} (not with $\backslash$caption).
+\item[\Almac{nocaptionofalgo}] doesn't print Algorithm and its number
+  in the caption. This macros is \textbf{ONLY} active for
+  \emph{``\optalgoruled''} or \emph{``\optruled''} algorithms and for
+  the next algorithm. For example, it is useful when the algorithm
+  just describes a function and you only want to display the name of
+  the function in the caption.
+\item[\Almac{restorecaptionofalgo}] restores correct captions that was
+  corrupted by a \almac{nocaptionofalgo} macro.
+\item[\Almacp{restylealgo}{style}] sets the style of the following algorithms 
+  to that given by this macro (\optplain, \optboxed, \optruled, \optalgoruled)
+  unlike those indicated in the options of the package (see options of
+  the package).
+\item[\Almacpp{SetInd}{before rule space}{after rule space}] sets
+  the size of the space before the vertical rule and after. In
+  \almac{NoLine} mode the indentation space is the sum of these two
+  values, by default 0.5em and 1em
+\item[\Almacp{setnlskip}{length}] sets the value of the space
+  between the line numbers and the text, by default 1em.
+\item[\Almac{algomargin}] this is the value of the margin of all
+  algorithms. You can change it by setting:
+  $\backslash$\texttt{setlength\{}\almac{algomargin}\texttt{\}\{2em\}}
+  for example. The default value is the sum of the two dimensions
+  \almac{leftskip} and \almac{parindent} when the algorithm2e package
+  is loaded. Note that if you change this value, it will take effect
+  with the next algorithm environment. So even if you change it
+  \emph{inside} an algorithm environment, it will not affect the
+  current algorithm.
+\item[\Almacp{incmargin}{length}] increases the size of the
+  \almac{algomargin} by the length given in argument.
+\item[\Almacp{decmargin}{length}] decreases the size of the
+  \almac{algomargin} by the length given in argument.
+\end{description}
+
+
+%*******************************************************************
+
+\section{The predefined language keywords}\label{predefkeywords}
+
+Here are the english keywords predefined in the package. There are other
+language predefined macros provided, such as french keywords, see
+section~\ref{sec_lang} for a list of other language keywords.
+
+%\subsection{english keywords}
+
+\begin{enumerate}
+\item Input, output macros...
+  \begin{itemize}
+  \item $\backslash$KwData\{input\}\macind{KwData}
+  \item $\backslash$KwResult\{output\}\macind{KwResult}
+  \item $\backslash$KwIn\{input\}\macind{KwIn}
+  \item $\backslash$KwOut\{output\}\macind{KwOut}
+  \end{itemize}
+\item One simple common keyword:
+  \begin{itemize}
+  \item $\backslash$KwTo\macind{KwTo}
+  \end{itemize}
+\item One keyword requiring an argument:
+  \begin{itemize}
+  \item $\backslash$KwRet\{[value]\}\macind{KwRet}
+  \end{itemize}
+\item A block:
+  \begin{itemize}
+  \item $\backslash$Begin\{block inside\}\macind{Begin}
+  \end{itemize}
+\item Comments:
+  \begin{itemize}
+  \item $\backslash$tcc\{line(s) of comment\}\macind{cc}
+  \item $\backslash$tcpp\{line(s) of comment\}\macind{cpp}
+  \end{itemize}
+\item "if-then-else" macros:
+  \begin{itemize}
+  \item $\backslash$eIf\{condition\}\{then block\}\{else block\}\macind{eIf}
+  \item $\backslash$If\{condition\}\{then block\}\macind{If}
+  \item $\backslash$Else\{else block\}\macind{Else}
+  \item $\backslash$lIf\{condition\}\{then's line text\}\macind{lIf}
+  \item $\backslash$lElse\{else's line text\}\macind{lElse}
+  \item $\backslash$uIf\{condition\}\{then block\}\macind{uIf}
+  \item $\backslash$gIf\{condition\}\{then block\}\macind{gIf}
+  \item $\backslash$gElsIf\{condition\}\{elseif block\}\macind{gElsIf}
+  \item $\backslash$gElse\{else block\}\macind{gElse}
+  \end{itemize}
+\item multiple condition selection:
+  \begin{itemize}
+  \item $\backslash$Switch\{condition\}\{Switch block\}\macind{Switch}
+  \item $\backslash$Case\{a case\}\{case block\}\macind{Case}
+  \item $\backslash$lCase\{a case\}\{case's line\}\macind{lCase}
+  \item $\backslash$Other\{otherwise block\}\macind{Other}
+  \item $\backslash$lOther\{otherwise's line\}\macind{lOther}
+  \end{itemize}
+\item loops with "end condition" test at the beginning:
+  \begin{itemize}
+  \item $\backslash$For\{condition\}\{text loop\}\macind{For}
+  \item $\backslash$lFor\{condition\}\{line text loop\}\macind{lFor}
+  \end{itemize}
+  \begin{itemize}
+  \item $\backslash$While\{condition\}\{text loop\}\macind{While}
+  \item $\backslash$lWhile\{condition\}\{line text loop\}\macind{lWhile}
+  \end{itemize}
+  \begin{itemize}
+  \item $\backslash$ForEach\{condition\}\{text loop\}\macind{ForEach}
+  \item $\backslash$lForEach\{condition\}\{line text loop\}\macind{lForEach}
+  \end{itemize}
+\item loops with "end condition" test at the end:
+  \begin{itemize}
+  \item $\backslash$Repeat\{end condition\}\{text loop\}\macind{Repeat}
+  \item $\backslash$lRepeat\{end condition\}\{line text
+    loop\}\macind{lRepeat}
+  \end{itemize}
+\end{enumerate}
+
+Here we describe how they are obtained:
+
+\begin{enumerate}
+\item \almacpp{SetKwData}{KwData}{Data} for example.
+\item \almacpp{SetKw}{KwTo}{to}
+\item \almacpp{SetKw}{KwRet}{return}
+\item \almacppp{SetKwBlock}{Begin}{begin}{end}
+\item \almacppp{SetKwComment}{/*}{ */}
+\item \almacppp{SetKwComment}{//}{}
+\item \almacpsix{SetKwIf}{If}{Else}{if}{then}{else}{endif}
+\item \almacphuit{SetKwIfElseIf}{gIf}{gElsIf}{gElse}{if}{then}{else if}{else}{endif}
+\item {\small \almacphuit{SetKwSwitch}{Switch}{Case}{Other}{switch}{do}{case}{otherwise}{endsw}}
+\item \almacpppp{SetKwFor}{For}{for}{do}{endfor}\par
+  \almacpppp{SetKwFor}{While}{while}{do}{endw}\par
+  \almacpppp{SetKwFor}{ForEach}{foreach}{do}{endfch}
+\item \almacppp{SetKwRepeat}{Repeat}{repeat}{until}
+\end{enumerate}
+
+%----------
+\subsection{To define your own language keywords}\label{sec_deflanguage}
+
+\begin{description}
+\item[\Almacpp{SetKw}{Kw}{thetext}] defines the macro \almac{Kw} which
+  defines a keyword \emph{thetext} and prints it in keyword
+  typography. It can take one argument: $backslash$Kw\{arg\}. If so,
+  \emph{arg} is printed in argument typography.
+\item[\Almacpp{SetKwData}{Kw}{thetext}] defines the macro \almacp{Kw}
+  which defines a data text. Prints \emph{thetext} in data typography.
+  Note that this macros can takes one argument as function macros.
+\item[\Almacpp{SetKwInput}{Kw}{input}] defines the macro
+  \almacp{Kw}{arg} which prints \emph{input} followed by `:' in key
+  word typography, and behind the argument \emph{arg}. Typically used
+  to define macros such as \almacp{Input}{data} or
+  \almacp{Output}{result}. Note that \emph{arg} will be shifted so that
+  all the text is vertically aligned and to the right of the `:'.
+\item[\Almacpp{SetKwInOut}{Kw}{input}] works as
+  \almacpp{SetKwInput}{Kw}{input}. But the position of the `:' is fixed
+  and set by the longest keyword defined by this macro.\par
+  \Almacp{ResetInOut}{input} resets the position of the `:' for all
+  macros defined previously by \almacpp{SetKwInOut}{Kw}{input}. The
+  new position is fixed depending on the size of the text \emph{input}
+  given in argument.
+\item[\Almacppp{SetKwInParam}{Kw}{text1}{text2}] defines the macro
+  \almacpp{Kw}{name}{arg} which prints \emph{name} followed by
+  \emph{text1} in key word typography, behind the argument \emph{arg},
+  followed by \emph{text2} in key word typography. Typically used when
+  the algorithm described a function in order to define a macro which
+  allows to give the name of the function and to show its arguments.
+  Note that \emph{arg} will be shifted so that all the text is
+  vertically aligned and to the right of
+  \emph{text1}.\\
+  Example $\backslash$SetKwInParam\{Func\}\{(\}\{)\} defines macro
+  $\backslash$Func and $\backslash$Func\{function\}\{arg1, arg2, arg3\}
+  gives \KwSty{function(}arg1, arg2, arg3\KwSty{)}.
+\item[\Almacpp{SetKwFunction}{KwFn}{Fn}] defines a macro
+  \almacp{KwFn}{arg} which prints \emph{Fn} in Function typography and
+  its argument \emph{arg} in argument typography, surrounded by a pair
+  of parentheses.
+
+  \almacpp{SetKwFunction}{Dothat}{Do that} defines the macro
+  \almacp{DoThat}{this}, which is equivalent to
+  \almacp{FuncSty}{Do that(}\almacp{ArgSty}{this}\almacp{FuncSty}{)} which
+  gives: \FuncSty{Do that(}\ArgSty{this}\FuncSty{)}.
+
+  Note that you can also use it without
+  arguments, it will be printed without `()', example:
+  \almacpp{SetKwFunction}{Fn}{TheFunction} use as
+  \almac{Fn} gives \FuncSty{TheFunction}.
+
+  Keywords (with or without arguments) and functions defined
+  previously in normal text (not in an algorithm environment) can be
+  used outside an algorithm environment. You can use it by typing
+  \almacp{DoThat}{toto} (for a function defined by
+  \almacpp{SetKwFunction}{Dothat}{Do that}), you will obtain
+  \FuncSty{Do That(\ArgSty{toto})}.
+\item[\Almacppp{SetKwBlock}{Begin}{begin}{end}] defines a macro
+  \almacp{Begin}{txt} which denotes a block. The text is surrounded by
+  the words \emph{begin} and \emph{end} in keyword typography and
+  shifted to the right (indented). In \almac{Vline}\emph{ or
+    }\almac{Line}\emph{ mode} a straight vertical line is added.
+  \item[\Almacppp{SetKwComment}{Comment}{start}{end}] defines a macro
+  \almacp{Comment}{text comment} which writes \emph{text comment} between
+  \emph{start} and \emph{end}. Note that \emph{start} or \emph{end} can be
+  empty.
+\item[\Almacpsix{SetKwIf}{If}{Else}{if}{then}{else}{endif}]
+  defines several macros to give an If-Then-Else-endif like
+  environment:
+  \begin{enumerate}
+  \item \almacpp{If}{cond}{Then's text}
+  \item \almacp{Else}{Else's text}
+  \item \almacpp{lIf}{cond}{Then's text}
+  \item \almacp{lElse}{Else's text}
+  \item \almacppp{eIf}{cond}{Then's text}{Else's text} {\small
+      equivalent to the use of \almac{If} and \almac{Else}}
+  \item \almacpp{uIf}{cond}{Then's text} (for uncomplete if),
+    \textbf{useful in Vline or Line mode only}.\\ 
+    defines a If block unterminated like in a \almac{eIf} block,
+    i.e. don't print the \emph{endif} or don't put the little
+    horizontal line. Allows to have a correct vertical line when doing
+    things like: \\
+    \vspace{-2ex}\begin{verbatim}
+\uIF{condition}{
+   if's block\;
+}
+\almacp{lElse}{else in one line}\;
+    \end{verbatim}
+    \vspace{-2ex}which gives\par\medskip
+
+    \vspace{-1ex}\begin{minipage}{3.5cm}
+      \setlength{\algomargin}{0em}
+      \begin{algorithm}[H]
+        \SetLine
+        \uIf{condition}{
+          if's block\;
+          }
+        \lElse{else in one line}\;
+      \end{algorithm}
+    \end{minipage}
+  \end{enumerate}
+
+  The macros which begin with a `l' {\small (l as line)} denote that
+  the text passed in argument will be printed on the same line. With
+  the others the text is printed in a block and indented. You must put
+  \almac{;} at the end of such a macro.
+
+  The keywords \emph{then} and \emph{else} are automatically printed.
+  \emph{cond} is always printed in argument typography just behind the
+  keyword if.
+
+  For example:
+  \begin{verbatim}
+\SetKwIf{IF}{ELSE}{if}{then}{else}{endif}
+\SetVline
+\eIF{cond1}{
+  a line\;
+  a line\;
+}{
+  another line\;
+  another line\;
+}
+\IF{cond2}{
+  second if\;
+  second if\;
+}
+\SetNoline
+\lIF{cond3}{ a last example}
+\ELSE{
+  a block\;
+  a block\;
+}
+  \end{verbatim}
+
+  \vspace{-2ex}gives\par\medskip
+
+  \vspace{-1ex}\noindent\begin{minipage}{5.8cm}
+    \setlength{\algomargin}{0em}
+    \begin{algorithm}[H]
+      \SetKwIf{IF}{ELSE}{if}{then}{else}{endif}
+      \SetVline
+      \eIF{cond1}{
+        a line\;
+        a line\;
+        }{
+        another line\;
+        another line\;
+        }
+      \IF{cond2}{
+        second if\;
+        second if\;
+        }
+      \SetNoline
+      \lIF{cond3}{ a last example}
+      \ELSE{
+        a block\;
+        a block\;
+        }
+    \end{algorithm}
+  \end{minipage}
+\item[\almacphuit{SetKwIfElseIf}{gIf}{gElsIf}{gElse}{if}{then}{else if}{else}{endif}]
+  defines several macros to give an if-then-else-if-else environment:
+  \begin{enumerate}
+  \item \almacpp{gIf}{cond}{then block}
+  \item \almacpp{gElsIf}{cond}{elseif block}
+  \item \almacp{gElse}{else block}
+  \item \almacpp{lgIf}{cond}{then line}
+  \item \almacpp{lgElsIf}{cond}{elseif line}
+  \item \almacp{lgElse}{else line}
+  \end{enumerate}
+
+\item[\Almacphuit{SetKwSwitch}{Switch}{Case}{Other}{switch}{do}{case}{otherwise}{endsw}]
+  defines several macros to give a complete Switch-do-case-otherwise
+  environment:
+  \begin{enumerate}
+  \item \almacpp{Switch}{iden}{switch's block}
+  \item \almacpp{Case}{cond}{Case's text}
+  \item \almacp{Other}{Otherwise's text}
+  \item \almacpp{lCase}{cond}{Case's text}
+  \item \almacp{lOther}{Otherwise's text}
+  \end{enumerate}
+  The keywords \emph{do} and \emph{endsw} are automatically
+  printed.  \emph{iden} and \emph{cond} are always printed in argument
+  typography just behind the keywords Switch, Case and Otherwise.
+
+  for example:
+  \begin{verbatim}
+\SetKwSwitch{Sw}{Cs}{Ot}{switch}{do}{case}{otherwise}{endsw}
+\SetVline
+\Sw{the value of T}{
+  \Cs{a value}{
+    do this\;
+    do that\;
+    }
+  \lCs{another value}{one line}
+  \Cs{last value}{
+    do this\;
+    do that\;
+    }
+  \Ot{
+    for the other values\;
+    do that\;
+    }
+  }
+  \end{verbatim}
+
+  \vspace{-2ex}gives\par\medskip
+
+  \vspace{-1ex}\begin{minipage}{7.5cm}
+    \setlength{\algomargin}{0em}
+    \begin{algorithm}[H]
+      \SetKwSwitch{Sw}{Cs}{Ot}{switch}{do}{case}{otherwise}{endsw}
+      \SetVline
+      \Sw{the value of T}{
+        \Cs{a value}{
+          do this\;
+          do that\;
+          }
+        \lCs{another value}{one line}
+        \Cs{last value}{
+          do this\;
+          do that\;
+          }
+        \Ot{
+          for the other values\;
+          do that\;
+          }
+        }
+    \end{algorithm}
+  \end{minipage}
+
+\item[\Almacpppp{SetKwFor}{For}{for}{do}{endfor}]
+  defines a loop environment with stop-test done at the beginning of
+  the loop.
+  \begin{enumerate}
+    \item \almacpp{For}{loop's condition}{For's text}
+    \item \almacpp{lFor}{loop's condition}{For's text}
+  \end{enumerate}
+  The keywords \emph{do} and \emph{endfor} are automatically printed.
+  The loop condition is printed in argument typography.
+
+  for example:
+  \begin{verbatim}
+\SetLine
+\SetKwFor{FOR}{for}{do}{endFor}
+\FOR{all the elements of the set $S_1$}{
+  remove an element e from $S_1$\;
+  put e in the set $S_2$\;
+  }
+\lFOR{all the elements of $S_2$}{labelling}
+  \end{verbatim}
+
+  \vspace{-2ex}gives\par\medskip
+
+    \vspace{-1ex}\begin{minipage}{6cm}
+      \setlength{\algomargin}{0em}
+      \begin{algorithm}[H]
+        \SetLine
+        \SetKwFor{FOR}{for}{do}{endFor}
+        \FOR{all the elements of the set $S_1$}{
+          remove an element e from $S_1$\;
+          put e in the set $S_2$\;
+          }
+        \lFOR{all the elements of $S_2$}{labelling}
+      \end{algorithm}
+    \end{minipage}
+
+
+\item[\Almacppp{SetKwRepeat}{Repeat}{repeat}{until}]
+  defines a repeat-until environment (loop with stop-test at the end
+  of the loop):
+  \begin{enumerate}
+  \item \almacpp{Repeat}{end loop condition}{the loop}
+  \item \almacpp{lRepeat}{end loop condition}{only one line}
+  \end{enumerate}
+  It prints the loop condition behind the \emph{until} after the text
+  of the loop.
+
+  for example:
+  
+  \begin{verbatim}
+\SetKwRepeat{REPEAT}{repeat}{until}
+\REPEAT{this stop condition}{
+  the text of the loop\;
+  another line\;
+  always in the loop\;
+  }
+\lREPEAT{stop}{ a one line loop}
+  \end{verbatim}
+
+  \vspace{-1ex}which gives\par\medskip
+
+    \vspace{-1ex}\begin{minipage}{6cm}
+      \setlength{\algomargin}{0em}
+      \begin{algorithm}[H]
+        \SetKwRepeat{REPEAT}{repeat}{until}
+        \REPEAT{this stop condition}{
+          the text of the loop\;
+          another line\;
+          always in the loop\;
+          }
+        \lREPEAT{stop}{ a one line loop}
+      \end{algorithm}
+    \end{minipage}
+
+\end{description}
+
+\clearpage
+\section{Two complete examples}\label{longexample}
+
+
+The algorithms~\ref{algo_disjdecomp} and~\ref{IR} are written with this package.
+
+\subsection{Algorithm~\protect\ref{algo_disjdecomp} : disjoint decomposition}
+
+Here we suppose we have done:
+\begin{verbatim}
+\usepackage[lined,algonl,boxed]{algorithm2e}
+\end{verbatim}\index{lined|textit,algonl|textit,boxed|textit}
+
+\noindent The algorithm was written in \LaTeX2e code as follow:
+\begin{samepage}
+\begin{verbatim}
+\incmargin{1em}
+\begin{algorithm}
+  \SetKwData{Left}{left}
+  \SetKwData{This}{this}
+  \SetKwData{Up}{up}
+  \SetKwFunction{Union}{Union}
+  \SetKwFunction{FindCompress}{FindCompress}
+  \SetKwInOut{Input}{input}
+  \SetKwInOut{Output}{output}
+  \caption{disjoint decomposition}
+
+  \Input{A bitmap $Im$ of size $w\times l$}
+  \Output{A partition of the bitmap}
+  \BlankLine
+  \emph{special treatment of the first line}\;
+  \For{$i\leftarrow 2$ \KwTo $l$}{
+    \emph{special treatment of the first element of line $i$}\;
+    \For{$j\leftarrow 2$ \KwTo $w$}{
+      \Left$\leftarrow$ \FindCompress{$Im[i,j-1]$}\;
+      \Up$\leftarrow$ \FindCompress{$Im[i-1,]$}\;
+      \This$\leftarrow$ \FindCompress{$Im[i,j]$}\;
+\nl   \If{\Left compatible with \This}{
+        \lIf{\Left $<$ \This}{\Union{\Left,\This}}\;
+        \lElse{\Union{\This,\Left}}
+      }
+\nl   \If{\Up compatible with \This}{
+        \lIf{\Up $<$ \This}{\Union{\Up,\This}}\;
+        \lElse{\Union{\This,\Up}}
+      }
+    }
+  \lForEach{element $e$ of the line $i$}{\FindCompress{p}}
+  }
+  \label{algo_disjdecomp}
+\end{algorithm}
+\decmargin{1em}
+\end{verbatim}
+\end{samepage}
+
+\noindent which gives the algorithme~\vref{algo_disjdecomp}:
+
+\def\theAlgoLine{\thealgocf.\arabic{AlgoLine}}
+\incmargin{1em}
+\restylealgo{boxed}
+\begin{algorithm}
+  \SetLine
+  \SetKwData{Left}{left}
+  \SetKwData{This}{this}
+  \SetKwData{Up}{up}
+  \SetKwFunction{Union}{Union}
+  \SetKwFunction{FindCompress}{FindCompress}
+  \SetKwInOut{Input}{input}
+  \SetKwInOut{Output}{output}
+  \caption{disjoint decomposition}
+
+  \Input{a bitmap $im$ of size $w\times l$.}
+  \Output{A partition of the bitmap.}
+  \BlankLine
+  \emph{special treatment of the first line}\;
+  \For{$i\leftarrow 2$ \KwTo $l$}{
+    \emph{special treatment of the first element of line $i$}\;
+    \For{$j\leftarrow 2$ \KwTo $w$}{
+      \Left$\leftarrow$ \FindCompress{$Im[i,j-1]$}\;
+      \Up$\leftarrow$ \FindCompress{$Im[i-1,]$}\;
+      \This$\leftarrow$ \FindCompress{$Im[i,j]$}\;
+\nl   \If{\Left compatible with \This}{
+        \lIf{\Left $<$ \This}{\Union{\Left,\This}}\;
+        \lElse{\Union{\This,\Left}}
+      }
+\nl   \If{\Up compatible with \This}{
+        \lIf{\Up $<$ \This}{\Union{\Up,\This}}\;
+        \lElse{\Union{\This,\Up}}
+      }
+    }
+  \lForEach{element $e$ of the line $i$}{\FindCompress{p}}
+  }
+  \label{algo_disjdecomp}
+\end{algorithm}
+\decmargin{1em}
+
+\clearpage
+\subsection{Algorithm~\protect\ref{IR} : IntervalRestriction}
+\def\theAlgoLine{\arabic{AlgoLine}}
+
+Here we suppose we have done:
+\begin{verbatim}
+\usepackage[ruled,vlined]{algorithm2e}
+\end{verbatim}\index{ruled|textit,vlined|textit}
+
+\noindent and the \LaTeX2e code is:
+\begin{samepage}
+\begin{verbatim}
+\begin{algorithm}
+\dontprintsemicolon
+\KwData{$G=(X,U)$ such that $G^{tc}$ is an order.}
+\KwResult{$G'=(X,V)$ with $V\subseteq U$ such that $G'^{tc}$ is an
+interval order.}
+\Begin{
+  $V \longleftarrow U$\;
+  $S \longleftarrow \emptyset$\; 
+  \For{$x\in X$}{ 
+    $NbSuccInS(x) \longleftarrow 0$\;
+    $NbPredInMin(x) \longleftarrow 0$\;
+    $NbPredNotInMin(x) \longleftarrow |ImPred(x)|$\;
+    }
+  \For{$x \in X$}{
+    \If{$NbPredInMin(x) = 0$ {\bf and} $NbPredNotInMin(x) = 0$}{
+      $AppendToMin(x)$}
+    } 
+  \lnl{InRes1}\While{$S \neq \emptyset$}{
+    remove $x$ from the list of $T$ of maximal index\;
+    \lnl{InRes2}\While{$|S \cap  ImSucc(x)| \neq |S|$}{ 
+      \For{$ y \in  S-ImSucc(x)$}{
+        \{ remove from $V$ all the arcs $zy$ : \}\;
+        \For{$z \in  ImPred(y) \cap  Min$}{
+          remove the arc $zy$ from $V$\;
+          $NbSuccInS(z) \longleftarrow NbSuccInS(z) - 1$\;
+          move $z$ in $T$ to the list preceding its present list\;
+          \{i.e. If $z \in T[k]$, move $z$ from $T[k]$ to 
+           $T[k-1]$\}\;
+          }
+        $NbPredInMin(y) \longleftarrow 0$\;
+        $NbPredNotInMin(y) \longleftarrow 0$\;
+        $S \longleftarrow S - \{y\}$\;
+        $AppendToMin(y)$\;
+        }
+      }
+    $RemoveFromMin(x)$\;
+    }
+  }  
+\caption{IntervalRestriction\label{IR}}
+\end{algorithm}
+\end{verbatim}
+\end{samepage}
+
+\noindent which give us the algorithm~\vref{IR}.
+
+\restylealgo{algoruled}
+\begin{algorithm}
+\dontprintsemicolon
+\SetVline
+\KwData{$G=(X,U)$ such that $G^{tc}$ is an order.}
+\KwResult{$G'=(X,V)$ with $V\subseteq U$ such that $G'^{tc}$ is an
+interval order.}
+\Begin{
+  $V \longleftarrow U$\;
+  $S \longleftarrow \emptyset$\; 
+  \For{$x\in X$}{ 
+    $NbSuccInS(x) \longleftarrow 0$\;
+    $NbPredInMin(x) \longleftarrow 0$\;
+    $NbPredNotInMin(x) \longleftarrow |ImPred(x)|$\;
+    }
+  \For{$x \in X$}{
+    \If{$NbPredInMin(x) = 0$ {\bf and} $NbPredNotInMin(x) = 0$}{
+      $AppendToMin(x)$}
+    } 
+  \lnl{InRes1}\While{$S \neq \emptyset$}{
+    remove $x$ from the list of $T$ of maximal index\;
+    \lnl{InRes2}\While{$|S \cap  ImSucc(x)| \neq |S|$}{ 
+      \For{$ y \in  S-ImSucc(x)$}{
+        \{ remove from $V$ all the arcs $zy$ : \}\;
+        \For{$z \in  ImPred(y) \cap  Min$}{
+          remove the arc $zy$ from $V$\;
+          $NbSuccInS(z) \longleftarrow NbSuccInS(z) - 1$\;
+          move $z$ in $T$ to the list preceding its present list\;
+          \{i.e. If $z \in T[k]$, move $z$ from $T[k]$ to 
+           $T[k-1]$\}\;
+          }
+        $NbPredInMin(y) \longleftarrow 0$\;
+        $NbPredNotInMin(y) \longleftarrow 0$\;
+        $S \longleftarrow S - \{y\}$\;
+        $AppendToMin(y)$\;
+        }
+      }
+    $RemoveFromMin(x)$\;
+    }
+  }  
+\caption{IntervalRestriction\label{IR}}
+\end{algorithm}
+
+
+\section{Other language predefined keywords}\label{sec_lang}
+
+\subsection{french keywords}
+
+Hey, I am a frenchy , so I have defined the same as the precedent
+but in french.
+
+\begin{itemize}
+\item $\backslash$Donnees\{donn\'ees\}\macind{Donnees}
+\item $\backslash$Res\{r\'esultats\}\macind{Res}
+\item $\backslash$Entree\{entr\'ees\}\macind{Entree}
+\item $\backslash$Sortie\{sorties\}\macind{Sortie}
+\item $\backslash$A\macind{KwA}
+\item $\backslash$Retour\{[valeur]\}\macind{Retour}
+\item $\backslash$Deb\{int\'erieur du bloc\}\macind{Deb}
+\item $\backslash$eSi\{condition\}\{bloc du alors\}\{bloc du sinon\}\macind{eSi}
+\item $\backslash$Si\{condition\}\{bloc du alors\}\macind{Si}
+\item $\backslash$Sinon\{bloc du sinon\}\macind{Else}
+\item $\backslash$lSi\{condition\}\{ligne du alors\}\macind{lSi}
+\item $\backslash$lElse\{ligne du sinon\}\macind{lElse}
+\item $\backslash$gSi\{condition\}\{bloc du alors\}\macind{gSi}
+\item $\backslash$gSinonSi\{condition\}\{bloc du sinonsi\}\macind{gSinonSi}
+\item $\backslash$gSinon\{bloc du sinon\}\macind{gSinon}
+\item $\backslash$Suivant\{condition\}\{bloc du Suivant-cas-alors\}\macind{Suivant}
+\item $\backslash$Cas\{cas o\`u\}\{bloc de ce cas\}\macind{Cas}
+\item $\backslash$lCas\{cas o\`u\}\{ligne de ce cas\}\macind{lCas}
+\item $\backslash$Autre\{bloc de l'alternative\}\macind{Autre}
+\item $\backslash$lAutre\{ligne de l'alternative\}\macind{lAutre}
+\item $\backslash$Pour\{condition\}\{bloc de la boucle\}\macind{Pour}
+\item $\backslash$lPour\{condition\}\{ligne de la boucle\}\macind{lPour}
+\item $\backslash$Tq\{condition\}\{bloc de la boucle\}\macind{Tq}
+\item $\backslash$lTq\{condition\}\{ligne de la boucle\}\macind{lTq}
+\item $\backslash$PourCh\{condition\}\{bloc de la boucle\}\macind{PourCh}
+\item $\backslash$lPourCh\{condition\}\{ligne de la boucle\}\macind{lPourCh}
+\item $\backslash$Repeter\{condition d'arr\^et\}\{bloc de la boucle\}\macind{Repeter}
+\item $\backslash$lRepeter\{condition d'arr\^et\}\{ligne de la boucle\}\macind{lRepeter}
+\end{itemize}
+
+Here we describe how they are obtained:
+
+\begin{enumerate}
+\item \almacpp{SetKwData}{Donnes}{Donn\'ees} for example.
+\item \almacpp{SetKw}{A}{\`a}
+\item \almacpp{SetKw}{Retour}{retourner}
+\item \almacppp{SetKwBlock}{Deb}{d\'ebut}{fin}
+\item \almacpsix{SetKwIf}{Si}{Sinon}{si}{alors}{sinon}{finsi}
+\item \almacphuit{SetKwIfElseIf}{gSi}{gSinonSi}{gSinon}{si}{alors}{sinon si}{alors}{finsi}
+\item {\footnotesize\almacphuit{SetKwSwitch}{Suivant}{Cas}{Autre}{suivant}{faire}{cas o\`u}{autres cas}{fin d'alternative}}
+\item \almacpppp{SetKwFor}{Pour}{pour}{faire}{finpour}\par
+  \almacpppp{SetKwFor}{Tq}{tant que}{faire}{fintq}\par
+  \almacpppp{SetKwFor}{PourCh}{pour chaque}{faire}{finprch}
+\item \almacppp{SetKwRepeat}{Repeter}{r\'ep\'eter}{jusqu'\`a}
+\end{enumerate}
+
+\subsection{German keywords}
+
+\begin{itemize}
+\item $\backslash$Ein\{Eingabe\}\macind{Ein}%KwIn
+\item $\backslash$Aus\{Ausgabe\}\macind{Aus}%KwOut
+\item $\backslash$Daten\{Daten\}\macind{Daten}%KwData
+\item $\backslash$Ergebnis\{Ergebnis\}\macind{Ergebnis}%KwResult
+\item $\backslash$Bis\{bis\}\macind{Bis}%KwTo
+\item $\backslash$KwZurueck\{zur\"uck\}\macind{KwZurueck}%KwRet
+\item $\backslash$Zurueck\{zur\"uck\}\macind{Zurueck}%Return
+\item $\backslash$Beginn\{Beginn\}\macind{Beginn}%Begin
+\item $\backslash$Wiederh\{stop condition\}\{loop\}\macind{Wiederh}%Repeat
+\item $\backslash$lWiederh\{stop condition\}\{line loop\}\macind{lWiederh}%Repeat
+\item $\backslash$eWenn\{condition\}\{then text\}\{else text\}\macind{eWenn}%If
+\item $\backslash$Wenn\{condition\}\{then text\}\macind{Wenn}%If
+\item $\backslash$lWenn\{condition\}\{then line\}\macind{lWenn}%If
+\item $\backslash$Sonst\{else text\}\macind{Sonst}%If
+\item $\backslash$lSonst\{else line\}\macind{lSonst}%If
+\item $\backslash$gWenn\{dann text\}\macind{gWenn}%gIf
+\item $\backslash$gSonstWenn\{condition\}\{elseif text\}\macind{gSonstWenn}%gIf
+\item $\backslash$gSonst\{else text\}\macind{gSonst}%gIf
+\item $\backslash$Unterscheide\{conditions\}{switch-case-default text}\macind{Unterscheide}%Switch
+\item $\backslash$Fall\{case of\}\{text\}\macind{Fall}%Switch
+\item $\backslash$lFall\{case of\}\{line text\}\macind{lFall}%Switch
+\item $\backslash$Anderes\{default text\}\macind{Anderes}%Switch
+\item $\backslash$lAnderes\{default line\}\macind{lAnderes}%Switch
+\item $\backslash$Fuer\{condition\}\{loop\}\macind{Fuer}%For
+\item $\backslash$lFuer\{condition\}\{line loop\}\macind{lFuer}%For
+\item $\backslash$FuerPar\{condition\}\{loop\}\macind{FuerPar}%ForPar
+\item $\backslash$lFuerPar\{condition\}\{line\}\macind{lFuerPar}%ForPar
+\item $\backslash$FuerJedes\{condition\}\{loop\}\macind{FuerJedes}%ForEach
+\item $\backslash$lFuerJedes\{condition\}\{line\}\macind{lFuerJedes}%ForEach
+\item $\backslash$FuerAlle\{condition\}\{loop\}\macind{FuerAlle}%ForAll
+\item $\backslash$lFuerAlle\{condition\}\{line\}{Ende}\macind{lFuerAlle}%ForAll
+\item $\backslash$Solange\{condition\}\{loop\}{Ende}\macind{Solange}%While
+\item $\backslash$lSolange\{condition\}\{line\}\macind{lSolange}%While
+\end{itemize}
+
+Here we describe how they are obtained:
+
+\begin{itemize}
+\item \almacpp{SetKwInput}{Ein}{Eingabe}%KwIn
+\item \almacpp{SetKwInput}{Aus}{Ausgabe}%KwOut
+\item \almacpp{SetKwInput}{Daten}{Daten}%KwData
+\item \almacpp{SetKwInput}{Ergebnis}{Ergebnis}%KwResult
+\item \almacpp{SetKw}{Bis}{bis}%KwTo
+\item \almacpp{SetKw}{KwZurueck}{zur\"uck}%KwRet
+\item \almacpp{SetKw}{Zurueck}{zur\"uck}%Return
+\item \almacppp{SetKwBlock}{Beginn}{Beginn}{Ende}%Begin
+\item \almacppp{SetKwRepeat}{Wiederh}{wiederhole}{bis}%Repeat
+\item \almacpsix{SetKwIf}{Wenn}{Sonst}{wenn}{dann}{sonst}{Ende}%If
+\item \almacphuit{SetKwIfElseIf}{gWenn}{gSonstWenn}{gSonst}{wenn}{dann}{sonst wenn}{sonst}{Ende}%gIf
+\item \almacphuit{SetKwSwitch}{Unterscheide}{Fall}{Anderes}{unterscheide}{tue}{Fall}{sonst}{Ende.}%Switch
+\item \almacpppp{SetKwFor}{Fuer}{f\"ur}{tue}{Ende}%For
+\item \almacpppp{SetKwFor}{FuerPar}{f\"ur}{tue gleichzeitig}{Ende}%ForPar
+\item \almacpppp{SetKwFor}{FuerJedes}{f\"ur jedes}{tue}{Ende}%ForEach
+\item \almacpppp{SetKwFor}{FuerAlle}{f\"ur alle}{tue}{Ende}%ForAll
+\item \almacpppp{SetKwFor}{Solange}{solange}{tue}{Ende}%While
+\end{itemize}
+
+\subsection{Portuguese keywords}
+
+\begin{itemize}
+% \item $\backslash$AlgDados\{Dados\}\macind{AlgDados}
+% \item $\backslash$AlgResultado\{Result.\}\macind{Res}
+\item $\backslash$Entrada\{Entrada\}\macind{KwEntrada}
+\item $\backslash$Saida\{Sa\'{i}da\}\macind{KwSaida}
+\item $\backslash$Dados\{Dados\}\macind{KwDados}
+\item $\backslash$Resultado\{Resultado\}\macind{KwResultado}
+\item $\backslash$Ate\macind{at\'{e}}
+\item $\backslash$KwRetorna\{[val]\}\macind{KwRetorna}
+\item $\backslash$Retorna\{[val]\}\macind{Retorna}
+\item $\backslash$Iniciob\{inside block\}\macind{Iniciob}
+\item $\backslash$eSe\{condition\}\{then block\}\{else block\}\macind{eSe}
+\item $\backslash$Se\{condition\}\{then block\}\macind{Se}
+\item $\backslash$Senao\{else block\}\macind{Senao}
+\item $\backslash$lSe\{condition\}\{then's line text\}\macind{lSe}
+\item $\backslash$lSenao\{else's line text\}\macind{lSenao}
+\item $\backslash$uSe\{condition\}\{then block\}\macind{uSe}
+\item $\backslash$gSe\{condition\}\{then block\}\macind{gSe}
+\item $\backslash$gSenaoSe\{condition\}\{elseif block\}\macind{gSenaoSe}
+\item $\backslash$gSenao\{else block\}\macind{gSenao}
+\item $\backslash$Selec\{condition\}\{Switch block\}\macind{Selec}
+\item $\backslash$Caso\{a case\}\{case block\}\macind{Caso}
+\item $\backslash$lCaso\{a case\}\{case's line\}\macind{lCaso}
+\item $\backslash$Outro\{otherwise block\}\macind{Outro}
+\item $\backslash$lOutro\{otherwise's line\}\macind{lOutro}
+\item $\backslash$ParaPar\{condition\}\{text loop\}\macind{ParaPar}
+\item $\backslash$lParaPar\{condition\}\{line text loop\}\macind{lParaPar}
+\item $\backslash$ParaCada\{condition\}\{text loop\}\macind{ParaCada}
+\item $\backslash$lParaCada\{condition\}\{line text loop\}\macind{lParaCada}
+\item $\backslash$ParaTodo\{condition\}\{text loop\}\macind{ParaTodo}
+\item $\backslash$lParaTodo\{condition\}\{line text loop\}\macind{lParaTodo}
+\item $\backslash$Repita\{stop condition\}\{text loop\}\macind{Repita}
+\item $\backslash$lRepita\{stop condition\}\{line of the loop\}\macind{lRepita}
+\item $\backslash$Enqto\{stop condition\}\{text loop\}\macind{Enqto}
+\item $\backslash$lEnqto\{stop condition\}\{text loop\}\macind{lEnqto}
+\end{itemize}
+
+Here we describe how they are obtained:
+
+\begin{enumerate}
+% \item \almacpp{SetKwInOut}{AlgDados}{Dados}
+% \item \almacpp{SetKwInOut}{AlgResultado}{Result.}
+\item \almacpp{SetKwInput}{Entrada}{Entrada}%
+\item \almacpp{SetKwInput}{Saida}{Sa\'{i}da}%
+\item \almacpp{SetKwInput}{Dados}{Dados}%
+\item \almacpp{SetKwInput}{Resultado}{Resultado}%
+\item \almacpp{SetKw}{Ate}{at\'{e}}
+\item \almacpp{SetKw}{KwRetorna}{retorna}%
+\item \almacpp{SetKw}{Retorna}{retorna}%
+\item \almacppp{SetKwBlock}{Inicio}{in\'{i}cio}{fim}%
+\item \almacpsix{SetKwIf}{Se}{Senao}{se}{ent\~{a}o}{sen\~{a}o}{fim se}%
+\item \almacphuit{SetKwIfElseIf}{gSe}{gSenaoSe}{gSenao}{se}{ent\~{a}o}{sen\~{a}o se}{sen\~{a}o}{fim se}%
+\item \almacphuit{SetKwIfElseIf}{Selec}{Caso}{Outro}{selecione}{fa\c{c}a}{caso}{sen\~{a}o}{fim selec}%
+\item \almacpppp{SetKwFor}{Para}{para}{fa\c{c}a}{fim para}%
+\item \almacpppp{SetKwFor}{ParaPar}{para}{fa\c{c}a em paralelo}{fim para}
+\item \almacpppp{SetKwFor}{ParaCada}{para cada}{fa\c{c}a}{fim para cada}%
+\item \almacpppp{SetKwFor}{ParaTodo}{para todo}{fa\c{c}a}{fim para todo}%
+\item \almacpppp{SetKwFor}{Enqto}{enquanto}{fa\c{c}a}{fim enqto}%
+\item \almacppp{SetKwRepeat}{Repita}{repita}{at\'{e}}%
+\end{enumerate}
+
+\subsection{Some Czech keywords}
+
+Here are some czech keywords, please feel free to send me the others.
+
+\begin{itemize}
+% \item $\backslash$AlgVst\macind{AlgVst}
+% \item $\backslash$AlgVyst\macind{AlgVyst}
+\item $\backslash$Vst\macind{Vst}
+\item $\backslash$Vyst\macind{Vyst}
+\item $\backslash$Vysl\macind{Vysl}
+\end{itemize}
+
+How they are obtained:
+
+\begin{enumerate}
+% \item \almacp{SetKwInOut}{AlgVst}{Vstup}
+% \item \almacp{SetKwInOut}{AlgVyst}{V\'{y}stup}
+\item \almacp{SetKwInput}{Vst}{Vstup}%
+\item \almacp{SetKwInput}{Vyst}{V\'{y}stup}%
+\item \almacp{SetKwInput}{Vysl}{V\'{y}sledek}%
+\end{enumerate}
+
+
+
+\section{Known bugs}\label{sec_bugs}
+
+\begin{itemize}
+\item $[$H$]$ option of algorithm environment doesn't work with * environments
+  (ie. algorithm*). This is due to floats defined with float package, as
+  algorithms are, and so can't be addressed here.
+\item option \Optfigure is not compatible with floatflt package, in fact
+  \texttt{caption} of floatingfigure are not compatible. \Optfigure restyle algo
+  as figure, so caption of figure uses \texttt{float} package caption.
+  \texttt{floatflt} package is declare as a figure but doesn't call some
+  \texttt{figure} macro as in the original and so some stuffs are not defined
+  correctly which makes a bug. If someone find a solution to this problem, I
+  will be glad to include its contribution and thanks him in the documentation.
+\end{itemize}
+
+
+\clearpage
+\listofalgorithms
+\clearpage
+\printindex
+\end{document}
