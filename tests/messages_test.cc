@@ -11,10 +11,10 @@ SUITE(MESSAGES) {
   TEST(basic) {
     Message* a = new Boundaries ({1,2,3,4,5});
     Message* b = new KeyValue ("K","V");
-    a->set_origin ("myself");
-    a->set_destination ("you");
-    b->set_origin ("myself");
-    b->set_destination ("you");
+    a->set_origin (1);
+    a->set_destination (2);
+    b->set_origin (1);
+    b->set_destination (2);
     
     string a_out = save_message(a);
     string b_out = save_message(b);
@@ -22,13 +22,13 @@ SUITE(MESSAGES) {
     auto b_ = static_cast<Boundaries*>(load_message (a_out));
     auto k_ = static_cast<KeyValue*>(load_message (b_out));
 
-    CHECK(b_->get_origin() == "myself");
+    CHECK(b_->get_origin() == 1);
     CHECK(b_->data[0] == 1);
     CHECK(b_->data[1] == 2);
     CHECK(b_->data[2] == 3);
     CHECK(b_->data[3] == 4);
     CHECK(b_->data[4] == 5);
-    CHECK(k_->get_origin() == "myself");
+    CHECK(k_->get_origin() == 1);
     CHECK(k_->key == "K");
     CHECK(k_->value == "V");
 

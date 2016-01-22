@@ -38,7 +38,7 @@ static auto range_of = [] (multimap<int, NodeRemote* >& m, int type) -> vec_node
 };
 
 auto corresponding_node = [] (string k, int  size) -> int {
-   return h(k.c_str(), size);
+   return h(k.c_str(), k.length()) % size;
 };
 // }}}
 // Constructor & destructor {{{
@@ -67,8 +67,7 @@ PeerLocal::PeerLocal(Settings& setted) : NodeLocal(setted) {
       (io_service, logger.get(), nodes, port, id);
   
   } else if (tType == "ring") {
-    topology = make_unique<RingTopology>
-      (io_service, logger.get(), nodes, port, id);
+    topology = make_unique<RingTopology> (io_service, logger.get(), nodes, port, id);
   }
 }
 
@@ -107,7 +106,7 @@ void PeerLocal::insert (std::string k, std::string v) {
     }
     i++;
   }
-  int idx = corresponding_node (k, universe.size()) % universe.size(); 
+  int idx = corresponding_node (k, universe.size());
 
   logger->info ("Inserting [%10s]:[%10s] -> %d", k.c_str(),v.c_str(), idx);
   if (idx == this->id) {
@@ -121,42 +120,32 @@ void PeerLocal::insert (std::string k, std::string v) {
 }
 // }}}
 // lookup {{{
-std::string PeerLocal::lookup (std::string s) {
-  //int idx = correspoding_node(key);
-  //string value;
-  //if (idx == id_of_this) {
-  //  value = cache.get (k);
+std::string PeerLocal::request (std::string key) {
+ int idx = corresponding_node(key, universe.size());
+ if (idx == this->id) {
+   return cache->get (key);
 
-  //} else {
-  //  PeerRemote& peer = get_peers_of(universe)[idx]
-  //    value = peer->lookup_s (k);
-  //}
-  //return value;
-  return "void";
+ } else {
+   auto peer = range_of (universe, PEER)[idx];
+   KeyRequest k_req (key);
+   k_req.set_origin (id);
+   peer->do_write (&k_req);
+   return "WAIT";
+ }
 }
 // }}}
 // exist {{{
-bool PeerLocal::exist (std::string) {
- return true;
+bool PeerLocal::exists (std::string key) {
+  return cache->exists (key);
 }
-// }}}
-// close {{{
-void PeerLocal::close() { exit(EXIT_SUCCESS); }
 // }}}
 // process_message (Boundaries* m) {{{
 template<> void PeerLocal::process_message (Boundaries* m) {
   *histogram << *m;
 
-  string dest = m->get_destination();
-  if (dest != ip_of_this) {
-    auto peers = range_of (universe, PEER);
-    auto it = find_if (peers.begin(), peers.end(), [&dest] (NodeRemote* n) {
-        return n->get_ip() == dest;
-        });
-
-    if (it != peers.end()) {
+  int dest = m->get_destination();
+  if (dest != this->id) {
       //(*it)->send(m);
-    }
   }
 }
 // }}}
@@ -164,10 +153,11 @@ template<> void PeerLocal::process_message (Boundaries* m) {
 template<> void PeerLocal::process_message (KeyValue* m) {
   string& key = m->key;
 
-  int which_node = 0;  //corresponding_node(key);
+  int which_node = corresponding_node (key, universe.size());
   if (which_node == id) {
+    logger->info ("Instering key = %s", key.c_str());
     histogram->count_query(which_node);
-    histogram->updateboundary();
+    //histogram->updateboundary();
     cache->put (key, m->value);
 
   } else {
@@ -180,6 +170,21 @@ template<> void PeerLocal::process_message (KeyValue* m) {
       //(*it)->send(m);
     }
   }
+}
+// }}}
+// process_message (KeyRequest* m) {{{
+template<> void PeerLocal::process_message (KeyRequest* m) {
+  string& key = m->key;
+  string value;
+  if (cache->exists(key)) {
+    value = cache->get(key);
+  } else {
+    value = "EMPTY";
+  }
+
+  KeyValue kv (key, value);
+  auto* node = range_of(universe, PEER)[m->origin];
+  node->do_write(&kv);
 }
 // }}}
 // process_message (Control* m) {{{
@@ -201,6 +206,7 @@ template<> void PeerLocal::process_message (Control* m) {
 // process_message (Message*) {{{
 template<> void PeerLocal::process_message (Message* m) {
   string type = m->get_type();
+
   if (type == "Boundaries") {
     auto m_ = dynamic_cast<Boundaries*>(m);
     process_message(m_);
@@ -210,7 +216,11 @@ template<> void PeerLocal::process_message (Message* m) {
     process_message(m_);
 
   } else if (type == "Control") {
-    Control* m_ = dynamic_cast<Control*>(m);
+    auto m_ = dynamic_cast<Control*>(m);
+    process_message(m_);
+
+  } else if (type == "KeyRequest") {
+    auto m_ = dynamic_cast<KeyRequest*>(m);
     process_message(m_);
   }
 }
@@ -230,5 +240,8 @@ void PeerLocal::run () {
 void PeerLocal::join () {
   for (auto& t : threads) t->join();
 }
+// }}}
+// close {{{
+void PeerLocal::close() { exit(EXIT_SUCCESS); }
 // }}}
 }

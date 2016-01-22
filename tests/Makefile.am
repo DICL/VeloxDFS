@@ -15,6 +15,7 @@ CLEANFILES       = eclipse.json
 messages_files   = src/messages/boundaries.cc \
                    src/messages/message.cc    \
                    src/messages/keyvalue.cc   \
+                   src/messages/keyrequest.cc   \
                    src/messages/control.cc    \
                    src/messages/boost_impl.cc \
                    src/messages/factory.cc

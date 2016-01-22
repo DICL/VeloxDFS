@@ -10,6 +10,7 @@
 #include "boundaries.hh"
 #include "keyvalue.hh"
 #include "control.hh"
+#include "keyrequest.hh"
 
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/access.hpp>
@@ -52,6 +53,12 @@ template <typename Archive>
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.type);
   }
+
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::KeyRequest& c, unsigned int) {
+    ar & BASE_OBJECT(Message, c);
+    ar & BOOST_SERIALIZATION_NVP(c.key);
+  }
 }
 }
 
@@ -62,3 +69,4 @@ BOOST_CLASS_TRACKING(eclipse::messages::Message, boost::serialization::track_nev
 BOOST_CLASS_TRACKING(eclipse::messages::Boundaries, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::KeyValue, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::Control, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::KeyRequest, boost::serialization::track_never);

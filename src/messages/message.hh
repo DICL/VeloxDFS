@@ -14,18 +14,18 @@ namespace messages {
 
 struct Message {
   Message() = default;
-  Message(std::string, std::string);
+  Message(int, int);
   virtual ~Message () {}
 
   virtual std::string get_type() const;
 
-  std::string get_origin() const;
-  std::string get_destination() const;
+  int get_origin() const;
+  int get_destination() const;
 
-  Message& set_origin(std::string);
-  Message& set_destination(std::string);
+  Message& set_origin(int);
+  Message& set_destination(int);
 
-  std::string origin, destination;
+  int origin, destination;
 };
 
 }

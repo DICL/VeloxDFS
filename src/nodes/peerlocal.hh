@@ -22,8 +22,8 @@ class PeerLocal: public NodeLocal {
 
     bool establish() override;
     void insert (string, string);
-    string lookup (string);
-    bool exist (string);
+    string request (string);
+    bool exists (string);
     void close ();
 
     void run ();
@@ -35,8 +35,8 @@ class PeerLocal: public NodeLocal {
     u_ptr<lru_cache<string, string> > cache;
     u_ptr<Histogram> histogram;
     u_ptr<Topology> topology;
-    int concurrency;
     std::vector<u_ptr<std::thread>> threads;
+    int concurrency;
 };
 
 }

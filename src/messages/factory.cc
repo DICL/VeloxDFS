@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <boost/asio/streambuf.hpp>
+#include <boost/asio/buffers_iterator.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 
@@ -33,7 +34,12 @@ void operator<< (Message* m , std::string s) {
 }
 
 void operator<< (Message* m, boost::asio::streambuf& data_) {
-  istream is (&data_);
+
+  auto buf = data_.data();
+  std::string s (boost::asio::buffers_begin(buf),
+                   boost::asio::buffers_end(buf));
+
+  std::stringstream is(s);
   xml_iarchive ia (is, no_header);
 
   ia >> BOOST_SERIALIZATION_NVP(m);
@@ -48,9 +54,9 @@ void operator<< (Histogram& h, Message& m) {
 Message* load_message (std::string s) {
   Message* m; 
   stringstream ss (s);
-  xml_iarchive oa (ss, no_header);
+  xml_iarchive ia (ss, no_header);
 
-  oa >> BOOST_SERIALIZATION_NVP(m);
+  ia >> BOOST_SERIALIZATION_NVP(m);
   return m;
 }
 

@@ -10,6 +10,9 @@ using boost::bind;
 namespace ph = boost::asio::placeholders;
 
 // establish {{{
+// @brief It establish the network, 
+// connecting with other nodes
+// @todo  refactor
 bool MeshTopology::establish () {
   net_size = static_cast<int> (nodes.size());
   
@@ -20,18 +23,18 @@ bool MeshTopology::establish () {
   for (auto node : nodes) {
     if (node != myself) {
 
-    tcp::resolver::query query (node, to_string(port));
-    tcp::resolver::iterator it (resolver.resolve(query));
+      tcp::resolver::query query (node, to_string(port));
+      tcp::resolver::iterator it (resolver.resolve(query));
 
-    auto endpoint = new tcp::endpoint (*it);
-    auto client = new tcp::socket (ioservice);
+      auto endpoint = new tcp::endpoint (*it);
+      auto client = new tcp::socket (ioservice);
 
-    client->async_connect (*endpoint, bind (
-          &MeshTopology::on_connect, this, ph::error, client, 
-          endpoint));
+      client->async_connect (*endpoint, bind (
+            &MeshTopology::on_connect, this, ph::error, client, 
+            endpoint));
 
-    auto channel = new Channel(client);
-    channels.insert (make_pair(i, channel));
+      auto channel = new Channel(client);
+      channels.insert (make_pair(i, channel));
     }
     i++;
   }
@@ -48,10 +51,18 @@ bool MeshTopology::establish () {
 // }}}
 // close {{{
 bool MeshTopology::close () {
+  for (auto p: channels) {
+    auto channel = p.second;
+
+    channel->send_socket()->close();
+    channel->recv_socket()->close();
+  }
+
   return true;
 }
 // }}}
 // on_connect {{{
+// @brief handle a connection to a server
 void MeshTopology::on_connect (
     const boost::system::error_code& ec,
     tcp::socket* client,
@@ -70,6 +81,8 @@ void MeshTopology::on_connect (
 }
 // }}}
 // on_accept {{{
+// @brief handle a connection with a client
+// @todo refactor
 void MeshTopology::on_accept (
     const boost::system::error_code& ec,
     tcp::socket* sock) 

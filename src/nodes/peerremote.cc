@@ -2,6 +2,7 @@
 #include "../messages/factory.hh"
 #include <string>
 #include <sstream>
+#include <iomanip>
 #include <istream>
 #include <boost/bind.hpp>
 
@@ -16,43 +17,49 @@ PeerRemote::PeerRemote(NodeLocal* p, int i) : NodeRemote(p, i) {
  owner_peer = dynamic_cast<PeerLocal*>(p);
 }
 // }}}
-// on_connect {{{
-void PeerRemote::on_connect(const boost::system::error_code& ec,
-        boost::asio::ip::tcp::resolver::iterator iterator) {
-  if (!ec) {
-    this->do_read();
-  }
-}
-// }}}
 // start {{{
 void PeerRemote::start () {
-do_read();
+  do_read();
 }
 // }}}
 // do_read {{{
 void PeerRemote::do_read () {
 
-  async_read_until (*channel->recv_socket(), inbound_data, 
-      "\r\r",
-      boost::bind(&PeerRemote::on_read, this, ph::error, ph::bytes_transferred));
+  async_read (*channel->recv_socket(), buffer(inbound_header), 
+      transfer_exactly(header_size),
+      boost::bind(&PeerRemote::on_read_header, this, 
+        ph::error, ph::bytes_transferred));
 }
 // }}}
-// on_read {{{
-void PeerRemote::on_read (const boost::system::error_code& ec, size_t s) {
+// on_read_header {{{
+void PeerRemote::on_read_header (const boost::system::error_code& ec, size_t s) {
 
-  logger->info ("Message arrived l=%d", s);
   if (!ec)  {
+    size_t size = atoi(inbound_header);
+    logger->info ("Header received size=%d:%d", s, size);
+    async_read (*channel->recv_socket(), inbound_data, 
+      transfer_exactly (size), boost::bind(
+        &PeerRemote::on_read_body, this, 
+        ph::error, ph::bytes_transferred));
+  }
 
-    std::istream buffer(&inbound_data);
-     stringstream ss;
-     buffer >> ss.rdbuf(); 
-    std::string str = ss.str();
-    //str << ss; // (msg_inbound.begin(), msg_inbound.end());
-    str = str.substr(0, str.find("\r\r"));
-    logger->info ("Message arrived %d:%s", str.length(), str.c_str());
-    sleep(1);
-    Message* msg = load_message (str);
+  do_read();
+}
+// }}}
+// on_read_body {{{
+void PeerRemote::on_read_body (const boost::system::error_code& ec,
+    size_t s) {
+
+  if (!ec)  {
+    logger->info ("Message arrived size=%d");
+
+    std::string str((istreambuf_iterator<char>(&inbound_data)), 
+                     istreambuf_iterator<char>());
+
+    Message* msg = nullptr;
+    msg = load_message(str);
     owner_peer->process_message(msg);
+    delete msg;
   }
 
   do_read();
@@ -61,11 +68,11 @@ void PeerRemote::on_read (const boost::system::error_code& ec, size_t s) {
 // do_write {{{
 void PeerRemote::do_write (Message* m) {
   string str = save_message (m);
-  string tosend = str + "\r\r";
+  stringstream ss; 
+  ss << setfill('0') << setw(header_size) << str.length() << str;
 
   async_write (*channel->send_socket(), 
-      boost::asio::buffer(tosend), boost::bind (
-      &PeerRemote::on_write, this, 
+      buffer(ss.str()), boost::bind (&PeerRemote::on_write, this, 
       ph::error, ph::bytes_transferred, m));
 }
 // }}}
@@ -75,18 +82,12 @@ void PeerRemote::on_write (const boost::system::error_code& ec,
   if (ec) {
     logger->info ("Message could not reach err=%s", 
         ec.message().c_str());
+
     do_write(m);
+
   } else  {
-    logger->info ("Message delivered: %s", 
-        ec.message().c_str());
+    logger->info ("Message delivered: %s", ec.message().c_str());
   }
 }
 // }}}
-// send {{{
-void PeerRemote::send(Message* m) {
-  string tosend;
-  tosend << m;
- // socket->send (boost::asio::buffer(tosend));
-}
-// }}}
-} /* nodes  */
+} /* eclipse */

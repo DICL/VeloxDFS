@@ -16,10 +16,6 @@ NodeRemote::NodeRemote(NodeLocal* n, int id) :
    Node(id), owner(n), ioservice (n->io_service), 
    logger(n->logger.get()) { }
 // }}}
-// close {{{
-void NodeRemote::close() {
-}
-// }}}
 // get_ip {{{
 string NodeRemote::get_ip() const { return "placeholder"; }
 // }}}
