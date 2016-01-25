@@ -17,11 +17,20 @@ Job::Job() {
   num_map_task_ = 0;
   num_red_task_ = 0;
 }
+Job::Job(std::string app_path) {
+  Job();
+  SetApplicationPath(app_path);
+}
 Job::~Job() {
 }
-//void Job::SetId(int id) {}
 int Job::GetId() {
   return id_;
+}
+void Job::SetApplicationPath(std::string app_path) {
+  app_path_ = app_path;
+}
+std::string Job::GetApplicationPath() {
+  return app_path_;
 }
 void Job::SetTotalNumMapSlot(int tot_num_map_slot) {
   tot_num_map_slot_ = tot_num_map_slot;
