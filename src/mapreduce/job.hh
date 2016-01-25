@@ -14,9 +14,7 @@ class Job {
   private:
     int id_;
     static int id_counter_;
-    // Depending on filesystem, I can decide where to put inputpath var, whether
-    // Task class or Job class.
-    //std::string inputpath_;
+    std::string app_path_;
     // The total number of worker thread allowed at a time over the whole
     // system.
     // Default is the total number of available worker thread over the whole
@@ -35,11 +33,11 @@ class Job {
 
   public:
     Job();
+    Job(std::string app_path);
     ~Job();
-    //void SetId(int id);
     int GetId();
-    //void SetInputpath(std::string input_path);
-    //std::string GetInputpath();
+    void SetApplicationPath(std::string app_path);
+    std::string GetApplicationPath();
     void SetTotalNumMapSlot(int tot_num_map_slot);
     int GetTotalNumMapSlot();
     void SetTotalNumReduceSlot(int tot_num_red_slot);
