@@ -1,33 +1,15 @@
-#include "dh_loader.hh"
-#include <dlfcn.h>
+#pragma once
 
-using namespace std;
+#include <string>
 
-// Constructor& destructors {{{
-DL_loader::DL_loader(string path, string fun) {
-  lib = dlopen(path.c_str(), RTLD_NOW);
+class DL_loader {
+  public:
+    DL_loader(std::string, std::string);
+    ~DL_loader();
 
-  if (!lib) {
-    return;
-  }
+    void run();
 
-  dlerror();
-
-  func_ = dlsym(lib, fun.c_str); 
-
-  char* err = dlerror();
-  if (err) {
-    return;
-  }
-}
-
-DL_loader::~DL_loader() {
-    dlclose(lib);
-
-}
-// }}}
-// run {{{
-void DL_loader::run() {
-  this->func_();
-}
-// }}}
+  protected:
+    void (*func_) () = nullptr;
+    void* lib  = nullptr;
+};
