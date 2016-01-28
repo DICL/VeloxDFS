@@ -1,5 +1,5 @@
 AM_CPPFLAGS_T    = $(AM_CPPFLAGS) -include UnitTest++/UnitTest++/UnitTest++.h
-LDADD_T          = $(LDADD) -l:libUnitTest++.a
+LDADD_T          = $(LDADD) -l:libUnitTest++.a -ldl
 
 # Input your tests files here
 check_PROGRAMS   = units network nodes
@@ -38,7 +38,9 @@ units_SOURCES      = tests/main.cc \
                      src/nodes/peerremote.cc \
                      src/nodes/nodelocal.cc \
                      src/nodes/noderemote.cc \
-                     src/nodes/node.cc
+                     src/nodes/node.cc \
+                     src/common/dl_loader.cc \
+                     tests/dl_test.cc
 
 network_LDADD     = $(LDADD_T)
 network_CPPFLAGS  = $(AM_CPPFLAGS_T)
