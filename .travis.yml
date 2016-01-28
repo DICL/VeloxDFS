@@ -11,7 +11,6 @@ addons:
       - libboost-all-dev
       - build-essential
       - gcc-4.9
-      - g++-4.9
 
 before_script:
   - export CXX=g++-4.9
