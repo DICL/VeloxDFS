@@ -7,6 +7,6 @@ SUITE(DL) {
     CHECK_THROW(ld = new DL_loader("myfile", "myfunc"), 
         std::runtime_error);
 
-    ld->run();
+    //ld->run();
   }
 }

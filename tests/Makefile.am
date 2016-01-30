@@ -1,4 +1,4 @@
-AM_CPPFLAGS_T    = $(AM_CPPFLAGS) -include UnitTest++/UnitTest++/UnitTest++.h
+AM_CPPFLAGS_T    = $(AM_CPPFLAGS) -include unittest++/UnitTest++.h
 LDADD_T          = $(LDADD) -l:libUnitTest++.a -ldl
 
 # Input your tests files here
