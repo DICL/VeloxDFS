@@ -68,7 +68,7 @@ centralizedtopology_SOURCES   = tests/centralizedtopology.cc \
                                 $(messages_files) \
                                 src/network/topology.cc \
                                 src/network/centralizedtopology.cc \
-                    src/network/channel.cc 
+                                src/network/channel.cc 
 
 
 #nodes_test_SOURCES    = nodes_test.cc \

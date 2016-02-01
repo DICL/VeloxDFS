@@ -13,8 +13,10 @@ int main (int argc, char ** argv) {
 
   vec_str net = setted.get<vec_str> ("network.nodes");
   string master = setted.get<string> ("network.master");
-  int port = setted.get<int> ("network.port_mr");
-  int id = setted.get<int> ("id");
+  int port = setted.get<int> ("network.port_cache");
+  string myip = setted.getip();
+
+  int id = std::find (net.begin(), net.end(), myip) - net.begin();
 
   string logname = setted.get<string> ("log.name");
   string logtype = setted.get<string> ("log.type");
