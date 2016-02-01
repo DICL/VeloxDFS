@@ -78,9 +78,12 @@ void CentralizedTopology::on_connect (
 
   } else {
     logger->info ("connection established id=%d", id);
-    client->async_connect (*it, bind (
-          &CentralizedTopology::on_connect, this, ph::error, 
-          client, it));
+
+    string str;
+    static boost::asio::streambuf sbuf;
+    async_read(*client, sbuf, bind(
+          &CentralizedTopology::dummy_callback, this, 
+          ph::error));
   }
 }
 // }}}
@@ -119,6 +122,10 @@ void CentralizedTopology::on_accept (
         ph::error, next_socket)); 
 
   sleep (1);
+}
+// }}}
+// dummy_callback {{{
+void CentralizedTopology::dummy_callback (const boost::system::error_code&) {
 }
 // }}}
 

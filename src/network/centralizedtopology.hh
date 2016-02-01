@@ -31,6 +31,7 @@ class CentralizedTopology: public Topology {
 
     void on_accept (const boost::system::error_code&,
         tcp::socket*);
+    void dummy_callback (const boost::system::error_code&);
 
     std::unique_ptr<tcp::acceptor> acceptor;
 };
