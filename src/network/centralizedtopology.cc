@@ -77,7 +77,10 @@ void CentralizedTopology::on_connect (
           client, it));
 
   } else {
-    delete it;
+    logger->info ("connection established id=%d", id);
+    client->async_connect (*it, bind (
+          &CentralizedTopology::on_connect, this, ph::error, 
+          client, it));
   }
 }
 // }}}
