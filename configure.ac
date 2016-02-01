@@ -12,12 +12,13 @@ AC_CONFIG_FILES([src/fs/eclipsed],      [chmod +x src/fs/eclipsed])
 AC_CONFIG_FILES([tests/integration],    [chmod +x tests/integration])
 AC_CONFIG_FILES([tests/network_executor],    [chmod +x tests/network_executor])
 AC_CONFIG_FILES([tests/nodes_executor],    [chmod +x tests/nodes_executor])
+AC_CONFIG_FILES([tests/ctop_executor],    [chmod +x tests/ctop_executor])
 AC_CONFIG_FILES([tests/eclipse_debug],    [chmod +x tests/eclipse_debug])
 
 AM_CONDITIONAL([DEFAULT_CXXFLAGS], [test -z "$CXXFLAGS"])
 AM_COND_IF([DEFAULT_CXXFLAGS], [CXXFLAGS='-g -O0 -march=native'])
 
-CXXFLAGS="$CXXFLAGS -std=c++14" #make sure the compiler support GNU extensions of C++11
+CXXFLAGS="$CXXFLAGS -std=c++14" #make sure the compiler support C++14
 AC_PROG_CXX
 AC_LANG([C++])
 

@@ -2,7 +2,7 @@ AM_CPPFLAGS_T    = $(AM_CPPFLAGS) -include unittest++/UnitTest++.h
 LDADD_T          = $(LDADD) -l:libUnitTest++.a -ldl
 
 # Input your tests files here
-check_PROGRAMS   = units network nodes
+check_PROGRAMS   = units network nodes centralizedtopology
 
 TESTS            = units #tests/network_executor
 check_SCRIPTS    = tests/network_executor.in \
@@ -62,6 +62,13 @@ nodes_SOURCES   = tests/nodes.cc \
                   src/nodes/nodelocal.cc \
                   src/nodes/noderemote.cc \
                   src/nodes/node.cc
+centralizedtopology_LDADD     = $(LDADD_T)
+centralizedtopology_CPPFLAGS  = $(AM_CPPFLAGS_T)
+centralizedtopology_SOURCES   = tests/centralizedtopology.cc \
+                                $(messages_files) \
+                                src/network/topology.cc \
+                                src/network/centralizedtopology.cc \
+                    src/network/channel.cc 
 
 
 #nodes_test_SOURCES    = nodes_test.cc \

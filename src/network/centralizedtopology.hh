@@ -15,25 +15,24 @@ using namespace boost::asio;
 
 class CentralizedTopology: public Topology {
   public:
-    using Topology::Topology;
+    CentralizedTopology(boost::asio::io_service&, Logger*,
+        std::string, vec_str, int, int);
 
     bool establish () override;
     bool close () override;
     bool is_online() override;
 
   private:
+    std::string type, master;
+    int net_size, clients_connected = 1; 
+
     void on_connect (const boost::system::error_code&,
-        boost::asio::ip::tcp::resolver::iterator);
-    void on_accept (const boost::system::error_code&);
-    std::tuple<std::string, std::string> organize();
+        tcp::socket*, tcp::endpoint*);
+
+    void on_accept (const boost::system::error_code&,
+        tcp::socket*);
 
     std::unique_ptr<tcp::acceptor> acceptor;
-    std::unique_ptr<tcp::resolver::iterator> endpoint_iterator; 
-    std::unique_ptr<tcp::socket> client_sock;
-    std::unique_ptr<tcp::socket> server_sock;
-
-    std::unique_ptr<Channel> client;
-    std::unique_ptr<Channel> server;
 };
 
 } /* network */ 
