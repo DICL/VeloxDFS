@@ -20,6 +20,8 @@ using namespace std;
 	fs.open_writefile();
 	string msg = "Hello, world!";
 	fs.write_file(&msg);
+	string path = fs.display_path();
+	l->info("path is %s", path.c_str()); 
 	//fs.read_line(&msg);
 	//fs.read_file(&msg);
 	//cout << msg << endl;
