@@ -26,6 +26,9 @@ class FileIO {
 		bool write_file(const string *);
 		string read_inter();
 		bool write_inter();
+
+		// for test
+		string display_path();
 };
 
 }
