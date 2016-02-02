@@ -2,14 +2,14 @@
 
 namespace eclipse {
 
-class NodeExecutor {
+class Executor: MR_traits {
   public:
-    NodeExecutor ();
-    ~NodeExecutor ();
+    Executor ();
+    ~Executor ();
 
+    bool load(std::string) override;
   protected:
     template <typename T> void process_message (T);
-
 };
 
 } /* eclipse  */ 
