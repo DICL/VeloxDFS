@@ -1,5 +1,4 @@
 #include "nodeexecutor.hh"
-#include "dl_loader.hh"
 #include "../messages/factory.hh"
 #include "../messages/boost_impl.hh"
 
@@ -8,21 +7,21 @@ using namespace eclipse::messages;
 using namespace boost::asio;
 using namespace std;
 
-namespace eclipse { 
+namespace eclipse {
 
-NodeExecutor::NodeExecutor() {
+Executor::Executor() {
 
 }
 
-NodeExecutor::~NodeExecutor() {
+Executor::~Executor() {
 
 }
 // process_message (Job* m) {{{
-template<> void PeerLocal::process_message (Task* m) {
+template<> void Executor::process_message (Task* m) {
 }
 // }}}
 // process_message (Control* m) {{{
-template<> void PeerLocal::process_message (Control* m) {
+template<> void Executor::process_message (Control* m) {
   switch (m->type) {
     case messages::SHUTDOWN:
       exit(EXIT_SUCCESS);
@@ -38,7 +37,7 @@ template<> void PeerLocal::process_message (Control* m) {
 }
 // }}}
 // process_message (Message*) {{{
-template<> void PeerLocal::process_message (Message* m) {
+template<> void Executor::process_message (Message* m) {
   string type = m->get_type();
 
   if (type == "Job") {
@@ -51,5 +50,9 @@ template<> void PeerLocal::process_message (Message* m) {
   }
 }
 // }}}
+// load {{{
+bool Executor::load (std::string) {
+}
+// }}}
 
-} /* eclipse  */ 
+} /* eclipse  */
