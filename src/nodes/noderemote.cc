@@ -10,11 +10,12 @@ namespace ph = boost::asio::placeholders;
 
 namespace eclipse {
 // constructor & destructor {{{
-NodeRemote::NodeRemote(NodeLocal* n) : owner(n), ioservice (n->io_service), logger(n->logger.get()){ }
+NodeRemote::NodeRemote(NodeLocal* n) : owner(n), 
+  ioservice (n->io_service), logger(n->logger){ }
 
 NodeRemote::NodeRemote(NodeLocal* n, int id) :
    Node(id), owner(n), ioservice (n->io_service), 
-   logger(n->logger.get()) { }
+   logger(n->logger) { }
 // }}}
 // get_ip {{{
 string NodeRemote::get_ip() const { return "placeholder"; }
