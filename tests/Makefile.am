@@ -18,7 +18,9 @@ messages_files   = src/messages/boundaries.cc \
                    src/messages/keyrequest.cc   \
                    src/messages/control.cc    \
                    src/messages/boost_impl.cc \
-                   src/messages/factory.cc
+                   src/messages/factory.cc    \
+                   src/messages/task.cc       \
+                   src/mapreduce/task.cc       
 
 # Input the dependencies of the test files here
 units_LDADD        = $(LDADD_T)
