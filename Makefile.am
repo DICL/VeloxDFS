@@ -8,7 +8,8 @@ AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3
 # libs -----
 lib_LTLIBRARIES     = libecfs.la
 libecfs_la_SOURCES  = src/common/hash.cc src/common/settings.cc \
-											src/common/util.cc src/common/logger.cc src/common/histogram.cc
+											src/common/util.cc src/common/logger.cc src/common/histogram.cc \
+											src/common/context.cc
 libecfs_la_LDFLAGS  = -version-info 0:0:0 
 
 # Binaries ----
