@@ -1,23 +1,30 @@
 #include "mr_traits.hh"
 
+using namespace std;
 namespace eclipse {
 
+using vec_str = std::vector<std::string>;
+
+// Constructor {{{
 MR_traits::MR_traits(Settings& setted) : 
-  NodeLocal(Settings& setted) {
+  NodeLocal(setted) {
 
   setted.load();
 
   vec_str nodes = setted.get<vec_str> ("network.nodes");
   string master =  setted.get<string> ("network.master");
   int port = setted.get<int> ("network.port_mapreduce");
+
+  auto net_ = new CentralizedTopology (this, io_service, 
+      logger.get(), master, nodes, port, id);
+  network.reset(net_);
 }
 
 MR_traits::~MR_traits() { }
-
-}
+//}}}
 // establish {{{
 bool MR_traits::establish () {
-
-  auto net_ = CentralizedTopology()
+  return network->establish();
 }
 // }}}
+}
