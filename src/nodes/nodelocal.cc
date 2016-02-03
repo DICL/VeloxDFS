@@ -15,16 +15,14 @@ using vec_node   = std::vector<NodeRemote*>;
 using PAIR       = std::pair<int, NodeRemote*>;
 
 // Constructor & destructor {{{
-NodeLocal::NodeLocal(Settings& setted) {
-  setted.load();
-
-  string logname = setted.get<string> ("log.name");
-  string logtype = setted.get<string> ("log.type");
-  ip_of_this     = setted.getip ();
-  port           = setted.get<int> ("network.port_cache");
-
-  logger.reset (Logger::connect(logname, logtype));
-
+NodeLocal::NodeLocal(Context& context) : 
+  logger    (context.logger.get()),
+  ip_of_this(context.settings.getip()),
+  io_service(context.io),
+  port      (context.settings.get<int>("network.port_cache"))
+{
+  //ip_of_this     = context.settings.getip ();
+ // port           = context.settings.get<int> ("network.port_cache");
 }
 
 NodeLocal::~NodeLocal() { }
