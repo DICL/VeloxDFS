@@ -42,8 +42,8 @@ auto corresponding_node = [] (string k, int  size) -> int {
 };
 // }}}
 // Constructor & destructor {{{
-PeerLocal::PeerLocal(Settings& setted) : NodeLocal(setted) { 
-  setted.load();
+PeerLocal::PeerLocal(Context& context) : NodeLocal(context) { 
+  Settings& setted = context.settings;
 
   int numbin     = setted.get<int> ("cache.numbin");
   int cachesize  = setted.get<int> ("cache.size");
@@ -64,10 +64,10 @@ PeerLocal::PeerLocal(Settings& setted) : NodeLocal(setted) {
   // topology initialization
   if (tType == "mesh") {
     topology = make_unique<MeshTopology>
-      (io_service, logger.get(), nodes, port, id);
+      (io_service, logger, nodes, port, id);
   
   } else if (tType == "ring") {
-    topology = make_unique<RingTopology> (io_service, logger.get(), nodes, port, id);
+    topology = make_unique<RingTopology> (io_service, logger, nodes, port, id);
   }
 }
 
