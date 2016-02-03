@@ -10,7 +10,8 @@
  "path" : {
    "filesystem" : "/home/vicente/mr_storage",
    "scratch"    : "/scratch/vicente/mr_storage",
-   "ipc"        : "/scratch/vicente/socket"
+   "ipc"        : "/scratch/vicente/socket",
+   "idata"      : "/scratch/vicente/idata"
  },
 
  "network" : {
