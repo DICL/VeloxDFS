@@ -1,35 +1,28 @@
 #pragma once
-#include "../common/logger.hh"
-#include "../common/settings.hh"
+#include "../common/context.hh"
 #include <iostream>
 #include <fstream>
 #include <string>
 
-using namespace std;
-
 namespace eclipse {
 class FileIO {
 	private:
-		Logger* logger;
-		fstream file;
-		string file_name, path, ipath, key, value;
+		Context con;
 		int jobid;
+		std::fstream file;
 
 	public:
-		FileIO(Logger*, Settings &, string, string, string, int);
-		~FileIO(){file.close(); }
+		FileIO(int jid) : jobid(jid){}
+		~FileIO(){close_file();}
 
-		bool open_readfile();
-		bool open_writefile();
-		bool read_file(string *);
-		bool read_line(string *);
-		bool write_file(const string *);
-		string read_inter();
-		bool write_inter();
-
-		// for test
-		string display_path();
+		void open_rfile(std::string);
+		void open_wfile(std::string);
+		void open_irfile(std::string);
+		void open_iwfile(std::string);
+		void read_file(std::string *);
+		void read_line(std::string *);
+		void write_file(const std::string *);
+		void close_file(){if(file.is_open()) file.close();}
 };
 
 }
-
