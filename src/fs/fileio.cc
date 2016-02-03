@@ -3,6 +3,17 @@
 using namespace std;
 
 namespace eclipse {
+
+FileIO::FileIO(int jobid)
+{
+	this->jobid = jobid;
+}
+
+FileIO::~FileIO()
+{
+	close_file();
+}
+
 void FileIO::open_rfile(string file_name)
 {
 	string path = con.settings.get<string>("path.scratch") + "/" + file_name;
@@ -40,6 +51,12 @@ void FileIO::read_line(string *buf)
 void FileIO::write_file(const string *buf)
 {
 	file << *buf;
+}
+
+void FileIO::close_file()
+{
+	if(file.is_open())
+		file.close();
 }
 
 }
