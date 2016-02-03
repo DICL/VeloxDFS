@@ -40,7 +40,9 @@ units_SOURCES      = tests/main.cc \
                      src/nodes/noderemote.cc \
                      src/nodes/node.cc \
                      src/common/dl_loader.cc \
-                     tests/dl_test.cc
+                     tests/dl_test.cc \
+					 src/fs/fileio.cc \
+                     tests/fileio_test.cc
 
 network_LDADD     = $(LDADD_T)
 network_CPPFLAGS  = $(AM_CPPFLAGS_T)
