@@ -12,17 +12,17 @@ class FileIO {
 		std::fstream file;
 
 	public:
-		FileIO(int jid) : jobid(jid){}
-		~FileIO(){close_file();}
+		FileIO(int);
+		~FileIO();
 
-		void open_rfile(std::string);
-		void open_wfile(std::string);
-		void open_irfile(std::string);
-		void open_iwfile(std::string);
-		void read_file(std::string *);
-		void read_line(std::string *);
-		void write_file(const std::string *);
-		void close_file(){if(file.is_open()) file.close();}
+		void open_rfile(std::string);	// open file for read
+		void open_wfile(std::string);	// open file for write
+		void open_irfile(std::string);	// open intermediate file for read
+		void open_iwfile(std::string);	// open intermediate file for write 
+		void read_file(std::string *);	// read whole file
+		void read_line(std::string *);	// read one line
+		void write_file(const std::string *);	// write string
+		void close_file();				// close file
 };
 
 }
