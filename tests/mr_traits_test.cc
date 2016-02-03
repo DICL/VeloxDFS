@@ -3,6 +3,6 @@
 using namespace eclipse;
 
 TEST(MRTRAITS) {
-  Settings setted;
-  Executor ex (setted);
+  Context context;
+  Executor ex (context);
 }
