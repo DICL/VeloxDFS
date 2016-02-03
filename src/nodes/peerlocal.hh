@@ -17,7 +17,7 @@ using std::map;
 
 class PeerLocal: public NodeLocal {
   public:
-    PeerLocal (Settings&);
+    PeerLocal (Context&);
     ~PeerLocal ();
 
     bool establish() override;

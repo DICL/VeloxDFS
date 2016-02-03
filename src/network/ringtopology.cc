@@ -47,7 +47,9 @@ bool RingTopology::close () {
     server_sock->close();
   } catch (...) {
   
+    return false;
   }
+  return true;
 }
 // }}}
 // on_connect {{{
@@ -75,7 +77,7 @@ void RingTopology::on_accept (
 std::tuple<string,string> RingTopology::organize () {
   string to_accept;
   string to_connect;
-  size_t size = nodes.size() - 1;
+  int size = static_cast<int>(nodes.size() - 1);
 
   if (id != 0 and id != size) {
     to_accept = nodes[id-1];
