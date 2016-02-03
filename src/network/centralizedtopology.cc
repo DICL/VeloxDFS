@@ -11,9 +11,11 @@ namespace ph = boost::asio::placeholders;
 
 // constructor {{{
 CentralizedTopology::CentralizedTopology(
+    eclipse::MR_traits* o,
     boost::asio::io_service& io, Logger* l, 
     std::string master, vec_str net, int port , int id) : 
-  Topology(io, l , net, port, id), master(master){
+  Topology(io, l , net, port, id), master(master), 
+    owner (o) {
     net_size = static_cast<int> (net.size());
 
     if (master == net[id]) {
@@ -78,12 +80,7 @@ void CentralizedTopology::on_connect (
 
   } else {
     logger->info ("connection established id=%d", id);
-
-    string str;
-    static boost::asio::streambuf sbuf;
-    async_read(*client, sbuf, bind(
-          &CentralizedTopology::dummy_callback, this, 
-          ph::error));
+    owner->action (client);
   }
 }
 // }}}
@@ -111,6 +108,9 @@ void CentralizedTopology::on_accept (
 
     } else { 
       logger->info ("Network established with id=%d",id);
+      //Call function
+      owner->action(sock);
+      return;
     }
 
   } else {

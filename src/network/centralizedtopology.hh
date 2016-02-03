@@ -1,6 +1,7 @@
 #pragma once
 
 #include "topology.hh"
+#include "../mapreduce/mr_traits.hh"
 
 #include <boost/asio.hpp>
 #include <boost/asio/error.hpp>
@@ -8,6 +9,8 @@
 #include <tuple>
 
 namespace eclipse {
+class MR_traits;
+
 namespace network {
 
 using boost::asio::ip::tcp;
@@ -15,7 +18,8 @@ using namespace boost::asio;
 
 class CentralizedTopology: public Topology {
   public:
-    CentralizedTopology(boost::asio::io_service&, Logger*,
+    CentralizedTopology(eclipse::MR_traits*,
+        boost::asio::io_service&, Logger*,
         std::string, vec_str, int, int);
 
     bool establish () override;
@@ -34,6 +38,7 @@ class CentralizedTopology: public Topology {
     void dummy_callback (const boost::system::error_code&);
 
     std::unique_ptr<tcp::acceptor> acceptor;
+    eclipse::MR_traits* owner;
 };
 
 } /* network */ 
