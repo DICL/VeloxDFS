@@ -6,17 +6,16 @@ namespace eclipse {
 using vec_str = std::vector<std::string>;
 
 // Constructor {{{
-MR_traits::MR_traits(Settings& setted) : 
-  NodeLocal(setted) {
-
-  setted.load();
+MR_traits::MR_traits(Context& context) : 
+  NodeLocal(context) {
+  Settings& setted = context.settings;
 
   vec_str nodes = setted.get<vec_str> ("network.nodes");
-  string master =  setted.get<string> ("network.master");
-  int port = setted.get<int> ("network.port_mapreduce");
+  string master = setted.get<string> ("network.master");
+  int port =      setted.get<int> ("network.port_mapreduce");
 
   auto net_ = new CentralizedTopology (this, io_service, 
-      logger.get(), master, nodes, port, id);
+      logger, master, nodes, port, id);
   network.reset(net_);
 }
 

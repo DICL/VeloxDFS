@@ -12,7 +12,7 @@ class CentralizedTopology;
 }
 class MR_traits: public NodeLocal {
   public:
-    MR_traits(Settings&);
+    MR_traits(Context&);
     ~MR_traits();
 
     bool establish () override;
