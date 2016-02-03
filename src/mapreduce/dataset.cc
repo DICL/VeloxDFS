@@ -47,3 +47,9 @@ std::string GetRandomOutputPath() {
   output_path = ss.str();
   return output_path;
 }
+void DataSet::RequestToMaster(std::string func_name, std::string output_path) {
+  // TODO:
+  // 1. Send function name to master
+  // 2. Send inputpath to master
+  // 3. Send outputpath to master
+}

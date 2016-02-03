@@ -4,6 +4,9 @@
 
 namespace eclipse {
 
+// Variables for tasks
+extern std::string 
+
 // User functions
 void InitEclipseMr();
 void FinalizeEclipseMr();
