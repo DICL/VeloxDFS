@@ -41,7 +41,8 @@ units_SOURCES      = tests/main.cc \
                      src/nodes/node.cc \
                      src/common/dl_loader.cc \
                      tests/dl_test.cc \
-					 src/fs/fileio.cc \
+                     src/fs/fileio.cc \
+                     src/fs/fileinfo.cc \
                      tests/fileio_test.cc
 
 network_LDADD     = $(LDADD_T)
