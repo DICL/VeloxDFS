@@ -27,6 +27,12 @@ namespace eclipse {
     auto search = f_map.find(path);
     if(search != f_map.end())
     {
+      f_info.jobid = search.jobid;
+      f_info.num_block = search.num_block;
+      f_info.cur_block = search.cur_block;
+      f_info.size = search.size;
+      f_info.path = search.path;
+      f_info.type = search.type;
       file.open(path.c_str(), ios::in);
     }
     else
@@ -37,6 +43,7 @@ namespace eclipse {
 
   void FileIO::open_write(int jobid, string name, bool type)
   {
+    //f_info = new FileInfo;
     f_info.jobid = jobid;
     f_info.num_block = 1;
     f_info.cur_block = 1;
@@ -96,6 +103,9 @@ namespace eclipse {
   void FileIO::close_file()
   {
     if(file.is_open())
+    {
+      auto search = f_map.find(path);
+      if(search != f_map.end())
       file.close();
   }
 
