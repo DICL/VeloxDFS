@@ -10,7 +10,7 @@ namespace eclipse {
   class FileIO {
     private:
       Context con;
-      FileInfo f_info;
+      FileInfo *f_info;
       std::fstream file;
       std::map<std::string, FileInfo> f_map;
 
