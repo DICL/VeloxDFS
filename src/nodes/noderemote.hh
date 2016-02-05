@@ -11,6 +11,9 @@
 #include <boost/asio/error.hpp>
 
 namespace eclipse {
+namespace network {
+class Channel;
+}
 
 using boost::asio::ip::tcp;
 using namespace messages;
@@ -28,7 +31,7 @@ class NodeRemote: public Node {
 
     std::string get_ip () const override;
 
-    virtual void start () = 0;
+    virtual void action () = 0;
     virtual void do_read () = 0;
     virtual void do_write (messages::Message*) = 0; 
 

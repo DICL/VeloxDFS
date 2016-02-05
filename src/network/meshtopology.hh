@@ -4,6 +4,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/asio/error.hpp>
+#include <boost/asio/spawn.hpp>
 #include <memory>
 #include <tuple>
 
@@ -27,8 +28,7 @@ class MeshTopology: public Topology {
     void on_connect (const boost::system::error_code&,
         tcp::socket*, tcp::endpoint*);
 
-    void on_accept (const boost::system::error_code&,
-        tcp::socket*);
+    void accept (boost::asio::yield_context);
 
     std::unique_ptr<tcp::acceptor> acceptor;
 };
