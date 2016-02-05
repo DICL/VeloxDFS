@@ -10,7 +10,8 @@ PeerLocalMR::~PeerLocalMR () {
 }
 // }}} 
 // insert {{{
-bool PeerLocalMR::insert (std::string, std::string) {
+bool PeerLocalMR::insert (std::string key, std::string val) {
+  if (key )
 }
 // }}}
 // lookup {{{
@@ -22,22 +23,6 @@ std::string PeerLocalMR::lookup (std::string key) {
  } else {
    // Read file from input folder 
  }
-}
-// }}}
-// insert_cache {{{
-bool PeerLocalMR::insert_cache (std::string, std::string) {
-}
-// }}}
-// insert_disk {{{
-bool PeerLocalMR::insert_disk (std::string, std::string) {
-}
-// }}}
-// lookup_cache {{{
-bool PeerLocalMR::lookup_cache (std::string) {
-}
-// }}}
-// lookup_disk {{{
-bool PeerLocalMR::lookup_disk (std::string) {
 }
 // }}}
 } /* eclipse  */ 

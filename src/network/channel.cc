@@ -12,5 +12,15 @@ void Channel::set_recv_socket (tcp::socket* s ) {
   this->recv_ = s;
 }
 // }}}
+// action {{{
+void Channel::action () {
+  node->action();
+}
+// }}}
+// set_node {{{
+void Channel::set_node (NodeRemote* n) {
+  node = n;
+}
+// }}}
 }
 }

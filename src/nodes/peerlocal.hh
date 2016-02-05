@@ -15,6 +15,8 @@ using std::string;
 using std::thread;
 using std::map;
 
+typedef void(*req_func)(std::string);
+
 class PeerLocal: public NodeLocal {
   public:
     PeerLocal (Context&);
@@ -22,8 +24,9 @@ class PeerLocal: public NodeLocal {
 
     bool establish() override;
     void insert (string, string);
-    string request (string);
+    void request (string, req_func);
     bool exists (string);
+    bool belongs (string);
     void close ();
 
     void run ();
@@ -31,12 +34,15 @@ class PeerLocal: public NodeLocal {
 
     template <typename T> void process_message (T);
 
+    int H(string);
+
   protected:
     u_ptr<lru_cache<string, string> > cache;
     u_ptr<Histogram> histogram;
     u_ptr<Topology> topology;
     std::vector<u_ptr<std::thread>> threads;
     int concurrency;
+    std::map<std::string, req_func> requested_blocks;
 };
 
 }

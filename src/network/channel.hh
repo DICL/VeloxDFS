@@ -11,10 +11,12 @@
  */
 #pragma once
 
+#include "../nodes/noderemote.hh"
 #include <boost/asio.hpp>
 #include <string>
 
 namespace eclipse {
+class NodeRemote;
 namespace network {
 
 using boost::asio::ip::tcp;
@@ -41,8 +43,12 @@ class Channel {
 
     void set_recv_socket(tcp::socket*);
 
+    void action();
+    void set_node(NodeRemote*);
+
   protected:
     tcp::socket* send_, *recv_;
+    NodeRemote* node;
 };
 
 } /* network */ 

@@ -22,7 +22,7 @@ class NodeLocal: public Node {
     virtual bool establish() = 0;
 
   protected:
-    std::multimap<int, NodeRemote*> universe;
+    std::map<int, NodeRemote*> universe;
     Logger* logger;
     std::string ip_of_this;
     boost::asio::io_service& io_service;
