@@ -11,14 +11,15 @@ using namespace std::placeholders;
 namespace ph = boost::asio::placeholders;
 
 namespace eclipse {
+
 class PeerLocal;
 // constructor {{{
 PeerRemote::PeerRemote(NodeLocal* p, int i) : NodeRemote(p, i) {
  owner_peer = dynamic_cast<PeerLocal*>(p);
 }
 // }}}
-// start {{{
-void PeerRemote::start () {
+// action {{{
+void PeerRemote::action () {
   do_read();
 }
 // }}}
@@ -37,13 +38,18 @@ void PeerRemote::on_read_header (const boost::system::error_code& ec, size_t s) 
   if (!ec)  {
     size_t size = atoi(inbound_header);
     logger->info ("Header received size=%d:%d", s, size);
-    async_read (*channel->recv_socket(), inbound_data, 
-      transfer_exactly (size), boost::bind(
+
+    if(size == 0) {
+      logger->info ("Header received : %s", inbound_header);
+    }
+    async_read (*channel->recv_socket(),
+        inbound_data.prepare(size),
+       boost::bind(
         &PeerRemote::on_read_body, this, 
         ph::error, ph::bytes_transferred));
+  } else {
+    do_read();
   }
-
-  do_read();
 }
 // }}}
 // on_read_body {{{
@@ -53,13 +59,19 @@ void PeerRemote::on_read_body (const boost::system::error_code& ec,
   if (!ec)  {
     logger->info ("Message arrived size=%d");
 
+    inbound_data.commit(s);
+
     std::string str((istreambuf_iterator<char>(&inbound_data)), 
                      istreambuf_iterator<char>());
+    inbound_data.consume(s);
 
     Message* msg = nullptr;
     msg = load_message(str);
     owner_peer->process_message(msg);
     delete msg;
+
+  } else {
+    logger->info ("Message arrived error=%s", ec.message().c_str());
   }
 
   do_read();

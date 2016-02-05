@@ -1,5 +1,6 @@
 #include "meshtopology.hh"
 #include <boost/bind.hpp>
+#include <boost/asio.hpp>
 #include <iostream>
 
 namespace eclipse {
@@ -42,9 +43,7 @@ bool MeshTopology::establish () {
   acceptor = make_unique<tcp::acceptor> 
     (ioservice, tcp::endpoint(tcp::v4(), port) );
 
-  auto server = new tcp::socket(ioservice);
-  acceptor->async_accept (*server, 
-      bind (&MeshTopology::on_accept, this, ph::error, server));
+  spawn(ioservice, bind(&MeshTopology::accept, this, _1));
 
   return true;
 }
@@ -80,50 +79,36 @@ void MeshTopology::on_connect (
     }
 }
 // }}}
-// on_accept {{{
+// accept {{{
 // @brief handle a connection with a client
 // @todo refactor
-void MeshTopology::on_accept (
-    const boost::system::error_code& ec,
-    tcp::socket* sock) 
-{
-  if (ec) {
-    if ( clients_connected < net_size ) {
-      acceptor->async_accept(*sock, 
-          bind (&MeshTopology::on_accept, this, 
-            ph::error, sock));
+void MeshTopology::accept (boost::asio::yield_context yield)
+{ 
+  tcp::socket* server = nullptr;
+
+  try {
+    while (clients_connected < net_size) {
+      server = new tcp::socket(ioservice);
+      acceptor->async_accept (*server, yield);
+
+      auto ep = server->remote_endpoint();
+      auto address = ep.address().to_string();
+
+      int index = 0;
+      for (auto node : nodes) {
+        if (node == address) break;
+        index++;
+      }
+
+      channels[index]->set_recv_socket(server);
+      clients_connected++;
+      channels[index]->action();
+      logger->info ("Accepted client id=%d", index);
     }
-    sleep (1);
+    logger->info ("Network established with id=%d",id);
 
-      acceptor->async_accept(*sock, 
-          bind (&MeshTopology::on_accept, this, 
-            ph::error, sock));
-
-  } else {
-    auto ep = sock->remote_endpoint();
-    auto address = ep.address().to_string();
-
-    int index = 0;
-    for (auto node : nodes) {
-      if (node == address) break;
-      index++;
-    }
-
-    channels[index]->set_recv_socket(sock);
-    clients_connected++;
-    logger->info ("Accepted client id=%d", index);
-    if ( clients_connected < net_size ) {
-      auto server = new tcp::socket(ioservice);
-      acceptor->async_accept(*server,
-          bind (&MeshTopology::on_accept, this,
-            ph::error, server));
-    } else {
-      logger->info ("Network established with id=%d",id);
-      auto server = new tcp::socket(ioservice);
-      acceptor->async_accept(*server,
-          bind (&MeshTopology::on_accept, this,
-            ph::error, server)); sleep (1);
-    }
+  } catch (std::exception& e) {
+      acceptor->async_accept (*server, yield);
   }
 }
 // }}}

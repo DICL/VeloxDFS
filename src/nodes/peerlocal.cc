@@ -36,10 +36,12 @@ static auto range_of = [] (multimap<int, NodeRemote* >& m, int type) -> vec_node
   });
   return vec;
 };
+ 
+int PeerLocal::H(string k) {
+  uint32_t index = h(k.c_str(), k.length());
+  return histogram->get_index(index);
+}
 
-auto corresponding_node = [] (string k, int  size) -> int {
-   return h(k.c_str(), k.length()) % size;
-};
 // }}}
 // Constructor & destructor {{{
 PeerLocal::PeerLocal(Context& context) : NodeLocal(context) { 
@@ -58,7 +60,8 @@ PeerLocal::PeerLocal(Context& context) : NodeLocal(context) {
   for (auto& node : nodes) {
     if (node == ip_of_this) 
       id = i;
-    universe.insert ({PEER, new PeerRemote (this, i++)});
+    universe.insert ({i, new PeerRemote (this, i)});
+    i++;
   }
 
   // topology initialization
@@ -77,66 +80,58 @@ PeerLocal::~PeerLocal() {
 // }}}
 // establish {{{
 bool PeerLocal::establish () {
-  int i = 0;
-
   logger->info ("Running Eclipse id=%d ip=%s size=%d", 
       id, ip_of_this.c_str(), universe.size());
   topology->establish();
 
-  for (auto& node : range_of(universe, PEER)) {
-    if (i != id)  {
-      node->set_channel (topology->get_channel(i));
+  for (unsigned int i = 0; i < universe.size(); i++ )
+    if (i != static_cast<unsigned int> (id))  {
+      auto channel  = topology->get_channel(i);
+      auto node = universe[i];
+      channel->set_node(node);
+      node->set_channel (channel);
     } 
-    i++;
-    if (node->get_id() == 23) continue;
-  }
 
  return true;
 }
 // }}}
 // insert {{{
 void PeerLocal::insert (std::string k, std::string v) {
+//  while (not topology->is_online()) sleep(1);
 
-  while (not topology->is_online() ) sleep(1);
-
-  int i = 0;
-  for (auto& node : range_of(universe, PEER)) {
-    if (i != id)  {
-      node->start();
-    }
-    i++;
-  }
-  int idx = corresponding_node (k, universe.size());
-
+  int idx = H(k);
   logger->info ("Inserting [%10s]:[%10s] -> %d", k.c_str(),v.c_str(), idx);
-  if (idx == this->id) {
+
+  if (belongs(k)){
     cache->put (k, v);
 
   } else {
-    auto peer = range_of (universe, PEER)[idx]; 
+    auto peer = universe[idx]; 
     auto msg  = new KeyValue (k, v);
     peer->do_write (msg);
   }
 }
 // }}}
-// lookup {{{
-std::string PeerLocal::request (std::string key) {
- int idx = corresponding_node(key, universe.size());
- if (idx == this->id) {
-   return cache->get (key);
-
- } else {
-   auto peer = range_of (universe, PEER)[idx];
+// request {{{
+void PeerLocal::request (std::string key, req_func f) {
+ int idx = H(key);
+ if (idx != id) {
+   auto peer = universe[idx];
    KeyRequest k_req (key);
    k_req.set_origin (id);
    peer->do_write (&k_req);
-   return "WAIT";
+   requested_blocks.insert ({key, f});
  }
 }
 // }}}
 // exist {{{
 bool PeerLocal::exists (std::string key) {
   return cache->exists (key);
+}
+// }}}
+// belongs {{{
+bool PeerLocal::belongs (std::string key) {
+  return H(key) == id;
 }
 // }}}
 // process_message (Boundaries* m) {{{
@@ -153,27 +148,25 @@ template<> void PeerLocal::process_message (Boundaries* m) {
 template<> void PeerLocal::process_message (KeyValue* m) {
   string& key = m->key;
 
-  int which_node = corresponding_node (key, universe.size());
-  if (which_node == id) {
+  int which_node = H(key);
+  if (which_node == id or m->destination == id)  {
     logger->info ("Instering key = %s", key.c_str());
     histogram->count_query(which_node);
     //histogram->updateboundary();
     cache->put (key, m->value);
 
-  } else {
-    auto peers = range_of (universe, PEER);
-    auto it = find_if (peers.begin(), peers.end(), [&which_node] (NodeRemote* n) {
-        return n->get_id() == which_node;
-        });
-
-    if (it != peers.end()) {
-      //(*it)->send(m);
+    if (requested_blocks.find(key) !=requested_blocks.end()){
+      logger->info ("Executing func");
+      requested_blocks[key](m->value);
+      requested_blocks.erase(key);
     }
-  }
+
+  } 
 }
 // }}}
 // process_message (KeyRequest* m) {{{
 template<> void PeerLocal::process_message (KeyRequest* m) {
+  logger->info ("Arrived req key = %s", m->key.c_str());
   string& key = m->key;
   string value;
   if (cache->exists(key)) {
@@ -183,7 +176,8 @@ template<> void PeerLocal::process_message (KeyRequest* m) {
   }
 
   KeyValue kv (key, value);
-  auto* node = range_of(universe, PEER)[m->origin];
+  kv.destination = m->origin;
+  auto* node = universe[m->origin];
   node->do_write(&kv);
 }
 // }}}

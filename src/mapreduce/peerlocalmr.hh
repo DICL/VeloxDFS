@@ -12,11 +12,7 @@ class PeerLocalMR: public PeerLocal {
     std::string lookup (std::string);
 
   private:
-    bool insert_cache (std::string, std::string);
-    bool insert_disk (std::string, std::string);
-
-    bool lookup_cache (std::string);
-    bool lookup_disk (std::string);
+    FileManager f_manager;
 };
 
 } /* eclipse  */ 

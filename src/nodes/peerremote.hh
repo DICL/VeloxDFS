@@ -27,7 +27,7 @@ class PeerRemote: public NodeRemote {
     void on_read_header (const boost::system::error_code&, size_t); 
     void on_read_body (const boost::system::error_code&, size_t); 
 
-    void start () override;
+    void action () override;
 };
 
 }

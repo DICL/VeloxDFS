@@ -41,11 +41,6 @@ units_SOURCES      = tests/main.cc \
                      src/nodes/nodelocal.cc \
                      src/nodes/noderemote.cc \
                      src/nodes/node.cc \
-                     src/common/dl_loader.cc \
-                     tests/dl_test.cc \
-                     src/mapreduce/mr_traits.cc \
-                     src/mapreduce/executor.cc \
-                     tests/mr_traits_test.cc \
                      src/fs/fileio.cc \
                      tests/fileio_test.cc
 
