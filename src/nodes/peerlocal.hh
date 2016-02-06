@@ -15,7 +15,7 @@ using std::string;
 using std::thread;
 using std::map;
 
-typedef void(*req_func)(std::string);
+typedef std::function<void(std::string)> req_func;
 
 class PeerLocal: public NodeLocal {
   public:

@@ -16,11 +16,12 @@ int main (int argc, char ** argv) {
   nl.run();
 
   sleep(2);
+
   nl.insert ("KEY", "VALUE");
-  //sleep(1);
   nl.request ("KEY", [&] (std::string in) -> void {
       std::cout << "DONE: " << in << std::endl;
       });
+
   nl.join();
 
   return 0;

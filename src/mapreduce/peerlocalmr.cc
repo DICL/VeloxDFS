@@ -11,17 +11,30 @@ PeerLocalMR::~PeerLocalMR () {
 // }}} 
 // insert {{{
 bool PeerLocalMR::insert (std::string key, std::string val) {
-  if (key )
+  if (exists(key)) {
+    auto value = cache->get(key);
+    value += string("\n") + val;
+    cache->put(key, value);
+
+  } else {
+    insert(key, val);
+  }
+
+  return true;
 }
 // }}}
 // lookup {{{
-std::string PeerLocalMR::lookup (std::string key) {
- string value;
- if (cache->exists(key)) {
-   value = cache->lookup(key);
+void PeerLocalMR::lookup (std::string key, req_func f) {
+ if (exists(key)) {
+   string value = cache->get(key);
+   f(value);
  
  } else {
-   // Read file from input folder 
+   if (belongs(key)) {
+     //Read from disk
+   } else {
+     request(key, f);
+   }
  }
 }
 // }}}

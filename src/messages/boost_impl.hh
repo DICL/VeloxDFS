@@ -68,6 +68,7 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.type);
     ar & BOOST_SERIALIZATION_NVP(c.library);
     ar & BOOST_SERIALIZATION_NVP(c.input_path);
+    ar & BOOST_SERIALIZATION_NVP(c.func_name);
   }
 }
 }

@@ -97,8 +97,6 @@ bool PeerLocal::establish () {
 // }}}
 // insert {{{
 void PeerLocal::insert (std::string k, std::string v) {
-//  while (not topology->is_online()) sleep(1);
-
   int idx = H(k);
   logger->info ("Inserting [%10s]:[%10s] -> %d", k.c_str(),v.c_str(), idx);
 
