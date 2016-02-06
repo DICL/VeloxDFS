@@ -1,5 +1,5 @@
 #pragma once
-#include "../common/peerlocal.hh"
+#include "../nodes/peerlocal.hh"
 
 namespace eclipse {
 
@@ -9,10 +9,9 @@ class PeerLocalMR: public PeerLocal {
     ~PeerLocalMR ();
 
     bool insert (std::string, std::string);
-    std::string lookup (std::string);
+    void lookup (std::string, req_func);
 
   private:
-    FileManager f_manager;
 };
 
 } /* eclipse  */ 

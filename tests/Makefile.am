@@ -42,7 +42,15 @@ units_SOURCES      = tests/main.cc \
                      src/nodes/noderemote.cc \
                      src/nodes/node.cc \
                      src/fs/fileio.cc \
-                     tests/fileio_test.cc
+                     tests/fileio_test.cc \
+										 src/mapreduce/peerlocalmr.cc \
+										 src/common/dl_loader.cc \
+                     tests/dl_test.cc \
+                     src/network/centralizedtopology.cc \
+                     src/mapreduce/mr_traits.cc \
+                     src/mapreduce/executor.cc \
+										 tests/mr_traits_test.cc 
+
 
 network_LDADD     = $(LDADD_T)
 network_CPPFLAGS  = $(AM_CPPFLAGS_T)

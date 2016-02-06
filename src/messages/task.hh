@@ -21,7 +21,7 @@ struct Task: public Message {
   std::string get_input_path();
 
   int id, type;
-  std::string library, input_path;
+  std::string library, func_name, input_path;
 };
 
 eclipse::messages::Task* serialize (eclipse::Task*);

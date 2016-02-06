@@ -1,6 +1,7 @@
 #include "executor.hh"
 #include "../messages/factory.hh"
 #include "../messages/boost_impl.hh"
+
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -16,7 +17,7 @@ using namespace std;
 namespace eclipse {
 
 // Constructor {{{
-Executor::Executor(Context& context) : MR_traits (context) {
+Executor::Executor(Context& context) : MR_traits (context), peer_cache (context) {
 
 }
 
@@ -24,17 +25,35 @@ Executor::~Executor() {
 
 }
 // }}}
+// run_map {{{
+void Executor::run_map (messages::Task* m, std::string input) {
+    DL_loader loader (m->library);
+
+    try {
+      loader.init_lib();
+    } catch (std::exception& e) {
+      logger->error ("Not found library path[%s]", m->library.c_str());
+    }
+
+    auto _map_ = loader.load_function(m->func_name);
+    stringstream ss (input);
+
+    while (ss.eof()) {
+      char next_line [256];
+      ss.getline (next_line, 256);
+      auto key_value = _map_ (string(next_line));
+
+      auto& key   = key_value.first;
+      auto& value = key_value.second;
+      peer_cache.insert (key, value);
+    }
+  }
+// }}}
 // process_message (Task* m) {{{
 template<> void Executor::process_message (messages::Task* m) {
   if (m->type == 0) {
-    DL_loader loader (m->library);
-    auto _map_ = loader.load_function(m->func_name);
-
-    auto file = peer_cache.lookup(m->input_path);
-    while (file.eof()) {
-      auto& key_value = _map_ (file.read_line());
-      peer_cache.insert_intermediate(key_value, m->next_id);
-    }
+    peer_cache.request(m->input_path, std::bind(&Executor::run_map, 
+          this, m, std::placeholders::_1));
   }
 }
 // }}}
