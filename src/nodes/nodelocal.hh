@@ -3,6 +3,7 @@
 #include "node.hh"
 #include "noderemote.hh"
 #include "../common/context.hh"
+#include "../messages/message.hh"
 
 #include <map>
 #include <memory>
@@ -20,6 +21,7 @@ class NodeLocal: public Node {
 
     std::string get_ip () const override;
     virtual bool establish() = 0;
+    virtual void process_message (messages::Message*) = 0;
 
   protected:
     std::map<int, NodeRemote*> universe;

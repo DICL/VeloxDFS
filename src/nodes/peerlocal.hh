@@ -23,6 +23,7 @@ class PeerLocal: public NodeLocal {
     ~PeerLocal ();
 
     bool establish() override;
+    void process_message (messages::Message*) override;
     void insert (string, string);
     void request (string, req_func);
     bool exists (string);
@@ -32,8 +33,6 @@ class PeerLocal: public NodeLocal {
     void run ();
     void join ();
 
-    template <typename T> void process_message (T);
-
     int H(string);
 
   protected:
@@ -41,8 +40,10 @@ class PeerLocal: public NodeLocal {
     u_ptr<Histogram> histogram;
     u_ptr<Topology> topology;
     std::vector<u_ptr<std::thread>> threads;
-    int concurrency;
     std::map<std::string, req_func> requested_blocks;
+    int concurrency;
+
+    template <typename T> void process (T);
 };
 
 }
