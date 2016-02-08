@@ -26,23 +26,6 @@ using PAIR       = std::pair<int, NodeRemote*>;
 // }}}
 
 namespace eclipse {
-// Auxiliar functions {{{
-static auto range_of = [] (multimap<int, NodeRemote* >& m, int type) -> vec_node {
-  auto it = m.equal_range (type);
-  vector<NodeRemote*> vec;
-
-  std::transform (it.first, it.second, back_inserter(vec), [] (PAIR p) {
-    return p.second;
-  });
-  return vec;
-};
- 
-int PeerLocal::H(string k) {
-  uint32_t index = h(k.c_str(), k.length());
-  return histogram->get_index(index);
-}
-
-// }}}
 // Constructor & destructor {{{
 PeerLocal::PeerLocal(Context& context) : NodeLocal(context) { 
   Settings& setted = context.settings;
@@ -76,6 +59,12 @@ PeerLocal::PeerLocal(Context& context) : NodeLocal(context) {
 
 PeerLocal::~PeerLocal() {
   for (auto& t : threads) t->join();
+}
+// }}}
+// H {{{
+int PeerLocal::H(string k) {
+  uint32_t index = h(k.c_str(), k.length());
+  return histogram->get_index(index);
 }
 // }}}
 // establish {{{
@@ -132,91 +121,6 @@ bool PeerLocal::belongs (std::string key) {
   return H(key) == id;
 }
 // }}}
-// process_message (Boundaries* m) {{{
-template<> void PeerLocal::process_message (Boundaries* m) {
-  *histogram << *m;
-
-  int dest = m->get_destination();
-  if (dest != this->id) {
-      //(*it)->send(m);
-  }
-}
-// }}}
-// process_message (KeyValue* m) {{{
-template<> void PeerLocal::process_message (KeyValue* m) {
-  string& key = m->key;
-
-  int which_node = H(key);
-  if (which_node == id or m->destination == id)  {
-    logger->info ("Instering key = %s", key.c_str());
-    histogram->count_query(which_node);
-    //histogram->updateboundary();
-    cache->put (key, m->value);
-
-    if (requested_blocks.find(key) !=requested_blocks.end()){
-      logger->info ("Executing func");
-      requested_blocks[key](m->value);
-      requested_blocks.erase(key);
-    }
-
-  } 
-}
-// }}}
-// process_message (KeyRequest* m) {{{
-template<> void PeerLocal::process_message (KeyRequest* m) {
-  logger->info ("Arrived req key = %s", m->key.c_str());
-  string& key = m->key;
-  string value;
-  if (cache->exists(key)) {
-    value = cache->get(key);
-  } else {
-    value = "EMPTY";
-  }
-
-  KeyValue kv (key, value);
-  kv.destination = m->origin;
-  auto* node = universe[m->origin];
-  node->do_write(&kv);
-}
-// }}}
-// process_message (Control* m) {{{
-template<> void PeerLocal::process_message (Control* m) {
-  switch (m->type) {
-    case messages::SHUTDOWN:
-      this->close();
-      break;
-
-    case messages::RESTART:
-      break;
-
-      //    case PING:
-      //      process_ping (m);
-      //      break;
-  }
-}
-// }}}
-// process_message (Message*) {{{
-template<> void PeerLocal::process_message (Message* m) {
-  string type = m->get_type();
-
-  if (type == "Boundaries") {
-    auto m_ = dynamic_cast<Boundaries*>(m);
-    process_message(m_);
-
-  } else if (type == "KeyValue") {
-    auto m_ = dynamic_cast<KeyValue*>(m);
-    process_message(m_);
-
-  } else if (type == "Control") {
-    auto m_ = dynamic_cast<Control*>(m);
-    process_message(m_);
-
-  } else if (type == "KeyRequest") {
-    auto m_ = dynamic_cast<KeyRequest*>(m);
-    process_message(m_);
-  }
-}
-// }}}
 // run {{{
 void PeerLocal::run () {
   for (int i = 0; i < concurrency; i++ ) {
@@ -235,5 +139,90 @@ void PeerLocal::join () {
 // }}}
 // close {{{
 void PeerLocal::close() { exit(EXIT_SUCCESS); }
+// }}}
+// process (Boundaries* m) {{{
+template<> void PeerLocal::process (Boundaries* m) {
+  *histogram << *m;
+
+  int dest = m->get_destination();
+  if (dest != this->id) {
+      //(*it)->send(m);
+  }
+}
+// }}}
+// process (KeyValue* m) {{{
+template<> void PeerLocal::process (KeyValue* m) {
+  string& key = m->key;
+
+  int which_node = H(key);
+  if (which_node == id or m->destination == id)  {
+    logger->info ("Instering key = %s", key.c_str());
+    histogram->count_query(which_node);
+    //histogram->updateboundary();
+    cache->put (key, m->value);
+
+    if (requested_blocks.find(key) !=requested_blocks.end()){
+      logger->info ("Executing func");
+      requested_blocks[key](m->value);
+      requested_blocks.erase(key);
+    }
+
+  } 
+}
+// }}}
+// process (KeyRequest* m) {{{
+template<> void PeerLocal::process (KeyRequest* m) {
+  logger->info ("Arrived req key = %s", m->key.c_str());
+  string& key = m->key;
+  string value;
+  if (cache->exists(key)) {
+    value = cache->get(key);
+  } else {
+    value = "EMPTY";
+  }
+
+  KeyValue kv (key, value);
+  kv.destination = m->origin;
+  auto* node = universe[m->origin];
+  node->do_write(&kv);
+}
+// }}}
+// process (Control* m) {{{
+template<> void PeerLocal::process (Control* m) {
+  switch (m->type) {
+    case messages::SHUTDOWN:
+      this->close();
+      break;
+
+    case messages::RESTART:
+      break;
+
+      //    case PING:
+      //      process_ping (m);
+      //      break;
+  }
+}
+// }}}
+// process_message (Message*) {{{
+void PeerLocal::process_message (Message* m) {
+  string type = m->get_type();
+
+  if (type == "Boundaries") {
+    auto m_ = dynamic_cast<Boundaries*>(m);
+    process(m_);
+
+  } else if (type == "KeyValue") {
+    auto m_ = dynamic_cast<KeyValue*>(m);
+    process(m_);
+
+  } else if (type == "Control") {
+    auto m_ = dynamic_cast<Control*>(m);
+    process(m_);
+
+  } else if (type == "KeyRequest") {
+    auto m_ = dynamic_cast<KeyRequest*>(m);
+    process(m_);
+  }
+}
 // }}}
 }

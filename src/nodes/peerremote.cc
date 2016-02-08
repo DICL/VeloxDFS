@@ -7,16 +7,12 @@
 #include <boost/bind.hpp>
 
 using namespace std;
-using namespace std::placeholders;
+using namespace boost::asio;
 namespace ph = boost::asio::placeholders;
 
 namespace eclipse {
-
-class PeerLocal;
 // constructor {{{
-PeerRemote::PeerRemote(NodeLocal* p, int i) : NodeRemote(p, i) {
- owner_peer = dynamic_cast<PeerLocal*>(p);
-}
+PeerRemote::PeerRemote(NodeLocal* p, int i) : NodeRemote(p, i) { }
 // }}}
 // action {{{
 void PeerRemote::action () {
@@ -25,56 +21,7 @@ void PeerRemote::action () {
 // }}}
 // do_read {{{
 void PeerRemote::do_read () {
-
-  async_read (*channel->recv_socket(), buffer(inbound_header), 
-      transfer_exactly(header_size),
-      boost::bind(&PeerRemote::on_read_header, this, 
-        ph::error, ph::bytes_transferred));
-}
-// }}}
-// on_read_header {{{
-void PeerRemote::on_read_header (const boost::system::error_code& ec, size_t s) {
-
-  if (!ec)  {
-    size_t size = atoi(inbound_header);
-    logger->info ("Header received size=%d:%d", s, size);
-
-    if(size == 0) {
-      logger->info ("Header received : %s", inbound_header);
-    }
-    async_read (*channel->recv_socket(),
-        inbound_data.prepare(size),
-       boost::bind(
-        &PeerRemote::on_read_body, this, 
-        ph::error, ph::bytes_transferred));
-  } else {
-    do_read();
-  }
-}
-// }}}
-// on_read_body {{{
-void PeerRemote::on_read_body (const boost::system::error_code& ec,
-    size_t s) {
-
-  if (!ec)  {
-    logger->info ("Message arrived size=%d");
-
-    inbound_data.commit(s);
-
-    std::string str((istreambuf_iterator<char>(&inbound_data)), 
-                     istreambuf_iterator<char>());
-    inbound_data.consume(s);
-
-    Message* msg = nullptr;
-    msg = load_message(str);
-    owner_peer->process_message(msg);
-    delete msg;
-
-  } else {
-    logger->info ("Message arrived error=%s", ec.message().c_str());
-  }
-
-  do_read();
+  spawn(ioservice, bind(&PeerRemote::read_coroutine, this, _1));
 }
 // }}}
 // do_write {{{
@@ -99,6 +46,42 @@ void PeerRemote::on_write (const boost::system::error_code& ec,
 
   } else  {
     logger->info ("Message delivered: %s", ec.message().c_str());
+  }
+}
+// }}}
+// read_coroutine {{{
+void PeerRemote::read_coroutine (yield_context yield) {
+  boost::asio::streambuf body; 
+  boost::system::error_code ec;
+  char header [16]; 
+  auto* sock = channel->recv_socket();
+
+  while (true) {
+    size_t l = async_read (*sock, buffer(header), yield[ec]);
+    if (l != (size_t)header_size) continue;
+
+    size_t size = atoi(header);
+    logger->info ("Header received size=%d:%d", l, size);
+
+    l = async_read (*sock, body.prepare(size), yield[ec]);
+
+    if (!ec)  {
+      logger->info ("Message arrived size=%d");
+
+      body.commit (l);
+      string str ((istreambuf_iterator<char>(&body)), 
+          istreambuf_iterator<char>());
+      body.consume (l);
+
+      Message* msg = nullptr;
+      msg = load_message(str);
+      owner->process_message(msg);
+      delete msg;
+
+    } else {
+      logger->info ("Message arrived error=%s", 
+          ec.message().c_str());
+    }
   }
 }
 // }}}

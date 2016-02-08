@@ -21,8 +21,6 @@ NodeLocal::NodeLocal(Context& context) :
   io_service(context.io),
   port      (context.settings.get<int>("network.port_cache"))
 {
-  //ip_of_this     = context.settings.getip ();
- // port           = context.settings.get<int> ("network.port_cache");
 }
 
 NodeLocal::~NodeLocal() { }

@@ -37,10 +37,12 @@ class NodeRemote: public Node {
 
     void set_channel (Channel*);
 
+    const int header_size = 16;
+
   protected:
     Channel* channel = nullptr;
     NodeLocal* owner = nullptr;
-    io_service& ioservice;
     Logger* logger = nullptr;
+    io_service& ioservice;
 };
 }

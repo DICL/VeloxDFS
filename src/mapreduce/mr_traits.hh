@@ -17,6 +17,7 @@ class MR_traits: public NodeLocal {
 
     bool establish () override;
     virtual void action (boost::asio::ip::tcp::socket*) = 0;
+    virtual void process_message (messages::Message*) = 0;
 
   protected:
     DL_loader* dl_loader;
