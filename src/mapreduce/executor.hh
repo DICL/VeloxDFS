@@ -2,6 +2,7 @@
 #include "mr_traits.hh"
 #include "peerlocalmr.hh"
 #include "../messages/task.hh"
+#include "../nodes/peerremote.hh"
 
 namespace eclipse {
 
@@ -15,20 +16,13 @@ class Executor: public MR_traits {
     ~Executor ();
 
     void action (tcp::socket*) override;
+    void process_message (messages::Message*) override;
 
   protected:
     PeerLocalMR peer_cache;
-    boost::asio::streambuf inbound_data;
-    char inbound_header [16];
-    const int header_size = 16;
+    PeerRemote* peer_remote = nullptr;
 
-    template <typename T> void process_message (T);
-    void do_read (tcp::socket* sock);
-    void on_read_header (const error_code&, size_t, 
-        tcp::socket*); 
-    void on_read_body (const error_code&, size_t, 
-        tcp::socket*); 
-
+    template <typename T> void process (T);
     void run_map (messages::Task*, std::string);
 };
 
