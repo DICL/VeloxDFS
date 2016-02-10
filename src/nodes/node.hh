@@ -21,7 +21,7 @@ class Node: public Machine {
 
   protected:
     Logger* logger;
-    network::Network* network;
+    //network::Network* network;
     std::string ip_of_this;
     boost::asio::io_service& io_service;
     int port;

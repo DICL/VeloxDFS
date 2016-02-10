@@ -65,11 +65,9 @@ nodes_LDADD     = $(LDADD_T)
 nodes_CPPFLAGS  = $(AM_CPPFLAGS_T)
 nodes_SOURCES   = tests/nodes.cc \
                   $(messages_files) \
-                  src/network/topology.cc \
-                  src/network/meshtopology.cc \
                   src/network/channel.cc \
                   src/network/asyncchannel.cc \
-                  src/network/meshnetwork.cc \
+                  src/network/p2p.cc \
                   src/nodes/machine.cc \
                   src/nodes/peer.cc \
                   src/nodes/node.cc 

@@ -1,7 +1,9 @@
 #pragma once
 
 #include "node.hh"
+#include "../network/asyncnetwork.hh"
 #include "../network/asyncnode.hh"
+#include "../network/p2p.hh"
 #include "../network/topology.hh"
 #include "../cache/cache.hh"
 #include "../common/histogram.hh"
@@ -45,6 +47,7 @@ class Peer: public Node, public AsyncNode {
     std::map<std::string, req_func> requested_blocks;
     int concurrency;
     bool connected = false;
+    network::AsyncNetwork<network::P2P>* network;
 
     template <typename T> void process (T);
 };

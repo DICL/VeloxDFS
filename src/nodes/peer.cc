@@ -1,6 +1,7 @@
 // includes & usings {{{
 #include "peer.hh"
-#include "../network/meshnetwork.hh"
+#include "../network/asyncnetwork.hh"
+#include "../network/p2p.hh"
 #include "../common/settings.hh"
 #include "../common/definitions.hh"
 #include "../messages/factory.hh"
@@ -30,7 +31,7 @@ Peer::Peer (Context& context) : Node (context) {
   int cachesize  = setted.get<int> ("cache.size");
   concurrency    = setted.get<int> ("cache.concurrency");
 
-  network   = new MeshNetwork(this, context);
+  network   = new AsyncNetwork<P2P>(this, context, 10);
   histogram = make_unique<Histogram> (network->size(), numbin);
   cache     = make_unique<lru_cache<string, string>> (cachesize);
 
