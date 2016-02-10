@@ -10,6 +10,11 @@ using namespace std;
 using boost::bind;
 namespace ph = boost::asio::placeholders;
 
+// Constructor {{{
+MeshTopology::MeshTopology(Context& c, 
+    std::map<int, Channel*>* _map, AsyncNode* node_) :
+  Topology (c), node (node_), channels(_map) {}
+// }}}
 // establish {{{
 // @brief It establish the network, 
 // connecting with other nodes
@@ -28,14 +33,11 @@ bool MeshTopology::establish () {
       tcp::resolver::iterator it (resolver.resolve(query));
 
       auto endpoint = new tcp::endpoint (*it);
-      auto client = new tcp::socket (ioservice);
+      auto client = (*channels)[i]->send_socket;
 
       client->async_connect (*endpoint, bind (
             &MeshTopology::on_connect, this, ph::error, client, 
             endpoint));
-
-      auto channel = new Channel(client);
-      channels.insert (make_pair(i, channel));
     }
     i++;
   }
@@ -50,13 +52,6 @@ bool MeshTopology::establish () {
 // }}}
 // close {{{
 bool MeshTopology::close () {
-  for (auto p: channels) {
-    auto channel = p.second;
-
-    channel->send_socket()->close();
-    channel->recv_socket()->close();
-  }
-
   return true;
 }
 // }}}
@@ -100,12 +95,11 @@ void MeshTopology::accept (boost::asio::yield_context yield)
         index++;
       }
 
-      channels[index]->set_recv_socket(server);
       clients_connected++;
-      channels[index]->action();
+      (*channels)[index]->update_recv(server);
       logger->info ("Accepted client id=%d", index);
     }
-    logger->info ("Network established with id=%d",id);
+    node->on_connect();
 
   } catch (std::exception& e) {
       acceptor->async_accept (*server, yield);

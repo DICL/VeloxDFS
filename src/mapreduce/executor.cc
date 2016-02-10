@@ -11,10 +11,9 @@ using namespace eclipse::network;
 using namespace std;
 
 namespace eclipse {
-
 // Constructor {{{
-Executor::Executor(Context& context) : MR_traits (context), peer_cache (context) {
-  peer_remote = new PeerRemote(this, 0);
+Executor::Executor(Context& context) : Node (context), peer_cache (context) {
+  Network = new CentralizedNetwork (this, context);
 }
 
 Executor::~Executor() { }
@@ -66,8 +65,8 @@ template<> void Executor::process (Control* m) {
   }
 }
 // }}}
-// process_message (Message*) {{{
-void Executor::process_message (Message* m) {
+// on_connect {{{
+void Executor::on_read (Message* m) {
   string type = m->get_type();
 
   if (type == "Task") {
@@ -81,11 +80,7 @@ void Executor::process_message (Message* m) {
 }
 // }}}
 // action {{{
-void Executor::action (tcp::socket* sock) {
-  Channel* c = new Channel (sock);
-  c->set_recv_socket(sock);
-  peer_remote->set_channel(c);
+void Executor::on_connect () {
 }
 // }}}
-
 } /* eclipse  */
