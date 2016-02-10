@@ -3,24 +3,18 @@
 namespace eclipse {
 namespace network {
 
-Channel::Channel (tcp::socket* s): send_(s) {}
+Channel::Channel (Context& c, int id_) :
+  iosvc  (c.io), 
+  id     (id_),
+  logger (c.logger.get()),
+  send_socket (new tcp::socket(c.io)),
+  recv_socket (new tcp::socket(c.io)) {}
+ 
+void Channel::update_recv(tcp::socket* in ) {
+  delete recv_socket;
+  recv_socket = in;
+  on_connect();
+}
 
-tcp::socket*  Channel::send_socket(){ return send_; }
-tcp::socket*  Channel::recv_socket(){ return recv_; }
-// set_recv_socket {{{
-void Channel::set_recv_socket (tcp::socket* s ) {
-  this->recv_ = s;
-}
-// }}}
-// action {{{
-void Channel::action () {
-  node->action();
-}
-// }}}
-// set_node {{{
-void Channel::set_node (NodeRemote* n) {
-  node = n;
-}
-// }}}
 }
 }

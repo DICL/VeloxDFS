@@ -1,6 +1,7 @@
 #pragma once
 
-#include "nodelocal.hh"
+#include "node.hh"
+#include "../network/asyncnode.hh"
 #include "../network/topology.hh"
 #include "../cache/cache.hh"
 #include "../common/histogram.hh"
@@ -17,13 +18,15 @@ using std::map;
 
 typedef std::function<void(std::string)> req_func;
 
-class PeerLocal: public NodeLocal {
+class Peer: public Node, public AsyncNode {
   public:
-    PeerLocal (Context&);
-    ~PeerLocal ();
+    Peer (Context&);
+    ~Peer ();
 
     bool establish() override;
-    void process_message (messages::Message*) override;
+    void on_read (messages::Message*) override;
+    void on_connect () override;
+
     void insert (string, string);
     void request (string, req_func);
     bool exists (string);
@@ -38,10 +41,10 @@ class PeerLocal: public NodeLocal {
   protected:
     u_ptr<lru_cache<string, string> > cache;
     u_ptr<Histogram> histogram;
-    u_ptr<Topology> topology;
     std::vector<u_ptr<std::thread>> threads;
     std::map<std::string, req_func> requested_blocks;
     int concurrency;
+    bool connected = false;
 
     template <typename T> void process (T);
 };

@@ -1,23 +1,30 @@
 #pragma once
-#include <string>
+
+#include "machine.hh"
+#include "../common/context.hh"
+#include "../messages/message.hh"
+#include "../network/network.hh"
+
+#include <map>
 #include <memory>
+#include <boost/asio.hpp>
 
 namespace eclipse {
-enum NodeTypes { PEER, MASTER, APP, EXECUTOR };
-const int header_length = 8;
 
-class Node {
-  protected:
-    template <typename T> using u_ptr = std::unique_ptr<T>;
-    int id;
-
+class Node: public Machine {
   public:
-    Node() = default;
-    Node(int);
-    virtual ~Node() { } /* Polymorphic class */
+    Node(Context&);
+    ~Node();
 
-    virtual std::string get_ip () const = 0;
-    int get_id () const;
+    std::string get_ip () const override;
+    virtual bool establish() = 0;
+
+  protected:
+    Logger* logger;
+    network::Network* network;
+    std::string ip_of_this;
+    boost::asio::io_service& io_service;
+    int port;
 };
 
-}
+} /* nodes */

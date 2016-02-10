@@ -10,49 +10,25 @@ using boost::bind;
 namespace ph = boost::asio::placeholders;
 
 // constructor {{{
-CentralizedTopology::CentralizedTopology(
-    eclipse::MR_traits* o,
-    boost::asio::io_service& io, Logger* l, 
-    std::string master, vec_str net, int port , int id) : 
-  Topology(io, l , net, port, id), master(master), 
-    owner (o) {
-    net_size = static_cast<int> (net.size());
+CentralizedTopology::CentralizedTopology(Context& c, 
+    Channel* channel_, AsyncNode* node_): 
+  Topology(c), channel(channel_), node(node_) 
+{
 
-    if (master == net[id]) {
-      type = "master";
-    
-    } else {
-      type = "slave";
-    }
 }
 //}}}
 // establish {{{
 bool CentralizedTopology::establish () {
-  if (type == "master") {
-    acceptor = make_unique<tcp::acceptor> 
-      (ioservice, tcp::endpoint(tcp::v4(), port) );
+  acceptor = make_unique<tcp::acceptor> 
+    (ioservice, tcp::endpoint(tcp::v4(), port) );
 
-    auto server = new tcp::socket(ioservice);
-    acceptor->async_accept (*server, 
-        bind (&CentralizedTopology::on_accept, this, 
-          ph::error, server));
-
-  } else {
-    tcp::resolver resolver (ioservice);
-    tcp::resolver::query query (master, to_string(port));
-    tcp::resolver::iterator it (resolver.resolve(query));
-
-    auto endpoint = new tcp::endpoint (*it);
-    auto client = new tcp::socket (ioservice);
-
-    client->async_connect (*endpoint, bind (
-          &CentralizedTopology::on_connect, this, 
-          ph::error, client, endpoint));
-
-    auto channel = new Channel(client);
-    channels.insert (make_pair(0, channel));
-  }
+  auto server = channel->send_socket;
+  channel->update_recv (server);
+  acceptor->async_accept (*server, 
+      bind (&CentralizedTopology::on_accept, this, 
+        ph::error, server));
   return true;
+
 }
 // }}}
 // close {{{
@@ -67,65 +43,45 @@ bool CentralizedTopology::is_online () {
 // }}}
 // on_connect {{{
 // @brief handle a connection to a server
-void CentralizedTopology::on_connect (
-    const boost::system::error_code& ec,
-    tcp::socket* client,
-    tcp::endpoint* it) 
-{
-
-  if (ec) {
-    client->async_connect (*it, bind (
-          &CentralizedTopology::on_connect, this, ph::error, 
-          client, it));
-
-  } else {
-    logger->info ("connection established id=%d", id);
-    owner->action (client);
-  }
-}
+//void CentralizedTopology::on_connect (
+//    const boost::system::error_code& ec,
+//    tcp::socket* client,
+//    tcp::endpoint* it) 
+//{
+//
+//  if (ec) {
+//    client->async_connect (*it, bind (
+//          &CentralizedTopology::on_connect, this, ph::error, 
+//          client, it));
+//
+//  } else {
+//    logger->info ("connection established id=%d", id);
+//    owner->action (client);
+//  }
+//}
 // }}}
 // on_accept {{{
 // @brief handle a connection with a client
 // @todo refactor
 void CentralizedTopology::on_accept (
-    const boost::system::error_code& ec,
-    tcp::socket* sock)  
+    const boost::system::error_code& ec)  
 {
-  tcp::socket* next_socket = nullptr;
-
   if (!ec) {
-    next_socket = new tcp::socket(ioservice);
-    if (clients_connected < net_size) {
       auto ep = sock->remote_endpoint();
-      auto address = ep.address().to_string();
+      auto address = ep.address().to_string().c_str();
 
-      int index = find (nodes.begin(), nodes.end(), address) - nodes.begin() ;
-
-      auto channel = new Channel(sock);
-      channels.insert (make_pair(index, channel));
-      clients_connected++;
-      logger->info ("Accepted client id=%d", index);
-
-    } else { 
-      logger->info ("Network established with id=%d",id);
-      //Call function
-      owner->action(sock);
+      logger->info ("Accepted client id=%s", address);
+      node->on_connect();
+      channel->on_connect();
       return;
     }
 
   } else {
-    next_socket = sock;
+    acceptor->async_accept(*(channel->send_socket),
+        bind (&CentralizedTopology::on_accept, this,
+          ph::error)); 
   }
 
-  acceptor->async_accept(*next_socket,
-      bind (&CentralizedTopology::on_accept, this,
-        ph::error, next_socket)); 
-
-  sleep (1);
-}
-// }}}
-// dummy_callback {{{
-void CentralizedTopology::dummy_callback (const boost::system::error_code&) {
 }
 // }}}
 

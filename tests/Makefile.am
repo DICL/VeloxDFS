@@ -2,9 +2,9 @@ AM_CPPFLAGS_T    = $(AM_CPPFLAGS) -include unittest++/UnitTest++.h
 LDADD_T          = $(LDADD) -l:libUnitTest++.a -ldl
 
 # Input your tests files here
-check_PROGRAMS   = units network nodes #centralizedtopology
+check_PROGRAMS   = nodes #units network #nodes #centralizedtopology
 
-TESTS            = units #tests/network_executor
+TESTS            = #units #tests/network_executor
 check_SCRIPTS    = tests/network_executor.in \
                    tests/nodes_executor.in   \
                    tests/eclipse_debug.in
@@ -23,56 +23,56 @@ messages_files   = src/messages/boundaries.cc \
                    src/mapreduce/task.cc       
 
 # Input the dependencies of the test files here
-units_LDADD        = $(LDADD_T)
-units_CPPFLAGS     = $(AM_CPPFLAGS_T)
-units_SOURCES      = tests/main.cc \
-                     tests/settings_tests.cc \
-                     tests/cache_test.cc \
-                     tests/messages_test.cc \
-                     tests/nodes_test.cc \
-                     $(messages_files) \
-                     tests/topology_test.cc \
-                     src/network/topology.cc \
-                     src/network/ringtopology.cc \
-                     src/network/meshtopology.cc \
-                     src/network/channel.cc \
-                     src/nodes/peerlocal.cc \
-                     src/nodes/peerremote.cc \
-                     src/nodes/nodelocal.cc \
-                     src/nodes/noderemote.cc \
-                     src/nodes/node.cc \
-                     src/fs/fileio.cc \
-                     tests/fileio_test.cc \
-										 src/mapreduce/peerlocalmr.cc \
-										 src/common/dl_loader.cc \
-                     tests/dl_test.cc \
-                     src/network/centralizedtopology.cc \
-                     src/mapreduce/mr_traits.cc \
-                     src/mapreduce/executor.cc \
-										 tests/mr_traits_test.cc 
+#units_LDADD        = $(LDADD_T)
+#units_CPPFLAGS     = $(AM_CPPFLAGS_T)
+#units_SOURCES      = tests/main.cc \
+#                     tests/settings_tests.cc \
+#                     tests/cache_test.cc \
+#                     tests/messages_test.cc \
+#                     $(messages_files) \
+#                     src/network/topology.cc \
+#                     src/network/ringtopology.cc \
+#                     src/network/meshtopology.cc \
+#                     src/network/channel.cc \
+#                     tests/topology_test.cc 
+
+                     #tests/nodes_test.cc \
+                     #src/nodes/peerlocal.cc \
+                     #src/nodes/peerremote.cc \
+                     #src/nodes/nodelocal.cc \
+                     #src/nodes/noderemote.cc \
+                     #src/nodes/node.cc \
+                     #src/fs/fileio.cc \
+                     #tests/fileio_test.cc \
+										 #src/mapreduce/peerlocalmr.cc \
+										 #src/common/dl_loader.cc \
+                     #tests/dl_test.cc \
+                     #src/network/centralizedtopology.cc \
+                     #src/mapreduce/mr_traits.cc \
+                     #src/mapreduce/executor.cc \
+										 #tests/mr_traits_test.cc 
 
 
-network_LDADD     = $(LDADD_T)
-network_CPPFLAGS  = $(AM_CPPFLAGS_T)
-network_SOURCES   = tests/network.cc \
-                    src/network/topology.cc \
-                    src/network/ringtopology.cc \
-                    src/network/meshtopology.cc \
-                    src/network/channel.cc 
+#network_LDADD     = $(LDADD_T)
+#network_CPPFLAGS  = $(AM_CPPFLAGS_T)
+#network_SOURCES   = tests/network.cc \
+#                    src/network/topology.cc \
+#                    src/network/ringtopology.cc \
+#                    src/network/meshtopology.cc \
+#                    src/network/channel.cc 
 
 nodes_LDADD     = $(LDADD_T)
 nodes_CPPFLAGS  = $(AM_CPPFLAGS_T)
 nodes_SOURCES   = tests/nodes.cc \
                   $(messages_files) \
                   src/network/topology.cc \
-                  src/network/ringtopology.cc \
                   src/network/meshtopology.cc \
                   src/network/channel.cc \
-                  src/nodes/peerlocal.cc \
-                  src/nodes/peerremote.cc \
-                  src/nodes/nodelocal.cc \
-                  src/nodes/noderemote.cc \
-                  src/nodes/node.cc
+                  src/network/asyncchannel.cc \
+                  src/network/meshnetwork.cc \
+                  src/nodes/machine.cc \
+                  src/nodes/peer.cc \
+                  src/nodes/node.cc 
 
 #centralizedtopology_LDADD     = $(LDADD_T)
 #centralizedtopology_CPPFLAGS  = $(AM_CPPFLAGS_T)

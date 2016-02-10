@@ -1,19 +1,20 @@
 #pragma once
 
-#include "noderemote.hh"
-#include "peerlocal.hh"
+#include "channel.hh"
+#include "asyncnode.hh"
 #include "../messages/message.hh"
 #include <string>
 #include <vector>
 #include <boost/asio/spawn.hpp>
 
 namespace eclipse {
+namespace network {
 
-class PeerRemote: public NodeRemote {
+class AsyncChannel: public Channel {
   public:
-    PeerRemote(NodeLocal*, int);
+    AsyncChannel(Context&, int, AsyncNode*);
 
-    void action () override;
+    void on_connect() override;
     void do_read () override;
     void do_write (messages::Message*) override; 
 
@@ -21,6 +22,8 @@ class PeerRemote: public NodeRemote {
     void on_write (const boost::system::error_code&, size_t, 
         Message*); 
     void read_coroutine (boost::asio::yield_context);
+    AsyncNode* node;
 };
 
+}
 }
