@@ -1,13 +1,10 @@
 // includes & usings {{{
-#include "peerlocal.hh"
-#include "peerremote.hh"
-#include "noderemote.hh"
+#include "peer.hh"
+#include "../network/meshnetwork.hh"
 #include "../common/settings.hh"
 #include "../common/definitions.hh"
 #include "../messages/factory.hh"
 #include "../messages/boost_impl.hh"
-#include "../network/meshtopology.hh"
-#include "../network/ringtopology.hh"
 
 #include <boost/range/adaptor/map.hpp>
 #include <boost/asio.hpp>
@@ -17,75 +14,48 @@
 
 using namespace eclipse;
 using namespace eclipse::messages;
+using namespace eclipse::network;
 using namespace boost::asio;
 using namespace std;
 
 using vec_str    = std::vector<std::string>;
-using vec_node   = std::vector<NodeRemote*>;
-using PAIR       = std::pair<int, NodeRemote*>;
 // }}}
 
 namespace eclipse {
 // Constructor & destructor {{{
-PeerLocal::PeerLocal(Context& context) : NodeLocal(context) { 
+Peer::Peer (Context& context) : Node (context) { 
   Settings& setted = context.settings;
 
   int numbin     = setted.get<int> ("cache.numbin");
   int cachesize  = setted.get<int> ("cache.size");
-  string tType   = setted.get<string> ("network.topology");
-  vec_str nodes  = setted.get<vec_str> ("network.nodes");
   concurrency    = setted.get<int> ("cache.concurrency");
 
-  histogram = make_unique<Histogram> (nodes.size(), numbin);
+  network   = new MeshNetwork(this, context);
+  histogram = make_unique<Histogram> (network->size(), numbin);
   cache     = make_unique<lru_cache<string, string>> (cachesize);
 
-  int i = 0;
-  for (auto& node : nodes) {
-    if (node == ip_of_this) 
-      id = i;
-    universe.insert ({i, new PeerRemote (this, i)});
-    i++;
-  }
-
-  // topology initialization
-  if (tType == "mesh") {
-    topology = make_unique<MeshTopology>
-      (io_service, logger, nodes, port, id);
-  
-  } else if (tType == "ring") {
-    topology = make_unique<RingTopology> (io_service, logger, nodes, port, id);
-  }
 }
 
-PeerLocal::~PeerLocal() {
+Peer::~Peer() {
   for (auto& t : threads) t->join();
 }
 // }}}
 // H {{{
-int PeerLocal::H(string k) {
+int Peer::H(string k) {
   uint32_t index = h(k.c_str(), k.length());
   return histogram->get_index(index);
 }
 // }}}
 // establish {{{
-bool PeerLocal::establish () {
-  logger->info ("Running Eclipse id=%d ip=%s size=%d", 
-      id, ip_of_this.c_str(), universe.size());
-  topology->establish();
-
-  for (unsigned int i = 0; i < universe.size(); i++ )
-    if (i != static_cast<unsigned int> (id))  {
-      auto channel  = topology->get_channel(i);
-      auto node = universe[i];
-      channel->set_node(node);
-      node->set_channel (channel);
-    } 
+bool Peer::establish () {
+ logger->info ("Running Eclipse id=%d", id);
+ network->establish();
 
  return true;
 }
 // }}}
 // insert {{{
-void PeerLocal::insert (std::string k, std::string v) {
+void Peer::insert (std::string k, std::string v) {
   int idx = H(k);
   logger->info ("Inserting [%10s]:[%10s] -> %d", k.c_str(),v.c_str(), idx);
 
@@ -93,36 +63,34 @@ void PeerLocal::insert (std::string k, std::string v) {
     cache->put (k, v);
 
   } else {
-    auto peer = universe[idx]; 
     auto msg  = new KeyValue (k, v);
-    peer->do_write (msg);
+    network->send(idx, msg);
   }
 }
 // }}}
 // request {{{
-void PeerLocal::request (std::string key, req_func f) {
+void Peer::request (std::string key, req_func f) {
  int idx = H(key);
  if (idx != id) {
-   auto peer = universe[idx];
    KeyRequest k_req (key);
    k_req.set_origin (id);
-   peer->do_write (&k_req);
+   network->send(idx, &k_req);
    requested_blocks.insert ({key, f});
  }
 }
 // }}}
 // exist {{{
-bool PeerLocal::exists (std::string key) {
+bool Peer::exists (std::string key) {
   return cache->exists (key);
 }
 // }}}
 // belongs {{{
-bool PeerLocal::belongs (std::string key) {
+bool Peer::belongs (std::string key) {
   return H(key) == id;
 }
 // }}}
 // run {{{
-void PeerLocal::run () {
+void Peer::run () {
   for (int i = 0; i < concurrency; i++ ) {
     auto t = new std::thread ( [this] {
         this->io_service.run();
@@ -130,18 +98,20 @@ void PeerLocal::run () {
 
     threads.emplace_back (t);
   }
+
+ while (not connected) sleep(1);
 }
 // }}}
 // join {{{
-void PeerLocal::join () {
+void Peer::join () {
   for (auto& t : threads) t->join();
 }
 // }}}
 // close {{{
-void PeerLocal::close() { exit(EXIT_SUCCESS); }
+void Peer::close() { exit(EXIT_SUCCESS); }
 // }}}
 // process (Boundaries* m) {{{
-template<> void PeerLocal::process (Boundaries* m) {
+template<> void Peer::process (Boundaries* m) {
   *histogram << *m;
 
   int dest = m->get_destination();
@@ -151,7 +121,7 @@ template<> void PeerLocal::process (Boundaries* m) {
 }
 // }}}
 // process (KeyValue* m) {{{
-template<> void PeerLocal::process (KeyValue* m) {
+template<> void Peer::process (KeyValue* m) {
   string& key = m->key;
 
   int which_node = H(key);
@@ -171,7 +141,7 @@ template<> void PeerLocal::process (KeyValue* m) {
 }
 // }}}
 // process (KeyRequest* m) {{{
-template<> void PeerLocal::process (KeyRequest* m) {
+template<> void Peer::process (KeyRequest* m) {
   logger->info ("Arrived req key = %s", m->key.c_str());
   string& key = m->key;
   string value;
@@ -183,12 +153,11 @@ template<> void PeerLocal::process (KeyRequest* m) {
 
   KeyValue kv (key, value);
   kv.destination = m->origin;
-  auto* node = universe[m->origin];
-  node->do_write(&kv);
+  network->send(m->origin, &kv);
 }
 // }}}
 // process (Control* m) {{{
-template<> void PeerLocal::process (Control* m) {
+template<> void Peer::process (Control* m) {
   switch (m->type) {
     case messages::SHUTDOWN:
       this->close();
@@ -203,8 +172,8 @@ template<> void PeerLocal::process (Control* m) {
   }
 }
 // }}}
-// process_message (Message*) {{{
-void PeerLocal::process_message (Message* m) {
+// on_read (Message*) {{{
+void Peer::on_read (Message* m) {
   string type = m->get_type();
 
   if (type == "Boundaries") {
@@ -223,6 +192,12 @@ void PeerLocal::process_message (Message* m) {
     auto m_ = dynamic_cast<KeyRequest*>(m);
     process(m_);
   }
+}
+// }}}
+// on_connect {{{
+void Peer::on_connect () {
+  connected = true;
+  logger->info ("Network established id=%d", id);
 }
 // }}}
 }

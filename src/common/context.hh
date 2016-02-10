@@ -10,6 +10,7 @@ struct Context {
   std::unique_ptr<Logger, decltype(&Logger::disconnect)> 
     logger {nullptr, Logger::disconnect};
   Settings settings;
+  int id;
 
   Context(std::string);
   Context();

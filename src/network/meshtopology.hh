@@ -1,6 +1,7 @@
 #pragma once
 
 #include "topology.hh"
+#include "asyncnode.hh"
 
 #include <boost/asio.hpp>
 #include <boost/asio/error.hpp>
@@ -16,14 +17,16 @@ using namespace boost::asio;
 
 class MeshTopology: public Topology {
   public:
-    using Topology::Topology;
+    MeshTopology(Context&, std::map<int, Channel*>*, AsyncNode*);
 
     bool establish () override;
     bool close () override;
     bool is_online() override;
 
-  private:
+  protected:
     int net_size, clients_connected = 1, server_connected = 1;
+    AsyncNode* node;
+    std::map<int, Channel*>* channels;
 
     void on_connect (const boost::system::error_code&,
         tcp::socket*, tcp::endpoint*);

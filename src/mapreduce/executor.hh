@@ -1,22 +1,22 @@
 #pragma once
-#include "mr_traits.hh"
 #include "peerlocalmr.hh"
+#include "../nodes/node.hh"
 #include "../messages/task.hh"
-#include "../nodes/peerremote.hh"
 
 namespace eclipse {
 
 using boost::system::error_code;
 using boost::asio::ip::tcp;
 
-class Executor: public MR_traits {
+class Executor: public Node, public AsyncNode {
   typedef void (*maptype)(std::string);
   public:
     Executor (Context&);
     ~Executor ();
 
-    void action (tcp::socket*) override;
-    void process_message (messages::Message*) override;
+    bool establish() override; 
+    void on_connect() override;
+    void on_read(messages::Message*) override;
 
   protected:
     PeerLocalMR peer_cache;
