@@ -29,17 +29,14 @@ Peer::Peer (Context& context) : Node (context) {
 
   int numbin     = setted.get<int> ("cache.numbin");
   int cachesize  = setted.get<int> ("cache.size");
-  concurrency    = setted.get<int> ("cache.concurrency");
+  int port       = setted.get<int>("network.port_cache");
 
-  network   = new AsyncNetwork<P2P>(this, context, 10);
+  network   = new AsyncNetwork<P2P>(this, context, 10, port);
   histogram = make_unique<Histogram> (network->size(), numbin);
   cache     = make_unique<lru_cache<string, string>> (cachesize);
-
 }
 
-Peer::~Peer() {
-  for (auto& t : threads) t->join();
-}
+Peer::~Peer() { }
 // }}}
 // H {{{
 int Peer::H(string k) {
@@ -52,6 +49,7 @@ bool Peer::establish () {
  logger->info ("Running Eclipse id=%d", id);
  network->establish();
 
+ while (not connected) sleep(1);
  return true;
 }
 // }}}
@@ -75,7 +73,7 @@ void Peer::request (std::string key, req_func f) {
  if (idx != id) {
    KeyRequest k_req (key);
    k_req.set_origin (id);
-   network->send(idx, &k_req);
+   network->send (idx, &k_req);
    requested_blocks.insert ({key, f});
  }
 }
@@ -88,24 +86,6 @@ bool Peer::exists (std::string key) {
 // belongs {{{
 bool Peer::belongs (std::string key) {
   return H(key) == id;
-}
-// }}}
-// run {{{
-void Peer::run () {
-  for (int i = 0; i < concurrency; i++ ) {
-    auto t = new std::thread ( [this] {
-        this->io_service.run();
-        });
-
-    threads.emplace_back (t);
-  }
-
- while (not connected) sleep(1);
-}
-// }}}
-// join {{{
-void Peer::join () {
-  for (auto& t : threads) t->join();
 }
 // }}}
 // close {{{
@@ -199,6 +179,11 @@ void Peer::on_read (Message* m) {
 void Peer::on_connect () {
   connected = true;
   logger->info ("Network established id=%d", id);
+}
+// }}}
+// on_disconnect {{{
+void Peer::on_disconnect () {
+
 }
 // }}}
 }

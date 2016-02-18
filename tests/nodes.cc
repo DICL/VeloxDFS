@@ -9,17 +9,15 @@ int main (int argc, char ** argv) {
   string input = argv[1];
 
   Context context(input);
-  Peer nl (context);
+  context.run();
 
+  Peer nl (context);
   nl.establish();
-  nl.run();
 
   nl.insert ("KEY", "VALUE");
   nl.request ("KEY", [&] (std::string in) -> void {
       std::cout << "DONE: " << in << std::endl;
       });
 
-  nl.join();
-
-  return 0;
+  return context.join();
 }

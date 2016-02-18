@@ -9,8 +9,10 @@ class Network {
     virtual ~Network () { }
 
     virtual bool establish() = 0;
+    virtual void on_disconnect() = 0;
     virtual bool close () = 0;
     virtual size_t size () = 0;
+    virtual bool send(int, messages::Message*) = 0;
 };
 
 }
