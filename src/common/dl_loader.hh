@@ -1,15 +1,20 @@
 #pragma once
 
 #include <string>
+#include <utility>
 
+typedef std::pair<std::string, std::string>(*maptype)(std::string);
 class DL_loader {
   public:
-    DL_loader(std::string, std::string);
+    DL_loader(std::string);
     ~DL_loader();
 
-    void run();
+    bool init_lib ();
+    maptype load_function (std::string);
+    void close();
+
 
   protected:
-    void (*func_) () = nullptr;
-    void* lib  = nullptr;
+    std::string lib_name;
+    void* lib= nullptr;
 };
