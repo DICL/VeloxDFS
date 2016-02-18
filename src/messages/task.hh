@@ -6,6 +6,13 @@
 namespace eclipse {
 namespace messages {
 
+enum TASKTYPE {
+  OPEN    = 0,
+  FLATMAP = 1,
+  MAP     = 2,
+  REDUCE  = 4
+};
+
 struct Task: public Message {
   Task() = default;
   ~Task() = default;

@@ -1,15 +1,11 @@
 #pragma once
 
 #include "node.hh"
-#include "../network/asyncnetwork.hh"
 #include "../network/asyncnode.hh"
-#include "../network/p2p.hh"
-#include "../network/topology.hh"
 #include "../cache/cache.hh"
 #include "../common/histogram.hh"
 
 #include <string>
-#include <thread>
 #include <boost/asio.hpp>
 
 namespace eclipse {
@@ -25,9 +21,10 @@ class Peer: public Node, public AsyncNode {
     Peer (Context&);
     ~Peer ();
 
-    bool establish() override;
+    bool establish () override;
     void on_read (messages::Message*) override;
     void on_connect () override;
+    void on_disconnect() override;
 
     void insert (string, string);
     void request (string, req_func);
@@ -35,19 +32,13 @@ class Peer: public Node, public AsyncNode {
     bool belongs (string);
     void close ();
 
-    void run ();
-    void join ();
-
-    int H(string);
+    int H (string);
 
   protected:
     u_ptr<lru_cache<string, string> > cache;
     u_ptr<Histogram> histogram;
-    std::vector<u_ptr<std::thread>> threads;
     std::map<std::string, req_func> requested_blocks;
-    int concurrency;
     bool connected = false;
-    network::AsyncNetwork<network::P2P>* network;
 
     template <typename T> void process (T);
 };
