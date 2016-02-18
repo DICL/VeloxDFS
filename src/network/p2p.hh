@@ -13,7 +13,7 @@ namespace network {
 
 class P2P: public AsyncChannel {
   public:
-    P2P(Context&, int, AsyncNode*);
+    P2P (Context&, int, AsyncNode*);
 
     void do_connect () override; 
     void do_write (messages::Message*) override; 

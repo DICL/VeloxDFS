@@ -5,8 +5,7 @@ LDADD_T          = $(LDADD) -l:libUnitTest++.a -ldl
 check_PROGRAMS   = nodes executor units
 
 TESTS            = units 
-check_SCRIPTS    = tests/network_executor.in \
-                   tests/nodes_executor.in   \
+check_SCRIPTS    = tests/nodes_executor.in   \
                    tests/eclipse_debug.in
 
 check_DATA       = $(top_srcdir)/doc/eclipse.json
@@ -15,7 +14,7 @@ CLEANFILES       = eclipse.json
 messages_files   = src/messages/boundaries.cc \
                    src/messages/message.cc    \
                    src/messages/keyvalue.cc   \
-                   src/messages/keyrequest.cc   \
+                   src/messages/keyrequest.cc \
                    src/messages/control.cc    \
                    src/messages/boost_impl.cc \
                    src/messages/factory.cc    \
