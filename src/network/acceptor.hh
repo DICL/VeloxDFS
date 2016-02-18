@@ -16,7 +16,7 @@ using vec_str = std::vector<std::string>;
 template <typename T>
 class Acceptor {
   public:
-    Acceptor(Context&, T*);
+    Acceptor(Context&, int, T*);
 
     void listen();
 
@@ -32,11 +32,11 @@ class Acceptor {
 
 // Constructor {{{
 template <typename T>
-Acceptor<T>::Acceptor(Context& c, T* fun):
+Acceptor<T>::Acceptor(Context& c, int port_, T* fun):
   callback(fun),
   iosvc (c.io),
   nodes (c.settings.get<vec_str>("network.nodes")),
-  port  (c.settings.get<int>("network.port_cache"))
+  port  (port_)
 { }
 // }}}
 // listen {{{

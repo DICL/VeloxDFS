@@ -1,5 +1,5 @@
 #pragma once
-#include "peerlocalmr.hh"
+#include "peermr.hh"
 #include "../nodes/node.hh"
 #include "../messages/task.hh"
 
@@ -16,14 +16,17 @@ class Executor: public Node, public AsyncNode {
 
     bool establish() override; 
     void on_connect() override;
+    void on_disconnect() override;
     void on_read(messages::Message*) override;
 
   protected:
-    PeerLocalMR peer_cache;
-    PeerRemote* peer_remote = nullptr;
+    PeerMR peer_cache;
+    int port;
 
     template <typename T> void process (T);
     void run_map (messages::Task*, std::string);
+//    void run_reduce (messages::Task*, std::string);
+//    void run_flatmap (messages::Task*, std::string);
 };
 
 } /* eclipse  */ 

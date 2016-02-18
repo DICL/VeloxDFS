@@ -1,16 +1,16 @@
-#include "peerlocalmr.hh"
+#include "peermr.hh"
 
 namespace eclipse {
 // Constructor{{{
-PeerLocalMR::PeerLocalMR (Context& c) : PeerLocal(c) {
+PeerMR::PeerMR (Context& c) : Peer (c) {
 }
 
-PeerLocalMR::~PeerLocalMR () {
+PeerMR::~PeerMR () {
 
 }
 // }}} 
 // insert {{{
-bool PeerLocalMR::insert (std::string key, std::string val) {
+bool PeerMR::insert (std::string key, std::string val) {
   if (exists(key)) {
     auto value = cache->get(key);
     value += string("\n") + val;
@@ -24,7 +24,7 @@ bool PeerLocalMR::insert (std::string key, std::string val) {
 }
 // }}}
 // lookup {{{
-void PeerLocalMR::lookup (std::string key, req_func f) {
+void PeerMR::lookup (std::string key, req_func f) {
  if (exists(key)) {
    string value = cache->get(key);
    f(value);

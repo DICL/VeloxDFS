@@ -2,7 +2,7 @@ AM_CPPFLAGS_T    = $(AM_CPPFLAGS) -include unittest++/UnitTest++.h
 LDADD_T          = $(LDADD) -l:libUnitTest++.a -ldl
 
 # Input your tests files here
-check_PROGRAMS   = nodes #units network #nodes #centralizedtopology
+check_PROGRAMS   = nodes executor #units network #nodes
 
 TESTS            = #units #tests/network_executor
 check_SCRIPTS    = tests/network_executor.in \
@@ -72,14 +72,19 @@ nodes_SOURCES   = tests/nodes.cc \
                   src/nodes/peer.cc \
                   src/nodes/node.cc 
 
-#centralizedtopology_LDADD     = $(LDADD_T)
-#centralizedtopology_CPPFLAGS  = $(AM_CPPFLAGS_T)
-#centralizedtopology_SOURCES   = \
-#                  tests/centralizedtopology.cc \
-#                  $(messages_files) \
-#                  src/network/topology.cc \
-#                  src/network/centralizedtopology.cc \
-#                  src/network/channel.cc 
+executor_LDADD     = $(LDADD_T)
+executor_CPPFLAGS  = $(AM_CPPFLAGS_T)
+executor_SOURCES   = tests/executor.cc \
+										 $(messages_files) \
+										 src/network/channel.cc \
+										 src/network/asyncchannel.cc \
+										 src/network/server.cc \
+										 src/network/p2p.cc \
+										 src/mapreduce/executor.cc \
+										 src/nodes/machine.cc \
+										 src/nodes/peer.cc \
+										 src/nodes/node.cc \
+										 src/mapreduce/peermr.cc
 
 
 #nodes_test_SOURCES    = nodes_test.cc \

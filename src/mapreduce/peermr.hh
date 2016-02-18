@@ -1,16 +1,18 @@
 #pragma once
-#include "../nodes/peerlocal.hh"
+#include "../nodes/peer.hh"
 
 namespace eclipse {
 
-class PeerLocalMR: public PeerLocal {
+class PeerMR: public Peer {
   public:
-    PeerLocalMR (Context&);
-    ~PeerLocalMR ();
+    PeerMR (Context&);
+    ~PeerMR ();
 
     bool insert (std::string, std::string);
     void lookup (std::string, req_func);
 
+    using Peer::establish;
+    using Peer::close;
   private:
 };
 

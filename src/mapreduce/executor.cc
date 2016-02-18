@@ -1,4 +1,7 @@
 #include "executor.hh"
+#include "../common/dl_loader.hh"
+#include "../network/asyncnetwork.hh"
+#include "../network/server.hh"
 #include "../messages/factory.hh"
 #include "../messages/boost_impl.hh"
 
@@ -13,10 +16,18 @@ using namespace std;
 namespace eclipse {
 // Constructor {{{
 Executor::Executor(Context& context) : Node (context), peer_cache (context) {
-  Network = new CentralizedNetwork (this, context);
+
+  port = context.settings.get<int>("network.port_mapreduce");
+  network = new AsyncNetwork<Server> (this, context, 1, port);
 }
 
 Executor::~Executor() { }
+// }}}
+// establish {{{
+bool Executor::establish () {
+  peer_cache.establish();
+  network->establish();
+}
 // }}}
 // run_map {{{
 void Executor::run_map (messages::Task* m, std::string input) {
@@ -44,19 +55,21 @@ void Executor::run_map (messages::Task* m, std::string input) {
 // }}}
 // process (Task* m) {{{
 template<> void Executor::process (messages::Task* m) {
-  if (m->type == 0) {
-    peer_cache.request(m->input_path, std::bind(&Executor::run_map,         this, m, std::placeholders::_1));
+  if (m->type == MAP) {
+    peer_cache.request(m->input_path, std::bind(
+          &Executor::run_map, this, m, 
+          std::placeholders::_1));
   }
 }
 // }}}
 // process (Control* m) {{{
 template<> void Executor::process (Control* m) {
   switch (m->type) {
-    case messages::SHUTDOWN:
+    case SHUTDOWN:
       exit(EXIT_SUCCESS);
       break;
 
-    case messages::RESTART:
+    case RESTART:
       break;
 
       //    case PING:
@@ -65,7 +78,7 @@ template<> void Executor::process (Control* m) {
   }
 }
 // }}}
-// on_connect {{{
+// on_read {{{
 void Executor::on_read (Message* m) {
   string type = m->get_type();
 
@@ -79,8 +92,14 @@ void Executor::on_read (Message* m) {
   }
 }
 // }}}
-// action {{{
+// on_disconnect {{{
+void Executor::on_disconnect () {
+  network->on_disconnect();
+}
+// }}}
+// on_connect() {{{
 void Executor::on_connect () {
+  logger->info("Client connected to executor #%d", id);
 }
 // }}}
 } /* eclipse  */
