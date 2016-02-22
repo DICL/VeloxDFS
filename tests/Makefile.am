@@ -19,6 +19,7 @@ messages_files   = src/messages/boundaries.cc \
                    src/messages/boost_impl.cc \
                    src/messages/factory.cc    \
                    src/messages/task.cc       \
+                   src/messages/fileinfo.cc   \
                    src/mapreduce/task.cc       
 
 # Input the dependencies of the test files here

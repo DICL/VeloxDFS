@@ -12,6 +12,7 @@
 #include "control.hh"
 #include "keyrequest.hh"
 #include "task.hh"
+#include "fileinfo.hh"
 
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/access.hpp>
@@ -70,6 +71,14 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.input_path);
     ar & BOOST_SERIALIZATION_NVP(c.func_name);
   }
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::FileInfo& c, unsigned int) {
+    ar & BASE_OBJECT(Message, c);
+    ar & BOOST_SERIALIZATION_NVP(c.filename);
+    ar & BOOST_SERIALIZATION_NVP(c.size);
+    ar & BOOST_SERIALIZATION_NVP(c.id);
+    ar & BOOST_SERIALIZATION_NVP(c.block_number);
+  }
 }
 }
 
@@ -82,3 +91,4 @@ BOOST_CLASS_TRACKING(eclipse::messages::KeyValue, boost::serialization::track_ne
 BOOST_CLASS_TRACKING(eclipse::messages::Control, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::KeyRequest, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::Task, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::FileInfo, boost::serialization::track_never);
