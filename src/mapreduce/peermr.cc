@@ -38,4 +38,11 @@ void PeerMR::lookup (std::string key, req_func f) {
  }
 }
 // }}}
+// store {{{
+void PeerMR::store (messages::FileInfo* f) {
+ //Save it to sqlite db
+
+ logger->info ("Saving to SQLite db");
+}
+// }}}
 } /* eclipse  */ 
