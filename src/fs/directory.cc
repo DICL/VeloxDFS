@@ -13,12 +13,12 @@ namespace eclipse{
   static int Directory::file_callback(void *file_info, int argc, char **argv, char **azColName)
   {
     int i = 0;
-    (FileInfo*)file_info->file_id = argv[i++];
-    (FileInfo*)file_info->file_name = argv[i++];
-    (FileInfo*)file_info->file_hash_key = argv[i++];
-    (FileInfo*)file_info->file_size = argv[i++];
-    (FileInfo*)file_info->num_block = argv[i++];
-    (FileInfo*)file_info->replica = argv[i];
+    *(FileInfo*)file_info->file_id = argv[i++];
+    *(FileInfo*)file_info->file_name = argv[i++];
+    *(FileInfo*)file_info->file_hash_key = argv[i++];
+    *(FileInfo*)file_info->file_size = argv[i++];
+    *(FileInfo*)file_info->num_block = argv[i++];
+    *(FileInfo*)file_info->replica = argv[i];
     return 0;
   }
 
