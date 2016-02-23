@@ -4,11 +4,13 @@
 #include <string>
 #include "../common/hash.hh"
 #include "../common/context.hh"
-#include "directory.hh"
+#include "fileinfo.hh"
+#include "blockinfo.hh"
 
 using namespace std;
+using namespace eclipse;
 
-int main(int argc, char* arvg[])
+int main(int argc, char* argv[])
 {
   Context con;
   if(argc < 2)
@@ -19,10 +21,11 @@ int main(int argc, char* arvg[])
   }
   else
   {
-    const uint32_t BUF_SIZE = con.settings.get<int>("filesystem.buffer");
-    const uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
+    uint32_t BUF_SIZE = con.settings.get<int>("filesystem.buffer");
+    uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
+    uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
     string path = con.settings.get<string>("path.scratch");
-    file_info.replica = con.settings.get<int>("filesystem.replica");
+//    file_info.replica = con.settings.get<int>("filesystem.replica");
     for(unsigned int i=0; i<argc; i++)
     {
       char buff[BUF_SIZE] = {0};
@@ -34,7 +37,7 @@ int main(int argc, char* arvg[])
       unsigned int block_seq = 0;
       uint32_t start = 0;
       uint32_t end = start + BLOCK_SIZE - 1;
-      uint32_t file_hash_key = hash_ruby(file_name);
+      uint32_t file_hash_key = h (file_name);
       
       //TODO: remote_metadata_server = lookup(hkey);
       int remote_metadata_server = 1;
@@ -97,14 +100,14 @@ int main(int argc, char* arvg[])
           block_info.file_id = file_id;
           block_info.block_seq = block_seq;
           block_info.block_hash_key = block_hash_key;
-          block_info.block_name = file_name + "_" + block_seq++;
+          block_info.block_name = file_name + "_" + to_string(block_seq++);
           block_info.block_size = block_size;
           block_info.is_inter = 0;
-          block_info.node = remote_server.ip_address;
-          l_server = lookup((block_hash_key-1+NUM_SERVERS)%NUM_SERVERS);
-          r_server = lookup((block_hash_key+1+NUM_SERVERS)%NUM_SERVERS);
-          block_info.l_node = l_server.ip_address;
-          block_info.r_node = r_server.ip_address;
+          //block_info.node = remote_server.ip_address;
+          //l_server = lookup((block_hash_key-1+NUM_SERVERS)%NUM_SERVERS);
+          ////r_server = lookup((block_hash_key+1+NUM_SERVERS)%NUM_SERVERS);
+          //block_info.l_node = l_server.ip_address;
+          //block_info.r_node = r_server.ip_address;
           block_info.commit = 1;
           file_info.num_block = block_seq;
 
@@ -121,7 +124,7 @@ int main(int argc, char* arvg[])
 
           // TODO: remote node part
           ofstream block;
-          block.open(block_name);
+          block.open(block_info.block_name);
           block << buff ;
           block.close();
         }
@@ -142,14 +145,14 @@ int main(int argc, char* arvg[])
           block_info.file_id = file_id;
           block_info.block_seq = block_seq;
           block_info.block_hash_key = block_hash_key;
-          block_info.block_name = file_name + "_" + block_seq++;
+          block_info.block_name = file_name + "_" + to_string(block_seq++);
           block_info.block_size = block_size;
           block_info.is_inter = 0;
-          block_info.node = remote_server.ip_address;
-          l_server = lookup(block_hash_key-1);
-          r_server = lookup(block_hash_key+1);
-          block_info.l_node = l_server.ip_address;
-          block_info.r_node = r_server.ip_address;
+          //block_info.node = remote_server.ip_address;
+          //l_server = lookup(block_hash_key-1);
+          //r_server = lookup(block_hash_key+1);
+          //block_info.l_node = l_server.ip_address;
+          //block_info.r_node = r_server.ip_address;
           block_info.commit = 1;
           file_info.num_block = block_seq;
 
@@ -166,7 +169,7 @@ int main(int argc, char* arvg[])
 
           // remote node part
           ofstream block;
-          block.open(block_name);
+          block.open(block_info.block_name.c_str());
           block << buff ;
           block.close();
           break;
