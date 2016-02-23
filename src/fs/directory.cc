@@ -10,38 +10,40 @@ namespace eclipse{
   {
   }
 
-  static int Directory::file_callback(void *file_info, int argc, char **argv, char **azColName)
+  int Directory::file_callback(void *file_info, int argc, char **argv, char **azColName)
   {
     int i = 0;
-    *(FileInfo*)file_info->file_id = argv[i++];
-    *(FileInfo*)file_info->file_name = argv[i++];
-    *(FileInfo*)file_info->file_hash_key = argv[i++];
-    *(FileInfo*)file_info->file_size = argv[i++];
-    *(FileInfo*)file_info->num_block = argv[i++];
-    *(FileInfo*)file_info->replica = argv[i];
+    auto file = reinterpret_cast<FileInfo*>(file_info);
+    file->file_id       = atoi(argv[i++]);
+    file->file_name     = argv[i++];
+    file->file_hash_key = atoi(argv[i++]);
+    file->file_size     = atoi(argv[i++]);
+    file->num_block     = atoi(argv[i++]);
+    file->replica       = atoi(argv[i]);
     return 0;
   }
 
-  static int Directory::block_callback(void *block_info, int argc, char **argv, char **azColName)
+  int Directory::block_callback(void *block_info, int argc, char **argv, char **azColName)
   {
     int i = 0;
-    (BlockInfo*)block_info->file_id = argv[i++];
-    (BlockInfo*)block_info->block_seq = argv[i++];
-    (BlockInfo*)block_info->block_hash_key = argv[i++];
-    (BlockInfo*)block_info->block_name = argv[i++];
-    (BlockInfo*)block_info->block_size = argv[i++];
-    (BlockInfo*)block_info->is_inter = argv[i++];
-    (BlockInfo*)block_info->node = argv[i++];
-    (BlockInfo*)block_info->l_node = argv[i] ? argv[i] : "NULL";
+    auto block = reinterpret_cast<BlockInfo*>(block_info);
+    block->file_id        = atoi(argv[i++]);
+    block->block_seq      = atoi(argv[i++]);
+    block->block_hash_key = atoi(argv[i++]);
+    block->block_name     = argv[i++];
+    block->block_size     = atoi(argv[i++]);
+    block->is_inter       = atoi(argv[i++]);
+    block->node           = argv[i++];
+    block->l_node = argv[i] ? argv[i] : "NULL";
     i++;
-    (BlockInfo*)block_info->r_node = argv[i] ? argv[i] : "NULL";
+    block->r_node = argv[i] ? argv[i] : "NULL";
     i++;
-    (BlockInfo*)block_info->commit = argv[i] ? argv[i] : 0;
+    block->commit = argv[i] ? atoi(argv[i]) : 0;
     return 0;
   }
 
-  static int Directory::exist_callback(void *result, int argc, char **argv, char **azColName){
-    *(bool *result) = argv[i]? true : false;
+  int Directory::exist_callback(void *result, int argc, char **argv, char **azColName){
+    //*reinterpret_cast<bool*>(result) = argv[i] ? true : false;
     return 0;
   }
 
@@ -51,7 +53,7 @@ namespace eclipse{
     sqlite3 *db;
     char *zErrMsg = 0;
     string path = con.settings.get<string>("path.mdata") + "/metadata.db";
-    int rc = sqlite3_open(path, &db);
+    int rc = sqlite3_open(path.c_str(), &db);
     char sql[512];
     sqlite3_callback void_callback;
     if(rc)
@@ -123,7 +125,7 @@ namespace eclipse{
     sqlite3_callback void_callback;
     char *zErrMsg = 0;
     string path = con.settings.get<string>("path.mdata") + "/metadata.db";
-    int rc = sqlite3_open(path, &db);
+    int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
       con.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
@@ -139,7 +141,7 @@ namespace eclipse{
         num_block, replica) \
       VALUES (%u, '%s', %u, %u, %u, %u);",
         file_info.file_id,
-        file_info.file_name,
+        file_info.file_name.c_str(),
         file_info.file_hash_key,
         file_info.file_size,
         file_info.num_block,
@@ -169,7 +171,7 @@ namespace eclipse{
     sqlite3_callback void_callback;
     char *zErrMsg = 0;
     string path = con.settings.get<string>("path.mdata") + "/metadata.db";
-    int rc = sqlite3_open(path, &db);
+    int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
       con.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
@@ -187,13 +189,13 @@ namespace eclipse{
         block_info.file_id,
         block_info.block_seq,
         block_info.block_hash_key,
-        block_info.block_name,
+        block_info.block_name.c_str(),
         block_info.block_size,
         block_info.is_inter,
-        block_info.node,
-        block_info.l_node ? block_info.l_node : "NULL",
-        block_info.r_node ? block_info.r_node : "NULL",
-        block_info.commit ? block_info.commit : 0);
+        block_info.node.c_str(),
+        block_info.l_node.c_str(),
+        block_info.r_node.c_str(),
+        block_info.commit);
 
     // Execute SQL statement
     rc = sqlite3_exec(db, sql, void_callback, 0, &zErrMsg);
@@ -219,7 +221,7 @@ namespace eclipse{
     sqlite3_callback void_callback;
     char *zErrMsg = 0;
     string path = con.settings.get<string>("path.mdata") + "/metadata.db";
-    int rc = sqlite3_open(path, &db);
+    int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
       con.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
@@ -256,7 +258,7 @@ namespace eclipse{
     sqlite3_callback void_callback;
     char *zErrMsg = 0;
     string path = con.settings.get<string>("path.mdata") + "/metadata.db";
-    int rc = sqlite3_open(path, &db);
+    int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
       con.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
@@ -294,7 +296,7 @@ namespace eclipse{
     sqlite3_callback void_callback;
     char *zErrMsg = 0;
     string path = con.settings.get<string>("path.mdata") + "/metadata.db";
-    int rc = sqlite3_open(path, &db);
+    int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
       con.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
@@ -309,7 +311,7 @@ namespace eclipse{
         file_id=%u, file_name='%s', file_hash_key=%u, file_size=%u, \
         num_block=%u, replica=%u where file_id=%u;",
         file_info.file_id,
-        file_info.file_name,
+        file_info.file_name.c_str(),
         file_info.file_hash_key,
         file_info.file_size,
         file_info.num_block,
@@ -340,7 +342,7 @@ namespace eclipse{
     sqlite3_callback void_callback;
     char *zErrMsg = 0;
     string path = con.settings.get<string>("path.mdata") + "/metadata.db";
-    int rc = sqlite3_open(path, &db);
+    int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
       con.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
@@ -358,13 +360,13 @@ namespace eclipse{
         block_info.file_id,
         block_info.block_seq,
         block_info.block_hash_key,
-        block_info.block_name,
+        block_info.block_name.c_str(),
         block_info.block_size,
         block_info.is_inter,
-        block_info.node,
-        block_info.l_node ? block_info.l_node : "NULL",
-        block_info.r_node ? block_info.r_node : "NULL",
-        block_info.commit ? block_info.commit : 0,
+        block_info.node.c_str(),
+        block_info.l_node.c_str(),
+        block_info.r_node.c_str(),
+        block_info.commit,
         block_info.file_id,
         block_info.block_seq);
 
@@ -392,7 +394,7 @@ namespace eclipse{
     sqlite3_callback void_callback;
     char *zErrMsg = 0;
     string path = con.settings.get<string>("path.mdata") + "/metadata.db";
-    int rc = sqlite3_open(path, &db);
+    int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
       con.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
@@ -429,7 +431,7 @@ namespace eclipse{
     sqlite3_callback void_callback;
     char *zErrMsg = 0;
     string path = con.settings.get<string>("path.mdata") + "/metadata.db";
-    int rc = sqlite3_open(path, &db);
+    int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
       con.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
@@ -466,7 +468,7 @@ namespace eclipse{
     sqlite3_callback void_callback;
     char *zErrMsg = 0;
     string path = con.settings.get<string>("path.mdata") + "/metadata.db";
-    int rc = sqlite3_open(path, &db);
+    int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
       con.logger->error("Can't open block_talbe: %s\n", sqlite3_errmsg(db));
@@ -495,3 +497,4 @@ namespace eclipse{
     delete result;
     return return_bool;
   }
+}

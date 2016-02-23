@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <string>
 
 #define HASHLENGTH 64
 
@@ -17,4 +18,5 @@
 #endif
 
 extern "C" uint32_t h (const char *, size_t);
-extern "C" uint32_t hash_ruby (const char * data);
+uint32_t h (const std::string);
+extern "C" uint32_t hash_ruby (const char *);
