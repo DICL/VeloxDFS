@@ -25,6 +25,6 @@ script:
   - sh autogen.sh
   - cd build
   - sh ../configure --prefix=`pwd`
-  - make -j16
+  - make -j4
   - make install 
-  - make -j16 check 
+  - make -j4 check 
