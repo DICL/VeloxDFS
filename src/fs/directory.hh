@@ -1,12 +1,12 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include <sqlite3>
+#include <sqlite3.h>
 #include <cstdio>
 #include <cstdint>
 #include "../common/context.hh"
-#include "blockinfo.h"
-#include "fileinfo.h"
+#include "blockinfo.hh"
+#include "fileinfo.hh"
 
 namespace eclipse {
   class Directory {
