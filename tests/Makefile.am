@@ -25,7 +25,7 @@ messages_files   = src/messages/boundaries.cc \
 units_LDADD        = $(LDADD_T)
 units_CPPFLAGS     = $(AM_CPPFLAGS_T)
 units_SOURCES      = $(messages_files) \
-										 tests/main.cc \
+                     tests/main.cc \
                      tests/settings_tests.cc \
                      tests/cache_test.cc \
                      tests/messages_test.cc \
@@ -33,13 +33,13 @@ units_SOURCES      = $(messages_files) \
                      tests/nodes_test.cc \
                      tests/dl_test.cc \
                      src/fs/fileio.cc \
-										 src/common/dl_loader.cc \
-										 src/network/channel.cc \
-										 src/network/asyncchannel.cc \
-										 src/network/p2p.cc \
-										 src/nodes/machine.cc \
-										 src/nodes/peer.cc \
-										 src/nodes/node.cc 
+                     src/common/dl_loader.cc \
+                     src/network/channel.cc \
+                     src/network/asyncchannel.cc \
+                     src/network/p2p.cc \
+                     src/nodes/machine.cc \
+                     src/nodes/peer.cc \
+                     src/nodes/node.cc 
 
 nodes_LDADD     = $(LDADD_T)
 nodes_CPPFLAGS  = $(AM_CPPFLAGS_T)
@@ -55,13 +55,13 @@ nodes_SOURCES   = tests/nodes.cc \
 executor_LDADD     = $(LDADD_T)
 executor_CPPFLAGS  = $(AM_CPPFLAGS_T)
 executor_SOURCES   = tests/executor.cc \
-										 $(messages_files) \
-										 src/network/channel.cc \
-										 src/network/asyncchannel.cc \
-										 src/network/server.cc \
-										 src/network/p2p.cc \
-										 src/mapreduce/executor.cc \
-										 src/nodes/machine.cc \
-										 src/nodes/peer.cc \
-										 src/nodes/node.cc \
-										 src/mapreduce/peermr.cc
+                     $(messages_files) \
+                     src/network/channel.cc \
+                     src/network/asyncchannel.cc \
+                     src/network/server.cc \
+                     src/network/p2p.cc \
+                     src/mapreduce/executor.cc \
+                     src/nodes/machine.cc \
+                     src/nodes/peer.cc \
+                     src/nodes/node.cc \
+                     src/mapreduce/peermr.cc
