@@ -10,7 +10,7 @@ using std::string;
 namespace eclipse {
 
 IReader::IReader() {
-  // TODO(wbkim): Load the number of reducers from Context.
+  // TODO(wbkim): Load the number of iblocks from db.
   num_finished_ = 0;
   is_next_key_ = true;
   is_next_value_ = true;
@@ -88,7 +88,7 @@ bool IReader::ShiftToNextKey() {
   }
   return true;
 }
-bool IReader::LoadKey(int index) {
+bool IReader::LoadKey(const int &index) {
   // Make sure you are not in the middle of the values.
   if (blocks_[index]->eof()) return false;
   getline(*blocks_[index], loaded_keys_[index]);
@@ -98,14 +98,14 @@ bool IReader::LoadKey(int index) {
   key_order_.emplace(loaded_keys_[index], index);
   return true;
 }
-bool IReader::LoadValue(int index) {
+bool IReader::LoadValue(const int &index) {
   getline(*blocks_[index], next_value_);
   --num_remain_[curr_block_index_];
 }
 std::multimap<string, int>::iterator IReader::get_min_iterator() {
   return key_order_.begin();
 }
-bool IReader::FinishBlock(int index) {
+bool IReader::FinishBlock(const int &index) {
   blocks_[index]->close();
   delete blocks_[index];
   loaded_keys_[index] = "";

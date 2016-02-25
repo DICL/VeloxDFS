@@ -27,9 +27,9 @@ class IReader {
   void SetNext();
   void SetNextAsCurrent();
   bool ShiftToNextKey();
-  bool LoadKey(int index);
-  bool LoadValue(int index);
-  bool FinishBlock(int index);
+  bool LoadKey(const int &index);
+  bool LoadValue(const int &index);
+  bool FinishBlock(const int &index);
 
   multimap<string, int>::iterator get_min_iterator();
 
