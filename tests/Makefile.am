@@ -30,7 +30,6 @@ units_SOURCES      = $(messages_files) \
                      tests/settings_tests.cc \
                      tests/cache_test.cc \
                      tests/messages_test.cc \
-                     tests/fileio_test.cc \
                      tests/nodes_test.cc \
                      tests/dl_test.cc \
                      src/fs/fileio.cc \
