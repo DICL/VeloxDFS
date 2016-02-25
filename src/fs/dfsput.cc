@@ -21,24 +21,26 @@ int main(int argc, char* argv[])
   }
   else
   {
-    uint32_t BUF_SIZE = con.settings.get<int>("filesystem.buffer");
-    uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
+    //uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.buffer");
+    uint64_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
     uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
     string path = con.settings.get<string>("path.scratch");
-//    file_info.replica = con.settings.get<int>("filesystem.replica");
-    for(unsigned int i=0; i<argc; i++)
+    //    file_info.replica = con.settings.get<int>("filesystem.replica");
+    for(int i=1; i<argc; i++)
     {
-      char buff[BUF_SIZE] = {0};
+      char *buff = new char[BLOCK_SIZE];
+      bzero(buff, BLOCK_SIZE);
+      //char buff[BLOCK_SIZE] = {0};
       ifstream myfile;
-      string file_name = path + "/" + argv[i];
+      string file_name = argv[i];
       myfile.open(file_name);
       myfile.seekg(0, myfile.end);
-      uint32_t file_size = myfile.tellg();
+      uint64_t file_size = myfile.tellg();
       unsigned int block_seq = 0;
-      uint32_t start = 0;
-      uint32_t end = start + BLOCK_SIZE - 1;
-      uint32_t file_hash_key = h (file_name);
-      
+      uint64_t start = 0;
+      uint64_t end = start + BLOCK_SIZE - 1;
+      uint64_t file_hash_key = h (file_name);
+
       //TODO: remote_metadata_server = lookup(hkey);
       int remote_metadata_server = 1;
 
@@ -63,13 +65,14 @@ int main(int argc, char* argv[])
 
       // PSEUDO CODE
       // TODO: remote_metadata_server.insert_file_metadata(file_info);
-      cout << "remote_metadata_server.insert_file_metadata(file_info);" << endl;
+      //cout << "remote_metadata_server.insert_file_metadata(file_info);" << endl;
 
       // this function should call FileIO.open_file() in remote metadata server;
 
 
       while(1)
       {
+        
         if(end < file_size){
           myfile.seekg(start+BLOCK_SIZE-1, myfile.beg);
 
@@ -88,9 +91,6 @@ int main(int argc, char* argv[])
           start = end + 1;
           end = start + BLOCK_SIZE - 1;
 
-          //cout << "last block" << "-----" << endl; 
-          //cout << buff << endl << "-----" << endl;
-          cout << buff << endl ;
           unsigned int block_hash_key = rand()%NUM_SERVERS;
 
           //TODO: int remote_server = lookup(block_hash_key);
@@ -100,32 +100,32 @@ int main(int argc, char* argv[])
           block_info.file_id = file_id;
           block_info.block_seq = block_seq;
           block_info.block_hash_key = block_hash_key;
-          block_info.block_name = file_name + "_" + to_string(block_seq++);
+          block_info.block_name = file_info.file_name + "_" + to_string(block_seq++);
           block_info.block_size = block_size;
           block_info.is_inter = 0;
           //block_info.node = remote_server.ip_address;
           //l_server = lookup((block_hash_key-1+NUM_SERVERS)%NUM_SERVERS);
-          ////r_server = lookup((block_hash_key+1+NUM_SERVERS)%NUM_SERVERS);
+          //r_server = lookup((block_hash_key+1+NUM_SERVERS)%NUM_SERVERS);
           //block_info.l_node = l_server.ip_address;
           //block_info.r_node = r_server.ip_address;
           block_info.commit = 1;
           file_info.num_block = block_seq;
 
           //TODO: remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);
-          cout << "remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);" << endl;
+          //cout << "remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);" << endl;
 
           //TODO: remote_metadata_server.insert_block_metadata(blockinfo);
-          cout << "remote_metadata_server.insert_block_metadata(blockinfo);" << endl;
+          //cout << "remote_metadata_server.insert_block_metadata(blockinfo);" << endl;
 
           //TODO: remote_server.send_buff(block_info.block_name, buff);
-          cout << "remote_server.send_buff(block_info.block_name, buff);" << endl;
+          //cout << "remote_server.send_buff(block_info.block_name, buff);" << endl;
           //remote_server.send_buff(block_hash_key, buff);
           // this function should call FileIO.insert_block(_metadata) in remote metadata server?
 
           // TODO: remote node part
           ofstream block;
-          block.open(block_info.block_name);
-          block << buff ;
+          block.open(path + "/" + block_info.block_name);
+          block << buff;
           block.close();
         }
         else{  // last block
@@ -134,12 +134,10 @@ int main(int argc, char* argv[])
           uint32_t block_size = end - start;
           buff[file_size-start-1] = 0;
 
-          //cout << "last block" << "-----" << endl; 
-          cout << buff << endl;
           uint32_t block_hash_key = rand()%NUM_SERVERS;
 
           // TODO: remote_server = lookup(block_hash_key);
-          cout << "remote_server = lookup(block_hash_key);" << endl;
+          //cout << "remote_server = lookup(block_hash_key);" << endl;
 
           BlockInfo block_info;
           block_info.file_id = file_id;
@@ -157,25 +155,26 @@ int main(int argc, char* argv[])
           file_info.num_block = block_seq;
 
           // TODO: remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);
-          cout << "remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);" << endl;
+          //cout << "remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);" << endl;
 
           // TODO: remote_metadata_server.insert_block_metadata(blockinfo);
-          cout << "remote_metadata_server.insert_block_metadata(blockinfo);" << endl;
+          //cout << "remote_metadata_server.insert_block_metadata(blockinfo);" << endl;
 
           // TODO: remote_server.send_buff(block_info.block_name, buff);
-          cout << "remote_server.send_buff(block_info.block_name, buff);" << endl;
+          //cout << "remote_server.send_buff(block_info.block_name, buff);" << endl;
           //remote_server.send_buff(block_hash_key, buff);
           // this function should call FileIO.insert_block(_metadata) in remote metadata server;
 
           // remote node part
           ofstream block;
-          block.open(block_info.block_name.c_str());
-          block << buff ;
+          block.open(path + "/" + block_info.block_name);
+          block << buff;
           block.close();
           break;
         }
       }
       myfile.close();
+      delete[] buff;
     }
 
   }

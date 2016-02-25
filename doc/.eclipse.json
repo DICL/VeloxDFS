@@ -1,0 +1,47 @@
+{
+ "name"    : "Ferrari cluster eclipseMR file",
+ "max_job" : 1024,
+
+ "log" : {
+   "type" : "LOG_LOCAL7",
+   "name" : "ECLIPSE"
+ },
+
+ "path" : {
+   "filesystem" : "/home/inthound/eclipse_storage/",
+   "scratch"    : "/scratch/inthound/mr_storage",
+   "idata"      : "/scratch/inthound/mr_storage/idata",
+   "metadata"   : "/scratch/inthound/mr_storage/mdata",
+   "ipc"        : "/scratch/inthound/socket"
+ },
+
+ "filesystem" : {
+   "block"  : 16777216,
+   "replica" : 3
+ },
+
+ "cache" : {
+   "numbin" : 100,
+   "size" :   200000,
+   "concurrency" : 1
+ },
+
+ "network" : {
+   "port_mapreduce" : 8008,   
+   "port_cache"     : 8009,
+   "port_dht"       : 8010,
+   "topology"       : "mesh",
+   "iface"          : "em1",
+   "master"         : "10.20.13.123",
+   "nodes"          : [
+     "10.20.13.123",
+     "10.20.13.124",
+     "10.20.13.125",
+     "10.20.13.126",
+     "10.20.13.127",
+     "10.20.13.128",
+     "10.20.13.129",
+     "10.20.13.130"
+   ]
+ }
+}
