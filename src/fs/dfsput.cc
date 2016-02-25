@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
   else
   {
     //uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.buffer");
-    uint64_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
+    uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
     uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
     string path = con.settings.get<string>("path.scratch");
     //    file_info.replica = con.settings.get<int>("filesystem.replica");
@@ -37,9 +37,9 @@ int main(int argc, char* argv[])
       myfile.seekg(0, myfile.end);
       uint64_t file_size = myfile.tellg();
       unsigned int block_seq = 0;
-      uint64_t start = 0;
-      uint64_t end = start + BLOCK_SIZE - 1;
-      uint64_t file_hash_key = h (file_name);
+      uint32_t start = 0;
+      uint32_t end = start + BLOCK_SIZE - 1;
+      uint32_t file_hash_key = h (file_name);
 
       //TODO: remote_metadata_server = lookup(hkey);
       int remote_metadata_server = 1;

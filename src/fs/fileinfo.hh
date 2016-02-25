@@ -7,7 +7,7 @@ namespace eclipse {
     uint32_t file_id;
     std::string file_name;
     uint32_t file_hash_key;
-    uint32_t file_size;
+    uint64_t file_size;
     unsigned int num_block;
     unsigned int replica;
   };
