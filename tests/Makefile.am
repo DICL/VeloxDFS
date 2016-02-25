@@ -2,9 +2,9 @@ AM_CPPFLAGS_T    = $(AM_CPPFLAGS) -include unittest++/UnitTest++.h
 LDADD_T          = $(LDADD) -l:libUnitTest++.a -ldl
 
 # Input your tests files here
-check_PROGRAMS   = nodes executor units
+check_PROGRAMS   = nodes executor units client
 
-TESTS            = units 
+TESTS            = units
 check_SCRIPTS    = tests/nodes_executor.in   \
                    tests/eclipse_debug.in
 
@@ -40,7 +40,7 @@ units_SOURCES      = $(messages_files) \
                      src/network/p2p.cc \
                      src/nodes/machine.cc \
                      src/nodes/peer.cc \
-                     src/nodes/node.cc 
+                     src/nodes/node.cc
 
 nodes_LDADD     = $(LDADD_T)
 nodes_CPPFLAGS  = $(AM_CPPFLAGS_T)
@@ -66,3 +66,9 @@ executor_SOURCES   = tests/executor.cc \
                      src/nodes/peer.cc \
                      src/nodes/node.cc \
                      src/mapreduce/peermr.cc
+
+client_LDADD     = $(LDADD_T)
+client_CPPFLAGS  = $(AM_CPPFLAGS_T)
+client_SOURCES   = tests/dataset.cc \
+                   src/mapreduce/dataset.cc \
+                   $(message_files)
