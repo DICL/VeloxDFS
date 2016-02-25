@@ -1,69 +1,90 @@
-#include "iwriter.hh"
-#include "fileio.hh"
+#include "iwriter.h"
 #include <string>
-#include <unordered_map>
+#include <map>
+#include <iterator>
+#include <fstream>
+#include <utility>
 
-#define IBLOCKSIZE 64*1024*1024
+using std::vector;
+using std::multimap;
+using std::string;
 
-using namespace eclipse;
-using namespace std;
+namespace eclipse {
 
 IWriter::IWriter() {
-  const int REDUCE_SLOT = 8;
-  for (int i = 0; i < REDUCE_SLOT; ++i) {
-    kmv_blocks_.push_back(new unordered_multimap<string, string>());
+  reduce_slot_ = con.settings.get<int>("mapreduce.reduce_slot");
+  iblock_size_ = con.settings.get<int>("size.block");
+  for (int i = 0; i < reduce_slot_; ++i) {
+    kmv_blocks_.push_back(new multimap<string, string>());
     block_size_.push_back(0);
   }
+  index_counter_ = 0;
 }
 IWriter::~IWriter() {
-  const int REDUCE_SLOT = 8;
-  for (int i = 0; i < REDUCE_SLOT; ++i) {
-    delete kmv_blocks.at(i);
+  for (int i = 0; i < reduce_slot_; ++i) {
+    delete kmv_blocks_[i];
   }
 }
-void IWriter::AddKeyValue(string key, string value) {
+void IWriter::AddKeyValue(const string &key, const string &value) {
   int index;
-  //index = SomeHashFunction(key);
-  auto block = kmv_blocks_.at(index);
+  index = round_robin(key);
+  auto block = kmv_blocks_[index];
 
   int new_size;
-  if (block->find(key) == block->end) {
-    new_size = get_block_size() + key.length() + value.length() + 2;
+  if (block->find(key) == block->end()) {
+    new_size = get_block_size(index) + key.length() + value.length() + 2;
   } else {
-    new_size = get_block_size() + value.length() + 1;
+    new_size = get_block_size(index) + value.length() + 1;
   }
   block->emplace(key, value);
   set_block_size(index, new_size);
 
-  if (new_size > IBLOCKSIZE) {
+  if (new_size > iblock_size_) {
     Flush(index);
   }
 }
-void IWriter::Flush(int index) {
-  auto block = kmv_blocks_.at(index);
-  FileIO file;
+void IWriter::Flush(const int &index) {
+  auto block = kmv_blocks_[index];
+  std::ofstream file;
   string file_path;
-  //file_path = SomeFunctionToGetPath();
-  file.open_wfile(file_path);
+  // file_path = SomeFunctionToGetPath();
+  file.open(file_path);
 
-  pair<unorderd_multimap<string, string>::iterator,
-    unordered_multimap<string, string>::iterator> ret;
+  // Write into the file.
+  // Should be changed into asynchronous manner.
+  std::pair<multimap<string, string>::iterator,
+      multimap<string, string>::iterator> ret;
   for (auto key_it = block->begin(); key_it != block->end(); key_it =
-    ret.second) {
+      ret.second) {
     ret = block->equal_range(key_it->first);
+    file << key_it->first << std::endl;
+    int num_value = std::distance(ret.first, ret.second);
+    file << std::to_string(num_value) << std::endl;
     for (auto it = ret.first; it != ret.second; ++it) {
-      // Do something to wirte file
+      file << it->second << std::endl;
     }
   }
 
   block->clear();
   set_block_size(index, 0);
 
-  file.close_file();
+  file.close();
 }
-int IWriter::get_block_size(int index) {
+int IWriter::get_block_size(const int &index) {
   return block_size_[index];
 }
-void Iwriter::set_block_size(int index, int size) {
-  block_size_.at(index) = size;
+void IWriter::set_block_size(const int &index, const int &size) {
+  block_size_[index] = size;
 }
+int IWriter::round_robin(const string &key) {
+  auto it = key_index_.find(key);
+  if (it != key_index_.end()) {
+    return it->second;
+  } else {
+    int index = index_counter_++ % reduce_slot_;
+    key_index_.emplace(key, index);
+    return index;
+  }
+}
+
+}  // namespace eclipse
