@@ -1,9 +1,10 @@
 include tests/Makefile.am
 
 AM_CPPFLAGS         = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
-AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3
+AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3 
 
 #bin_PROGRAMS        = slave
+bin_PROGRAMS        = dfsput
 
 # libs -----
 lib_LTLIBRARIES     = libecfs.la
@@ -23,12 +24,15 @@ LDADD               = libecfs.la -lboost_system -lboost_thread -lboost_serializa
 #                      src/messages/control.cc src/messages/factory.cc \
 #                      src/messages/keyvalue.cc src/messages/message.cc
 
+dfsput_SOURCES       = src/fs/dfsput.cc src/fs/directory.cc
+dfsput_LDADD         = $(LDADD) -lsqlite3
+
 #master_SOURCES      = src/master/master.cc 
 
 pkginclude_HEADERS  = src/common/ecfs.hh src/common/settings.hh
 
 # Scripts -------
-bin_SCRIPTS         = src/fs/eclipsed
+#bin_SCRIPTS         = src/fs/eclipsed
 # ------
 if COPY_SAMPLES
 sysconf_DATA        = doc/eclipse.json
