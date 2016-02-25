@@ -11,6 +11,7 @@ namespace eclipse {
 
 IReader::IReader() {
   // TODO(wbkim): Load the number of iblocks from db.
+  // num_block_ = GetNumBlock();
   num_finished_ = 0;
   is_next_key_ = true;
   is_next_value_ = true;
@@ -18,7 +19,7 @@ IReader::IReader() {
   num_remain_.reserve(num_block_);
   loaded_keys_.reserve(num_block_);
   for (int i = 0; i < num_block_; ++i) {
-    // TODO(wbkim): Load the block information.
+    // TODO(wbkim): Load the block information from db.
     // blocks_.push_back(new ifstream(block_name));
     LoadKey(i);
   }
