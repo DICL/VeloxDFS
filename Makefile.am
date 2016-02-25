@@ -1,7 +1,7 @@
 include tests/Makefile.am
 
 AM_CPPFLAGS         = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
-AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3 -lsqlite3
+AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3 
 
 #bin_PROGRAMS        = slave
 bin_PROGRAMS        = dfsput
@@ -25,6 +25,7 @@ LDADD               = libecfs.la -lboost_system -lboost_thread -lboost_serializa
 #                      src/messages/keyvalue.cc src/messages/message.cc
 
 dfsput_SOURCES       = src/fs/dfsput.cc src/fs/directory.cc
+dfsput_LDADD         = $(LDADD) -lsqlite3
 
 #master_SOURCES      = src/master/master.cc 
 
