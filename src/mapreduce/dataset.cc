@@ -1,55 +1,46 @@
 #include "dataset.hh"
+#include "../messages/boost_impl.hh"
+#include "../common/ecfs.hh"
+#include "../common/hash.hh"
+#include <vector>
 
 using namespace eclipse;
+using namespace std;
+using vec_str = std::vector<std::string>;
 
-static int DataSet::counter_ = 0;
+DataSet& DataSet::open (std::string in) {
+  uint32_t id_ = h(in);
+  auto data = new DataSet(id_);
+  return *data;
+}
 
-DataSet::DataSet() {
-  is_output_path_ = false;
+DataSet::DataSet (uint32_t id_) : 
+  id (id_), 
+  socket (iosvc) 
+{
+  find_local_master();
+  auto  ep = find_local_master();
+  socket.connect(*ep);
 }
-DataSet::DataSet(std::string input_path) {
-  SetInputPath(input_path);
+
+tcp::endpoint* DataSet::find_local_master() {
+  Settings setted = Settings().load();
+
+  int port      = setted.get<int> ("network.port_mapreduce");
+  vec_str nodes = setted.get<vec_str> ("network.nodes");
+
+  string host = nodes[ id % nodes.size() ];
+
+  tcp::resolver resolver (iosvc);
+  tcp::resolver::query query (host, to_string(port));
+  tcp::resolver::iterator it (resolver.resolve(query));
+  auto ep = new tcp::endpoint (*it);
+
+  return ep;
 }
-DataSet::~DataSet() {
-}
-DataSet DataSet::Map(std::string map_function_name) {
-  if (!IsOutputPath()) SetOutputPath(GetRandomOutputPath());
-  // RequestToMaster(map_function_name, GetOutputPath());
-  // WaitForMapFinished();
-  DataSet output_data(GetOutputPath());
-  return output_data;
-}
-DataSet DataSet::Reduce(std::string reduce_function_name) {
-  // RequestToMaster(red_function_name, GetOutputPath());
-  // WaitForRedFinished();
-  DataSet output_data(GetOutputPath());
-  return output_data;
-}
-void DataSet::SetInputPath(std::string input_path) {
-  input_path_ = input_path;
-}
-std::string GetInputPath() {
-  return input_path_;
-}
-void DataSet::SetOutputPath(std::string output_path) {
-  output_path_ = output_path;
-}
-bool DataSet::IsOutputPath() {
-  return is_output_path_;
-}
-std::string GetOutputPath() {
-  return output_path_;
-}
-std::string GetRandomOutputPath() {
-  stringstream ss;
-  ss ".job" << job_id_ << "_idata" << counter_++;
-  string output_path;
-  output_path = ss.str();
-  return output_path;
-}
-void DataSet::RequestToMaster(std::string func_name, std::string output_path) {
-  // TODO:
-  // 1. Send function name to master
-  // 2. Send inputpath to master
-  // 3. Send outputpath to master
+
+DataSet& DataSet::map (std::string func) {
+
+  return *(new DataSet(2131231));
+
 }
