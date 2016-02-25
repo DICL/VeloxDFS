@@ -3,9 +3,7 @@
 
 SUITE(DL) {
   TEST(BASIC) {
-    CHECK_THROW(DL_loader* ld = new DL_loader("myfile", "myfunc"), 
-        std::runtime_error);
-
-    //ld->run();
+    DL_loader ld("myfile");
+    CHECK_THROW(ld.init_lib(), std::runtime_error);
   }
 }
