@@ -1,21 +1,22 @@
 #pragma once
 #include <string>
-#include <../network/syncnetwork.hh>
-#include <../network/client.hh>
+#include <boost/asio.hpp>
 
 namespace eclipse {
+
+using boost::asio::ip::tcp;
 
 class DataSet {
   public:
     DataSet& map(std::string);
-    static Dataset& open (std::string);
-  
-  private:
-    DataSet (int);
-    int id;
-    void connect();
+    static DataSet& open (std::string);
 
-    network::SyncNetwork<Client> network;
+  private:
+    DataSet (uint32_t);
+    int id;
+    tcp::endpoint* find_local_master();
+    boost::asio::io_service iosvc;
+    tcp::socket socket;
 };
 
 }

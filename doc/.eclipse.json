@@ -16,8 +16,7 @@
  },
 
  "filesystem" : {
-   "block"  : 134217728,
-   "buffer" : 8192,
+   "block"  : 16777216,
    "replica" : 3
  },
 
