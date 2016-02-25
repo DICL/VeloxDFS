@@ -32,7 +32,6 @@ units_SOURCES      = $(messages_files) \
                      tests/messages_test.cc \
                      tests/nodes_test.cc \
                      tests/dl_test.cc \
-                     src/fs/fileio.cc \
                      src/common/dl_loader.cc \
                      src/network/channel.cc \
                      src/network/asyncchannel.cc \
