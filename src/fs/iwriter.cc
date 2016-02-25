@@ -13,7 +13,7 @@ namespace eclipse {
 
 IWriter::IWriter() {
   reduce_slot_ = con.settings.get<int>("mapreduce.reduce_slot");
-  iblock_size_ = con.settings.get<int>("size.block");
+  iblock_size_ = con.settings.get<int>("mapreduce.iblock_size");
   for (int i = 0; i < reduce_slot_; ++i) {
     kmv_blocks_.push_back(new multimap<string, string>());
     block_size_.push_back(0);
@@ -47,11 +47,12 @@ void IWriter::Flush(const int &index) {
   auto block = kmv_blocks_[index];
   std::ofstream file;
   string file_path;
+  // TODO(wbkim): Get the path of intermediate data.
   // file_path = SomeFunctionToGetPath();
   file.open(file_path);
 
   // Write into the file.
-  // Should be changed into asynchronous manner.
+  // TODO(wbkim): Should be changed into asynchronous manner.
   std::pair<multimap<string, string>::iterator,
       multimap<string, string>::iterator> ret;
   for (auto key_it = block->begin(); key_it != block->end(); key_it =
@@ -69,6 +70,8 @@ void IWriter::Flush(const int &index) {
   set_block_size(index, 0);
 
   file.close();
+
+  // TODO(wbkim): Write file information into db.
 }
 int IWriter::get_block_size(const int &index) {
   return block_size_[index];
