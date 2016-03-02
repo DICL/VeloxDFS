@@ -4,6 +4,7 @@ AM_CPPFLAGS         = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
 AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3 
 
 bin_PROGRAMS        = dfsput
+bin_PROGRAMS        = dfsget
 
 # libs -----
 lib_LTLIBRARIES     = libecfs.la
@@ -19,6 +20,9 @@ LDADD               = libecfs.la -lboost_system -lboost_thread -lboost_serializa
 
 dfsput_SOURCES       = src/fs/dfsput.cc src/fs/directory.cc
 dfsput_LDADD         = $(LDADD) -lsqlite3
+
+dfsget_SOURCES       = src/fs/dfsget.cc src/fs/directory.cc
+dfsget_LDADD         = $(LDADD) -lsqlite3
 
 pkginclude_HEADERS  = src/common/ecfs.hh src/common/settings.hh
 
