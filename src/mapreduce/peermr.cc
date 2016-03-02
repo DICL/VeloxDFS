@@ -3,6 +3,7 @@
 namespace eclipse {
 // Constructor{{{
 PeerMR::PeerMR (Context& c) : Peer (c) {
+  directory.init_db();
 }
 
 PeerMR::~PeerMR () {
@@ -41,6 +42,7 @@ void PeerMR::lookup (std::string key, req_func f) {
 // store {{{
 void PeerMR::store (messages::FileInfo* f) {
  //Save it to sqlite db
+ directory.insert_file_metadata(*f);
 
  logger->info ("Saving to SQLite db");
 }

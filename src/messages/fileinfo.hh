@@ -11,9 +11,13 @@ struct FileInfo: public Message {
   ~FileInfo() = default;
 
   std::string get_type() const override;
-  std::string filename;
-  size_t size, block_number;
-  uint32_t id;
+
+  std::string file_name;
+  uint32_t file_id;
+  uint32_t file_hash_key;
+  uint64_t file_size;
+  unsigned int num_block;
+  unsigned int replica;
 };
 
 }

@@ -65,6 +65,7 @@ template<> void Executor::process (messages::Task* m) {
 // }}}
 // process (FileInfo* m) {{{
 template<> void Executor::process (messages::FileInfo* m) {
+  logger->info ("FileInfo received");
   peer_cache.store(m);
 }
 // }}}

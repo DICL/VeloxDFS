@@ -5,11 +5,23 @@ AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3
 
 bin_PROGRAMS        = dfsput
 
+
+messages_files   = src/messages/boundaries.cc \
+                   src/messages/message.cc    \
+                   src/messages/keyvalue.cc   \
+                   src/messages/keyrequest.cc \
+                   src/messages/control.cc    \
+                   src/messages/boost_impl.cc \
+                   src/messages/factory.cc    \
+                   src/messages/fileinfo.cc   \
+                   src/messages/blockinfo.cc   \
+                   src/messages/task.cc       
 # libs -----
 lib_LTLIBRARIES     = libecfs.la
 libecfs_la_SOURCES  = src/common/hash.cc src/common/settings.cc \
 											src/common/util.cc src/common/logger.cc src/common/histogram.cc \
 											src/common/context.cc src/common/dl_loader.cc
+
 libecfs_la_LDFLAGS  = -version-info 0:0:0 
 
 # Binaries ----
@@ -17,7 +29,9 @@ AM_LDFLAGS          = -static
 LDADD               = libecfs.la -lboost_system -lboost_thread -lboost_serialization -lboost_system -lboost_coroutine -lboost_context
 
 
-dfsput_SOURCES       = src/fs/dfsput.cc src/fs/directory.cc
+dfsput_SOURCES       = src/fs/dfsput.cc src/fs/directory.cc \
+											 $(messages_files)
+
 dfsput_LDADD         = $(LDADD) -lsqlite3
 
 pkginclude_HEADERS  = src/common/ecfs.hh src/common/settings.hh
