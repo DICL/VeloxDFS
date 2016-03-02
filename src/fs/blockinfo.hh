@@ -13,6 +13,6 @@ namespace eclipse {
     std::string node;
     std::string l_node;
     std::string r_node;
-    unsigned int commit;
+    unsigned int is_commit;
   };
 }

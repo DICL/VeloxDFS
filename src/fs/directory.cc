@@ -38,12 +38,22 @@ namespace eclipse{
     i++;
     block->r_node = argv[i] ? argv[i] : "NULL";
     i++;
-    block->commit = argv[i] ? atoi(argv[i]) : 0;
+    block->is_commit = argv[i] ? atoi(argv[i]) : 0;
+    return 0;
+  } 
+
+  int Directory::display_callback(void *data, int argc, char **argv, char **azColName){
+    Context con;
+    con.logger->info("%s: ", (const char*)data);
+    for(int i=0; i<argc; i++){
+      con.logger->info("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+    }
+    printf("\n");
     return 0;
   }
 
   int Directory::exist_callback(void *result, int argc, char **argv, char **azColName){
-    //*reinterpret_cast<bool*>(result) = argv[i] ? true : false;
+    *reinterpret_cast<bool*>(result) = argv[0] ? true : false;
     return 0;
   }
 
@@ -52,10 +62,9 @@ namespace eclipse{
     // Open database
     sqlite3 *db;
     char *zErrMsg = 0;
-    string path = con.settings.get<string>("path.mdata") + "/metadata.db";
+    string path = con.settings.get<string>("path.metadata") + "/metadata.db";
     int rc = sqlite3_open(path.c_str(), &db);
     char sql[512];
-    sqlite3_callback void_callback;
     if(rc)
     {
       con.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
@@ -64,7 +73,6 @@ namespace eclipse{
     {
       con.logger->info("Opened database successfully\n");
     }
-
     // Create SQL statement
     sprintf(sql, "CREATE TABLE file_table( \
       file_id         INT   NOT NULL, \
@@ -76,7 +84,7 @@ namespace eclipse{
         PRIMARY KEY (file_id));"); 
 
         // Execute SQL statement
-        rc = sqlite3_exec(db, sql, void_callback, 0, &zErrMsg);
+        rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
       con.logger->error("SQL error: %s\n", zErrMsg);
@@ -86,7 +94,6 @@ namespace eclipse{
     {
       con.logger->info("file_table created successfully\n");
     }
-
     // Create SQL statement
     sprintf(sql, "CREATE TABLE block_table( \
       file_id        INT       NOT NULL, \
@@ -98,11 +105,11 @@ namespace eclipse{
         node           TEXT      NOT NULL, \
         l_node         TEXT              , \
         r_node         TEXT              , \
-        commit         INT               , \
+        is_commit      INT               , \
         PRIMARY KEY (file_id, block_seq));"); 
 
         // Execute SQL statement
-        rc = sqlite3_exec(db, sql, void_callback, 0, &zErrMsg);
+        rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
       con.logger->error("SQL error: %s\n", zErrMsg);
@@ -112,7 +119,6 @@ namespace eclipse{
     {
       con.logger->info("block_table created successfully\n");
     }
-
     // Close Database
     sqlite3_close(db);
   }
@@ -122,9 +128,8 @@ namespace eclipse{
     // Open database
     sqlite3 *db;
     char sql[512];
-    sqlite3_callback void_callback;
     char *zErrMsg = 0;
-    string path = con.settings.get<string>("path.mdata") + "/metadata.db";
+    string path = con.settings.get<string>("path.metadata") + "/metadata.db";
     int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
@@ -139,7 +144,7 @@ namespace eclipse{
     sprintf(sql, "INSERT INTO file_table (\
       file_id, file_name, file_hash_key, file_size, \
         num_block, replica) \
-      VALUES (%u, '%s', %u, %u, %u, %u);",
+      VALUES (%" PRIu32 ", '%s', %" PRIu32 ", %" PRIu64 ", %u, %u);",
         file_info.file_id,
         file_info.file_name.c_str(),
         file_info.file_hash_key,
@@ -148,7 +153,7 @@ namespace eclipse{
         file_info.replica);
 
     // Execute SQL statement
-    rc = sqlite3_exec(db, sql, void_callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
       con.logger->error("SQL error: %s\n", zErrMsg);
@@ -168,9 +173,8 @@ namespace eclipse{
     // Open database
     sqlite3 *db;
     char sql[512];
-    sqlite3_callback void_callback;
     char *zErrMsg = 0;
-    string path = con.settings.get<string>("path.mdata") + "/metadata.db";
+    string path = con.settings.get<string>("path.metadata") + "/metadata.db";
     int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
@@ -184,8 +188,9 @@ namespace eclipse{
     // Create sql statement
     sprintf(sql, "INSERT INTO block_table (\
       file_id, block_seq, block_hash_key, block_name, \
-        block_size, is_inter, node, l_node, r_node, commit) \
-      VALUES (%u, %u, %u, '%s', %u, %u, '%s', '%s', '%s', %u);",
+        block_size, is_inter, node, l_node, r_node, is_commit) \
+      VALUES (%" PRIu32 ", %u, %" PRIu32 ", '%s', %" PRIu32 ",\
+      %u, '%s', '%s', '%s', %u);",
         block_info.file_id,
         block_info.block_seq,
         block_info.block_hash_key,
@@ -195,10 +200,10 @@ namespace eclipse{
         block_info.node.c_str(),
         block_info.l_node.c_str(),
         block_info.r_node.c_str(),
-        block_info.commit);
+        block_info.is_commit);
 
     // Execute SQL statement
-    rc = sqlite3_exec(db, sql, void_callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
       con.logger->error("SQL error: %s\n", zErrMsg);
@@ -218,9 +223,8 @@ namespace eclipse{
     // Open database
     sqlite3 *db;
     char sql[512];
-    sqlite3_callback void_callback;
     char *zErrMsg = 0;
-    string path = con.settings.get<string>("path.mdata") + "/metadata.db";
+    string path = con.settings.get<string>("path.metadata") + "/metadata.db";
     int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
@@ -232,7 +236,7 @@ namespace eclipse{
     }
 
     // Create sql statement
-    sprintf(sql, "SELECT * from file_table where file_id=%u;", file_id);
+    sprintf(sql, "SELECT * from file_table where file_id=%" PRIu32 ";", file_id);
 
     // Execute SQL statement
     rc = sqlite3_exec(db, sql, file_callback, (void*)file_info, &zErrMsg);
@@ -255,9 +259,8 @@ namespace eclipse{
     // Open database
     sqlite3 *db;
     char sql[512];
-    sqlite3_callback void_callback;
     char *zErrMsg = 0;
-    string path = con.settings.get<string>("path.mdata") + "/metadata.db";
+    string path = con.settings.get<string>("path.metadata") + "/metadata.db";
     int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
@@ -269,7 +272,7 @@ namespace eclipse{
     }
 
     // Create sql statement
-    sprintf(sql, "SELECT * from block_table where (file_id=%u) and \
+    sprintf(sql, "SELECT * from block_table where (file_id=%" PRIu32 ") and \
         (block_seq=%u);", file_id, block_seq);
 
     // Execute SQL statement
@@ -293,9 +296,8 @@ namespace eclipse{
     // Open database
     sqlite3 *db;
     char sql[512];
-    sqlite3_callback void_callback;
     char *zErrMsg = 0;
-    string path = con.settings.get<string>("path.mdata") + "/metadata.db";
+    string path = con.settings.get<string>("path.metadata") + "/metadata.db";
     int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
@@ -308,8 +310,9 @@ namespace eclipse{
 
     // Create sql statement
     sprintf(sql, "UPDATE file_table set \
-        file_id=%u, file_name='%s', file_hash_key=%u, file_size=%u, \
-        num_block=%u, replica=%u where file_id=%u;",
+        file_id=%" PRIu32 ", file_name='%s', file_hash_key=%" PRIu32 "\
+        , file_size=%" PRIu64 ", \
+        num_block=%u, replica=%u where file_id=%" PRIu32 ";",
         file_info.file_id,
         file_info.file_name.c_str(),
         file_info.file_hash_key,
@@ -319,7 +322,7 @@ namespace eclipse{
         file_id);
 
     // Execute SQL statement
-    rc = sqlite3_exec(db, sql, void_callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
       con.logger->error("SQL error: %s\n", zErrMsg);
@@ -339,9 +342,8 @@ namespace eclipse{
     // Open database
     sqlite3 *db;
     char sql[512];
-    sqlite3_callback void_callback;
     char *zErrMsg = 0;
-    string path = con.settings.get<string>("path.mdata") + "/metadata.db";
+    string path = con.settings.get<string>("path.metadata") + "/metadata.db";
     int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
@@ -354,9 +356,9 @@ namespace eclipse{
 
     // Create sql statement
     sprintf(sql, "UPDATE block_table set \
-        file_id=%u, block_seq=%u, block_hash_key=%u, block_name='%s', \
-        block_size=%u, is_inter=%u, node='%s', l_node='%s', r_node='%s' \
-        , commit=%u where (file_id=%u) and (block_seq=%u);",
+        file_id=%" PRIu32 ", block_seq=%u, block_hash_key=%" PRIu32 ", block_name='%s', \
+        block_size=%" PRIu32 ", is_inter=%u, node='%s', l_node='%s', r_node='%s' \
+        , is_commit=%u where (file_id=%" PRIu32 ") and (block_seq=%u);",
         block_info.file_id,
         block_info.block_seq,
         block_info.block_hash_key,
@@ -366,12 +368,12 @@ namespace eclipse{
         block_info.node.c_str(),
         block_info.l_node.c_str(),
         block_info.r_node.c_str(),
-        block_info.commit,
+        block_info.is_commit,
         block_info.file_id,
         block_info.block_seq);
 
     // Execute SQL statement
-    rc = sqlite3_exec(db, sql, void_callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
       con.logger->error("SQL error: %s\n", zErrMsg);
@@ -391,9 +393,8 @@ namespace eclipse{
     // Open database
     sqlite3 *db;
     char sql[512];
-    sqlite3_callback void_callback;
     char *zErrMsg = 0;
-    string path = con.settings.get<string>("path.mdata") + "/metadata.db";
+    string path = con.settings.get<string>("path.metadata") + "/metadata.db";
     int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
@@ -405,10 +406,10 @@ namespace eclipse{
     }
 
     // Create sql statement
-    sprintf(sql, "DELETE from file_table where file_id=%u;", file_id);
+    sprintf(sql, "DELETE from file_table where file_id=%" PRIu32 ";", file_id);
 
     // Execute SQL statement
-    rc = sqlite3_exec(db, sql, void_callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
       con.logger->error("SQL error: %s\n", zErrMsg);
@@ -428,9 +429,8 @@ namespace eclipse{
     // Open database
     sqlite3 *db;
     char sql[512];
-    sqlite3_callback void_callback;
     char *zErrMsg = 0;
-    string path = con.settings.get<string>("path.mdata") + "/metadata.db";
+    string path = con.settings.get<string>("path.metadata") + "/metadata.db";
     int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
@@ -442,10 +442,10 @@ namespace eclipse{
     }
 
     // Create sql statement
-    sprintf(sql, "DELETE from block_table where (file_id=%u) and (block_seq=%u);", file_id, block_seq);
+    sprintf(sql, "DELETE from block_table where (file_id=%" PRIu32 ") and (block_seq=%u);", file_id, block_seq);
 
     // Execute SQL statement
-    rc = sqlite3_exec(db, sql, void_callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
       con.logger->error("SQL error: %s\n", zErrMsg);
@@ -460,14 +460,87 @@ namespace eclipse{
     sqlite3_close(db);
   }
 
+  void Directory::display_file_metadata()
+  {
+    // Open database
+    sqlite3 *db;
+    char sql[512];
+    char *zErrMsg = 0;
+    const char* data = "Callback function called";
+    string path = con.settings.get<string>("path.metadata") + "/metadata.db";
+    int rc = sqlite3_open(path.c_str(), &db);
+    if(rc)
+    {
+      con.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
+    }
+    else
+    {
+      con.logger->info("Opened database successfully\n");
+    }
+
+    // Create sql statement
+    sprintf(sql, "SELECT * from file_table");
+
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, display_callback, (void*)data, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      con.logger->error("SQL error: %s\n", zErrMsg);
+      sqlite3_free(zErrMsg);
+    }
+    else
+    {
+      con.logger->info("file_metadata displayed successfully\n");
+    }
+
+    // Close Database
+    sqlite3_close(db);
+  }
+
+  void Directory::display_block_metadata()
+  {
+    // Open database
+    sqlite3 *db;
+    char sql[512];
+    char *zErrMsg = 0;
+    const char* data = "Callback function called";
+    string path = con.settings.get<string>("path.metadata") + "/metadata.db";
+    int rc = sqlite3_open(path.c_str(), &db);
+    if(rc != SQLITE_OK)
+    {
+      con.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
+    }
+    else
+    {
+      con.logger->info("Opened database successfully\n");
+    }
+
+    // Create sql statement
+    sprintf(sql, "SELECT * from block_table");
+
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, display_callback, (void*)data, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      con.logger->error("SQL error: %s\n", zErrMsg);
+      sqlite3_free(zErrMsg);
+    }
+    else
+    {
+      con.logger->info("block_metadata displayed successfully\n");
+    }
+
+    // Close Database
+    sqlite3_close(db);
+  }
+
   bool Directory::is_exist(uint32_t file_id)
   {
     // Open database
     sqlite3 *db;
     char sql[512];
-    sqlite3_callback void_callback;
     char *zErrMsg = 0;
-    string path = con.settings.get<string>("path.mdata") + "/metadata.db";
+    string path = con.settings.get<string>("path.metadata") + "/metadata.db";
     int rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
@@ -480,7 +553,7 @@ namespace eclipse{
     bool *result = new bool;
 
     // Create SQL statement
-    sprintf(sql, "SELECT * from file_table where file_id=%u;");
+    sprintf(sql, "SELECT * from file_table where file_id=%" PRIu32 ";", file_id);
 
     // Execute SQL statement
     rc = sqlite3_exec(db, sql, exist_callback, result, &zErrMsg);
