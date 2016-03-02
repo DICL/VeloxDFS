@@ -7,7 +7,6 @@ namespace messages {
 
 Message::Message(int o, int d) : origin(o), destination(d) { }
 
-string Message::get_type()        const { return "Message"; }
 int  Message::get_origin()      const { return origin; }
 int  Message::get_destination() const { return destination; }
 

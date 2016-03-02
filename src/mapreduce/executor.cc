@@ -27,6 +27,7 @@ Executor::~Executor() { }
 bool Executor::establish () {
   peer_cache.establish();
   network->establish();
+  return true;
 }
 // }}}
 // run_map {{{
@@ -62,6 +63,11 @@ template<> void Executor::process (messages::Task* m) {
   }
 }
 // }}}
+// process (FileInfo* m) {{{
+template<> void Executor::process (messages::FileInfo* m) {
+  peer_cache.store(m);
+}
+// }}}
 // process (Control* m) {{{
 template<> void Executor::process (Control* m) {
   switch (m->type) {
@@ -71,10 +77,6 @@ template<> void Executor::process (Control* m) {
 
     case RESTART:
       break;
-
-      //    case PING:
-      //      process_ping (m);
-      //      break;
   }
 }
 // }}}
@@ -88,6 +90,10 @@ void Executor::on_read (Message* m) {
 
   } else if (type == "Control") {
     auto m_ = dynamic_cast<Control*>(m);
+    process(m_);
+
+  } else if (type == "FileInfo") {
+    auto m_ = dynamic_cast<FileInfo*>(m);
     process(m_);
   }
 }
