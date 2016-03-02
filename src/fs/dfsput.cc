@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
           unsigned int block_hash_key = rand()%NUM_SERVERS;
 
           //TODO: int remote_server = lookup(block_hash_key);
-          int remote_server = 1;
+          //int remote_server = 1;
 
           BlockInfo block_info;
           block_info.file_id = file_id;
