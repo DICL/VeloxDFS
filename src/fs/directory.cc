@@ -67,7 +67,7 @@ namespace eclipse{
     char sql[512];
     if(rc)
     {
-      con.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
+      con.logger->error("Can't open database: %s err:%s\n", path.c_str(), sqlite3_errmsg(db));
     }
     else
     {

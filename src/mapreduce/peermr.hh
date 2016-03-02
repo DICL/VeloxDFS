@@ -1,6 +1,7 @@
 #pragma once
 #include "../nodes/peer.hh"
 #include "../messages/boost_impl.hh"
+#include "../fs/directory.hh"
 
 namespace eclipse {
 
@@ -16,6 +17,7 @@ class PeerMR: public Peer {
     using Peer::establish;
     using Peer::close;
   private:
+    Directory directory;
 };
 
 } /* eclipse  */ 
