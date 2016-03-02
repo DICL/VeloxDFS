@@ -17,7 +17,7 @@ struct Message {
   Message(int, int);
   virtual ~Message () {}
 
-  virtual std::string get_type() const;
+  virtual std::string get_type() const = 0;
 
   int get_origin() const;
   int get_destination() const;
