@@ -6,10 +6,11 @@
 #include <cstdint>
 #include <cinttypes>
 #include "../common/context.hh"
-#include "blockinfo.hh"
-#include "fileinfo.hh"
+#include "../messages/blockinfo.hh"
+#include "../messages/fileinfo.hh"
 
 namespace eclipse {
+  using namespace messages;
   class Directory {
     private:
       Context con;
