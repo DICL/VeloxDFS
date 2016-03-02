@@ -7,8 +7,7 @@
 using namespace eclipse;
 using namespace std;
 
-//TEST(metadata) {
-int main(void) {
+int main() {
   Context con;
   con.logger->info("==========Start dir test==========");
   Directory dir;
