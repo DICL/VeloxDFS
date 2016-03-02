@@ -3,7 +3,6 @@ include tests/Makefile.am
 AM_CPPFLAGS         = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
 AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3 
 
-#bin_PROGRAMS        = slave
 bin_PROGRAMS        = dfsput
 
 # libs -----
@@ -17,17 +16,9 @@ libecfs_la_LDFLAGS  = -version-info 0:0:0
 AM_LDFLAGS          = -static
 LDADD               = libecfs.la -lboost_system -lboost_thread -lboost_serialization -lboost_system -lboost_coroutine -lboost_context
 
-#slave_SOURCES       = src/targets/slave_main.cc src/nodes/node.cc src/nodes/nodelocal.cc \
-#                      src/nodes/peerlocal.cc src/nodes/peerremote.cc \
-#                      src/nodes/noderemote.cc \
-#                      src/messages/boost_impl.cc src/messages/boundaries.cc \
-#                      src/messages/control.cc src/messages/factory.cc \
-#                      src/messages/keyvalue.cc src/messages/message.cc
 
 dfsput_SOURCES       = src/fs/dfsput.cc src/fs/directory.cc
 dfsput_LDADD         = $(LDADD) -lsqlite3
-
-#master_SOURCES      = src/master/master.cc 
 
 pkginclude_HEADERS  = src/common/ecfs.hh src/common/settings.hh
 

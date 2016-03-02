@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
           //r_server = lookup((block_hash_key+1+NUM_SERVERS)%NUM_SERVERS);
           //block_info.l_node = l_server.ip_address;
           //block_info.r_node = r_server.ip_address;
-          block_info.commit = 1;
+          block_info.is_commit = 1;
           file_info.num_block = block_seq;
 
           //TODO: remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);
@@ -151,7 +151,7 @@ int main(int argc, char* argv[])
           //r_server = lookup(block_hash_key+1);
           //block_info.l_node = l_server.ip_address;
           //block_info.r_node = r_server.ip_address;
-          block_info.commit = 1;
+          block_info.is_commit = 1;
           file_info.num_block = block_seq;
 
           // TODO: remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);

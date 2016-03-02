@@ -1,7 +1,7 @@
 #pragma once
 
 #include "message.hh"
-#include "mapreduce/task.hh"
+//#include "mapreduce/task.hh"
 
 namespace eclipse {
 namespace messages {
@@ -14,9 +14,6 @@ enum TASKTYPE {
 };
 
 struct Task: public Message {
-  Task() = default;
-  ~Task() = default;
-
   std::string get_type() const override;
 
   Task& set_id(int);
@@ -31,8 +28,8 @@ struct Task: public Message {
   std::string library, func_name, input_path;
 };
 
-eclipse::messages::Task* serialize (eclipse::Task*);
-eclipse::Task* deserialize (Task*);
+//eclipse::messages::Task* serialize (eclipse::Task*);
+//eclipse::Task* deserialize (Task*);
 
 }
 }
