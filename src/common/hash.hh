@@ -18,5 +18,5 @@
 #endif
 
 extern "C" uint32_t h (const char *, size_t);
-uint32_t h (const std::string);
-extern "C" uint32_t hash_ruby (const char *);
+extern "C" uint32_t hash_ruby (const char * data);
+uint32_t h (std::string);

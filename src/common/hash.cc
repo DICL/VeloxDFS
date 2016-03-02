@@ -66,12 +66,12 @@ uint32_t hash_ruby (const char * data) {
 
  return ret; 
 } // }}}
-// h(string){{{
-uint32_t h (const std::string input) {
+// h (string) {{{
+uint32_t h (std::string input) {
  char tmp [HASHLENGTH];
 
  bzero ((char*)tmp, HASHLENGTH);
- input.copy(tmp, HASHLENGTH);
+ input.copy (tmp, HASHLENGTH);
  uint32_t ret = h(tmp, HASHLENGTH);
 
  return ret; 
