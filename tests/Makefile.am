@@ -1,8 +1,8 @@
 AM_CPPFLAGS_T    = $(AM_CPPFLAGS) -include unittest++/UnitTest++.h
-LDADD_T          = $(LDADD) -l:libUnitTest++.a -ldl
+LDADD_T          = $(LDADD) -l:libUnitTest++.a -ldl -lsqlite3
 
 # Input your tests files here
-check_PROGRAMS   = nodes executor units client
+check_PROGRAMS   = nodes executor units metadata client
 
 TESTS            = units
 check_SCRIPTS    = tests/nodes_executor.in   \
@@ -18,9 +18,8 @@ messages_files   = src/messages/boundaries.cc \
                    src/messages/control.cc    \
                    src/messages/boost_impl.cc \
                    src/messages/factory.cc    \
-                   src/messages/task.cc       \
                    src/messages/fileinfo.cc   \
-                   src/mapreduce/task.cc       
+                   src/messages/task.cc       
 
 # Input the dependencies of the test files here
 units_LDADD        = $(LDADD_T)
@@ -64,6 +63,11 @@ executor_SOURCES   = tests/executor.cc \
                      src/nodes/peer.cc \
                      src/nodes/node.cc \
                      src/mapreduce/peermr.cc
+
+metadata_LDADD     = $(LDADD_T)
+metadata_CPPFLAGS  = $(AM_CPPFLAGS_T)
+metadata_SOURCES   = tests/metadata_test.cc \
+                     src/fs/directory.cc
 
 client_LDADD     = $(LDADD_T)
 client_CPPFLAGS  = $(AM_CPPFLAGS_T)
