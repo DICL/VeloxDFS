@@ -3,8 +3,7 @@ include tests/Makefile.am
 AM_CPPFLAGS         = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
 AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3 
 
-bin_PROGRAMS        = dfsput
-bin_PROGRAMS        = dfsget
+bin_PROGRAMS        = dfsput dfsget
 
 # libs -----
 lib_LTLIBRARIES     = libecfs.la
