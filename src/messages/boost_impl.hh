@@ -14,6 +14,7 @@
 #include "task.hh"
 #include "fileinfo.hh"
 #include "blockinfo.hh"
+#include "reply.hh"
 
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/access.hpp>
@@ -87,6 +88,7 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.l_node);      
     ar & BOOST_SERIALIZATION_NVP(c.r_node);      
     ar & BOOST_SERIALIZATION_NVP(c.is_commit);  
+    ar & BOOST_SERIALIZATION_NVP(c.content);  
   }
 
 template <typename Archive>
@@ -97,6 +99,13 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.library);
     ar & BOOST_SERIALIZATION_NVP(c.input_path);
     ar & BOOST_SERIALIZATION_NVP(c.func_name);
+  }
+
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::Reply& c, unsigned int) {
+    ar & BASE_OBJECT(Message, c);
+    ar & BOOST_SERIALIZATION_NVP(c.message);
+    ar & BOOST_SERIALIZATION_NVP(c.details);
   }
 }
 }
@@ -112,3 +121,4 @@ BOOST_CLASS_TRACKING(eclipse::messages::KeyRequest, boost::serialization::track_
 BOOST_CLASS_TRACKING(eclipse::messages::FileInfo, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::BlockInfo, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::Task, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::Reply, boost::serialization::track_never);

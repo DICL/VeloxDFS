@@ -49,6 +49,17 @@ void send_message (tcp::socket* socket, eclipse::messages::Message* msg) {
   socket->send(boost::asio::buffer(ss.str()));
 }
 
+eclipse::messages::Reply* read_reply(tcp::socket* socket) {
+  char header[16];
+  socket->receive(boost::asio::buffer(header));
+  size_t size_of_msg = atoi(header);
+  char* body = new char[size_of_msg];
+  socket->receive(boost::asio::buffer(body, size_of_msg));
+  string recv_msg(body);
+  eclipse::messages::Message* m = load_message(recv_msg);
+  return dynamic_cast<eclipse::messages::Reply*>(m);
+}
+
 int main(int argc, char* argv[])
 {
   Context con;
@@ -104,6 +115,12 @@ int main(int argc, char* argv[])
       file_info.num_block = block_seq;
 
       send_message(socket, &file_info);
+      auto reply = read_reply (socket);
+
+      if (reply->message != "OK") {
+        cerr << "Failed to upload file. Details: " << reply->details << endl;
+        return EXIT_FAILURE;
+      } 
 
       while(1)
       {
@@ -120,8 +137,11 @@ int main(int argc, char* argv[])
               end--;
             }
           }
+          BlockInfo block_info;
           myfile.seekg(start, myfile.beg);
-          myfile.read(buff, end-start);
+          block_info.content.reserve(end-start);
+          myfile.read(&block_info.content[0], end-start);
+
           uint32_t block_size = end - start;
           start = end + 1;
           end = start + BLOCK_SIZE - 1;
@@ -131,7 +151,6 @@ int main(int argc, char* argv[])
           //TODO: int remote_server = lookup(block_hash_key);
           //int remote_server = 1;
 
-          BlockInfo block_info;
           block_info.file_id = file_id;
           block_info.block_seq = block_seq;
           block_info.block_hash_key = block_hash_key;
@@ -145,6 +164,14 @@ int main(int argc, char* argv[])
           //block_info.r_node = r_server.ip_address;
           block_info.is_commit = 1;
           file_info.num_block = block_seq;
+          
+          send_message(socket, &block_info);
+          auto reply = read_reply (socket);
+
+          if (reply->message != "OK") {
+            cerr << "Failed to upload file. Details: " << reply->details << endl;
+            return EXIT_FAILURE;
+          } 
 
           //TODO: remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);
           //cout << "remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);" << endl;
