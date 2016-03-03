@@ -21,6 +21,10 @@ namespace eclipse {
   {
     file << *buf << endl;
   }  
+  void BasicIO::read_whole_file(string *buf)
+  {
+    buf->assign((istreambuf_iterator<char>(file)), (istreambuf_iterator<char>()));
+  }
   void BasicIO::read_file(string *buf) 
   {
     getline(file, *buf);
