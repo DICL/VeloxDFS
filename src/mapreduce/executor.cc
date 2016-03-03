@@ -66,7 +66,35 @@ template<> void Executor::process (messages::Task* m) {
 // process (FileInfo* m) {{{
 template<> void Executor::process (messages::FileInfo* m) {
   logger->info ("FileInfo received");
-  peer_cache.store(m);
+  bool ret = peer_cache.store(m);
+  Reply reply;
+
+  if (ret) {
+    reply.message = "OK";
+
+  } else {
+    reply.message = "FAIL";
+    reply.details = "File already exists";
+  }
+
+  network->send(0, &reply);
+}
+// }}}
+// process (BlockInfo* m) {{{
+template<> void Executor::process (messages::BlockInfo* m) {
+  logger->info ("BlockInfo received");
+  bool ret = peer_cache.insert_block(m);
+  Reply reply;
+
+  if (ret) {
+    reply.message = "OK";
+
+  } else {
+    reply.message = "FAIL";
+    reply.details = "Block already exists";
+  }
+
+  network->send(0, &reply);
 }
 // }}}
 // process (Control* m) {{{
@@ -94,8 +122,15 @@ void Executor::on_read (Message* m) {
     process(m_);
 
   } else if (type == "FileInfo") {
-    auto m_ = dynamic_cast<FileInfo*>(m);
+    auto m_ = dynamic_cast<messages::FileInfo*>(m);
     process(m_);
+
+  } else if (type == "BlockInfo") {
+    auto m_ = dynamic_cast<messages::BlockInfo*>(m);
+    process(m_);
+
+  } else {
+    logger->error ("Messaged not managed received in Executor");
   }
 }
 // }}}

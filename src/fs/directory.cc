@@ -53,7 +53,8 @@ namespace eclipse{
   }
 
   int Directory::exist_callback(void *result, int argc, char **argv, char **azColName){
-    *reinterpret_cast<bool*>(result) = argv[0] ? true : false;
+    bool* result_ = reinterpret_cast<bool*>(result);
+    *result_ = argv[0] != NULL ? true : false;
     return 0;
   }
 
