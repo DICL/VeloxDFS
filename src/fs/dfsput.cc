@@ -6,6 +6,7 @@
 #include "../common/context.hh"
 #include "fileinfo.hh"
 #include "blockinfo.hh"
+#include "directory.hh"
 
 using namespace std;
 using namespace eclipse;
@@ -13,24 +14,22 @@ using namespace eclipse;
 int main(int argc, char* argv[])
 {
   Context con;
+  Directory dir;
   if(argc < 2)
   {
-    //con.logger->info("[ERROR]usage: dfsput file_name1 file_name2 ...\n");
-    cout << "[ERROR]usage: dfsput file_name1 file_name2 ..." << endl;
+    cout << "usage: dfsput file_name1 file_name2 ..." << endl;
     return -1;
   }
   else
   {
-    //uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.buffer");
     uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
     uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
     string path = con.settings.get<string>("path.scratch");
-    //    file_info.replica = con.settings.get<int>("filesystem.replica");
+    //file_info.replica = con.settings.get<int>("filesystem.replica");
     for(int i=1; i<argc; i++)
     {
       char *buff = new char[BLOCK_SIZE];
       bzero(buff, BLOCK_SIZE);
-      //char buff[BLOCK_SIZE] = {0};
       ifstream myfile;
       string file_name = argv[i];
       myfile.open(file_name);
@@ -47,7 +46,7 @@ int main(int argc, char* argv[])
       uint32_t file_id;
       while(1)
       {
-        file_id = rand();
+        file_id = h(file_name);
 
         // TODO: if(!remote_metadata_server.is_exist(file_id))
         if(1)
