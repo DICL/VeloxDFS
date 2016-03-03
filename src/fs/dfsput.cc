@@ -1,36 +1,30 @@
 #include <iostream>
-//#include <string.h>
-//#include <fstream>
-//#include <string>
-//#include "common/hash.hh"
-//#include "common/context.hh"
-//#include "fileinfo.hh"
-//#include "blockinfo.hh"
-//#include "directory.hh"
+#include <fstream>
+#include <string>
+#include "common/hash.hh"
+#include "common/context.hh"
+#include "fileinfo.hh"
+#include "blockinfo.hh"
+//#include "directory.hh" metadata save/load
 
 using namespace std;
-//using namespace eclipse;
+using namespace eclipse;
 
 int main(int argc, char* argv[])
 {
-//  Context con;
-//  Directory dir;
-/*  
+  Context con;
+
   if(argc < 2)
   {
     cout << "usage: dfsput file_name1 file_name2 ..." << endl;
     return -1;
   }
-*/  
-//  else
-//  {
-/*
-cout << "step 0" << endl;
+  else
+  {
     const uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
-    const uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
+    const unsigned int NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
     string path = con.settings.get<string>("path.scratch");
     char *buff = new char[BLOCK_SIZE];
-cout << "step 1" << endl;
     for(int i=1; i<argc; i++)
     {
       bzero(buff, BLOCK_SIZE);
@@ -176,7 +170,6 @@ cout << "step 1" << endl;
       myfile.close();
     }
     delete[] buff;
-*/
-//  }
-//  return 0;
+  }
+  return 0;
 }
