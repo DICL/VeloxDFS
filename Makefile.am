@@ -14,8 +14,9 @@ messages_files   = src/messages/boundaries.cc \
                    src/messages/boost_impl.cc \
                    src/messages/factory.cc    \
                    src/messages/fileinfo.cc   \
-                   src/messages/blockinfo.cc   \
-                   src/messages/task.cc       
+                   src/messages/blockinfo.cc  \
+                   src/messages/task.cc       \
+                   src/messages/reply.cc
 # libs -----
 lib_LTLIBRARIES     = libecfs.la
 libecfs_la_SOURCES  = src/common/hash.cc src/common/settings.cc \

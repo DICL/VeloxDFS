@@ -12,7 +12,8 @@ class PeerMR: public Peer {
 
     bool insert (std::string, std::string);
     void lookup (std::string, req_func);
-    void store (messages::FileInfo*);
+    bool store (messages::FileInfo*);
+    bool insert_block (messages::BlockInfo*);
 
     using Peer::establish;
     using Peer::close;
