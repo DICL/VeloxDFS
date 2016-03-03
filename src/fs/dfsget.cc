@@ -25,12 +25,11 @@ int main(int argc, char* argv[])
     {
       string file_name = argv[i];
       //uint32_t file_hash_key = h(file_name);
-      //uint32_t file_id = file_hash_key;
 
       //TODO: remote_metadata_server = lookup(file_hash_key);
       //int remote_metadata_server = 1;
 
-      // TODO: if(!remote_metadata_server.is_exist(file_id))
+      // TODO: if(!remote_metadata_server.is_exist(file_name))
       if(0)
       {
         cout << "[ERROR]: file " << file_name << " does not exist" << endl;
@@ -38,8 +37,8 @@ int main(int argc, char* argv[])
       else
       {
         FileInfo file_info;
-        // TODO: remote_metadata_server.select_file_metadata(file_id, &file_info);
-        //cout << "remote_metadata_server.select_file_metadata(file_id, &file_info);" << endl;
+        // TODO: remote_metadata_server.select_file_metadata(file_name, &file_info);
+        //cout << "remote_metadata_server.select_file_metadata(file_name, &file_info);" << endl;
 
         // for test
         file_info.num_block = 16;
@@ -47,8 +46,8 @@ int main(int argc, char* argv[])
         for(unsigned int block_seq=0; block_seq<file_info.num_block; block_seq++)
         {
           BlockInfo block_info;
-          // TODO: remote_metadata_server.select_block_metadata(file_id, block_seq, &block_info)
-          //cout << "remote_metadata_server.select_block_metadata(file_id, block_seq, &block_info)" << endl;
+          // TODO: remote_metadata_server.select_block_metadata(file_name, block_seq, &block_info)
+          //cout << "remote_metadata_server.select_block_metadata(file_name, block_seq, &block_info)" << endl;
 
           // TODO: remote_metadata_server.open(block_info.block_name);
           //cout << "remote_metadata_server.open(block_info.block_name)" << endl;

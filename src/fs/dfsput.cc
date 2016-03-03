@@ -39,17 +39,7 @@ int main(int argc, char* argv[])
       uint32_t file_hash_key = h(file_name);
       //TODO: remote_metadata_server = lookup(hkey);
       //int remote_metadata_server = 1;
-      uint32_t file_id;
-      while(1)
-      {
-        file_id = h(file_name); // file_id = h(rand());
-
-        // TODO: if(!remote_metadata_server.is_exist(file_id))
-        if(1)
-          break;
-      }
       FileInfo file_info;
-      file_info.file_id = file_id;
       file_info.file_name = file_name;
       file_info.file_hash_key = file_hash_key;
       file_info.file_size = file_size;
@@ -85,7 +75,7 @@ int main(int argc, char* argv[])
           //int remote_server = 1;
 
           BlockInfo block_info;
-          block_info.file_id = file_id;
+          block_info.file_name = file_name;
           block_info.block_seq = block_seq;
           block_info.block_hash_key = block_hash_key;
           block_info.block_name = file_info.file_name + "_" + to_string(block_seq++);
@@ -101,8 +91,8 @@ int main(int argc, char* argv[])
           //block_info.r_node = r_node.ip_address;
           file_info.num_block = block_seq;
 
-          //TODO: remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);
-          //cout << "remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);" << endl;
+          //TODO: remote_metadata_server.update_file_metadata(fileinfo.file_name, file_info);
+          //cout << "remote_metadata_server.update_file_metadata(fileinfo.file_name, file_info);" << endl;
 
           //TODO: remote_metadata_server.insert_block_metadata(blockinfo);
           //cout << "remote_metadata_server.insert_block_metadata(blockinfo);" << endl;
@@ -131,7 +121,7 @@ int main(int argc, char* argv[])
           //cout << "remote_server = lookup(block_hash_key);" << endl;
 
           BlockInfo block_info;
-          block_info.file_id = file_id;
+          block_info.file_name = file_name;
           block_info.block_seq = block_seq;
           block_info.block_hash_key = block_hash_key;
           block_info.block_name = file_name + "_" + to_string(block_seq++);
@@ -148,8 +138,8 @@ int main(int argc, char* argv[])
           file_info.num_block = block_seq;
 
 
-          // TODO: remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);
-          //cout << "remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);" << endl;
+          // TODO: remote_metadata_server.update_file_metadata(fileinfo.file_name, file_info);
+          //cout << "remote_metadata_server.update_file_metadata(fileinfo.file_name, file_info);" << endl;
 
           // TODO: remote_metadata_server.insert_block_metadata(blockinfo);
           //cout << "remote_metadata_server.insert_block_metadata(blockinfo);" << endl;
