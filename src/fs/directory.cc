@@ -550,13 +550,13 @@ namespace eclipse{
     {
       con.logger->info("Opened block_table successfully\n");
     }
-    bool *result = new bool;
+    bool result = false;
 
     // Create SQL statement
     sprintf(sql, "SELECT * from file_table where file_id=%" PRIu32 ";", file_id);
 
     // Execute SQL statement
-    rc = sqlite3_exec(db, sql, exist_callback, result, &zErrMsg);
+    rc = sqlite3_exec(db, sql, exist_callback, &result, &zErrMsg);
     if(rc != SQLITE_OK)
     {
       con.logger->error("SQL error: %s\n", zErrMsg);
@@ -566,8 +566,6 @@ namespace eclipse{
     {
       con.logger->info("is_exist executed successfully\n");
     }
-    bool return_bool = *result;
-    delete result;
-    return return_bool;
+    return result;
   }
 }
