@@ -19,7 +19,8 @@ namespace eclipse {
       char sql[512];
       static int file_callback(void *file_info, int argc, char **argv, char **azColName);
       static int block_callback(void *block_info, int argc, char **argv, char **azColName);
-      static int display_callback(void *data, int argc, char **argv, char **azColName);
+      static int display_callback(void *NotUsed, int argc, char **argv, char **azColName);
+      static int ls_callback(void *NotUsed, int argc, char **argv, char **azColName);
       static int exist_callback(void *result, int argc, char **argv, char **azColName);
 
     public:
@@ -37,6 +38,8 @@ namespace eclipse {
       void delete_block_metadata(std::string file_name, unsigned int block_seq);
       void display_file_metadata();
       void display_block_metadata();
+      void ls_file_metadata();
+      void ls_block_metadata();
       bool is_exist(std::string file_name);
   };
 }

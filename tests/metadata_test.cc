@@ -36,12 +36,19 @@ int main() {
 
   dir.insert_file_metadata(file_info);
   dir.insert_block_metadata(block_info);
-  dir.display_file_metadata();
-  dir.display_block_metadata();
-  dir.delete_file_metadata("test.txt");
-  dir.delete_block_metadata("text.txt", 1);
-  dir.display_file_metadata();
-  dir.display_block_metadata();
+
+  file_info.file_name = "test2.txt";
+  dir.insert_file_metadata(file_info);
+
+  file_info.file_name = "test3.txt";
+  dir.insert_file_metadata(file_info);
+
+  //dir.display_file_metadata();
+  //dir.display_block_metadata();
+  //dir.delete_file_metadata("test.txt");
+  //dir.delete_block_metadata("text.txt", 1);
+  //dir.display_file_metadata();
+  //dir.display_block_metadata();
 
   /*
   FileInfo file_info;
