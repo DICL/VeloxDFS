@@ -68,6 +68,15 @@ namespace eclipse{
     return 0;
   }
 
+  int Directory::ls_callback(void *NotUsed, int argc, char **argv, char **azColName)
+  {
+    for(int i=0; i<argc; i++)
+    {
+      cout << argv[i] << endl;
+    }
+    return 0;
+  }
+
   int Directory::exist_callback(void *result, int argc, char **argv, char **azColName)
   {
     *reinterpret_cast<bool*>(result) = argv[0] ? true : false;
@@ -422,6 +431,54 @@ namespace eclipse{
     else
     {
       con.logger->info("block_metadata displayed successfully\n");
+    }
+
+    // Close Database
+    sqlite3_close(db);
+  }
+
+  void Directory::ls_file_metadata() // Only for dfsls!! 
+  {
+    // Open database
+    open_db();
+
+    // Create sql statement
+    sprintf(sql, "SELECT file_name from file_table");
+
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, ls_callback, 0, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      cerr << "SQL error: " << zErrMsg << endl;
+      sqlite3_free(zErrMsg);
+    }
+    else
+    {
+      //cout  << "file_metadata ls done successfully" << endl;
+    }
+
+    // Close Database
+    sqlite3_close(db);
+  }
+
+  void Directory::ls_block_metadata() // Only for dfsls!! 
+  {
+    // Open database
+    open_db();
+
+    // Create sql statement
+    sprintf(sql, "SELECT file_name from block_table");
+
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, ls_callback, 0, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      cerr << "SQL error: " << zErrMsg << endl;
+      sqlite3_free(zErrMsg);
+    }
+    else
+    {
+      //cout << "block_metadata ls done successfully" << endl;
     }
 
     // Close Database
