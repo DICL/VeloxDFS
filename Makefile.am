@@ -3,7 +3,7 @@ include tests/Makefile.am
 AM_CPPFLAGS         = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
 AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3 
 
-bin_PROGRAMS        = dfsput cacheinfo
+bin_PROGRAMS        = dfsput cacheinfo dfsget
 
 
 messages_files   = src/messages/boundaries.cc \
@@ -38,6 +38,11 @@ dfsput_SOURCES       = src/fs/dfsput.cc src/fs/directory.cc \
 											 $(messages_files)
 
 dfsput_LDADD         = $(LDADD) -lsqlite3
+
+dfsget_SOURCES       = src/fs/dfsget.cc src/fs/directory.cc \
+											 $(messages_files)
+
+dfsget_LDADD         = $(LDADD) -lsqlite3
 
 pkginclude_HEADERS  = src/common/ecfs.hh src/common/settings.hh
 
