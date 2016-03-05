@@ -8,14 +8,12 @@
 #include "directory.hh"
 
 #include <iostream>
-#include <string.h>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <sstream>
 #include <iomanip>
 #include <boost/asio.hpp>
-
 using namespace std;
 using namespace eclipse;
 using namespace eclipse::messages;
@@ -63,7 +61,7 @@ eclipse::messages::Reply* read_reply(tcp::socket* socket) {
 int main(int argc, char* argv[])
 {
   Context con;
-  Directory dir;
+
   if(argc < 2)
   {
     cout << "usage: dfsput file_name1 file_name2 ..." << endl;
@@ -71,17 +69,12 @@ int main(int argc, char* argv[])
   }
   else
   {
-    
     uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
     uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
     string path = con.settings.get<string>("path.scratch");
-    //file_info.replica = con.settings.get<int>("filesystem.replica");
-    //
     char chunk [BLOCK_SIZE];
     for(int i=1; i<argc; i++)
     {
-      char *buff = new char[BLOCK_SIZE];
-      bzero(buff, BLOCK_SIZE);
       ifstream myfile;
       string file_name = argv[i];
       myfile.open(file_name);
@@ -95,19 +88,15 @@ int main(int argc, char* argv[])
       auto socket = connect(file_hash_key);
 
       //TODO: remote_metadata_server = lookup(hkey);
-      int remote_metadata_server = 1;
-
+      //int remote_metadata_server = 1;
       uint32_t file_id;
       while(1)
       {
-        file_id = h(file_name);
+        file_id = h(file_name); // file_id = h(rand());
 
         // TODO: if(!remote_metadata_server.is_exist(file_id))
         if(1)
-
-        {
           break;
-        }
       }
       FileInfo file_info;
       file_info.file_id = file_id;
@@ -115,6 +104,7 @@ int main(int argc, char* argv[])
       file_info.file_hash_key = file_hash_key;
       file_info.file_size = file_size;
       file_info.num_block = block_seq;
+      file_info.replica = con.settings.get<int>("filesystem.replica");
 
       send_message(socket, &file_info);
       auto reply = read_reply (socket);
@@ -126,10 +116,9 @@ int main(int argc, char* argv[])
 
       while(1)
       {
-        
-        if(end < file_size){
+        if(end < file_size)
+        {
           myfile.seekg(start+BLOCK_SIZE-1, myfile.beg);
-
           while(1)
           {
             if(myfile.peek() =='\n') break;
@@ -151,7 +140,6 @@ int main(int argc, char* argv[])
           end = start + BLOCK_SIZE - 1;
 
           unsigned int block_hash_key = rand()%NUM_SERVERS;
-
           //TODO: int remote_server = lookup(block_hash_key);
           //int remote_server = 1;
 
@@ -161,12 +149,14 @@ int main(int argc, char* argv[])
           block_info.block_name = file_info.file_name + "_" + to_string(block_seq++);
           block_info.block_size = block_size;
           block_info.is_inter = 0;
+          block_info.node = "1.1.1.1";
+          block_info.l_node = "1.1.1.0";
+          block_info.r_node = "1.1.1.2";
           //block_info.node = remote_server.ip_address;
-          //l_server = lookup((block_hash_key-1+NUM_SERVERS)%NUM_SERVERS);
-          //r_server = lookup((block_hash_key+1+NUM_SERVERS)%NUM_SERVERS);
-          //block_info.l_node = l_server.ip_address;
-          //block_info.r_node = r_server.ip_address;
-          block_info.is_commit = 1;
+          //Node l_node = lookup((block_hash_key-1+NUM_SERVERS)%NUM_SERVERS);
+          //Node r_node = lookup((block_hash_key+1+NUM_SERVERS)%NUM_SERVERS);
+          //block_info.l_node = l_node.ip_address;
+          //block_info.r_node = r_node.ip_address;
           file_info.num_block = block_seq;
             
           
@@ -192,10 +182,10 @@ int main(int argc, char* argv[])
           // TODO: remote node part
           ofstream block;
           block.open(path + "/" + block_info.block_name);
-          block << buff;
           block.close();
         }
-        else{  // last block
+        else // last block
+        {  
           BlockInfo block_info;
           myfile.seekg(start, myfile.beg);
           block_info.content.reserve(end-start);
@@ -203,7 +193,6 @@ int main(int argc, char* argv[])
           block_info.content = chunk;
 
           uint32_t block_size = end - start;
-          buff[file_size-start-1] = 0;
 
           uint32_t block_hash_key = rand()%NUM_SERVERS;
 
@@ -216,12 +205,14 @@ int main(int argc, char* argv[])
           block_info.block_name = file_name + "_" + to_string(block_seq++);
           block_info.block_size = block_size;
           block_info.is_inter = 0;
+          block_info.node = "1.1.1.1";
+          block_info.l_node = "1.1.1.0";
+          block_info.r_node = "1.1.1.2";
           //block_info.node = remote_server.ip_address;
-          //l_server = lookup(block_hash_key-1);
-          //r_server = lookup(block_hash_key+1);
-          //block_info.l_node = l_server.ip_address;
-          //block_info.r_node = r_server.ip_address;
-          block_info.is_commit = 1;
+          //Node l_node = lookup((block_hash_key-1+NUM_SERVERS)%NUM_SERVERS);
+          //Node r_node = lookup((block_hash_key+1+NUM_SERVERS)%NUM_SERVERS);
+          //block_info.l_node = l_node.ip_address;
+          //block_info.r_node = r_node.ip_address;
           file_info.num_block = block_seq;
 
           send_message(socket, &block_info);
@@ -245,16 +236,13 @@ int main(int argc, char* argv[])
           // remote node part
           ofstream block;
           block.open(path + "/" + block_info.block_name);
-          block << buff;
           block.close();
           break;
         }
       }
       socket->close();
       myfile.close();
-      delete[] buff;
     }
-
   }
   return 0;
 }
