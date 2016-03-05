@@ -16,6 +16,7 @@ class RemoteDFS: public Router {
     bool establish ();
     void insert_block (messages::Message*);
     void insert_file (messages::Message*);
+    void request_file (messages::Message*);
 
   protected:
     PeerDFS peer;
