@@ -10,3 +10,6 @@ BOOST_CLASS_EXPORT(eclipse::messages::Control);
 BOOST_CLASS_EXPORT(eclipse::messages::KeyRequest);
 BOOST_CLASS_EXPORT(eclipse::messages::Task);
 BOOST_CLASS_EXPORT(eclipse::messages::FileInfo);
+BOOST_CLASS_EXPORT(eclipse::messages::BlockInfo);
+BOOST_CLASS_EXPORT(eclipse::messages::Reply);
+BOOST_CLASS_EXPORT(eclipse::messages::CacheInfo);

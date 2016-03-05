@@ -13,6 +13,7 @@ namespace eclipse {
 using std::string;
 using std::thread;
 using std::map;
+using vec_str    = std::vector<std::string>;
 
 typedef std::function<void(std::string)> req_func;
 
@@ -33,6 +34,7 @@ class Peer: public Node, public AsyncNode {
     void close ();
 
     int H (string);
+    vec_str info();
 
   protected:
     u_ptr<lru_cache<string, string> > cache;
