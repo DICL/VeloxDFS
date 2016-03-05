@@ -10,6 +10,7 @@
 
 #include <unordered_map>
 #include <list>
+#include <vector>
 #include <cstddef>
 #include <stdexcept>
 
@@ -60,6 +61,14 @@ public:
 	size_t size() const {
 		return _cache_items_map.size();
 	}
+
+  std::vector<key_t> dump_keys () {
+    std::vector<key_t> keys;
+    for (auto& p : _cache_items_map) {
+      keys.push_back(p.first);
+    }
+    return keys;
+  }
 	
 private:
 	std::list<key_value_pair_t> _cache_items_list;

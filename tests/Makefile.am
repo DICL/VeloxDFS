@@ -11,15 +11,6 @@ check_SCRIPTS    = tests/nodes_executor.in   \
 check_DATA       = $(top_srcdir)/doc/eclipse.json
 CLEANFILES       = eclipse.json
 
-messages_files   = src/messages/boundaries.cc \
-                   src/messages/message.cc    \
-                   src/messages/keyvalue.cc   \
-                   src/messages/keyrequest.cc \
-                   src/messages/control.cc    \
-                   src/messages/boost_impl.cc \
-                   src/messages/factory.cc    \
-                   src/messages/fileinfo.cc   \
-                   src/messages/task.cc       
 
 # Input the dependencies of the test files here
 units_LDADD        = $(LDADD_T)
@@ -62,12 +53,14 @@ executor_SOURCES   = tests/executor.cc \
                      src/nodes/machine.cc \
                      src/nodes/peer.cc \
                      src/nodes/node.cc \
+                     src/fs/directory.cc \
                      src/mapreduce/peermr.cc
 
 metadata_LDADD     = $(LDADD_T)
 metadata_CPPFLAGS  = $(AM_CPPFLAGS_T)
 metadata_SOURCES   = tests/metadata_test.cc \
-                     src/fs/directory.cc
+                     src/fs/directory.cc \
+                     $(messages_files)
 
 client_LDADD     = $(LDADD_T)
 client_CPPFLAGS  = $(AM_CPPFLAGS_T)
