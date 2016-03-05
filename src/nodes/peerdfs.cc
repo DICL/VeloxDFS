@@ -1,5 +1,5 @@
 // includes & usings {{{
-#include "peer.hh"
+#include "peerdfs.hh"
 #include "../network/asyncnetwork.hh"
 #include "../network/p2p.hh"
 #include "../common/settings.hh"
@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <iterator>
 #include <memory>
+#include <fstream>
 
 using namespace eclipse;
 using namespace eclipse::messages;
@@ -23,28 +24,22 @@ using namespace std;
 
 namespace eclipse {
 // Constructor & destructor {{{
-Peer::Peer (Context& context) : Node (context) { 
+PeerDFS::PeerDFS (Context& context) : Node (context) { 
   Settings& setted = context.settings;
 
-  int numbin     = setted.get<int> ("cache.numbin");
-  int cachesize  = setted.get<int> ("cache.size");
   int port       = setted.get<int>("network.port_cache");
+  size           = setted.get<vec_str>("network.nodes").size();
+  disk_path      = setted.get<string>("path.scratch");
 
   network   = new AsyncNetwork<P2P>(this, context, 10, port);
-  histogram = make_unique<Histogram> (setted.get<vec_str>("network.nodes").size(), numbin);
-  cache     = make_unique<lru_cache<string, string>> (cachesize);
+
+  directory.init_db();
 }
 
-Peer::~Peer() { }
-// }}}
-// H {{{
-int Peer::H(string k) {
-  uint32_t index = h(k);
-  return histogram->get_index(index);
-}
+PeerDFS::~PeerDFS() { }
 // }}}
 // establish {{{
-bool Peer::establish () {
+bool PeerDFS::establish () {
  logger->info ("Running Eclipse id=%d", id);
  network->establish();
 
@@ -53,22 +48,26 @@ bool Peer::establish () {
 }
 // }}}
 // insert {{{
-void Peer::insert (std::string k, std::string v) {
-  int idx = H(k);
-  logger->info ("Inserting [%10s][H:%u] -> %d", k.c_str(), h(k), idx);
+void PeerDFS::insert (std::string k, std::string v) {
+  int which_node = h(k) % size;
 
-  if (belongs(k)){
-    cache->put (k, v);
+  if (which_node == id) {
+    string file_path = disk_path + string("/") + k;
+    ofstream file (file_path);
+    file << v;
+    file.close();
+    sleep(1);
 
   } else {
-    auto msg  = new KeyValue (k, v);
-    network->send(idx, msg);
+    logger->info ("[DFS] Forwaring KEY: %s -> %d",k.c_str(), which_node);
+    KeyValue kv (k, v);
+    network->send(which_node, &kv);
   }
 }
 // }}}
 // request {{{
-void Peer::request (std::string key, req_func f) {
- int idx = H(key);
+void PeerDFS::request (std::string key, req_func f) {
+ int idx = h(key) % size;
  if (idx != id) {
    KeyRequest k_req (key);
    k_req.set_origin (id);
@@ -77,39 +76,17 @@ void Peer::request (std::string key, req_func f) {
  }
 }
 // }}}
-// exist {{{
-bool Peer::exists (std::string key) {
-  return cache->exists (key);
-}
-// }}}
-// belongs {{{
-bool Peer::belongs (std::string key) {
-  return H(key) == id;
-}
-// }}}
 // close {{{
-void Peer::close() { exit(EXIT_SUCCESS); }
-// }}}
-// process (Boundaries* m) {{{
-template<> void Peer::process (Boundaries* m) {
-  *histogram << *m;
-
-  int dest = m->get_destination();
-  if (dest != this->id) {
-      //(*it)->send(m);
-  }
-}
+void PeerDFS::close() { exit(EXIT_SUCCESS); }
 // }}}
 // process (KeyValue* m) {{{
-template<> void Peer::process (KeyValue* m) {
+template<> void PeerDFS::process (KeyValue* m) {
   string& key = m->key;
 
-  int which_node = H(key);
+  int which_node = h(key) % size;
   if (which_node == id or m->destination == id)  {
     logger->info ("Instering key = %s", key.c_str());
-    histogram->count_query(which_node);
-    //histogram->updateboundary();
-    cache->put (key, m->value);
+    insert(key, m->value);
 
     if (requested_blocks.find(key) !=requested_blocks.end()){
       logger->info ("Executing func");
@@ -121,15 +98,14 @@ template<> void Peer::process (KeyValue* m) {
 }
 // }}}
 // process (KeyRequest* m) {{{
-template<> void Peer::process (KeyRequest* m) {
+template<> void PeerDFS::process (KeyRequest* m) {
   logger->info ("Arrived req key = %s", m->key.c_str());
   string& key = m->key;
   string value;
-  if (cache->exists(key)) {
-    value = cache->get(key);
-  } else {
-    value = "EMPTY";
-  }
+
+  ifstream in (disk_path + string("/") + key);
+  in >> value;
+  in.close();
 
   KeyValue kv (key, value);
   kv.destination = m->origin;
@@ -137,7 +113,7 @@ template<> void Peer::process (KeyRequest* m) {
 }
 // }}}
 // process (Control* m) {{{
-template<> void Peer::process (Control* m) {
+template<> void PeerDFS::process (Control* m) {
   switch (m->type) {
     case messages::SHUTDOWN:
       this->close();
@@ -145,22 +121,14 @@ template<> void Peer::process (Control* m) {
 
     case messages::RESTART:
       break;
-
-      //    case PING:
-      //      process_ping (m);
-      //      break;
   }
 }
 // }}}
 // on_read (Message*) {{{
-void Peer::on_read (Message* m) {
+void PeerDFS::on_read (Message* m) {
   string type = m->get_type();
 
-  if (type == "Boundaries") {
-    auto m_ = dynamic_cast<Boundaries*>(m);
-    process(m_);
-
-  } else if (type == "KeyValue") {
+  if (type == "KeyValue") {
     auto m_ = dynamic_cast<KeyValue*>(m);
     process(m_);
 
@@ -175,19 +143,38 @@ void Peer::on_read (Message* m) {
 }
 // }}}
 // on_connect {{{
-void Peer::on_connect () {
+void PeerDFS::on_connect () {
   connected = true;
-  logger->info ("Network established id=%d, boundary=%u", id, histogram->get_boundary(id));
+  logger->info ("Network established id=%d", id);
 }
 // }}}
 // on_disconnect {{{
-void Peer::on_disconnect () {
+void PeerDFS::on_disconnect () {
 
 }
 // }}}
-// info {{{
-vec_str Peer::info() {
-  return cache->dump_keys();
+// insert_file {{{
+bool PeerDFS::insert_file (messages::FileInfo* f) {
+ bool ret = directory.is_exist(f->file_name.c_str());
+
+ if (ret) {
+   logger->info ("File:%s exists in db, ret = %i", f->file_name.c_str(), ret);
+   return false;
+ }
+
+ directory.insert_file_metadata(*f);
+
+ logger->info ("Saving to SQLite db");
+ return true;
+}
+// }}}
+// insert_block {{{
+bool PeerDFS::insert_block (messages::BlockInfo* m) {
+  string key = m->block_name;
+  directory.insert_block_metadata(*m);
+  insert(key, m->content);
+
+  return true;
 }
 // }}}
 }
