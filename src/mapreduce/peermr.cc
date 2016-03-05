@@ -42,7 +42,7 @@ void PeerMR::lookup (std::string key, req_func f) {
 // store {{{
 bool PeerMR::store (messages::FileInfo* f) {
  //Save it to sqlite db
- bool ret = directory.is_exist(f->file_id);
+ bool ret = directory.is_exist(f->file_name.c_str());
 
  if (ret) {
    logger->info ("File:%s exists in db, ret = %i", f->file_name.c_str(), ret);

@@ -80,6 +80,7 @@ template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::BlockInfo& c, unsigned int) {
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.file_id);        
+    ar & BOOST_SERIALIZATION_NVP(c.file_name);  
     ar & BOOST_SERIALIZATION_NVP(c.block_seq);  
     ar & BOOST_SERIALIZATION_NVP(c.block_hash_key); 
     ar & BOOST_SERIALIZATION_NVP(c.block_name);  
