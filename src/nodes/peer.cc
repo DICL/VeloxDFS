@@ -19,7 +19,6 @@ using namespace eclipse::network;
 using namespace boost::asio;
 using namespace std;
 
-using vec_str    = std::vector<std::string>;
 // }}}
 
 namespace eclipse {
@@ -32,7 +31,7 @@ Peer::Peer (Context& context) : Node (context) {
   int port       = setted.get<int>("network.port_cache");
 
   network   = new AsyncNetwork<P2P>(this, context, 10, port);
-  histogram = make_unique<Histogram> (network->size(), numbin);
+  histogram = make_unique<Histogram> (setted.get<vec_str>("network.nodes").size(), numbin);
   cache     = make_unique<lru_cache<string, string>> (cachesize);
 }
 
@@ -40,7 +39,7 @@ Peer::~Peer() { }
 // }}}
 // H {{{
 int Peer::H(string k) {
-  uint32_t index = h(k.c_str(), k.length());
+  uint32_t index = h(k);
   return histogram->get_index(index);
 }
 // }}}
@@ -56,7 +55,7 @@ bool Peer::establish () {
 // insert {{{
 void Peer::insert (std::string k, std::string v) {
   int idx = H(k);
-  logger->info ("Inserting [%10s]:[%10s] -> %d", k.c_str(),v.c_str(), idx);
+  logger->info ("Inserting [%10s][H:%u] -> %d", k.c_str(), h(k), idx);
 
   if (belongs(k)){
     cache->put (k, v);
@@ -178,12 +177,17 @@ void Peer::on_read (Message* m) {
 // on_connect {{{
 void Peer::on_connect () {
   connected = true;
-  logger->info ("Network established id=%d", id);
+  logger->info ("Network established id=%d, boundary=%u", id, histogram->get_boundary(id));
 }
 // }}}
 // on_disconnect {{{
 void Peer::on_disconnect () {
 
+}
+// }}}
+// info {{{
+vec_str Peer::info() {
+  return cache->dump_keys();
 }
 // }}}
 }
