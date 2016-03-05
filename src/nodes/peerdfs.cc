@@ -87,14 +87,13 @@ template<> void PeerDFS::process (KeyValue* m) {
   if (which_node == id or m->destination == id)  {
     logger->info ("Instering key = %s", key.c_str());
     insert(key, m->value);
+  }
 
-    if (requested_blocks.find(key) !=requested_blocks.end()){
-      logger->info ("Executing func");
-      requested_blocks[key](m->value);
-      requested_blocks.erase(key);
-    }
-
-  } 
+  if (requested_blocks.find(key) !=requested_blocks.end()){
+    logger->info ("Executing func");
+    requested_blocks[key](m->value);
+    requested_blocks.erase(key);
+  }
 }
 // }}}
 // process (KeyRequest* m) {{{
@@ -173,6 +172,24 @@ bool PeerDFS::insert_block (messages::BlockInfo* m) {
   string key = m->block_name;
   directory.insert_block_metadata(*m);
   insert(key, m->content);
+  return true;
+}
+// }}}
+// request_block {{{
+bool PeerDFS::request_file (messages::KeyRequest* m, req_func f) {
+  string file_name = m->key;
+  FileInfo fi;
+  directory.select_file_metadata(file_name, &fi);
+  int num_blocks = fi.num_block;
+
+  for (int i = 0; i< num_blocks; i++) {
+    BlockInfo bi;
+    directory.select_block_metadata (file_name, i, &bi);
+    string block_name = bi.block_name;
+
+    requested_blocks.insert({block_name, f});
+    request (block_name, f);
+  }
 
   return true;
 }
