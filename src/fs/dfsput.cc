@@ -89,17 +89,7 @@ int main(int argc, char* argv[])
 
       //TODO: remote_metadata_server = lookup(hkey);
       //int remote_metadata_server = 1;
-      uint32_t file_id;
-      while(1)
-      {
-        file_id = h(file_name); // file_id = h(rand());
-
-        // TODO: if(!remote_metadata_server.is_exist(file_id))
-        if(1)
-          break;
-      }
       FileInfo file_info;
-      file_info.file_id = file_id;
       file_info.file_name = file_name;
       file_info.file_hash_key = file_hash_key;
       file_info.file_size = file_size;
@@ -143,7 +133,7 @@ int main(int argc, char* argv[])
           //TODO: int remote_server = lookup(block_hash_key);
           //int remote_server = 1;
 
-          block_info.file_id = file_id;
+          block_info.file_name = file_name;
           block_info.block_seq = block_seq;
           block_info.block_hash_key = block_hash_key;
           block_info.block_name = file_info.file_name + "_" + to_string(block_seq++);
@@ -168,8 +158,8 @@ int main(int argc, char* argv[])
             return EXIT_FAILURE;
           } 
 
-          //TODO: remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);
-          //cout << "remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);" << endl;
+          //TODO: remote_metadata_server.update_file_metadata(fileinfo.file_name, file_info);
+          //cout << "remote_metadata_server.update_file_metadata(fileinfo.file_name, file_info);" << endl;
 
           //TODO: remote_metadata_server.insert_block_metadata(blockinfo);
           //cout << "remote_metadata_server.insert_block_metadata(blockinfo);" << endl;
@@ -199,7 +189,7 @@ int main(int argc, char* argv[])
           // TODO: remote_server = lookup(block_hash_key);
           //cout << "remote_server = lookup(block_hash_key);" << endl;
 
-          block_info.file_id = file_id;
+          block_info.file_name = file_name;
           block_info.block_seq = block_seq;
           block_info.block_hash_key = block_hash_key;
           block_info.block_name = file_name + "_" + to_string(block_seq++);
