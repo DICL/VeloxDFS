@@ -4,6 +4,9 @@
 #include "../network/asyncnode.hh"
 #include "../cache/cache.hh"
 #include "../common/histogram.hh"
+#include "../messages/blockinfo.hh"
+#include "../messages/fileinfo.hh"
+#include "../fs/directory.hh"
 
 #include <string>
 #include <boost/asio.hpp>
@@ -17,10 +20,10 @@ using vec_str    = std::vector<std::string>;
 
 typedef std::function<void(std::string)> req_func;
 
-class Peer: public Node, public AsyncNode {
+class PeerDFS: public Node, public AsyncNode {
   public:
-    Peer (Context&);
-    ~Peer ();
+    PeerDFS (Context&);
+    ~PeerDFS ();
 
     bool establish () override;
     void on_read (messages::Message*) override;
@@ -29,18 +32,16 @@ class Peer: public Node, public AsyncNode {
 
     void insert (string, string);
     void request (string, req_func);
-    bool exists (string);
-    bool belongs (string);
     void close ();
-
-    int H (string);
-    vec_str info();
+    bool insert_block (messages::BlockInfo*);
+    bool insert_file (messages::FileInfo*);
 
   protected:
-    u_ptr<lru_cache<string, string> > cache;
-    u_ptr<Histogram> histogram;
+    Directory directory;
     std::map<std::string, req_func> requested_blocks;
     bool connected = false;
+    uint32_t size;
+    string disk_path;
 
     template <typename T> void process (T);
 };
