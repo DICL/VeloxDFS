@@ -15,6 +15,7 @@
 #include "fileinfo.hh"
 #include "blockinfo.hh"
 #include "reply.hh"
+#include "cacheinfo.hh"
 
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/access.hpp>
@@ -107,6 +108,12 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.message);
     ar & BOOST_SERIALIZATION_NVP(c.details);
   }
+
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::CacheInfo& c, unsigned int) {
+    ar & BASE_OBJECT(Message, c);
+    ar & BOOST_SERIALIZATION_NVP(c.keys);
+  }
 }
 }
 
@@ -122,3 +129,4 @@ BOOST_CLASS_TRACKING(eclipse::messages::FileInfo, boost::serialization::track_ne
 BOOST_CLASS_TRACKING(eclipse::messages::BlockInfo, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::Task, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::Reply, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::CacheInfo, boost::serialization::track_never);

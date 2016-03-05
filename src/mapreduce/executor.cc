@@ -109,12 +109,19 @@ template<> void Executor::process (Control* m) {
   }
 }
 // }}}
+// process (CacheInfo* m) {{{
+template<> void Executor::process (CacheInfo* m) {
+  vec_str out = peer_cache.info();
+  m->keys = out;
+  network->send(0, m);
+}
+// }}}
 // on_read {{{
 void Executor::on_read (Message* m) {
   string type = m->get_type();
 
   if (type == "Task") {
-    auto m_ = dynamic_cast<messages::Task*>(m);
+    auto m_ = dynamic_cast<Task*>(m);
     process(m_);
 
   } else if (type == "Control") {
@@ -122,11 +129,15 @@ void Executor::on_read (Message* m) {
     process(m_);
 
   } else if (type == "FileInfo") {
-    auto m_ = dynamic_cast<messages::FileInfo*>(m);
+    auto m_ = dynamic_cast<FileInfo*>(m);
     process(m_);
 
   } else if (type == "BlockInfo") {
-    auto m_ = dynamic_cast<messages::BlockInfo*>(m);
+    auto m_ = dynamic_cast<BlockInfo*>(m);
+    process(m_);
+
+  } else if (type == "CacheInfo") {
+    auto m_ = dynamic_cast<CacheInfo*>(m);
     process(m_);
 
   } else {

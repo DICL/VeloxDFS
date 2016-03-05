@@ -76,6 +76,8 @@ int main(int argc, char* argv[])
     uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
     string path = con.settings.get<string>("path.scratch");
     //file_info.replica = con.settings.get<int>("filesystem.replica");
+    //
+    char chunk [BLOCK_SIZE];
     for(int i=1; i<argc; i++)
     {
       char *buff = new char[BLOCK_SIZE];
@@ -140,7 +142,9 @@ int main(int argc, char* argv[])
           BlockInfo block_info;
           myfile.seekg(start, myfile.beg);
           block_info.content.reserve(end-start);
-          myfile.read(&block_info.content[0], end-start);
+          myfile.read(chunk, end-start);
+          block_info.content = chunk;
+
 
           uint32_t block_size = end - start;
           start = end + 1;
@@ -164,6 +168,7 @@ int main(int argc, char* argv[])
           //block_info.r_node = r_server.ip_address;
           block_info.is_commit = 1;
           file_info.num_block = block_seq;
+            
           
           send_message(socket, &block_info);
           auto reply = read_reply (socket);
@@ -191,8 +196,12 @@ int main(int argc, char* argv[])
           block.close();
         }
         else{  // last block
+          BlockInfo block_info;
           myfile.seekg(start, myfile.beg);
-          myfile.read(buff, file_size-start);
+          block_info.content.reserve(end-start);
+          myfile.read(chunk, end-start);
+          block_info.content = chunk;
+
           uint32_t block_size = end - start;
           buff[file_size-start-1] = 0;
 
@@ -201,7 +210,6 @@ int main(int argc, char* argv[])
           // TODO: remote_server = lookup(block_hash_key);
           //cout << "remote_server = lookup(block_hash_key);" << endl;
 
-          BlockInfo block_info;
           block_info.file_id = file_id;
           block_info.block_seq = block_seq;
           block_info.block_hash_key = block_hash_key;
@@ -216,6 +224,13 @@ int main(int argc, char* argv[])
           block_info.is_commit = 1;
           file_info.num_block = block_seq;
 
+          send_message(socket, &block_info);
+          auto reply = read_reply (socket);
+
+          if (reply->message != "OK") {
+            cerr << "Failed to upload file. Details: " << reply->details << endl;
+            return EXIT_FAILURE;
+          } 
           // TODO: remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);
           //cout << "remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);" << endl;
 
