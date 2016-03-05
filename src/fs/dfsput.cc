@@ -71,7 +71,6 @@ int main(int argc, char* argv[])
   {
     uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
     uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
-    string path = con.settings.get<string>("path.scratch");
     char chunk [BLOCK_SIZE];
     for(int i=1; i<argc; i++)
     {
@@ -170,9 +169,6 @@ int main(int argc, char* argv[])
           // this function should call FileIO.insert_block(_metadata) in remote metadata server?
 
           // TODO: remote node part
-          ofstream block;
-          block.open(path + "/" + block_info.block_name);
-          block.close();
         }
         else // last block
         {  
@@ -224,9 +220,6 @@ int main(int argc, char* argv[])
           // this function should call FileIO.insert_block(_metadata) in remote metadata server;
 
           // remote node part
-          ofstream block;
-          block.open(path + "/" + block_info.block_name);
-          block.close();
           break;
         }
       }

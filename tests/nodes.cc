@@ -1,4 +1,4 @@
-#include <nodes/peer.hh>
+#include <nodes/remotedfs.hh>
 #include <common/context.hh>
 #include <string>
 
@@ -11,13 +11,8 @@ int main (int argc, char ** argv) {
   Context context(input);
   context.run();
 
-  Peer nl (context);
+  RemoteDFS nl (context);
   nl.establish();
-
-  nl.insert ("KEY", "VALUE");
-  nl.request ("KEY", [&] (std::string in) -> void {
-      std::cout << "DONE: " << in << std::endl;
-      });
 
   return context.join();
 }
