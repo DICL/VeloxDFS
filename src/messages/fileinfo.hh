@@ -1,7 +1,6 @@
 #pragma once
 
 #include "message.hh"
-#include "mapreduce/task.hh"
 
 namespace eclipse {
 namespace messages {
