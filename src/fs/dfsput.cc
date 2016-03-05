@@ -79,10 +79,11 @@ int main(int argc, char* argv[])
       myfile.open(file_name);
       myfile.seekg(0, myfile.end);
       uint64_t file_size = myfile.tellg();
-      unsigned int block_seq = 0;
       uint32_t start = 0;
       uint32_t end = start + BLOCK_SIZE - 1;
       uint32_t file_hash_key = h (file_name);
+      unsigned int block_seq = 0;
+      unsigned int num_blocks = (file_size / BLOCK_SIZE) + 1;
 
       auto socket = connect(file_hash_key);
 
@@ -92,7 +93,7 @@ int main(int argc, char* argv[])
       file_info.file_name = file_name;
       file_info.file_hash_key = file_hash_key;
       file_info.file_size = file_size;
-      file_info.num_block = block_seq;
+      file_info.num_block = num_blocks;
       file_info.replica = con.settings.get<int>("filesystem.replica");
 
       send_message(socket, &file_info);

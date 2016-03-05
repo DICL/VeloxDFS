@@ -6,6 +6,7 @@
 #include "../common/histogram.hh"
 #include "../messages/blockinfo.hh"
 #include "../messages/fileinfo.hh"
+#include "../messages/keyrequest.hh"
 #include "../fs/directory.hh"
 
 #include <string>
@@ -35,6 +36,7 @@ class PeerDFS: public Node, public AsyncNode {
     void close ();
     bool insert_block (messages::BlockInfo*);
     bool insert_file (messages::FileInfo*);
+    bool request_file (messages::KeyRequest*, req_func);
 
   protected:
     Directory directory;
