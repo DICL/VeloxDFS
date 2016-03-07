@@ -10,3 +10,5 @@ set smartindent
 
 set makeprg=cd\ ~/build;\ make\ -j8\ check
 let NERDTreeIgnore = ['Makefile.in', '^configure$', 'aclocal.m4', 'autom4te.cache', 'm4', 'config.h.in']
+
+let g:clang_user_options = '-std=c++14'

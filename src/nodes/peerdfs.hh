@@ -7,6 +7,8 @@
 #include "../messages/blockinfo.hh"
 #include "../messages/fileinfo.hh"
 #include "../messages/keyrequest.hh"
+#include "../messages/filerequest.hh"
+#include "../messages/filedescription.hh"
 #include "../fs/directory.hh"
 
 #include <string>
@@ -14,12 +16,8 @@
 
 namespace eclipse {
 
-using std::string;
-using std::thread;
-using std::map;
-using vec_str    = std::vector<std::string>;
-
-typedef std::function<void(std::string)> req_func;
+using vec_str = std::vector<std::string>;
+typedef std::function<void(std::string, std::string)> req_func;
 
 class PeerDFS: public Node, public AsyncNode {
   public:
@@ -31,19 +29,19 @@ class PeerDFS: public Node, public AsyncNode {
     void on_connect () override;
     void on_disconnect() override;
 
-    void insert (string, string);
-    void request (string, req_func);
+    void insert (std::string, std::string);
+    void request (std::string, req_func);
     void close ();
     bool insert_block (messages::BlockInfo*);
     bool insert_file (messages::FileInfo*);
-    bool request_file (messages::KeyRequest*, req_func);
+    FileDescription request_file (messages::FileRequest*);
 
   protected:
     Directory directory;
     std::map<std::string, req_func> requested_blocks;
     bool connected = false;
     uint32_t size;
-    string disk_path;
+    std::string disk_path;
 
     template <typename T> void process (T);
 };
