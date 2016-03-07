@@ -68,11 +68,17 @@ void PeerDFS::insert (std::string k, std::string v) {
 // request {{{
 void PeerDFS::request (std::string key, req_func f) {
  int idx = h(key) % size;
+
  if (idx != id) {
    KeyRequest k_req (key);
    k_req.set_origin (id);
    network->send (idx, &k_req);
    requested_blocks.insert ({key, f});
+
+ } else {
+   //
+ 
+ 
  }
 }
 // }}}
@@ -91,7 +97,7 @@ template<> void PeerDFS::process (KeyValue* m) {
 
   if (requested_blocks.find(key) !=requested_blocks.end()){
     logger->info ("Executing func");
-    requested_blocks[key](m->value);
+    requested_blocks[key](key, m->value);
     requested_blocks.erase(key);
   }
 }
@@ -176,22 +182,25 @@ bool PeerDFS::insert_block (messages::BlockInfo* m) {
 }
 // }}}
 // request_block {{{
-bool PeerDFS::request_file (messages::KeyRequest* m, req_func f) {
-  string file_name = m->key;
-  FileInfo fi;
-  directory.select_file_metadata(file_name, &fi);
-  int num_blocks = fi.num_block;
+FileDescription PeerDFS::request_file (messages::FileRequest* m) {
+  string file_name = m->file_name;
 
+  FileInfo fi;
+  fi.num_block = 0;
+  FileDescription fd;
+  fd.file_name  = file_name;
+
+  directory.select_file_metadata(file_name, &fi);
+
+  int num_blocks = fi.num_block;
   for (int i = 0; i< num_blocks; i++) {
     BlockInfo bi;
     directory.select_block_metadata (file_name, i, &bi);
     string block_name = bi.block_name;
-
-    requested_blocks.insert({block_name, f});
-    request (block_name, f);
+    fd.nodes.push_back(block_name);
   }
 
-  return true;
+  return fd;
 }
 // }}}
 }

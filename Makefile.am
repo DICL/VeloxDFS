@@ -6,17 +6,20 @@ AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3
 bin_PROGRAMS        = dfsput cacheinfo dfsget #dfsls dfsinit
 
 
-messages_files   = src/messages/boundaries.cc \
-                   src/messages/message.cc    \
-                   src/messages/keyvalue.cc   \
-                   src/messages/keyrequest.cc \
-                   src/messages/control.cc    \
-                   src/messages/boost_impl.cc \
-                   src/messages/factory.cc    \
-                   src/messages/fileinfo.cc   \
-                   src/messages/blockinfo.cc  \
-                   src/messages/task.cc       \
-                   src/messages/reply.cc      \
+messages_files   = src/messages/boundaries.cc      \
+                   src/messages/message.cc         \
+                   src/messages/keyvalue.cc        \
+                   src/messages/keyrequest.cc      \
+                   src/messages/control.cc         \
+                   src/messages/boost_impl.cc      \
+                   src/messages/factory.cc         \
+                   src/messages/fileinfo.cc        \
+                   src/messages/blockinfo.cc       \
+                   src/messages/task.cc            \
+                   src/messages/reply.cc           \
+                   src/messages/filerequest.cc     \
+                   src/messages/blockrequest.cc    \
+                   src/messages/filedescription.cc \
                    src/messages/cacheinfo.cc
 # libs -----
 lib_LTLIBRARIES     = libecfs.la
