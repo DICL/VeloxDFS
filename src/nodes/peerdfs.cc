@@ -76,9 +76,11 @@ void PeerDFS::request (std::string key, req_func f) {
    requested_blocks.insert ({key, f});
 
  } else {
-   //
- 
- 
+  string value;
+  ifstream in (disk_path + string("/") + key);
+  in >> value;
+  in.close();
+  f(key, value);
  }
 }
 // }}}
