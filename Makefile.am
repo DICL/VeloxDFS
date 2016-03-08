@@ -3,7 +3,7 @@ include tests/Makefile.am
 AM_CPPFLAGS         = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
 AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3 
 
-bin_PROGRAMS        = dfsput dfsget dfsls dfsinit
+bin_PROGRAMS        = dfsput dfsget dfsls dfsinit dfsrm
 
 # libs -----
 lib_LTLIBRARIES     = libecfs.la
@@ -28,6 +28,9 @@ dfsls_LDADD         = $(LDADD) -lsqlite3
 
 dfsinit_SOURCES       = src/fs/dfsinit.cc src/fs/directory.cc
 dfsinit_LDADD         = $(LDADD) -lsqlite3
+
+dfsrm_SOURCES       = src/fs/dfsrm.cc src/fs/directory.cc
+dfsrm_LDADD         = $(LDADD) -lsqlite3
 
 pkginclude_HEADERS  = src/common/ecfs.hh src/common/settings.hh
 
