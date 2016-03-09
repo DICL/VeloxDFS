@@ -10,12 +10,17 @@ int main(int argc, char* argv[])
   {
     string list
     //TODO: remote_node[net_id].list_file_metadata(list);
-    //TODO: remote_node[net_id].list_block_metadata(list); -> maybe needed
+    //TODO: remote_node[net_id].list_block_metadata(list); -> maybe not needed
 
-    while(
-    //TODO: parsing_message(list);
+    // for test
+    list = "doc1.txt doc2.txt doc3.txt doc4.txt";
 
-    //TODO: cout << list;
+    while(!list.end)
+    {
+      //TODO: parsing_message(list);
+
+      //TODO: cout << list;
+    }
   
     // NOT FINISHED...
   }
