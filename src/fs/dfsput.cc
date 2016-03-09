@@ -119,6 +119,7 @@ int main(int argc, char* argv[])
             }
           }
           BlockInfo block_info;
+          bzero(chunk, BLOCK_SIZE);
           myfile.seekg(start, myfile.beg);
           block_info.content.reserve(end-start);
           myfile.read(chunk, end-start);
@@ -173,6 +174,7 @@ int main(int argc, char* argv[])
         }
         else // last block
         {  
+          bzero(chunk, BLOCK_SIZE);
           BlockInfo block_info;
           myfile.seekg(start, myfile.beg);
           block_info.content.reserve(end-start);
