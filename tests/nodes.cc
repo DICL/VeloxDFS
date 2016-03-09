@@ -6,7 +6,7 @@ using namespace eclipse;
 
 int main (int argc, char ** argv) {
 
-  string input = argv[1];
+  std::string input = argv[1];
 
   Context context(input);
   context.run();

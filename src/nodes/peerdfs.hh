@@ -2,8 +2,6 @@
 
 #include "node.hh"
 #include "../network/asyncnode.hh"
-#include "../cache/cache.hh"
-#include "../common/histogram.hh"
 #include "../messages/blockinfo.hh"
 #include "../messages/fileinfo.hh"
 #include "../messages/keyrequest.hh"
