@@ -71,7 +71,6 @@ int main(int argc, char* argv[])
   {
     uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
     uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
-    string path = con.settings.get<string>("path.scratch");
     char chunk [BLOCK_SIZE];
     for(int i=1; i<argc; i++)
     {
@@ -80,10 +79,11 @@ int main(int argc, char* argv[])
       myfile.open(file_name);
       myfile.seekg(0, myfile.end);
       uint64_t file_size = myfile.tellg();
-      unsigned int block_seq = 0;
       uint32_t start = 0;
       uint32_t end = start + BLOCK_SIZE - 1;
       uint32_t file_hash_key = h (file_name);
+      unsigned int block_seq = 0;
+      unsigned int num_blocks = (file_size / BLOCK_SIZE) + 1;
 
       auto socket = connect(file_hash_key);
 
@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
       file_info.file_name = file_name;
       file_info.file_hash_key = file_hash_key;
       file_info.file_size = file_size;
-      file_info.num_block = block_seq;
+      file_info.num_block = num_blocks;
       file_info.replica = con.settings.get<int>("filesystem.replica");
 
       send_message(socket, &file_info);
@@ -119,6 +119,7 @@ int main(int argc, char* argv[])
             }
           }
           BlockInfo block_info;
+          bzero(chunk, BLOCK_SIZE);
           myfile.seekg(start, myfile.beg);
           block_info.content.reserve(end-start);
           myfile.read(chunk, end-start);
@@ -170,12 +171,10 @@ int main(int argc, char* argv[])
           // this function should call FileIO.insert_block(_metadata) in remote metadata server?
 
           // TODO: remote node part
-          ofstream block;
-          block.open(path + "/" + block_info.block_name);
-          block.close();
         }
         else // last block
         {  
+          bzero(chunk, BLOCK_SIZE);
           BlockInfo block_info;
           myfile.seekg(start, myfile.beg);
           block_info.content.reserve(end-start);
@@ -224,9 +223,6 @@ int main(int argc, char* argv[])
           // this function should call FileIO.insert_block(_metadata) in remote metadata server;
 
           // remote node part
-          ofstream block;
-          block.open(path + "/" + block_info.block_name);
-          block.close();
           break;
         }
       }
