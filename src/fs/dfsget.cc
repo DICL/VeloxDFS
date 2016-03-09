@@ -56,6 +56,17 @@ eclipse::messages::FileDescription* read_reply(tcp::socket* socket) {
   return dynamic_cast<eclipse::messages::FileDescription*>(m);
 }
 
+eclipse::messages::BlockInfo* read_block(tcp::socket* socket) {
+  char header[16];
+  socket->receive(boost::asio::buffer(header));
+  size_t size_of_msg = atoi(header);
+  char* body = new char[size_of_msg];
+  socket->receive(boost::asio::buffer(body, size_of_msg));
+  string recv_msg(body);
+  eclipse::messages::Message* m = load_message(recv_msg);
+  return dynamic_cast<eclipse::messages::BlockInfo*>(m);
+}
+
 int main(int argc, char* argv[])
 {
   Context con;
@@ -80,11 +91,14 @@ int main(int argc, char* argv[])
 
       cout << "Got " << fd->file_name << endl;
 
+      ofstream f (file_name);
       for (auto block_name : fd->nodes) {
         auto* tmp_socket = connect(h(block_name.c_str()));
         BlockRequest br;
         br.block_name = block_name; 
         send_message(tmp_socket, &br);
+        auto msg = read_block(tmp_socket);
+        f << msg->content;
         tmp_socket->close();
       }
 
@@ -135,6 +149,7 @@ int main(int argc, char* argv[])
         }
       }
       */
+      socket->close(); 
     }
   }
   return 0;
