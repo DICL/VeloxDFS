@@ -8,7 +8,6 @@ AC_CONFIG_MACRO_DIR([./m4/])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile ])
 AC_CONFIG_FILES([tests/nodes_executor],    [chmod +x tests/nodes_executor])
-AC_CONFIG_FILES([tests/ctop_executor],    [chmod +x tests/ctop_executor])
 AC_CONFIG_FILES([tests/eclipse_debug],    [chmod +x tests/eclipse_debug])
 
 AM_CONDITIONAL([DEFAULT_CXXFLAGS], [test -z "$CXXFLAGS"])

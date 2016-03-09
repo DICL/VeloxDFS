@@ -3,20 +3,23 @@ include tests/Makefile.am
 AM_CPPFLAGS         = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
 AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3 
 
-bin_PROGRAMS        = dfsput cacheinfo dfsget #dfsls dfsinit
+bin_PROGRAMS        = eclipse_node dfsput cacheinfo dfsget #dfsls dfsinit
 
 
-messages_files   = src/messages/boundaries.cc \
-                   src/messages/message.cc    \
-                   src/messages/keyvalue.cc   \
-                   src/messages/keyrequest.cc \
-                   src/messages/control.cc    \
-                   src/messages/boost_impl.cc \
-                   src/messages/factory.cc    \
-                   src/messages/fileinfo.cc   \
-                   src/messages/blockinfo.cc  \
-                   src/messages/task.cc       \
-                   src/messages/reply.cc      \
+messages_files   = src/messages/boundaries.cc      \
+                   src/messages/message.cc         \
+                   src/messages/keyvalue.cc        \
+                   src/messages/keyrequest.cc      \
+                   src/messages/control.cc         \
+                   src/messages/boost_impl.cc      \
+                   src/messages/factory.cc         \
+                   src/messages/fileinfo.cc        \
+                   src/messages/blockinfo.cc       \
+                   src/messages/task.cc            \
+                   src/messages/reply.cc           \
+                   src/messages/filerequest.cc     \
+                   src/messages/blockrequest.cc    \
+                   src/messages/filedescription.cc \
                    src/messages/cacheinfo.cc
 # libs -----
 lib_LTLIBRARIES     = libecfs.la
@@ -30,6 +33,21 @@ libecfs_la_LDFLAGS  = -version-info 0:0:0
 AM_LDFLAGS          = -static
 LDADD               = libecfs.la -lboost_system -lboost_thread -lboost_serialization -lboost_system -lboost_coroutine -lboost_context
 
+
+eclipse_node_SOURCES = src/targets/node_main.cc \
+											 src/network/channel.cc \
+											 src/network/asyncchannel.cc \
+											 src/network/p2p.cc \
+											 src/network/server.cc \
+											 src/nodes/machine.cc \
+											 src/nodes/peerdfs.cc \
+											 src/nodes/remotedfs.cc \
+											 src/nodes/router.cc \
+											 src/fs/directory.cc \
+											 src/nodes/node.cc \
+											 $(messages_files)
+
+eclipse_node_LDADD   = $(LDADD) -lsqlite3
 
 cacheinfo_SOURCES    = src/fs/cacheinfo.cc \
 											 $(messages_files)
