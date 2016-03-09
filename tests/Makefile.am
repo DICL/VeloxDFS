@@ -18,7 +18,6 @@ units_CPPFLAGS     = $(AM_CPPFLAGS_T)
 units_SOURCES      = $(messages_files) \
                      tests/main.cc \
                      tests/settings_tests.cc \
-                     tests/cache_test.cc \
                      tests/messages_test.cc \
                      tests/dl_test.cc \
                      src/common/dl_loader.cc \
