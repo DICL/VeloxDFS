@@ -74,10 +74,9 @@ int main(int argc, char* argv[])
     char chunk [BLOCK_SIZE];
     for(int i=1; i<argc; i++)
     {
-      ifstream myfile;
       string file_name = argv[i];
-      myfile.open(file_name);
-      myfile.seekg(0, myfile.end);
+      ifstream myfile (file_name);
+      myfile.seekg(1, myfile.end);
       uint64_t file_size = myfile.tellg();
       uint32_t start = 0;
       uint32_t end = start + BLOCK_SIZE - 1;
@@ -111,7 +110,11 @@ int main(int argc, char* argv[])
           myfile.seekg(start+BLOCK_SIZE-1, myfile.beg);
           while(1)
           {
-            if(myfile.peek() =='\n') break;
+            if(myfile.peek() =='\n')
+            {
+              end++;
+              break;
+            }
             else
             {
               myfile.seekg(-1, myfile.cur);
