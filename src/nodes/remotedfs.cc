@@ -62,7 +62,7 @@ void RemoteDFS::insert_file (messages::Message* m_) {
 // request_file {{{
 void RemoteDFS::request_file (messages::Message* m_) {
   auto m = dynamic_cast<messages::FileRequest*> (m_);
-  logger->info ("FileInfo received");
+  logger->info ("File Info received %s", m->file_name.c_str());
 
   auto fd = peer.request_file (m);
   network->send(0, &fd);
@@ -77,6 +77,7 @@ void RemoteDFS::request_block (messages::Message* m_) {
 // }}}
 // send_block {{{
 void RemoteDFS::send_block (std::string k, std::string v) {
+  logger->info ("Sending Block %s", k.c_str());
   BlockInfo bi;
   bi.block_name = k;
   bi.content = v;
