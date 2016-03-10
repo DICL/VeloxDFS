@@ -68,11 +68,85 @@ namespace eclipse{
     return 0;
   }
 
-  int Directory::ls_callback(void *NotUsed, int argc, char **argv, char **azColName)
+/*
+  int Directory::list_file_callback(void *file_info_vector, int argc, char **argv, char **azColName)
   {
+    auto file_vector = reinterpret_cast<vector<FileInfo>*>(file_info_vector);
+    int i = 0;
+    for(vector<FileInfo>::iterator it=file_vector.begin(); it<argc/5; it++)
+    {
+      FileInfo tmp_file;
+      tmp_file->file_name     = argv[i++];
+      tmp_file->file_hash_key = atoi(argv[i++]);
+      tmp_file->file_size     = atoi(argv[i++]);
+      tmp_file->num_block     = atoi(argv[i++]);
+      tmp_file->replica       = atoi(argv[i++]);
+      file_vector.push_back(tmp_file);
+    }
+    return 0;
+  }
+
+  int Directory::list_block_callback(void *block_info_vector, int argc, char **argv, char **azColName)
+  {
+    auto block_vector = reinterpret_cast<vector<BlockInfo>*>(block_info_vector);
+    int i = 0;
+    for(vector<BlockInfo>::iterator it=block_vector.begin(); it<argc/10; it++)
+    {
+      BlockInfo tmp_block;
+      tmp_block->file_name      = atoi(argv[i++]);
+      tmp_block->block_seq      = atoi(argv[i++]);
+      tmp_block->block_hash_key = atoi(argv[i++]);
+      tmp_block->block_name     = argv[i++];
+      tmp_block->block_size     = atoi(argv[i++]);
+      tmp_block->is_inter       = atoi(argv[i++]);
+      tmp_block->node           = argv[i++];
+      tmp_block->l_node = argv[i] ? argv[i] : "NULL";
+      i++;
+      tmp_block->r_node = argv[i] ? argv[i] : "NULL";
+      i++;
+      tmp_block->is_commit = argv[i] ? atoi(argv[i]) : 0;
+      i++;
+      block_vector.push_back(tmp_block);
+    }
+    return 0;
+  }
+*/
+
+  int Directory::file_list_callback(void *list, int argc, char **argv, char **azColName)
+  {
+    auto file_list = reinterpret_cast<vector<FileInfo>*>(list);
     for(int i=0; i<argc; i++)
     {
-      cout << argv[i] << endl;
+      FileInfo tmp_file;
+      tmp_file.file_name     = argv[i++];
+      tmp_file.file_hash_key = atoi(argv[i++]);
+      tmp_file.file_size     = atoi(argv[i++]);
+      tmp_file.num_block     = atoi(argv[i++]);
+      tmp_file.replica       = atoi(argv[i]);
+      file_list->push_back(tmp_file);
+    }
+    return 0;
+  }
+
+  int Directory::block_list_callback(void *list, int argc, char **argv, char **azColName)
+  {
+    auto block_list = reinterpret_cast<vector<BlockInfo>*>(list);
+    for(int i=0; i<argc; i++)
+    {
+      BlockInfo tmp_block;
+      tmp_block.file_name      = atoi(argv[i++]);
+      tmp_block.block_seq      = atoi(argv[i++]);
+      tmp_block.block_hash_key = atoi(argv[i++]);
+      tmp_block.block_name     = argv[i++];
+      tmp_block.block_size     = atoi(argv[i++]);
+      tmp_block.is_inter       = atoi(argv[i++]);
+      tmp_block.node           = argv[i++];
+      tmp_block.l_node = argv[i] ? argv[i] : "NULL";
+      i++;
+      tmp_block.r_node = argv[i] ? argv[i] : "NULL";
+      i++;
+      tmp_block.is_commit = argv[i] ? atoi(argv[i]) : 0;
+      block_list->push_back(tmp_block);
     }
     return 0;
   }
@@ -263,6 +337,56 @@ namespace eclipse{
     sqlite3_close(db);
   } 
 
+  void Directory::select_all_file_metadata(vector<FileInfo> &file_list)
+  {
+    Context con;
+    // Open database
+    open_db();
+
+    // Create sql statement
+    sprintf(sql, "SELECT * from file_table;");
+
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, file_list_callback, (void*)&file_list, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      con.logger->error("SQL error: %s\n", zErrMsg);
+      sqlite3_free(zErrMsg);
+    }
+    else
+    {
+      con.logger->info("file_metadata selected successfully\n");
+    }
+
+    // Close Database
+    sqlite3_close(db);
+  }
+
+  void Directory::select_all_block_metadata(vector<BlockInfo> &block_info)
+  {
+    Context con;
+    // Open database
+    open_db();
+
+    // Create sql statement
+    sprintf(sql, "SELECT * from block_table;");
+
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, block_list_callback, (void*)&block_info, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      con.logger->error("SQL error: %s\n", zErrMsg);
+      sqlite3_free(zErrMsg);
+    }
+    else
+    {
+      con.logger->info("block_metadata selected successfully\n");
+    }
+
+    // Close Database
+    sqlite3_close(db);
+  } 
+
   void Directory::update_file_metadata(string file_name, FileInfo file_info)
   {
     Context con;
@@ -437,7 +561,8 @@ namespace eclipse{
     sqlite3_close(db);
   }
 
-  void Directory::ls_file_metadata() // Only for dfsls!! 
+/*
+  void Directory::list_file_metadata(string &list) // Only for dfsls!! 
   {
     // Open database
     open_db();
@@ -446,7 +571,7 @@ namespace eclipse{
     sprintf(sql, "SELECT file_name from file_table");
 
     // Execute SQL statement
-    rc = sqlite3_exec(db, sql, ls_callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, sql, list_callback, &list, &zErrMsg);
     if(rc != SQLITE_OK)
     {
       cerr << "SQL error: " << zErrMsg << endl;
@@ -461,16 +586,16 @@ namespace eclipse{
     sqlite3_close(db);
   }
 
-  void Directory::ls_block_metadata() // Only for dfsls!! 
+  void Directory::list_block_metadata(string &list) // Only for dfsls!! 
   {
     // Open database
     open_db();
 
     // Create sql statement
-    sprintf(sql, "SELECT file_name from block_table");
+    sprintf(sql, "SELECT file_name AND block_seq from block_table");
 
     // Execute SQL statement
-    rc = sqlite3_exec(db, sql, ls_callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, sql, list_callback, &list, &zErrMsg);
     if(rc != SQLITE_OK)
     {
       cerr << "SQL error: " << zErrMsg << endl;
@@ -484,6 +609,7 @@ namespace eclipse{
     // Close Database
     sqlite3_close(db);
   }
+*/
 
   bool Directory::is_exist(string file_name)
   {
