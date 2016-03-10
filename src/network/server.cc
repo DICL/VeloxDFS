@@ -61,12 +61,13 @@ void Server::on_write (const boost::system::error_code& ec,
 void Server::read_coroutine (yield_context yield) {
   boost::asio::streambuf body; 
   boost::system::error_code ec;
-  char header [16]; 
+  char header [17]; 
+  header[16] = '\0';
   auto* sock = server;
 
   try {
     while (true) {
-      size_t l = async_read (*sock, buffer(header), yield[ec]);
+      size_t l = async_read (*sock, buffer(header, 16), yield[ec]);
       if (ec) throw 1;
       if (l != (size_t)header_size) continue;
 

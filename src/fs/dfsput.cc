@@ -36,6 +36,7 @@ tcp::socket* connect (int hash_value) {
   tcp::resolver::iterator it (resolver.resolve(query));
   auto ep = new tcp::endpoint (*it);
   socket->connect(*ep);
+  delete ep;
   return socket;
 }
 
@@ -48,14 +49,15 @@ void send_message (tcp::socket* socket, eclipse::messages::Message* msg) {
 }
 
 eclipse::messages::Reply* read_reply(tcp::socket* socket) {
-  char header[16];
-  socket->receive(boost::asio::buffer(header));
+  char header[17] = {0};
+  header[16] = '\0';
+  socket->receive(boost::asio::buffer(header, 16));
   size_t size_of_msg = atoi(header);
   char* body = new char[size_of_msg];
   socket->receive(boost::asio::buffer(body, size_of_msg));
-  string recv_msg(body);
-  delete body;
+  string recv_msg(body, size_of_msg);
   eclipse::messages::Message* m = load_message(recv_msg);
+  delete[] body;
   return dynamic_cast<eclipse::messages::Reply*>(m);
 }
 
@@ -101,8 +103,10 @@ int main(int argc, char* argv[])
 
       if (reply->message != "OK") {
         cerr << "Failed to upload file. Details: " << reply->details << endl;
+        delete reply;
         return EXIT_FAILURE;
       } 
+      delete reply;
 
       while(1)
       {
@@ -160,8 +164,10 @@ int main(int argc, char* argv[])
 
           if (reply->message != "OK") {
             cerr << "Failed to upload file. Details: " << reply->details << endl;
+            delete reply;
             return EXIT_FAILURE;
           } 
+          delete reply;
 
           //TODO: remote_metadata_server.update_file_metadata(fileinfo.file_name, file_info);
           //cout << "remote_metadata_server.update_file_metadata(fileinfo.file_name, file_info);" << endl;
@@ -213,24 +219,15 @@ int main(int argc, char* argv[])
 
           if (reply->message != "OK") {
             cerr << "Failed to upload file. Details: " << reply->details << endl;
+            delete reply;
             return EXIT_FAILURE;
           } 
-          // TODO: remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);
-          //cout << "remote_metadata_server.update_file_metadata(fileinfo.file_id, file_info);" << endl;
-
-          // TODO: remote_metadata_server.insert_block_metadata(blockinfo);
-          //cout << "remote_metadata_server.insert_block_metadata(blockinfo);" << endl;
-
-          // TODO: remote_server.send_buff(block_info.block_name, buff);
-          //cout << "remote_server.send_buff(block_info.block_name, buff);" << endl;
-          //remote_server.send_buff(block_hash_key, buff);
-          // this function should call FileIO.insert_block(_metadata) in remote metadata server;
-
-          // remote node part
+          delete reply;
           break;
         }
       }
       socket->close();
+      delete socket;
       myfile.close();
     }
   }
