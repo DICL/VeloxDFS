@@ -12,6 +12,7 @@ RemoteDFS::RemoteDFS (Context& c) : Router(c), peer(c) {
   routing_table.insert({"FileInfo",   bind(&RemoteDFS::insert_file, this, ph::_1)});
   routing_table.insert({"FileRequest", bind(&RemoteDFS::request_file, this, ph::_1)});
   routing_table.insert({"BlockRequest", bind(&RemoteDFS::request_block, this, ph::_1)});
+  routing_table.insert({"FileList", bind(&RemoteDFS::request_ls, this, ph::_1)});
 }
 // }}}
 // establish {{{
@@ -73,6 +74,14 @@ void RemoteDFS::request_block (messages::Message* m_) {
   auto m = dynamic_cast<messages::BlockRequest*> (m_);
   string key = m->block_name;
   peer.request(key, std::bind(&RemoteDFS::send_block, this, ph::_1, ph::_2));
+}
+// }}}
+// request_ls {{{
+void RemoteDFS::request_ls (messages::Message* m_) {
+  auto m = dynamic_cast<messages::FileList*> (m_);
+  peer.list(m);
+  
+  network->send(0, m);
 }
 // }}}
 // send_block {{{
