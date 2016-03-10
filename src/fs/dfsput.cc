@@ -54,6 +54,7 @@ eclipse::messages::Reply* read_reply(tcp::socket* socket) {
   char* body = new char[size_of_msg];
   socket->receive(boost::asio::buffer(body, size_of_msg));
   string recv_msg(body);
+  delete body;
   eclipse::messages::Message* m = load_message(recv_msg);
   return dynamic_cast<eclipse::messages::Reply*>(m);
 }
