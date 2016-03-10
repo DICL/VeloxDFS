@@ -76,24 +76,25 @@ int main(int argc, char* argv[])
   std::sort(total.begin(), total.end(), [] (const FileInfo& a, const FileInfo& b) {
       return (a.file_name < b.file_name);
       });
+
   cout 
-    << setw(14) << "FileName" 
+    << setw(25) << "FileName" 
     << setw(14) << "Hash Key"
     << setw(14) << "Size"
-    << setw(14) << "NumBlocks"
+    << setw(8)  << "Blocks"
     << setw(14) << "Host"
-    << setw(14) << "Replicas"
-    << endl << string(14*6,'-') << endl;
+    << setw(5)  << "Repl"
+    << endl << string(80,'-') << endl;
 
 
   for (auto& fl: total) {
     cout 
-      << setw(14) << fl.file_name
+      << setw(25) << fl.file_name
       << setw(14) << fl.file_hash_key
       << setw(14) << fl.file_size
-      << setw(14) << fl.num_block
+      << setw(8) << fl.num_block
       << setw(14) << nodes[h(fl.file_name) % NUM_SERVERS]
-      << setw(14) << fl.replica
+      << setw(5) << fl.replica
       << endl;
   }
   return 0;
