@@ -206,4 +206,10 @@ FileDescription PeerDFS::request_file (messages::FileRequest* m) {
   return fd;
 }
 // }}}
+// list {{{
+bool PeerDFS::list (messages::FileList* m) {
+  directory.select_all_file_metadata(m->data);
+  return true;
+}
+// }}}
 }

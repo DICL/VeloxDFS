@@ -18,6 +18,7 @@ class RemoteDFS: public Router {
     void insert_file (messages::Message*);
     void request_file (messages::Message*);
     void request_block (messages::Message*);
+    void request_ls (messages::Message*);
     void send_block (std::string, std::string);
 
   protected:
