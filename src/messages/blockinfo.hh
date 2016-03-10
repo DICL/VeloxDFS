@@ -1,9 +1,13 @@
 #pragma once
-#include <string>
+#include "message.hh"
 #include <cstdint>
 
 namespace eclipse {
-  struct BlockInfo {
+namespace messages {
+  struct BlockInfo: public Message {
+    std::string get_type() const override;
+
+    uint32_t file_id;
     std::string file_name;
     unsigned int block_seq;
     uint32_t block_hash_key;
@@ -14,5 +18,7 @@ namespace eclipse {
     std::string l_node;
     std::string r_node;
     unsigned int is_commit;
+    std::string content;
   };
+}
 }

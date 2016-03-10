@@ -6,11 +6,12 @@
 #include <cstdint>
 #include <cinttypes>
 #include <vector>
-#include "common/context.hh"
-#include "blockinfo.hh"
-#include "fileinfo.hh"
+#include "../common/context.hh"
+#include "../messages/blockinfo.hh"
+#include "../messages/fileinfo.hh"
 
 namespace eclipse {
+  using namespace messages;
   class Directory {
     private:
       sqlite3 *db;
