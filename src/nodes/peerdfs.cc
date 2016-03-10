@@ -56,7 +56,6 @@ void PeerDFS::insert (std::string k, std::string v) {
     ofstream file (file_path);
     file << v;
     file.close();
-    sleep(1);
 
   } else {
     logger->info ("[DFS] Forwaring KEY: %s -> %d",k.c_str(), which_node);
