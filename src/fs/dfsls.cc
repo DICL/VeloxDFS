@@ -49,12 +49,13 @@ eclipse::messages::FileList* read_reply(tcp::socket* socket) {
   return dynamic_cast<eclipse::messages::FileList*>(m);
 }
 
+
 int main(int argc, char* argv[])
 {
   Context con;
   const int NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
   vector<string> nodes = con.settings.get<vector<string>>("network.nodes");
-  vector<string>::iterator nit = nodes.begin();
+  vector<FileInfo> total;
 
   for(int net_id=0; net_id<NUM_SERVERS; net_id++)
   {
@@ -64,24 +65,32 @@ int main(int argc, char* argv[])
     auto file_list_reply = read_reply(socket);
     socket->close();
 
-    cout << *nit << endl;
-      cout << setw(12) << "Hash Key"
-      << setw(12) << "Size"
-      << setw(12) << "NumBlocks"
-      << setw(12) << "Replicas"
-      << "\t" <<  "FileName" << endl;
-    nit++;
-
-    // client side
-    for(vector<FileInfo>::iterator it=file_list_reply->data.begin(); it!=file_list_reply->data.end(); it++)
-    {
-      cout << setw(12) << it->file_hash_key
-      << setw(12) << it->file_size
-      << setw(12) << it->num_block
-      << setw(12) << it->replica
-      << "\t" << it->file_name << endl;
-    }
+    std::copy(file_list_reply->data.begin(), file_list_reply->data.end(), back_inserter(total));
     delete file_list_reply;
+  }
+
+  std::sort(total.begin(), total.end(), [] (const FileInfo& a, const FileInfo& b) {
+      return (a.file_name < b.file_name);
+      });
+  cout 
+    << setw(14) << "FileName" 
+    << setw(14) << "Hash Key"
+    << setw(14) << "Size"
+    << setw(14) << "NumBlocks"
+    << setw(14) << "Host"
+    << setw(14) << "Replicas"
+    << endl << string(14*6,'-') << endl;
+
+
+  for (auto& fl: total) {
+    cout 
+      << setw(14) << fl.file_name
+      << setw(14) << fl.file_hash_key
+      << setw(14) << fl.file_size
+      << setw(14) << fl.num_block
+      << setw(14) << nodes[h(fl.file_name) % NUM_SERVERS]
+      << setw(14) << fl.replica
+      << endl;
   }
   return 0;
 }
