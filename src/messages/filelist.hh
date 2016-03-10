@@ -13,8 +13,8 @@ struct FileList: public Message {
   FileList() = default;
   FileList(std::vector<FileInfo>);
 
-  std::vector<FileInfo> data;
   std::string get_type() const override;
+  std::vector<FileInfo> data;
 };
 
 }
