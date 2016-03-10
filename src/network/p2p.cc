@@ -85,11 +85,13 @@ void P2P::on_write (const boost::system::error_code& ec,
 void P2P::read_coroutine (yield_context yield) {
   boost::asio::streambuf body; 
   boost::system::error_code ec;
-  char header [16]; 
+  char header [17]; 
   auto* sock = server;
 
   while (true) {
-    size_t l = async_read (*sock, buffer(header), yield[ec]);
+    bzero(header, 16);
+    header[16] = '\0';
+    size_t l = async_read (*sock, buffer(header, 16), yield[ec]);
     if (l != (size_t)header_size) continue;
 
     size_t size = atoi(header);
