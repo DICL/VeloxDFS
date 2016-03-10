@@ -1,6 +1,6 @@
 #include <iostream>
-#include "fs/fileinfo.hh"
-#include "fs/blockinfo.hh"
+#include "messages/fileinfo.hh"
+#include "messages/blockinfo.hh"
 #include "fs/directory.hh"
 #include "common/context.hh"
 
