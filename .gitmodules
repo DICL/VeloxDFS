@@ -1,3 +1,3 @@
 [submodule "doc/manual"]
 	path = doc/manual
-	url = git@github.com:DICL/Eclipse2.wiki.git
+	url = git@github.com:DICL/EclipseDFS.wiki.git
