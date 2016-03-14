@@ -57,7 +57,6 @@ void PeerDFS::insert (std::string k, std::string v) {
     ofstream file (file_path);
     file << v;
     file.close();
-    sleep(1);
 
   } else {
     logger->info ("[DFS] Forwaring KEY: %s -> %d",k.c_str(), which_node);
@@ -189,7 +188,6 @@ bool PeerDFS::insert_block (messages::BlockInfo* m) {
 void PeerDFS::Delete (std::string k) {
   string file_path = disk_path + string("/") + k;
   remove(file_path.c_str());
-  sleep(1);
 }
 // }}}
 // delete_block {{{
