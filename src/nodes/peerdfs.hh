@@ -8,6 +8,8 @@
 #include "../messages/filerequest.hh"
 #include "../messages/filedescription.hh"
 #include "../messages/filelist.hh"
+#include "../messages/filedel.hh"
+#include "../messages/blockdel.hh"
 #include "../fs/directory.hh"
 
 #include <string>
@@ -30,9 +32,12 @@ class PeerDFS: public Node, public AsyncNode {
 
     void insert (std::string, std::string);
     void request (std::string, req_func);
+    void Delete (std::string);
     void close ();
     bool insert_block (messages::BlockInfo*);
     bool insert_file (messages::FileInfo*);
+    bool delete_block (messages::BlockDel*);
+    bool delete_file (messages::FileDel*);
     bool list (messages::FileList*);
     FileDescription request_file (messages::FileRequest*);
 
