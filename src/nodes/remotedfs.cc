@@ -13,6 +13,8 @@ RemoteDFS::RemoteDFS (Context& c) : Router(c), peer(c) {
   routing_table.insert({"FileRequest", bind(&RemoteDFS::request_file, this, ph::_1)});
   routing_table.insert({"BlockRequest", bind(&RemoteDFS::request_block, this, ph::_1)});
   routing_table.insert({"FileList", bind(&RemoteDFS::request_ls, this, ph::_1)});
+  routing_table.insert({"BlockDel", bind(&RemoteDFS::delete_block, this, ph::_1)});
+  routing_table.insert({"FileDel", bind(&RemoteDFS::delete_file, this, ph::_1)});
 }
 // }}}
 // establish {{{
@@ -40,6 +42,23 @@ void RemoteDFS::insert_block (messages::Message* m_) {
 
   network->send(0, &reply);
 }
+void RemoteDFS::delete_block (messages::Message* m_) {
+  auto m = dynamic_cast<messages::BlockDel*> (m_);
+  logger->info ("BlockDel received");
+
+  bool ret = peer.delete_block(m);
+  Reply reply;
+
+  if (ret) {
+    reply.message = "OK";
+  } else {
+    reply.message = "FAIL";
+    reply.details = "Block doesn't exist";
+  }
+
+  network->send(0, &reply);
+}
+
 // }}}
 // FileInfo* {{{
 void RemoteDFS::insert_file (messages::Message* m_) {
@@ -55,6 +74,22 @@ void RemoteDFS::insert_file (messages::Message* m_) {
   } else {
     reply.message = "FAIL";
     reply.details = "File already exists";
+  }
+
+  network->send(0, &reply);
+}
+void RemoteDFS::delete_file (messages::Message* m_) {
+  auto m = dynamic_cast<messages::FileDel*> (m_);
+  logger->info ("FileDel received");
+
+  bool ret = peer.delete_file (m);
+  Reply reply;
+
+  if (ret) {
+    reply.message = "OK";
+  } else {
+    reply.message = "FAIL";
+    reply.details = "File doesn't exist";
   }
 
   network->send(0, &reply);

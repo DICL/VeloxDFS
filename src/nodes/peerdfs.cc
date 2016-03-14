@@ -13,6 +13,7 @@
 #include <iterator>
 #include <memory>
 #include <fstream>
+#include <cstdio>
 
 using namespace eclipse;
 using namespace eclipse::messages;
@@ -56,7 +57,6 @@ void PeerDFS::insert (std::string k, std::string v) {
     ofstream file (file_path);
     file << v;
     file.close();
-    sleep(1);
 
   } else {
     logger->info ("[DFS] Forwaring KEY: %s -> %d",k.c_str(), which_node);
@@ -181,6 +181,38 @@ bool PeerDFS::insert_block (messages::BlockInfo* m) {
   string key = m->block_name;
   directory.insert_block_metadata(*m);
   insert(key, m->content);
+  return true;
+}
+// }}}
+// Delete {{{
+void PeerDFS::Delete (std::string k) {
+  string file_path = disk_path + string("/") + k;
+  remove(file_path.c_str());
+}
+// }}}
+// delete_block {{{
+bool PeerDFS::delete_block (messages::BlockDel* m) {
+  string file_name = m->file_name;
+  unsigned int block_seq = m->block_seq;
+  string key = m->block_name;
+  Delete(key);
+  directory.delete_block_metadata(file_name, block_seq);
+  return true;
+}
+// }}}
+// delete_file {{{
+bool PeerDFS::delete_file (messages::FileDel* f) {
+  bool ret = directory.is_exist(f->file_name.c_str());
+
+  if (!ret) {
+    logger->info ("File:%s doesn't exist in db, ret = %i", f->file_name.c_str(),
+        ret);
+    return false;
+  }
+ 
+  directory.delete_file_metadata(f->file_name);
+ 
+  logger->info ("Removing from SQLite db");
   return true;
 }
 // }}}
