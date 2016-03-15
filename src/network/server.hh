@@ -26,7 +26,7 @@ class Server: public AsyncChannel {
     void do_read ();
     void read_coroutine (boost::asio::yield_context);
 
-    tcp::socket *server;
+    tcp::socket *server = nullptr;
     tcp::endpoint* endpoint = nullptr;
 };
 
