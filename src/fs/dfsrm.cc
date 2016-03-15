@@ -98,6 +98,8 @@ int main(int argc, char* argv[])
 
       send_message(socket, &fr);
       auto fd = read_fd(socket);
+      socket->close();
+      delete socket;
 
       unsigned int block_seq = 0;
       for (auto block_name : fd->nodes) {
@@ -110,19 +112,29 @@ int main(int argc, char* argv[])
         auto msg = read_reply(tmp_socket);
         if (msg->message != "OK") {
           cerr << "[ERROR]: block " << block_name << "doesn't exist" << endl;
+          delete msg;
           return EXIT_FAILURE;
         }
+        delete msg;
+
         tmp_socket->close();
+        delete tmp_socket;
       }
+      delete fd;
 
       FileDel file_del;
       file_del.file_name = file_name;
+      socket = connect(file_hash_key);
       send_message(socket, &file_del);
       auto reply = read_reply(socket);
       if (reply->message != "OK") {
         cerr << "[ERROR]: file " << file_name << " does not exist" << endl;
+        delete reply;
         return EXIT_FAILURE;
       }
+      delete reply;
+      socket->close();
+      delete socket;
 /*
       if (reply->message != "OK") {
       {
