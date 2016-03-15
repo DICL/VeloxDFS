@@ -24,6 +24,7 @@ void Server::do_connect () {
 // }}}
 // on_accept {{{
 void Server::on_accept (tcp::socket* sock) {
+  if (server != nullptr) delete server;
   server = sock;
   do_read();
 }
@@ -89,6 +90,8 @@ void Server::read_coroutine (yield_context yield) {
     if (ec == boost::asio::error::eof) {
       logger->info ("Closing server socket to client");
       server->close();
+      delete server;
+      server = nullptr;
       node->on_disconnect();
     } else {
       logger->info ("Message arrived error=%s", 
