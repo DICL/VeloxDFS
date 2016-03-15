@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
   {
     uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
     uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
-    char chunk [BLOCK_SIZE];
+    char* chunk = new char[BLOCK_SIZE];
     for(int i=1; i<argc; i++)
     {
       string file_name = argv[i];
@@ -230,6 +230,7 @@ int main(int argc, char* argv[])
       delete socket;
       myfile.close();
     }
+    delete[] chunk;
   }
   return 0;
 }
