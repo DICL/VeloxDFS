@@ -707,7 +707,7 @@ namespace eclipse{
     // Create sql statement
     sprintf(sql, "INSERT INTO idata_table (\
         job_id, map_id, num_reducer) \
-        VALUES (%" PRIu32 ", % " PRIu32 ", %" PRIu32 ");",
+        VALUES (%" PRIu32 ", %" PRIu32 ", %" PRIu32 ");",
         idata_info.job_id, idata_info.map_id, idata_info.num_reducer);
 
     // Execute SQL statement
@@ -733,7 +733,7 @@ namespace eclipse{
     // Create sql statement
     sprintf(sql, "INSERT INTO igroup_table (\
         job_id, map_id, reducer_id, num_block) \
-        VALUES (%" PRIu32 ", % " PRIu32 ", %" PRIu32 ", %" PRIu32 ");",
+        VALUES (%" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %" PRIu32 ");",
         igroup_info.job_id, igroup_info.map_id, igroup_info.reducer_id,
         igroup_info.num_block);
 
@@ -760,7 +760,7 @@ namespace eclipse{
     // Create sql statement
     sprintf(sql, "INSERT INTO iblock_table (\
         job_id, map_id, reducer_id, block_seq) \
-        VALUES (%" PRIu32 ", % " PRIu32 ", %" PRIu32 ", %" PRIu32 ");",
+        VALUES (%" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %" PRIu32 ");",
         iblock_info.job_id, iblock_info.map_id, iblock_info.reducer_id,
         iblock_info.block_seq);
 

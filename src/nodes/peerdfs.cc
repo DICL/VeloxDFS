@@ -246,15 +246,15 @@ bool PeerDFS::list (messages::FileList* m) {
 // }}}
 }
 
-void insert_idata(messages::IDataInfo* idata_info) {
+void PeerDFS::insert_idata(messages::IDataInfo* idata_info) {
   directory.insert_idata_metadata(*idata_info);
   logger->info ("Saving to SQLite db");
 }
-void insert_igroup(messages::IGroupInfo* igroup_info) {
+void PeerDFS::insert_igroup(messages::IGroupInfo* igroup_info) {
   directory.insert_igroup_metadata(*igroup_info);
   logger->info ("Saving to SQLite db");
 }
-void insert_iblock(messages::IBlockInfo* iblock_info) {
+void PeerDFS::insert_iblock(messages::IBlockInfo* iblock_info) {
   directory.insert_iblock_metadata(*iblock_info);
   logger->info ("Saving to SQLite db");
 }

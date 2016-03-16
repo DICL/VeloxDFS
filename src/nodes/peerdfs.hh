@@ -11,9 +11,9 @@
 #include "../messages/filedel.hh"
 #include "../messages/blockdel.hh"
 #include "../fs/directory.hh"
-#include "idatainfo.hh"
-#include "igroupinfo.hh"
-#include "iblockinfo.hh"
+#include "../messages/idatainfo.hh"
+#include "../messages/igroupinfo.hh"
+#include "../messages/iblockinfo.hh"
 
 #include <string>
 #include <boost/asio.hpp>
