@@ -44,5 +44,8 @@ namespace eclipse {
       void display_file_metadata();
       void display_block_metadata();
       bool is_exist(std::string file_name);
+      void insert_idata_metadata(IDataInfo idata_info);
+      void insert_igroup_metatdata(IGroupInfo igroup_info);
+      void insert_iblock_metadata(IBlockInfo iblock_info);
   };
 }

@@ -22,6 +22,9 @@ class RemoteDFS: public Router {
     void delete_file (messages::Message*);
     void delete_block (messages::Message*);
     void send_block (std::string, std::string);
+    void insert_idata(messages::Message* msg);
+    void insert_igroup(messages::Message* msg);
+    void insert_iblock(messages::Message* msg);
 
   protected:
     PeerDFS peer;
