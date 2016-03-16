@@ -210,6 +210,66 @@ namespace eclipse{
     {
       con.logger->info("block_table created successfully\n");
     }
+
+    // Create SQL statement
+    sprintf(sql, "CREATE TABLE idata_table( \
+        job_id         INT       NOT NULL, \
+        map_id         INT       NOT NULL, \
+        num_reducer    INT       NOT NULL, \
+        PRIMARY KEY (job_id, map_id));"); 
+
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      con.logger->error("SQL error: %s\n", zErrMsg);
+      sqlite3_free(zErrMsg);
+    }
+    else
+    {
+      con.logger->info("idata_table created successfully\n");
+    }
+
+    // Create SQL statement
+    sprintf(sql, "CREATE TABLE igroup_table( \
+        job_id         INT       NOT NULL, \
+        map_id         INT       NOT NULL, \
+        reducer_id     INT       NOT NULL, \
+        num_block      INT       NOT NULL, \
+        PRIMARY KEY (job_id, map_id, reducer_id));"); 
+
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      con.logger->error("SQL error: %s\n", zErrMsg);
+      sqlite3_free(zErrMsg);
+    }
+    else
+    {
+      con.logger->info("igroup_table created successfully\n");
+    }
+
+    // Create SQL statement
+    sprintf(sql, "CREATE TABLE iblock_table( \
+        job_id         INT       NOT NULL, \
+        map_id         INT       NOT NULL, \
+        reducer_id     INT       NOT NULL, \
+        block_seq      INT       NOT NULL, \
+        PRIMARY KEY (job_id, map_id, reducer_id, block_seq));"); 
+
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      con.logger->error("SQL error: %s\n", zErrMsg);
+      sqlite3_free(zErrMsg);
+    }
+    else
+    {
+      con.logger->info("iblock_table created successfully\n");
+    }
+      
     // Close Database
     sqlite3_close(db);
   }
@@ -637,5 +697,86 @@ namespace eclipse{
     // Close Database
     sqlite3_close(db);
     return result;
+  }
+
+  void Directory::insert_idata_metadata(IDataInfo idata_info) {
+    Context con;
+    // Open database
+    open_db();
+
+    // Create sql statement
+    sprintf(sql, "INSERT INTO idata_table (\
+        job_id, map_id, num_reducer) \
+        VALUES (%" PRIu32 ", %" PRIu32 ", %" PRIu32 ");",
+        idata_info.job_id, idata_info.map_id, idata_info.num_reducer);
+
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      con.logger->error("SQL error: %s\n", zErrMsg);
+      sqlite3_free(zErrMsg);
+    }
+    else
+    {
+      con.logger->info("idata_metadata inserted successfully\n");
+    }
+
+    // Close Database
+    sqlite3_close(db);
+  }
+  void Directory::insert_igroup_metadata(IGroupInfo igroup_info) {
+    Context con;
+    // Open database
+    open_db();
+
+    // Create sql statement
+    sprintf(sql, "INSERT INTO igroup_table (\
+        job_id, map_id, reducer_id, num_block) \
+        VALUES (%" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %" PRIu32 ");",
+        igroup_info.job_id, igroup_info.map_id, igroup_info.reducer_id,
+        igroup_info.num_block);
+
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      con.logger->error("SQL error: %s\n", zErrMsg);
+      sqlite3_free(zErrMsg);
+    }
+    else
+    {
+      con.logger->info("igroup_metadata inserted successfully\n");
+    }
+
+    // Close Database
+    sqlite3_close(db);
+  }
+  void Directory::insert_iblock_metadata(IBlockInfo iblock_info) {
+    Context con;
+    // Open database
+    open_db();
+
+    // Create sql statement
+    sprintf(sql, "INSERT INTO iblock_table (\
+        job_id, map_id, reducer_id, block_seq) \
+        VALUES (%" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %" PRIu32 ");",
+        iblock_info.job_id, iblock_info.map_id, iblock_info.reducer_id,
+        iblock_info.block_seq);
+
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      con.logger->error("SQL error: %s\n", zErrMsg);
+      sqlite3_free(zErrMsg);
+    }
+    else
+    {
+      con.logger->info("iblock_metadata inserted successfully\n");
+    }
+
+    // Close Database
+    sqlite3_close(db);
   }
 }

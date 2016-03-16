@@ -9,6 +9,9 @@
 #include "../common/context.hh"
 #include "../messages/blockinfo.hh"
 #include "../messages/fileinfo.hh"
+#include "../messages/idatainfo.hh"
+#include "../messages/igroupinfo.hh"
+#include "../messages/iblockinfo.hh"
 
 namespace eclipse {
   using namespace messages;
@@ -44,5 +47,8 @@ namespace eclipse {
       void display_file_metadata();
       void display_block_metadata();
       bool is_exist(std::string file_name);
+      void insert_idata_metadata(IDataInfo idata_info);
+      void insert_igroup_metadata(IGroupInfo igroup_info);
+      void insert_iblock_metadata(IBlockInfo iblock_info);
   };
 }
