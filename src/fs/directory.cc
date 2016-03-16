@@ -159,7 +159,6 @@ namespace eclipse{
 
   void Directory::init_db()
   {
-    remove(path.c_str());
     Context con;
     // Open database
     open_db();
