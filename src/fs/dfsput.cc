@@ -78,39 +78,25 @@ int main(int argc, char* argv[])
     for(int i=1; i<argc; i++)
     {
       string file_name = argv[i];
-      ifstream myfile (file_name);
-      myfile.seekg(1, myfile.end);
-      uint64_t file_size = myfile.tellg();
-      uint32_t start = 0;
-      uint32_t end = start + BLOCK_SIZE - 1;
-      uint32_t file_hash_key = h (file_name);
+      ifstream myfile (argv[i]);
+      uint64_t start = 0;
+      uint64_t end = start + BLOCK_SIZE - 1;
+      uint32_t block_size = 0;
       unsigned int block_seq = 0;
-      unsigned int num_blocks = (file_size / BLOCK_SIZE) + 1;
 
-      auto socket = connect(file_hash_key);
-
-      //TODO: remote_metadata_server = lookup(hkey);
-      //int remote_metadata_server = 1;
       FileInfo file_info;
       file_info.file_name = file_name;
-      file_info.file_hash_key = file_hash_key;
-      file_info.file_size = file_size;
-      file_info.num_block = num_blocks;
+      file_info.file_hash_key = h(file_name);
       file_info.replica = con.settings.get<int>("filesystem.replica");
+      myfile.seekg(0, myfile.end);
+      file_info.file_size = myfile.tellg();
+      BlockInfo block_info;
 
-      send_message(socket, &file_info);
-      auto reply = read_reply (socket);
-
-      if (reply->message != "OK") {
-        cerr << "Failed to upload file. Details: " << reply->details << endl;
-        delete reply;
-        return EXIT_FAILURE;
-      } 
-      delete reply;
+      auto socket = connect(file_info.file_hash_key);
 
       while(1)
       {
-        if(end < file_size)
+        if(end < file_info.file_size)
         {
           myfile.seekg(start+BLOCK_SIZE-1, myfile.beg);
           while(1)
@@ -126,106 +112,59 @@ int main(int argc, char* argv[])
               end--;
             }
           }
-          BlockInfo block_info;
-          bzero(chunk, BLOCK_SIZE);
-          myfile.seekg(start, myfile.beg);
-          block_info.content.reserve(end-start);
-          myfile.read(chunk, end-start);
-          block_info.content = chunk;
-
-
-          uint32_t block_size = end - start;
-          start = end + 1;
-          end = start + BLOCK_SIZE - 1;
-
-          unsigned int block_hash_key = rand()%NUM_SERVERS;
-          //TODO: int remote_server = lookup(block_hash_key);
-          //int remote_server = 1;
-
-          block_info.file_name = file_name;
-          block_info.block_seq = block_seq;
-          block_info.block_hash_key = block_hash_key;
-          block_info.block_name = file_info.file_name + "_" + to_string(block_seq++);
-          block_info.block_size = block_size;
-          block_info.is_inter = 0;
-          block_info.node = "1.1.1.1";
-          block_info.l_node = "1.1.1.0";
-          block_info.r_node = "1.1.1.2";
-          //block_info.node = remote_server.ip_address;
-          //Node l_node = lookup((block_hash_key-1+NUM_SERVERS)%NUM_SERVERS);
-          //Node r_node = lookup((block_hash_key+1+NUM_SERVERS)%NUM_SERVERS);
-          //block_info.l_node = l_node.ip_address;
-          //block_info.r_node = r_node.ip_address;
-          file_info.num_block = block_seq;
-            
-          
-          send_message(socket, &block_info);
-          auto reply = read_reply (socket);
-
-          if (reply->message != "OK") {
-            cerr << "Failed to upload file. Details: " << reply->details << endl;
-            delete reply;
-            return EXIT_FAILURE;
-          } 
-          delete reply;
-
-          //TODO: remote_metadata_server.update_file_metadata(fileinfo.file_name, file_info);
-          //cout << "remote_metadata_server.update_file_metadata(fileinfo.file_name, file_info);" << endl;
-
-          //TODO: remote_metadata_server.insert_block_metadata(blockinfo);
-          //cout << "remote_metadata_server.insert_block_metadata(blockinfo);" << endl;
-
-          //TODO: remote_server.send_buff(block_info.block_name, buff);
-          //cout << "remote_server.send_buff(block_info.block_name, buff);" << endl;
-          //remote_server.send_buff(block_hash_key, buff);
-          // this function should call FileIO.insert_block(_metadata) in remote metadata server?
-
-          // TODO: remote node part
         }
-        else // last block
-        {  
-          bzero(chunk, BLOCK_SIZE);
-          BlockInfo block_info;
-          myfile.seekg(start, myfile.beg);
-          block_info.content.reserve(end-start);
-          myfile.read(chunk, end-start);
-          block_info.content = chunk;
+        block_size = (uint32_t) end - start;
+        bzero(chunk, BLOCK_SIZE);
+        myfile.seekg(start, myfile.beg);
+        block_info.content.reserve(block_size);
+        myfile.read(chunk, block_size);
+        block_info.content = chunk;
 
-          uint32_t block_size = end - start;
+        block_info.block_name = file_name + "_" + to_string(block_seq++);
+        block_info.file_name = file_name;
+        block_info.block_seq = block_seq;
+        block_info.block_hash_key = (unsigned int) rand()%NUM_SERVERS;
+        block_info.block_size = block_size;
+        block_info.is_inter = 0;
+        block_info.node = "1.1.1.1";
+        block_info.l_node = "1.1.1.0";
+        block_info.r_node = "1.1.1.2";
+        //block_info.node = remote_server.ip_address;
+        //Node l_node = lookup((block_hash_key-1+NUM_SERVERS)%NUM_SERVERS);
+        //Node r_node = lookup((block_hash_key+1+NUM_SERVERS)%NUM_SERVERS);
+        //block_info.l_node = l_node.ip_address;
+        //block_info.r_node = r_node.ip_address;
 
-          uint32_t block_hash_key = rand()%NUM_SERVERS;
+        send_message(socket, &block_info);
+        auto reply = read_reply (socket);
 
-          // TODO: remote_server = lookup(block_hash_key);
-          //cout << "remote_server = lookup(block_hash_key);" << endl;
-
-          block_info.file_name = file_name;
-          block_info.block_seq = block_seq;
-          block_info.block_hash_key = block_hash_key;
-          block_info.block_name = file_name + "_" + to_string(block_seq++);
-          block_info.block_size = block_size;
-          block_info.is_inter = 0;
-          block_info.node = "1.1.1.1";
-          block_info.l_node = "1.1.1.0";
-          block_info.r_node = "1.1.1.2";
-          //block_info.node = remote_server.ip_address;
-          //Node l_node = lookup((block_hash_key-1+NUM_SERVERS)%NUM_SERVERS);
-          //Node r_node = lookup((block_hash_key+1+NUM_SERVERS)%NUM_SERVERS);
-          //block_info.l_node = l_node.ip_address;
-          //block_info.r_node = r_node.ip_address;
-          file_info.num_block = block_seq;
-
-          send_message(socket, &block_info);
-          auto reply = read_reply (socket);
-
-          if (reply->message != "OK") {
-            cerr << "Failed to upload file. Details: " << reply->details << endl;
-            delete reply;
-            return EXIT_FAILURE;
-          } 
+        if (reply->message != "OK") {
+          cerr << "Failed to upload file. Details: " << reply->details << endl;
           delete reply;
+          return EXIT_FAILURE;
+        } 
+        delete reply;
+
+        if(end >= file_info.file_size)
+        {
           break;
         }
+        start = end + 1;
+        end = start + BLOCK_SIZE - 1;
       }
+
+      file_info.num_block = block_seq;
+
+      send_message(socket, &file_info);
+      auto reply = read_reply (socket);
+
+      if (reply->message != "OK") {
+        cerr << "Failed to upload file. Details: " << reply->details << endl;
+        delete reply;
+        return EXIT_FAILURE;
+      } 
+      delete reply;
+
       socket->close();
       delete socket;
       myfile.close();

@@ -44,10 +44,10 @@ namespace eclipse{
   {
     int i = 0;
     auto block = reinterpret_cast<BlockInfo*>(block_info);
+    block->block_name     = argv[i++];
     block->file_name      = atoi(argv[i++]);
     block->block_seq      = atoi(argv[i++]);
     block->block_hash_key = atoi(argv[i++]);
-    block->block_name     = argv[i++];
     block->block_size     = atoi(argv[i++]);
     block->is_inter       = atoi(argv[i++]);
     block->node           = argv[i++];
@@ -67,50 +67,6 @@ namespace eclipse{
     printf("\n");
     return 0;
   }
-
-/*
-  int Directory::list_file_callback(void *file_info_vector, int argc, char **argv, char **azColName)
-  {
-    auto file_vector = reinterpret_cast<vector<FileInfo>*>(file_info_vector);
-    int i = 0;
-    for(vector<FileInfo>::iterator it=file_vector.begin(); it<argc/5; it++)
-    {
-      FileInfo tmp_file;
-      tmp_file->file_name     = argv[i++];
-      tmp_file->file_hash_key = atoi(argv[i++]);
-      tmp_file->file_size     = atoi(argv[i++]);
-      tmp_file->num_block     = atoi(argv[i++]);
-      tmp_file->replica       = atoi(argv[i++]);
-      file_vector.push_back(tmp_file);
-    }
-    return 0;
-  }
-
-  int Directory::list_block_callback(void *block_info_vector, int argc, char **argv, char **azColName)
-  {
-    auto block_vector = reinterpret_cast<vector<BlockInfo>*>(block_info_vector);
-    int i = 0;
-    for(vector<BlockInfo>::iterator it=block_vector.begin(); it<argc/10; it++)
-    {
-      BlockInfo tmp_block;
-      tmp_block->file_name      = atoi(argv[i++]);
-      tmp_block->block_seq      = atoi(argv[i++]);
-      tmp_block->block_hash_key = atoi(argv[i++]);
-      tmp_block->block_name     = argv[i++];
-      tmp_block->block_size     = atoi(argv[i++]);
-      tmp_block->is_inter       = atoi(argv[i++]);
-      tmp_block->node           = argv[i++];
-      tmp_block->l_node = argv[i] ? argv[i] : "NULL";
-      i++;
-      tmp_block->r_node = argv[i] ? argv[i] : "NULL";
-      i++;
-      tmp_block->is_commit = argv[i] ? atoi(argv[i]) : 0;
-      i++;
-      block_vector.push_back(tmp_block);
-    }
-    return 0;
-  }
-*/
 
   int Directory::file_list_callback(void *list, int argc, char **argv, char **azColName)
   {
@@ -134,10 +90,10 @@ namespace eclipse{
     for(int i=0; i<argc; i++)
     {
       BlockInfo tmp_block;
+      tmp_block.block_name     = argv[i++];
       tmp_block.file_name      = atoi(argv[i++]);
       tmp_block.block_seq      = atoi(argv[i++]);
       tmp_block.block_hash_key = atoi(argv[i++]);
-      tmp_block.block_name     = argv[i++];
       tmp_block.block_size     = atoi(argv[i++]);
       tmp_block.is_inter       = atoi(argv[i++]);
       tmp_block.node           = argv[i++];
@@ -159,7 +115,6 @@ namespace eclipse{
 
   void Directory::init_db()
   {
-    remove(path.c_str());
     Context con;
     // Open database
     open_db();
@@ -187,17 +142,17 @@ namespace eclipse{
 
     // Create SQL statement
     sprintf(sql, "CREATE TABLE block_table( \
+        block_name     TEXT      NOT NULL, \
         file_name      TEXT      NOT NULL, \
         block_seq      INT       NOT NULL, \
         block_hash_key INT       NOT NULL, \
-        block_name     TEXT      NOT NULL, \
         block_size     INT       NOT NULL, \
         is_inter       INT       NOT NULL, \
         node           TEXT      NOT NULL, \
         l_node         TEXT              , \
         r_node         TEXT              , \
         is_commit      INT               , \
-        PRIMARY KEY (file_name, block_seq));"); 
+        PRIMARY KEY (block_name));"); 
 
     // Execute SQL statement
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
@@ -255,14 +210,14 @@ namespace eclipse{
 
     // Create sql statement
     sprintf(sql, "INSERT INTO block_table (\
-      file_name, block_seq, block_hash_key, block_name, \
+      block_name, file_name, block_seq, block_hash_key, \
         block_size, is_inter, node, l_node, r_node, is_commit) \
-      VALUES ('%s', %u, %" PRIu32 ", '%s', %" PRIu32 ",\
+      VALUES ('%s', '%s', %u, %" PRIu32 ", %" PRIu32 ",\
       %u, '%s', '%s', '%s', %u);",
+        block_info.block_name.c_str(),
         block_info.file_name.c_str(),
         block_info.block_seq,
         block_info.block_hash_key,
-        block_info.block_name.c_str(),
         block_info.block_size,
         block_info.is_inter,
         block_info.node.c_str(),
@@ -429,13 +384,13 @@ namespace eclipse{
 
     // Create sql statement
     sprintf(sql, "UPDATE block_table set \
-        file_name='%s', block_seq=%u, block_hash_key=%" PRIu32 ", block_name='%s', \
+        block_name='%s', file_name='%s', block_seq=%u, block_hash_key=%" PRIu32 ", \
         block_size=%" PRIu32 ", is_inter=%u, node='%s', l_node='%s', r_node='%s' \
         , is_commit=%u where (file_name='%s') and (block_seq=%u);",
+        block_info.block_name.c_str(),
         block_info.file_name.c_str(),
         block_info.block_seq,
         block_info.block_hash_key,
-        block_info.block_name.c_str(),
         block_info.block_size,
         block_info.is_inter,
         block_info.node.c_str(),

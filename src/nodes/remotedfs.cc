@@ -15,6 +15,7 @@ RemoteDFS::RemoteDFS (Context& c) : Router(c), peer(c) {
   routing_table.insert({"FileList", bind(&RemoteDFS::request_ls, this, ph::_1)});
   routing_table.insert({"BlockDel", bind(&RemoteDFS::delete_block, this, ph::_1)});
   routing_table.insert({"FileDel", bind(&RemoteDFS::delete_file, this, ph::_1)});
+  routing_table.insert({"FormatRequest", bind(&RemoteDFS::request_format, this, ph::_1)});
 }
 // }}}
 // establish {{{
@@ -127,5 +128,21 @@ void RemoteDFS::send_block (std::string k, std::string v) {
   bi.content = v;
 
   network->send(0, &bi);
+}
+// }}}
+// send_block {{{
+void RemoteDFS::request_format (messages::Message* m_) {
+  bool ret = peer.format();
+  Reply reply;
+
+  if (ret) {
+    reply.message = "OK";
+
+  } else {
+    reply.message = "FAIL";
+    reply.details = "File already exists";
+  }
+
+  network->send(0, &reply);
 }
 // }}}
