@@ -217,7 +217,7 @@ bool PeerDFS::delete_file (messages::FileDel* f) {
   return true;
 }
 // }}}
-// request_block {{{
+// request_file {{{
 FileDescription PeerDFS::request_file (messages::FileRequest* m) {
   string file_name = m->file_name;
 
