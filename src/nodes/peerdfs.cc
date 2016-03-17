@@ -14,6 +14,7 @@
 #include <memory>
 #include <fstream>
 #include <cstdio>
+#include <dirent.h>
 
 using namespace eclipse;
 using namespace eclipse::messages;
@@ -241,6 +242,28 @@ FileDescription PeerDFS::request_file (messages::FileRequest* m) {
 // list {{{
 bool PeerDFS::list (messages::FileList* m) {
   directory.select_all_file_metadata(m->data);
+  return true;
+}
+// }}}
+// format {{{
+bool PeerDFS::format () {
+  logger->info ("Formating DFS");
+
+  string fs_path = settings.get<string>("path.scratch");
+  string md_path = settings.get<string>("path.metadata");
+
+  DIR *theFolder = opendir(fs_path.c_str());
+  struct dirent *next_file;
+  char filepath[256] = {0};
+
+  while ( (next_file = readdir(theFolder)) != NULL ) {
+    sprintf(filepath, "%s/%s", fs_path.c_str(), next_file->d_name);
+    remove(filepath);
+  }
+  closedir(theFolder);
+
+  remove((md_path + "/metadata.db").c_str());
+  directory.init_db();
   return true;
 }
 // }}}

@@ -39,6 +39,7 @@ class PeerDFS: public Node, public AsyncNode {
     bool delete_block (messages::BlockDel*);
     bool delete_file (messages::FileDel*);
     bool list (messages::FileList*);
+    bool format ();
     FileDescription request_file (messages::FileRequest*);
 
   protected:
