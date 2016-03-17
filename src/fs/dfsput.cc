@@ -81,6 +81,7 @@ int main(int argc, char* argv[])
       ifstream myfile (argv[i]);
       uint64_t start = 0;
       uint64_t end = start + BLOCK_SIZE - 1;
+      uint32_t block_size = 0;
       unsigned int block_seq = 0;
 
       FileInfo file_info;
@@ -112,17 +113,18 @@ int main(int argc, char* argv[])
             }
           }
         }
+        block_size = (uint32_t) end - start;
         bzero(chunk, BLOCK_SIZE);
         myfile.seekg(start, myfile.beg);
-        block_info.content.reserve(end-start);
-        myfile.read(chunk, end-start);
+        block_info.content.reserve(block_size);
+        myfile.read(chunk, block_size);
         block_info.content = chunk;
 
+        block_info.block_name = file_name + "_" + to_string(block_seq++);
         block_info.file_name = file_name;
         block_info.block_seq = block_seq;
         block_info.block_hash_key = (unsigned int) rand()%NUM_SERVERS;
-        block_info.block_name = file_name + "_" + to_string(block_seq++);
-        block_info.block_size = (uint32_t) end - start;
+        block_info.block_size = block_size;
         block_info.is_inter = 0;
         block_info.node = "1.1.1.1";
         block_info.l_node = "1.1.1.0";
