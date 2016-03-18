@@ -20,6 +20,9 @@
 #include "filerequest.hh"
 #include "blockrequest.hh"
 #include "filedescription.hh"
+#include "blockdel.hh"
+#include "filedel.hh"
+#include "formatrequest.hh"
 
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/access.hpp>
@@ -73,7 +76,6 @@ template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::FileInfo& c, unsigned int) {
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.file_name);
-    ar & BOOST_SERIALIZATION_NVP(c.file_id);
     ar & BOOST_SERIALIZATION_NVP(c.file_hash_key);
     ar & BOOST_SERIALIZATION_NVP(c.file_size);
     ar & BOOST_SERIALIZATION_NVP(c.num_block);
@@ -83,11 +85,10 @@ template <typename Archive>
 template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::BlockInfo& c, unsigned int) {
     ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.file_id);        
+    ar & BOOST_SERIALIZATION_NVP(c.block_name);  
     ar & BOOST_SERIALIZATION_NVP(c.file_name);  
     ar & BOOST_SERIALIZATION_NVP(c.block_seq);  
     ar & BOOST_SERIALIZATION_NVP(c.block_hash_key); 
-    ar & BOOST_SERIALIZATION_NVP(c.block_name);  
     ar & BOOST_SERIALIZATION_NVP(c.block_size);     
     ar & BOOST_SERIALIZATION_NVP(c.is_inter);   
     ar & BOOST_SERIALIZATION_NVP(c.node);        
@@ -143,6 +144,25 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.file_name);
     ar & BOOST_SERIALIZATION_NVP(c.nodes);
   }
+
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::FileDel& c, unsigned int) {
+    ar & BASE_OBJECT(Message, c);
+    ar & BOOST_SERIALIZATION_NVP(c.file_name);
+  }
+
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::BlockDel& c, unsigned int) {
+    ar & BASE_OBJECT(Message, c);
+    ar & BOOST_SERIALIZATION_NVP(c.file_name);
+    ar & BOOST_SERIALIZATION_NVP(c.block_seq);
+    ar & BOOST_SERIALIZATION_NVP(c.block_name);
+  }
+
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::FormatRequest& c, unsigned int) {
+    ar & BASE_OBJECT(Message, c);
+  }
 }
 }
 
@@ -163,3 +183,6 @@ BOOST_CLASS_TRACKING(eclipse::messages::CacheInfo, boost::serialization::track_n
 BOOST_CLASS_TRACKING(eclipse::messages::FileRequest, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::BlockRequest, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::FileDescription, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::FileDel, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::BlockDel, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::FormatRequest, boost::serialization::track_never);

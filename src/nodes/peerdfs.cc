@@ -13,6 +13,8 @@
 #include <iterator>
 #include <memory>
 #include <fstream>
+#include <cstdio>
+#include <dirent.h>
 
 using namespace eclipse;
 using namespace eclipse::messages;
@@ -183,6 +185,38 @@ bool PeerDFS::insert_block (messages::BlockInfo* m) {
   return true;
 }
 // }}}
+// Delete {{{
+void PeerDFS::Delete (std::string k) {
+  string file_path = disk_path + string("/") + k;
+  remove(file_path.c_str());
+}
+// }}}
+// delete_block {{{
+bool PeerDFS::delete_block (messages::BlockDel* m) {
+  string file_name = m->file_name;
+  unsigned int block_seq = m->block_seq;
+  string key = m->block_name;
+  Delete(key);
+  directory.delete_block_metadata(file_name, block_seq);
+  return true;
+}
+// }}}
+// delete_file {{{
+bool PeerDFS::delete_file (messages::FileDel* f) {
+  bool ret = directory.is_exist(f->file_name.c_str());
+
+  if (!ret) {
+    logger->info ("File:%s doesn't exist in db, ret = %i", f->file_name.c_str(),
+        ret);
+    return false;
+  }
+ 
+  directory.delete_file_metadata(f->file_name);
+ 
+  logger->info ("Removing from SQLite db");
+  return true;
+}
+// }}}
 // request_block {{{
 FileDescription PeerDFS::request_file (messages::FileRequest* m) {
   string file_name = m->file_name;
@@ -208,6 +242,28 @@ FileDescription PeerDFS::request_file (messages::FileRequest* m) {
 // list {{{
 bool PeerDFS::list (messages::FileList* m) {
   directory.select_all_file_metadata(m->data);
+  return true;
+}
+// }}}
+// format {{{
+bool PeerDFS::format () {
+  logger->info ("Formating DFS");
+
+  string fs_path = settings.get<string>("path.scratch");
+  string md_path = settings.get<string>("path.metadata");
+
+  DIR *theFolder = opendir(fs_path.c_str());
+  struct dirent *next_file;
+  char filepath[256] = {0};
+
+  while ( (next_file = readdir(theFolder)) != NULL ) {
+    sprintf(filepath, "%s/%s", fs_path.c_str(), next_file->d_name);
+    remove(filepath);
+  }
+  closedir(theFolder);
+
+  remove((md_path + "/metadata.db").c_str());
+  directory.init_db();
   return true;
 }
 // }}}
