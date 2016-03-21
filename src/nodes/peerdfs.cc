@@ -229,7 +229,7 @@ FileDescription PeerDFS::request_file (messages::FileRequest* m) {
   directory.select_file_metadata(file_name, &fi);
 
   int num_blocks = fi.num_block;
-  for (int i = 0; i< num_blocks; i++) {
+  for (int i = 1; i< num_blocks; i++) {
     BlockInfo bi;
     directory.select_block_metadata (file_name, i, &bi);
     string block_name = bi.block_name;
