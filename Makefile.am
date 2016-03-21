@@ -3,7 +3,7 @@ include tests/Makefile.am
 AM_CPPFLAGS         = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
 AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3 
 
-bin_PROGRAMS        = eclipse_node dfsput dfsget dfsls dfsformat dfsrm
+bin_PROGRAMS        = eclipse_node dfsput dfsget dfsls dfsformat dfsrm dfsshow
 
 
 messages_files   = src/messages/boundaries.cc      \
@@ -54,9 +54,6 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
 
 eclipse_node_LDADD   = $(LDADD) -lsqlite3
 
-cacheinfo_SOURCES    = src/fs/cacheinfo.cc \
-											 $(messages_files)
-
 dfsput_SOURCES       = src/fs/dfsput.cc src/fs/directory.cc \
 											 $(messages_files)
 
@@ -81,6 +78,11 @@ dfsrm_SOURCES      = src/fs/dfsrm.cc src/fs/directory.cc \
 											$(messages_files)
 
 dfsrm_LDADD        = $(LDADD) -lsqlite3
+
+dfsshow_SOURCES      = src/fs/dfsshow.cc src/fs/directory.cc \
+											$(messages_files)
+
+dfsshow_LDADD        = $(LDADD) -lsqlite3
 
 pkginclude_HEADERS  = src/common/ecfs.hh src/common/settings.hh
 
