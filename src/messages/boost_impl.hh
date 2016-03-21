@@ -94,7 +94,7 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.node);        
     ar & BOOST_SERIALIZATION_NVP(c.l_node);      
     ar & BOOST_SERIALIZATION_NVP(c.r_node);      
-    ar & BOOST_SERIALIZATION_NVP(c.is_commit);  
+    ar & BOOST_SERIALIZATION_NVP(c.is_committed);  
     ar & BOOST_SERIALIZATION_NVP(c.content);  
   }
 
