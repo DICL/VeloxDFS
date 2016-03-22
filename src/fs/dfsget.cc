@@ -20,14 +20,14 @@ using vec_str = std::vector<std::string>;
 
 boost::asio::io_service iosvc;
 
-tcp::socket* connect (int hash_value) { 
+tcp::socket* connect (int which_node) { 
   tcp::socket* socket = new tcp::socket (iosvc);
   Settings setted = Settings().load();
 
   int port      = setted.get<int> ("network.port_mapreduce");
   vec_str nodes = setted.get<vec_str> ("network.nodes");
 
-  string host = nodes[ hash_value % nodes.size() ];
+  string host = nodes[ which_node ];
 
   tcp::resolver resolver (iosvc);
   tcp::resolver::query query (host, to_string(port));
@@ -80,11 +80,14 @@ int main(int argc, char* argv[]) {
 
   } else {
     string path = con.settings.get<string>("path.scratch");
+    uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
+    Histogram boundaries(NUM_SERVERS, 0);
+    boundaries.initialize();
 
     for (int i=1; i<argc; i++) {
       string file_name = argv[i];
       uint32_t file_hash_key = h(file_name);
-      tcp::socket* socket = connect (file_hash_key);
+      tcp::socket* socket = connect (file_hash_key % NUM_SERVERS);
       FileRequest fr;
       fr.file_name = file_name;
       
@@ -92,10 +95,13 @@ int main(int argc, char* argv[]) {
       auto fd = read_reply (socket);
 
       ofstream f (file_name);
+      int j = 0;
       for (auto block_name : fd->nodes) {
-        auto* tmp_socket = connect(h(block_name.c_str()));
+        auto hash_key = fd->hashes[j++];
+        auto* tmp_socket = connect(boundaries.get_index(hash_key));
         BlockRequest br;
         br.block_name = block_name; 
+        br.hash_key   = hash_key; 
         send_message(tmp_socket, &br);
         auto msg = read_block(tmp_socket);
         f << msg->content;

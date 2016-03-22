@@ -31,6 +31,7 @@ class Histogram
         int get_index (unsigned query);   // return the dedicated node index of query
         int count_query (unsigned query);
         void updateboundary();
+        uint32_t random_within_boundaries(int);
         
         void set_numbin (int num);
         int get_numbin();

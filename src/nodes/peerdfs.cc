@@ -34,6 +34,8 @@ PeerDFS::PeerDFS (Context& context) : Node (context) {
   disk_path      = setted.get<string>("path.scratch");
 
   network   = new AsyncNetwork<P2P>(this, context, 10, port);
+  boundaries.reset( new Histogram {size, 0});
+  boundaries->initialize();
 
   directory.init_db();
 }
@@ -50,39 +52,39 @@ bool PeerDFS::establish () {
 }
 // }}}
 // insert {{{
-void PeerDFS::insert (std::string k, std::string v) {
-  int which_node = h(k) % size;
+void PeerDFS::insert (uint32_t hash_key, std::string name, std::string v) {
+  int which_node = boundaries->get_index(hash_key);
 
   if (which_node == id) {
-    string file_path = disk_path + string("/") + k;
+    string file_path = disk_path + string("/") + name;
     ofstream file (file_path);
     file << v;
     file.close();
 
   } else {
-    logger->info ("[DFS] Forwaring KEY: %s -> %d",k.c_str(), which_node);
-    KeyValue kv (k, v);
+    logger->info ("[DFS] Forwaring KEY: %s -> %d", name.c_str(), which_node);
+    KeyValue kv (hash_key, name, v);
     network->send(which_node, &kv);
   }
 }
 // }}}
 // request {{{
-void PeerDFS::request (std::string key, req_func f) {
- int idx = h(key) % size;
+void PeerDFS::request (uint32_t key, string name , req_func f) {
+ int idx = boundaries->get_index(key);
 
  if (idx != id) {
-   KeyRequest k_req (key);
+   KeyRequest k_req (name);
    k_req.set_origin (id);
    network->send (idx, &k_req);
-   requested_blocks.insert ({key, f});
+   requested_blocks.insert ({name, f});
 
  } else {
-  ifstream in (disk_path + string("/") + key);
+  ifstream in (disk_path + string("/") + name);
   string value ((std::istreambuf_iterator<char>(in)),
       std::istreambuf_iterator<char>());
 
   in.close();
-  f(key, value);
+  f(name, value);
  }
 }
 // }}}
@@ -91,18 +93,19 @@ void PeerDFS::close() { exit(EXIT_SUCCESS); }
 // }}}
 // process (KeyValue* m) {{{
 template<> void PeerDFS::process (KeyValue* m) {
-  string& key = m->key;
+  auto key = m->key;
+  auto name =  m->name;
 
-  int which_node = h(key) % size;
+  int which_node = boundaries->get_index(key);
   if (which_node == id or m->destination == id)  {
-    logger->info ("Instering key = %s", key.c_str());
-    insert(key, m->value);
+    logger->info ("Instering key = %s", name.c_str());
+    insert(key, m->name, m->value);
   }
 
-  if (requested_blocks.find(key) !=requested_blocks.end()){
+  if (requested_blocks.find(name) != requested_blocks.end()){
     logger->info ("Executing func");
-    requested_blocks[key](key, m->value);
-    requested_blocks.erase(key);
+    requested_blocks[name](name, m->value);
+    requested_blocks.erase(name);
   }
 }
 // }}}
@@ -116,7 +119,7 @@ template<> void PeerDFS::process (KeyRequest* m) {
   in >> value;
   in.close();
 
-  KeyValue kv (key, value);
+  KeyValue kv (0, key, value);
   kv.destination = m->origin;
   network->send(m->origin, &kv);
 }
@@ -181,7 +184,7 @@ bool PeerDFS::insert_file (messages::FileInfo* f) {
 bool PeerDFS::insert_block (messages::BlockInfo* m) {
   string key = m->block_name;
   directory.insert_block_metadata(*m);
-  insert(key, m->content);
+  insert(m->block_hash_key, key, m->content);
   return true;
 }
 // }}}
@@ -234,6 +237,7 @@ FileDescription PeerDFS::request_file (messages::FileRequest* m) {
     directory.select_block_metadata (file_name, i, &bi);
     string block_name = bi.block_name;
     fd.nodes.push_back(block_name);
+    fd.hashes.push_back(bi.block_hash_key);
   }
 
   return fd;

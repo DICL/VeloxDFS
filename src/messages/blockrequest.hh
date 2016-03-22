@@ -11,6 +11,7 @@ struct BlockRequest: public Message {
 
   std::string get_type() const override;
   std::string block_name;
+  uint32_t hash_key;
 };
 
 }

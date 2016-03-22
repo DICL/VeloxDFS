@@ -75,6 +75,10 @@ int main(int argc, char* argv[])
     uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
     uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
     char* chunk = new char[BLOCK_SIZE];
+    Histogram boundaries(NUM_SERVERS, 0);
+    boundaries.initialize();
+
+    int which_server = 0;
     for(int i=1; i<argc; i++)
     {
       string file_name = argv[i];
@@ -123,7 +127,7 @@ int main(int argc, char* argv[])
         block_info.block_name = file_name + "_" + to_string(block_seq++);
         block_info.file_name = file_name;
         block_info.block_seq = block_seq;
-        block_info.block_hash_key = (unsigned int) rand()%NUM_SERVERS;
+        block_info.block_hash_key = boundaries.random_within_boundaries(which_server);
         block_info.block_size = block_size;
         block_info.is_inter = 0;
         block_info.node = "1.1.1.1";
@@ -168,6 +172,7 @@ int main(int argc, char* argv[])
       socket->close();
       delete socket;
       myfile.close();
+      which_server = (which_server + 1) % NUM_SERVERS;
     }
     delete[] chunk;
   }
