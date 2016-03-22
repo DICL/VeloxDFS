@@ -20,14 +20,14 @@ using vec_str = std::vector<std::string>;
 
 boost::asio::io_service iosvc;
 
-tcp::socket* connect (int which_node) { 
+tcp::socket* connect (int hash_value) { 
   tcp::socket* socket = new tcp::socket (iosvc);
   Settings setted = Settings().load();
 
   int port      = setted.get<int> ("network.port_mapreduce");
   vec_str nodes = setted.get<vec_str> ("network.nodes");
 
-  string host = nodes[ which_node ];
+  string host = nodes[ hash_value % nodes.size() ];
 
   tcp::resolver resolver (iosvc);
   tcp::resolver::query query (host, to_string(port));
@@ -80,37 +80,26 @@ int main(int argc, char* argv[]) {
 
   } else {
     string path = con.settings.get<string>("path.scratch");
-    uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
-    Histogram boundaries(NUM_SERVERS, 0);
-    boundaries.initialize();
+    vec_str nodes = con.settings.get<vec_str> ("network.nodes");
 
     for (int i=1; i<argc; i++) {
       string file_name = argv[i];
       uint32_t file_hash_key = h(file_name);
-      tcp::socket* socket = connect (file_hash_key % NUM_SERVERS);
+      tcp::socket* socket = connect (file_hash_key);
       FileRequest fr;
       fr.file_name = file_name;
       
       send_message (socket, &fr);
       auto fd = read_reply (socket);
 
+      cout << file_name << endl;
+
       ofstream f (file_name);
-      int j = 0;
       for (auto block_name : fd->nodes) {
-        auto hash_key = fd->hashes[j++];
-        auto* tmp_socket = connect(boundaries.get_index(hash_key));
-        BlockRequest br;
-        br.block_name = block_name; 
-        br.hash_key   = hash_key; 
-        send_message(tmp_socket, &br);
-        auto msg = read_block(tmp_socket);
-        f << msg->content;
-        tmp_socket->close();
-        delete tmp_socket;
-        delete msg;
+        string node = nodes[h(block_name.c_str()) % nodes.size()];
+        cout << "\t- " << setw(15) << block_name << " : " << setw(15) << node << endl;
       }
 
-      cout << file_name << " downloaded" << endl;
       socket->close(); 
       f.close();
       delete socket;

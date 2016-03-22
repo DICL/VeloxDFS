@@ -45,7 +45,7 @@ namespace eclipse{
     int i = 0;
     auto block = reinterpret_cast<BlockInfo*>(block_info);
     block->block_name     = argv[i++];
-    block->file_name      = atoi(argv[i++]);
+    block->file_name      = argv[i++];
     block->block_seq      = atoi(argv[i++]);
     block->block_hash_key = atoi(argv[i++]);
     block->block_size     = atoi(argv[i++]);

@@ -57,6 +57,7 @@ template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::KeyValue& k, unsigned int) {
     ar & BASE_OBJECT(Message, k);
     ar & BOOST_SERIALIZATION_NVP(k.key);
+    ar & BOOST_SERIALIZATION_NVP(k.name);
     ar & BOOST_SERIALIZATION_NVP(k.value);
   }
 
@@ -136,6 +137,7 @@ template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::BlockRequest& c, unsigned int) {
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.block_name);
+    ar & BOOST_SERIALIZATION_NVP(c.hash_key);
   }
 
 template <typename Archive>
@@ -143,6 +145,7 @@ template <typename Archive>
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.file_name);
     ar & BOOST_SERIALIZATION_NVP(c.nodes);
+    ar & BOOST_SERIALIZATION_NVP(c.hashes);
   }
 
 template <typename Archive>

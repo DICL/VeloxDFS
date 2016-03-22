@@ -8,11 +8,11 @@ namespace messages {
 
 struct KeyValue: public Message {
   KeyValue () = default;
-  KeyValue (std::string, std::string);
+  KeyValue (uint32_t, std::string, std::string);
 
   std::string get_type() const override;
-  unsigned int key;
-  std::string value;
+  uint32_t key;
+  std::string name, value;
 };
 
 }
