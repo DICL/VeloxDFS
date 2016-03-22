@@ -13,7 +13,7 @@ struct FileDescription: public Message {
   std::string get_type() const override;
 
   std::string file_name;
-  std::vector<std::string> nodes;
+  std::vector<uint32_t> nodes;
 };
 
 }

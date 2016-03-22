@@ -11,7 +11,8 @@ struct KeyValue: public Message {
   KeyValue (std::string, std::string);
 
   std::string get_type() const override;
-  std::string key, value;
+  unsigned int key;
+  std::string value;
 };
 
 }

@@ -91,6 +91,7 @@ int main(int argc, char* argv[])
       myfile.seekg(0, myfile.end);
       file_info.file_size = myfile.tellg();
       BlockInfo block_info;
+      uint32_t block_hash_key = rand()%NUM_SERVERS;
 
       auto socket = connect(file_info.file_hash_key);
 
@@ -120,10 +121,10 @@ int main(int argc, char* argv[])
         myfile.read(chunk, block_size);
         block_info.content = chunk;
 
-        block_info.block_name = to_string(rand());
+        block_info.block_name = file_name + "_" + to_string(block_seq);
         block_info.file_name = file_name;
-        block_info.block_seq = block_seq;
-        block_info.block_hash_key = h(block_info.block_name);
+        block_info.block_seq = block_seq++;
+        block_info.block_hash_key = block_hash_key;
         block_info.block_size = block_size;
         block_info.is_inter = 0;
         block_info.node = "1.1.1.1";
@@ -152,6 +153,7 @@ int main(int argc, char* argv[])
         }
         start = end + 1;
         end = start + BLOCK_SIZE - 1;
+        block_hash_key = (block_hash_key + 1)%NUM_SERVERS;
       }
 
       file_info.num_block = block_seq;
