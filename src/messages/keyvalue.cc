@@ -3,7 +3,7 @@
 namespace eclipse {
 namespace messages {
 
-KeyValue::KeyValue (std::string k, std::string v) : key(k), value(v) { }
+KeyValue::KeyValue (uint32_t k, std::string n, std::string v) : key(k), name(n), value(v) { }
 
 std::string KeyValue::get_type() const { return "KeyValue"; }
 
