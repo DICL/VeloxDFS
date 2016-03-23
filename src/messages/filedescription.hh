@@ -14,6 +14,7 @@ struct FileDescription: public Message {
 
   std::string file_name;
   std::vector<std::string> nodes;
+  std::vector<uint32_t> hashes;
 };
 
 }

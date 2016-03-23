@@ -10,7 +10,7 @@ using namespace eclipse::messages;
 SUITE(MESSAGES) {
   TEST(basic) {
     Message* a = new Boundaries ({1,2,3,4,5});
-    Message* b = new KeyValue ("K","V");
+    Message* b = new KeyValue (1, "K","V");
     a->set_origin (1);
     a->set_destination (2);
     b->set_origin (1);
@@ -29,7 +29,8 @@ SUITE(MESSAGES) {
     CHECK(b_->data[3] == 4);
     CHECK(b_->data[4] == 5);
     CHECK(k_->get_origin() == 1);
-    CHECK(k_->key == "K");
+    CHECK(k_->key == 1);
+    CHECK(k_->name== "K");
     CHECK(k_->value == "V");
 
     delete b_;

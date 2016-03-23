@@ -108,8 +108,9 @@ void RemoteDFS::request_file (messages::Message* m_) {
 // request_block {{{
 void RemoteDFS::request_block (messages::Message* m_) {
   auto m = dynamic_cast<messages::BlockRequest*> (m_);
-  string key = m->block_name;
-  peer.request(key, std::bind(&RemoteDFS::send_block, this, ph::_1, ph::_2));
+  auto key = m->hash_key;
+  auto name= m->block_name;
+  peer.request(key, name, std::bind(&RemoteDFS::send_block, this, ph::_1, ph::_2));
 }
 // }}}
 // request_ls {{{
