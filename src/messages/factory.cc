@@ -45,7 +45,6 @@ void operator<< (Message* m, boost::asio::streambuf& data_) {
   ia >> BOOST_SERIALIZATION_NVP(m);
 }
 
-
 void operator<< (Histogram& h, Message& m) {
   Boundaries* b = dynamic_cast<Boundaries*>(&m);
   for (int i = 0; i < h.get_numserver(); i++)
