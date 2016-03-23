@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
         {
           break;
         }
-        start = end + 1;
+        start = end;
         end = start + BLOCK_SIZE - 1;
         which_server = (which_server + 1) % NUM_SERVERS;
       }
