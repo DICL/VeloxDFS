@@ -20,7 +20,7 @@ using vec_str = std::vector<std::string>;
 
 boost::asio::io_service iosvc;
 
-tcp::socket* connect (int which_node) { 
+tcp::socket* connect (uint32_t which_node) { 
   tcp::socket* socket = new tcp::socket (iosvc);
   Settings setted = Settings().load();
 
