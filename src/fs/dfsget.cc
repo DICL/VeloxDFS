@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
 
       ofstream f (file_name);
       int j = 0;
-      for (auto block_name : fd->nodes) {
+      for (auto block_name : fd->blocks) {
         auto hash_key = fd->hashes[j++];
         auto* tmp_socket = connect(boundaries.get_index(hash_key));
         BlockRequest br;

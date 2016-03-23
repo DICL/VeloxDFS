@@ -78,9 +78,9 @@ int main(int argc, char* argv[])
     Histogram boundaries(NUM_SERVERS, 0);
     boundaries.initialize();
 
-    int which_server = 0;
     for(int i=1; i<argc; i++)
     {
+      int which_server = rand()%NUM_SERVERS;
       string file_name = argv[i];
       ifstream myfile (argv[i]);
       uint64_t start = 0;
@@ -95,7 +95,6 @@ int main(int argc, char* argv[])
       myfile.seekg(0, myfile.end);
       file_info.file_size = myfile.tellg();
       BlockInfo block_info;
-      uint32_t block_hash_key = rand()%NUM_SERVERS;
 
       auto socket = connect(file_info.file_hash_key);
 
@@ -157,7 +156,7 @@ int main(int argc, char* argv[])
         }
         start = end + 1;
         end = start + BLOCK_SIZE - 1;
-        block_hash_key = (block_hash_key + 1)%NUM_SERVERS;
+        which_server = (which_server + 1) % NUM_SERVERS;
       }
 
       file_info.num_block = block_seq;
@@ -175,7 +174,6 @@ int main(int argc, char* argv[])
       socket->close();
       delete socket;
       myfile.close();
-      which_server = (which_server + 1) % NUM_SERVERS;
     }
     delete[] chunk;
   }

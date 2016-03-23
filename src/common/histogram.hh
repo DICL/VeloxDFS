@@ -25,13 +25,13 @@ class Histogram
         void initialize(); // partition the problem space equally to each bin
         void init_count(); // initialize the all query counts to zero
         unsigned get_boundary (int index);
-        void set_boundary (int index, unsigned boundary);
+        void set_boundary (int index, unsigned int boundary);
         double get_count (int index);
         void set_count (int index, double count);
         int get_index (unsigned query);   // return the dedicated node index of query
         int count_query (unsigned query);
         void updateboundary();
-        uint32_t random_within_boundaries(int);
+        uint32_t random_within_boundaries(unsigned int);
         
         void set_numbin (int num);
         int get_numbin();
