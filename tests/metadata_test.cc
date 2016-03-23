@@ -32,7 +32,7 @@ int main() {
   block_info.node = "1.1.1.1";
   block_info.l_node = "1.1.1.0";
   block_info.r_node = "1.1.1.2";
-  block_info.is_commit = 3;
+  block_info.is_committed = 3;
 
   dir.insert_file_metadata(file_info);
   dir.insert_block_metadata(block_info);

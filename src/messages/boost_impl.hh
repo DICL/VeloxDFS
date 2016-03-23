@@ -95,7 +95,7 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.node);        
     ar & BOOST_SERIALIZATION_NVP(c.l_node);      
     ar & BOOST_SERIALIZATION_NVP(c.r_node);      
-    ar & BOOST_SERIALIZATION_NVP(c.is_commit);  
+    ar & BOOST_SERIALIZATION_NVP(c.is_committed);  
     ar & BOOST_SERIALIZATION_NVP(c.content);  
   }
 
@@ -144,7 +144,7 @@ template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::FileDescription& c, unsigned int) {
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.file_name);
-    ar & BOOST_SERIALIZATION_NVP(c.nodes);
+    ar & BOOST_SERIALIZATION_NVP(c.blocks);
     ar & BOOST_SERIALIZATION_NVP(c.hashes);
   }
 

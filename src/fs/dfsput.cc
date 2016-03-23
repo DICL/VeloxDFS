@@ -78,9 +78,9 @@ int main(int argc, char* argv[])
     Histogram boundaries(NUM_SERVERS, 0);
     boundaries.initialize();
 
-    int which_server = 0;
     for(int i=1; i<argc; i++)
     {
+      int which_server = rand()%NUM_SERVERS;
       string file_name = argv[i];
       ifstream myfile (argv[i]);
       uint64_t start = 0;
@@ -124,15 +124,16 @@ int main(int argc, char* argv[])
         myfile.read(chunk, block_size);
         block_info.content = chunk;
 
-        block_info.block_name = file_name + "_" + to_string(block_seq++);
+        block_info.block_name = file_name + "_" + to_string(block_seq);
         block_info.file_name = file_name;
-        block_info.block_seq = block_seq;
+        block_info.block_seq = block_seq++;
         block_info.block_hash_key = boundaries.random_within_boundaries(which_server);
         block_info.block_size = block_size;
         block_info.is_inter = 0;
         block_info.node = "1.1.1.1";
         block_info.l_node = "1.1.1.0";
         block_info.r_node = "1.1.1.2";
+        block_info.is_committed = 1;
         //block_info.node = remote_server.ip_address;
         //Node l_node = lookup((block_hash_key-1+NUM_SERVERS)%NUM_SERVERS);
         //Node r_node = lookup((block_hash_key+1+NUM_SERVERS)%NUM_SERVERS);
@@ -155,6 +156,7 @@ int main(int argc, char* argv[])
         }
         start = end + 1;
         end = start + BLOCK_SIZE - 1;
+        which_server = (which_server + 1) % NUM_SERVERS;
       }
 
       file_info.num_block = block_seq;
@@ -172,7 +174,6 @@ int main(int argc, char* argv[])
       socket->close();
       delete socket;
       myfile.close();
-      which_server = (which_server + 1) % NUM_SERVERS;
     }
     delete[] chunk;
   }

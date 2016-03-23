@@ -95,7 +95,7 @@ int main(int argc, char* argv[]) {
       cout << file_name << endl;
 
       ofstream f (file_name);
-      for (auto block_name : fd->nodes) {
+      for (auto block_name : fd->blocks) {
         string node = nodes[h(block_name.c_str()) % nodes.size()];
         cout << "\t- " << setw(15) << block_name << " : " << setw(15) << node << endl;
       }

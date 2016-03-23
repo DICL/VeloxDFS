@@ -246,8 +246,8 @@ int Histogram::get_index (unsigned query)     // return the server index range o
 }
 
 // random_within_boundaries {{{
-uint32_t Histogram::random_within_boundaries (int index) {
-  int which_server = get_index(index);
+uint32_t Histogram::random_within_boundaries (unsigned int index) {
+  unsigned int which_server = index;
   int lower_boundary ;
 
   if (which_server != 0)
@@ -256,7 +256,8 @@ uint32_t Histogram::random_within_boundaries (int index) {
     lower_boundary = boundaries[numserver-1];
 
   int upper_boundary = boundaries[which_server];
-  uint32_t result = (upper_boundary - lower_boundary) * rand() + lower_boundary;
+  int range = upper_boundary - lower_boundary;
+  uint32_t result = rand() % range + lower_boundary;
 
   return result;
 }

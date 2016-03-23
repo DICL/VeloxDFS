@@ -16,7 +16,7 @@ namespace messages {
     std::string node;
     std::string l_node;
     std::string r_node;
-    unsigned int is_commit;
+    unsigned int is_committed;
     std::string content;
   };
 }

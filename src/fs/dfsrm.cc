@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
       delete socket;
 
       unsigned int block_seq = 0;
-      for (auto block_name : fd->nodes) {
+      for (auto block_name : fd->blocks) {
         auto *tmp_socket = connect(h(block_name.c_str()));
         BlockDel bd;
         bd.block_name = block_name;
