@@ -38,6 +38,10 @@ void operator<< (Message* m, boost::asio::streambuf& data_) {
   auto buf = data_.data();
   std::string s (boost::asio::buffers_begin(buf),
                    boost::asio::buffers_end(buf));
+
+  std::stringstream is(s);
+  xml_iarchive ia (is, no_header);
+
   ia >> BOOST_SERIALIZATION_NVP(m);
 }
 
