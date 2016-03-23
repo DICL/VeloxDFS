@@ -167,7 +167,7 @@ void PeerDFS::on_disconnect () {
 // }}}
 // insert_file {{{
 bool PeerDFS::insert_file (messages::FileInfo* f) {
- bool ret = directory.is_exist(f->file_name.c_str());
+ bool ret = directory.file_exist(f->file_name.c_str());
 
  if (ret) {
    logger->info ("File:%s exists in db, ret = %i", f->file_name.c_str(), ret);
@@ -206,7 +206,7 @@ bool PeerDFS::delete_block (messages::BlockDel* m) {
 // }}}
 // delete_file {{{
 bool PeerDFS::delete_file (messages::FileDel* f) {
-  bool ret = directory.is_exist(f->file_name.c_str());
+  bool ret = directory.file_exist(f->file_name.c_str());
 
   if (!ret) {
     logger->info ("File:%s doesn't exist in db, ret = %i", f->file_name.c_str(),
@@ -269,6 +269,17 @@ bool PeerDFS::format () {
   remove((md_path + "/metadata.db").c_str());
   directory.init_db();
   return true;
+}
+// }}}
+// file_exist {{{
+// FIXME need to think better name for this function
+/**
+ *@brief check we have given file name on our database
+ *@param f is file name
+ *@return return true if found that file on database otherwise return false
+ */
+void PeerDFS::file_exist (messages::FileExist* f) {
+ f->result = directory.file_exist(f->file_name.c_str());
 }
 // }}}
 }

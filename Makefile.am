@@ -24,7 +24,8 @@ messages_files   = src/messages/boundaries.cc      \
                    src/messages/cacheinfo.cc       \
                    src/messages/blockdel.cc        \
                    src/messages/filedel.cc         \
-									 src/messages/formatrequest.cc
+									 src/messages/formatrequest.cc  \
+									 src/messages/fileexist.cc
 
 # libs -----
 lib_LTLIBRARIES     = libecfs.la
