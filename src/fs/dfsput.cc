@@ -5,6 +5,7 @@
 #include "../messages/factory.hh"
 #include "../messages/fileinfo.hh"
 #include "../messages/blockinfo.hh"
+#include "../messages/fileexist.hh"
 #include "directory.hh"
 
 #include <iostream>
@@ -67,11 +68,12 @@ int main(int argc, char* argv[])
 
   if(argc < 2)
   {
-    cout << "usage: dfsput file_name1 file_name2 ..." << endl;
+    cout << "[Usage]: dfsput file_name1 file_name2 ..." << endl;
     return -1;
   }
   else
   {
+    
     uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
     uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
     char* chunk = new char[BLOCK_SIZE];
@@ -80,8 +82,27 @@ int main(int argc, char* argv[])
 
     for(int i=1; i<argc; i++)
     {
-      int which_server = rand()%NUM_SERVERS;
       string file_name = argv[i];
+      FileExist fe;
+      fe.file_name = file_name;
+      uint32_t file_hash_key = h(file_name);
+      auto socket = connect(file_hash_key);
+      send_message(socket, &fe);
+      auto rep = read_reply (socket);
+
+      if (rep->message == "TRUE")
+      {
+        cerr << "[Error]: " << file_name << " file already exists" << endl;
+        delete rep;
+        continue;
+      }
+      else
+      {
+        delete rep;
+      }
+      cout << argv[i] << " is uploaded" << endl;
+
+      int which_server = rand()%NUM_SERVERS;
       ifstream myfile (argv[i]);
       uint64_t start = 0;
       uint64_t end = start + BLOCK_SIZE - 1;
@@ -90,13 +111,11 @@ int main(int argc, char* argv[])
 
       FileInfo file_info;
       file_info.file_name = file_name;
-      file_info.file_hash_key = h(file_name);
+      file_info.file_hash_key = file_hash_key;
       file_info.replica = con.settings.get<int>("filesystem.replica");
       myfile.seekg(0, myfile.end);
       file_info.file_size = myfile.tellg();
       BlockInfo block_info;
-
-      auto socket = connect(file_info.file_hash_key);
 
       while(1)
       {
@@ -107,7 +126,6 @@ int main(int argc, char* argv[])
           {
             if(myfile.peek() =='\n')
             {
-              end++;
               break;
             }
             else
@@ -154,7 +172,7 @@ int main(int argc, char* argv[])
         {
           break;
         }
-        start = end + 1;
+        start = end;
         end = start + BLOCK_SIZE - 1;
         which_server = (which_server + 1) % NUM_SERVERS;
       }

@@ -23,6 +23,7 @@
 #include "blockdel.hh"
 #include "filedel.hh"
 #include "formatrequest.hh"
+#include "fileexist.hh"
 
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/access.hpp>
@@ -166,6 +167,12 @@ template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::FormatRequest& c, unsigned int) {
     ar & BASE_OBJECT(Message, c);
   }
+
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::FileExist& c, unsigned int) {
+    ar & BASE_OBJECT(Message, c);
+    ar & BOOST_SERIALIZATION_NVP(c.file_name);
+  }
 }
 }
 
@@ -189,3 +196,4 @@ BOOST_CLASS_TRACKING(eclipse::messages::FileDescription, boost::serialization::t
 BOOST_CLASS_TRACKING(eclipse::messages::FileDel, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::BlockDel, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::FormatRequest, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::FileExist, boost::serialization::track_never);

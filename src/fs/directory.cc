@@ -516,57 +516,7 @@ namespace eclipse{
     sqlite3_close(db);
   }
 
-/*
-  void Directory::list_file_metadata(string &list) // Only for dfsls!! 
-  {
-    // Open database
-    open_db();
-
-    // Create sql statement
-    sprintf(sql, "SELECT file_name from file_table");
-
-    // Execute SQL statement
-    rc = sqlite3_exec(db, sql, list_callback, &list, &zErrMsg);
-    if(rc != SQLITE_OK)
-    {
-      cerr << "SQL error: " << zErrMsg << endl;
-      sqlite3_free(zErrMsg);
-    }
-    else
-    {
-      //cout  << "file_metadata ls done successfully" << endl;
-    }
-
-    // Close Database
-    sqlite3_close(db);
-  }
-
-  void Directory::list_block_metadata(string &list) // Only for dfsls!! 
-  {
-    // Open database
-    open_db();
-
-    // Create sql statement
-    sprintf(sql, "SELECT file_name AND block_seq from block_table");
-
-    // Execute SQL statement
-    rc = sqlite3_exec(db, sql, list_callback, &list, &zErrMsg);
-    if(rc != SQLITE_OK)
-    {
-      cerr << "SQL error: " << zErrMsg << endl;
-      sqlite3_free(zErrMsg);
-    }
-    else
-    {
-      //cout << "block_metadata ls done successfully" << endl;
-    }
-
-    // Close Database
-    sqlite3_close(db);
-  }
-*/
-
-  bool Directory::is_exist(string file_name)
+  bool Directory::file_exist(string file_name)
   {
     Context con;
     bool result = false;
@@ -575,7 +525,7 @@ namespace eclipse{
     open_db();
 
     // Create SQL statement
-    sprintf(sql, "SELECT * from file_table where file_name='%s';", file_name.c_str());
+    sprintf(sql, "SELECT file_name from file_table where file_name='%s';", file_name.c_str());
 
     // Execute SQL statement
     rc = sqlite3_exec(db, sql, exist_callback, &result, &zErrMsg);
@@ -586,7 +536,7 @@ namespace eclipse{
     }
     else
     {
-      con.logger->info("is_exist executed successfully\n");
+      con.logger->info("file_exist executed successfully\n");
     }
 
     // Close Database
