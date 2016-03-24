@@ -42,8 +42,8 @@ class PeerDFS: public Node, public AsyncNode {
     bool delete_file (messages::FileDel*);
     bool list (messages::FileList*);
     bool format ();
-    void file_exist (messages::FileExist*);
     FileDescription request_file (messages::FileRequest*);
+    bool file_exist (std::string);
 
   protected:
     Directory directory;

@@ -8,7 +8,6 @@ struct FileExist: public Message {
   std::string get_type() const override;
 
   std::string file_name;
-  bool result;
 };
 
 }

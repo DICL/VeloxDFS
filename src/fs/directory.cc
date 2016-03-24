@@ -536,7 +536,7 @@ namespace eclipse{
     }
     else
     {
-      con.logger->info("is_exist executed successfully\n");
+      con.logger->info("file_exist executed successfully\n");
     }
 
     // Close Database

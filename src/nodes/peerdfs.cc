@@ -271,6 +271,7 @@ bool PeerDFS::format () {
   return true;
 }
 // }}}
+
 // file_exist {{{
 // FIXME need to think better name for this function
 /**
@@ -278,8 +279,8 @@ bool PeerDFS::format () {
  *@param f is file name
  *@return return true if found that file on database otherwise return false
  */
-void PeerDFS::file_exist (messages::FileExist* f) {
- f->result = directory.file_exist(f->file_name.c_str());
+bool PeerDFS::file_exist (std::string file_name) {
+  return directory.file_exist(file_name.c_str());
 }
 // }}}
 }

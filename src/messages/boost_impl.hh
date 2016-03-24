@@ -172,7 +172,6 @@ template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::FileExist& c, unsigned int) {
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.file_name);
-    ar & BOOST_SERIALIZATION_NVP(c.result);
   }
 }
 }

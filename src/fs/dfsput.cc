@@ -62,19 +62,6 @@ eclipse::messages::Reply* read_reply(tcp::socket* socket) {
   return dynamic_cast<eclipse::messages::Reply*>(m);
 }
 
-eclipse::messages::Reply* read_exist(tcp::socket* socket) {
-  char header[17] = {0};
-  header[16] = '\0';
-  socket->receive(boost::asio::buffer(header, 16));
-  size_t size_of_msg = atoi(header);
-  char* body = new char[size_of_msg];
-  socket->receive(boost::asio::buffer(body, size_of_msg));
-  string recv_msg(body, size_of_msg);
-  eclipse::messages::Message* m = load_message(recv_msg);
-  delete[] body;
-  return dynamic_cast<eclipse::messages::Reply*>(m);
-}
-
 int main(int argc, char* argv[])
 {
   Context con;
@@ -95,21 +82,24 @@ int main(int argc, char* argv[])
 
     for(int i=1; i<argc; i++)
     {
-      FileExist f;
       string file_name = argv[i];
-      f.file_name = file_name;
+      FileExist fe;
+      fe.file_name = file_name;
       uint32_t file_hash_key = h(file_name);
       auto socket = connect(file_hash_key);
-      send_message(socket, &f);
-      auto rep = read_exist (socket);
+      send_message(socket, &fe);
+      auto rep = read_reply (socket);
 
-      if (f.result == true)
+      if (rep->message == "TRUE")
       {
         cerr << "[Error]: " << file_name << " file already exists" << endl;
         delete rep;
         continue;
       }
-      delete rep;
+      else
+      {
+        delete rep;
+      }
       cout << argv[i] << " is uploaded" << endl;
 
       int which_server = rand()%NUM_SERVERS;
@@ -136,7 +126,6 @@ int main(int argc, char* argv[])
           {
             if(myfile.peek() =='\n')
             {
-              //end++;
               break;
             }
             else
