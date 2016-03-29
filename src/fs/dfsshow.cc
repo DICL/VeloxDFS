@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
     for (int i=1; i<argc; i++) {
       string file_name = argv[i];
       uint32_t file_hash_key = h(file_name);
-      tcp::socket* socket = connect (file_hash_key);
+      auto socket = connect (file_hash_key);
       FileRequest fr;
       fr.file_name = file_name;
       

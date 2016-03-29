@@ -75,7 +75,7 @@ eclipse::messages::BlockInfo* read_block(tcp::socket* socket) {
 int main(int argc, char* argv[]) {
   Context con;
   if (argc < 2) {
-    cout << "usage: dfsget file_name1 file_name2 ..." << endl;
+    cout << "[INFO] dfsget file_1 file_2 ..." << endl;
     return EXIT_FAILURE;
 
   } else {
@@ -87,17 +87,19 @@ int main(int argc, char* argv[]) {
     for (int i=1; i<argc; i++) {
       string file_name = argv[i];
       uint32_t file_hash_key = h(file_name);
-      tcp::socket* socket = connect (file_hash_key % NUM_SERVERS);
+      auto socket = connect (file_hash_key % NUM_SERVERS);
       FileRequest fr;
       fr.file_name = file_name;
-      
+
       send_message (socket, &fr);
       auto fd = read_reply (socket);
+      socket->close(); 
+      delete socket;
 
       ofstream f (file_name);
-      int j = 0;
+      int block_seq = 0;
       for (auto block_name : fd->blocks) {
-        auto hash_key = fd->hashes[j++];
+        auto hash_key = fd->hash_keys[block_seq++];
         auto* tmp_socket = connect(boundaries.get_index(hash_key));
         BlockRequest br;
         br.block_name = block_name; 
@@ -110,10 +112,8 @@ int main(int argc, char* argv[]) {
         delete msg;
       }
 
-      cout << file_name << " downloaded" << endl;
-      socket->close(); 
+      cout << "[INFO] " << file_name << " is downloaded." << endl;
       f.close();
-      delete socket;
       delete fd;
     }
   }
