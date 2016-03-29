@@ -10,6 +10,7 @@
 #include "../messages/filelist.hh"
 #include "../messages/filedel.hh"
 #include "../messages/blockdel.hh"
+#include "../messages/fileexist.hh"
 #include "../fs/directory.hh"
 #include "../common/histogram.hh"
 
@@ -43,6 +44,7 @@ class PeerDFS: public Node, public AsyncNode {
     bool list (messages::FileList*);
     bool format ();
     FileDescription request_file (messages::FileRequest*);
+    bool file_exist (std::string);
 
   protected:
     Directory directory;

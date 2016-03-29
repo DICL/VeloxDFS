@@ -43,6 +43,6 @@ namespace eclipse {
       void delete_block_metadata(std::string file_name, unsigned int block_seq);
       void display_file_metadata();
       void display_block_metadata();
-      bool is_exist(std::string file_name);
+      bool file_exist(std::string file_name);
   };
 }
