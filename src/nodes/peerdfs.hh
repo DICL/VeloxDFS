@@ -32,8 +32,9 @@ class PeerDFS: public Node, public AsyncNode {
     void on_connect () override;
     void on_disconnect() override;
 
-    void insert (uint32_t, std::string, std::string);
-    void request (uint32_t, std::string, req_func);
+    virtual void insert (uint32_t, std::string, std::string);
+    virtual void request (uint32_t, std::string, req_func);
+
     void Delete (std::string);
     void close ();
     bool insert_block (messages::BlockInfo*);

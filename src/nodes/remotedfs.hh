@@ -13,7 +13,7 @@ class RemoteDFS: public Router {
     RemoteDFS (Context&);
     ~RemoteDFS () = default;
 
-    bool establish ();
+    virtual bool establish ();
     void insert_block (messages::Message*);
     void insert_file (messages::Message*);
     void request_file (messages::Message*);
@@ -26,7 +26,8 @@ class RemoteDFS: public Router {
     void file_exist (messages::Message*);
 
   protected:
-    PeerDFS peer;
+    std::unique_ptr<PeerDFS> peer;
+    Context& context;
 };
 
 } /* eclipse  */ 
