@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
   Context con;
   if(argc < 2)
   {
-    cout << "usage: dfsrm file_name1 file_name2 ..." << endl;
+    cout << "[INFO] dfsrm file_1 file_2 ..." << endl;
     return -1;
   }
   else
@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 
       unsigned int block_seq = 0;
       for (auto block_name : fd->blocks) {
-        auto *tmp_socket = connect(boundaries.get_index(fd->hashes[block_seq]));
+        auto *tmp_socket = connect(boundaries.get_index(fd->hash_keys[block_seq]));
         BlockDel bd;
         bd.block_name = block_name;
         bd.file_name = file_name;
@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
         send_message(tmp_socket, &bd);
         auto msg = read_reply(tmp_socket);
         if (msg->message != "OK") {
-          cerr << "[ERROR]: block " << block_name << "doesn't exist" << endl;
+          cerr << "[ERR] " << block_name << "doesn't exist." << endl;
           delete msg;
           return EXIT_FAILURE;
         }
@@ -129,12 +129,15 @@ int main(int argc, char* argv[])
       send_message(socket, &file_del);
       auto reply = read_reply(socket);
       if (reply->message != "OK") {
-        cerr << "[ERROR]: file " << file_name << " does not exist" << endl;
+        cerr << "[ERR] " << file_name << " doesn't exist." << endl;
         delete reply;
         return EXIT_FAILURE;
       }
       delete reply;
       socket->close();
       delete socket;
-  return 0;
+      cout << "[INFO] " << file_name << " is removed." << endl;
+    }
+    return 0;
+  }
 }

@@ -237,7 +237,7 @@ FileDescription PeerDFS::request_file (messages::FileRequest* m) {
     directory.select_block_metadata (file_name, i, &bi);
     string block_name = bi.block_name;
     fd.blocks.push_back(block_name);
-    fd.hashes.push_back(bi.block_hash_key);
+    fd.hash_keys.push_back(bi.block_hash_key);
   }
 
   return fd;

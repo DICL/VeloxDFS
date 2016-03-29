@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
     auto reply = read_reply(socket);
 
     if (reply->message != "OK") {
-      cerr << "Failed to upload file. Details: " << reply->details << endl;
+      cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
       delete reply;
       return EXIT_FAILURE;
     } 
@@ -78,5 +78,6 @@ int main(int argc, char* argv[]) {
     socket->close();
     delete socket;
   }
+  cout << "[INFO] dfs format is done." << endl;
   return EXIT_SUCCESS;
 }
