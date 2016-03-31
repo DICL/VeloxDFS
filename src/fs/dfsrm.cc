@@ -79,14 +79,15 @@ int main(int argc, char* argv[])
   Context con;
   if(argc < 2)
   {
-    cout << "usage: dfsrm file_name1 file_name2 ..." << endl;
+    cout << "[INFO] dfsrm file_1 file_2 ..." << endl;
     return -1;
   }
   else
   {
-    //uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
-    //uint32_t NUMSERVERS = con.settings.get<vector<string>>(
-        //"network.nodes").size();
+    uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
+    Histogram boundaries(NUM_SERVERS, 0);
+    boundaries.initialize();
+
     string path = con.settings.get<string>("path.scratch");
     for(int i=1; i<argc; i++)
     {
@@ -103,7 +104,7 @@ int main(int argc, char* argv[])
 
       unsigned int block_seq = 0;
       for (auto block_name : fd->blocks) {
-        auto *tmp_socket = connect(h(block_name.c_str()));
+        auto *tmp_socket = connect(boundaries.get_index(fd->hash_keys[block_seq]));
         BlockDel bd;
         bd.block_name = block_name;
         bd.file_name = file_name;
@@ -111,7 +112,7 @@ int main(int argc, char* argv[])
         send_message(tmp_socket, &bd);
         auto msg = read_reply(tmp_socket);
         if (msg->message != "OK") {
-          cerr << "[ERROR]: block " << block_name << "doesn't exist" << endl;
+          cerr << "[ERR] " << block_name << "doesn't exist." << endl;
           delete msg;
           return EXIT_FAILURE;
         }
@@ -128,59 +129,15 @@ int main(int argc, char* argv[])
       send_message(socket, &file_del);
       auto reply = read_reply(socket);
       if (reply->message != "OK") {
-        cerr << "[ERROR]: file " << file_name << " does not exist" << endl;
+        cerr << "[ERR] " << file_name << " doesn't exist." << endl;
         delete reply;
         return EXIT_FAILURE;
       }
       delete reply;
       socket->close();
       delete socket;
-/*
-      if (reply->message != "OK") {
-      {
-        cerr << "[ERROR]: file " << file_name << " does not exist" << endl;
-        return EXIT_FAILURE;
-      }
-      else
-      {
-        FileRequest file_request;
-        send_message(scoket, &file_reqeust);
-        FileDescription file_description;
-        file_description = read_fd(scoket);
-        //cout << "remote_metadata_server.select_file_metadata(file_name, &file_info);" << endl;
-
-        file_del.num_block = file_description.nodes.size();
-
-        for(unsigned int block_seq=0; block_seq<file_del.num_block; block_seq++)
-        {
-          // TODO: remote_metadata_server.select_block_metadata(file_name, block_seq, &block_info);
-          //cout << "remote_metadata_server.select_block_metadata(file_name, block_seq, &block_info)" << endl;
-          
-          // TODO: remote_block_server.lookup(block_info.block_hash_key);
-          //cout << "remote_block_server.lookup(block_info.block_hash_key)" << endl;
-
-          // for test
-          //block_info.block_name = file_name + "_" + to_string(block_seq);
-          BlockRequest
-
-
-          string rmblock = path + "/" + block_info.block_name;
-
-          // TODO: remote_block_server.remove(rmblock.c_str());
-          //cout << "remote_block_server.remove(rmblock.c_str())" << endl;
-
-          // TODO: remote_metadata_server.delete_block_metadata(file_name, block_seq, &block_info);
-          //cout << "remote_metadata_server.delete_block_metadata(file_name, block_seq, &block_info)" << endl;
-
-
-          // remote server side
-          //cout << rmblock.c_str() << endl;
-          remove(rmblock.c_str());
-        }
-      }
+      cout << "[INFO] " << file_name << " is removed." << endl;
     }
-*/
-    }
+    return 0;
   }
-  return 0;
 }

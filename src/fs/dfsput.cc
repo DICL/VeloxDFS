@@ -68,12 +68,12 @@ int main(int argc, char* argv[])
 
   if(argc < 2)
   {
-    cout << "[Usage]: dfsput file_name1 file_name2 ..." << endl;
+    cout << "[INFO] dfsput file_1 file_2 ..." << endl;
     return -1;
   }
   else
   {
-    
+
     uint32_t BLOCK_SIZE = con.settings.get<int>("filesystem.block");
     uint32_t NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
     char* chunk = new char[BLOCK_SIZE];
@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
 
       if (rep->message == "TRUE")
       {
-        cerr << "[Error]: " << file_name << " file already exists" << endl;
+        cerr << "[ERR] " << file_name << " already exists." << endl;
         delete rep;
         continue;
       }
@@ -100,10 +100,10 @@ int main(int argc, char* argv[])
       {
         delete rep;
       }
-      cout << argv[i] << " is uploaded" << endl;
+      cout << "[INFO] " << argv[i] << " is uploaded." << endl;
 
       int which_server = rand()%NUM_SERVERS;
-      ifstream myfile (argv[i]);
+      ifstream myfile (file_name);
       uint64_t start = 0;
       uint64_t end = start + BLOCK_SIZE - 1;
       uint32_t block_size = 0;
@@ -162,7 +162,7 @@ int main(int argc, char* argv[])
         auto reply = read_reply (socket);
 
         if (reply->message != "OK") {
-          cerr << "Failed to upload file. Details: " << reply->details << endl;
+          cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
           delete reply;
           return EXIT_FAILURE;
         } 
@@ -178,12 +178,11 @@ int main(int argc, char* argv[])
       }
 
       file_info.num_block = block_seq;
-
       send_message(socket, &file_info);
       auto reply = read_reply (socket);
 
       if (reply->message != "OK") {
-        cerr << "Failed to upload file. Details: " << reply->details << endl;
+        cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
         delete reply;
         return EXIT_FAILURE;
       } 
