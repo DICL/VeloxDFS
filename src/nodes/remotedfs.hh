@@ -25,9 +25,8 @@ class RemoteDFS: public Router {
     void request_format (messages::Message*);
     void file_exist (messages::Message*);
 
-  protected:
-    std::unique_ptr<PeerDFS> peer;
-    Context& context;
+  private:
+    PeerDFS* peer_dfs = nullptr;
 };
 
 } /* eclipse  */ 
