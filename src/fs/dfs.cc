@@ -20,7 +20,7 @@ namespace eclipse{
     tcp::resolver::query query (host, to_string(port));
     tcp::resolver::iterator it (resolver.resolve(query));
     auto ep = make_unique<tcp::endpoint>(*it);
-    socket->connect(*(ep.get()));
+    socket->connect(*ep);
     return socket;
   }
 
@@ -33,7 +33,7 @@ namespace eclipse{
   }
 
   template <typename T>
-    T* DFS::read_reply(tcp::socket* socket) {
+    unique_ptr<T> DFS::read_reply(tcp::socket* socket) {
       char header[17] = {0};
       header[16] = '\0';
       socket->receive(boost::asio::buffer(header, 16));
@@ -42,7 +42,7 @@ namespace eclipse{
       socket->receive(boost::asio::buffer(body.get(), size_of_msg));
       string recv_msg(body.get(), size_of_msg);
       eclipse::messages::Message* m = load_message(recv_msg);
-      return dynamic_cast<T*>(m);
+      return unique_ptr<T>(dynamic_cast<T*>(m));
     }
 
   int DFS::put(int argc, char* argv[])
@@ -55,7 +55,7 @@ namespace eclipse{
     }
     else
     {
-      char* chunk = new char[BLOCK_SIZE];
+			auto chunk = make_unique<char>(BLOCK_SIZE);
       Histogram boundaries(NUM_SERVERS, 0);
       boundaries.initialize();
 
@@ -72,12 +72,7 @@ namespace eclipse{
         if (rep->message == "TRUE")
         {
           cerr << "[ERR] " << file_name << " already exists." << endl;
-          delete rep;
           continue;
-        }
-        else
-        {
-          delete rep;
         }
         cout << "[INFO] " << argv[i] << " is uploaded." << endl;
 
@@ -115,11 +110,11 @@ namespace eclipse{
             }
           }
           block_size = (uint32_t) end - start;
-          bzero(chunk, BLOCK_SIZE);
+          bzero(chunk.get(), BLOCK_SIZE);
           myfile.seekg(start, myfile.beg);
           block_info.content.reserve(block_size);
-          myfile.read(chunk, block_size);
-          block_info.content = chunk;
+          myfile.read(chunk.get(), block_size);
+          block_info.content = chunk.get();
 
           block_info.block_name = file_name + "_" + to_string(block_seq);
           block_info.file_name = file_name;
@@ -142,10 +137,8 @@ namespace eclipse{
 
           if (reply->message != "OK") {
             cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
-            delete reply;
             return EXIT_FAILURE;
           } 
-          delete reply;
 
           if(end >= file_info.file_size)
           {
@@ -162,13 +155,10 @@ namespace eclipse{
 
         if (reply->message != "OK") {
           cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
-          delete reply;
           return EXIT_FAILURE;
         } 
-        delete reply;
         myfile.close();
       }
-      delete[] chunk;
     }
     return 0;
   }
@@ -204,12 +194,10 @@ namespace eclipse{
           send_message(tmp_socket.get(), &br);
           auto msg = read_reply<BlockInfo>(tmp_socket.get());
           f << msg->content;
-          delete msg;
         }
 
         cout << "[INFO] " << file_name << " is downloaded." << endl;
         f.close();
-        delete fd;
       }
     }
     return 0;
@@ -227,7 +215,6 @@ namespace eclipse{
       auto file_list_reply = read_reply<FileList>(socket.get());
 
       std::copy(file_list_reply->data.begin(), file_list_reply->data.end(), back_inserter(total));
-      delete file_list_reply;
     }
 
     std::sort(total.begin(), total.end(), [] (const FileInfo& a, const FileInfo& b) {
@@ -291,13 +278,10 @@ namespace eclipse{
           auto msg = read_reply<Reply>(tmp_socket.get());
           if (msg->message != "OK") {
             cerr << "[ERR] " << block_name << "doesn't exist." << endl;
-            delete msg;
             return EXIT_FAILURE;
           }
-          delete msg;
 
         }
-        delete fd;
 
         FileDel file_del;
         file_del.file_name = file_name;
@@ -306,10 +290,8 @@ namespace eclipse{
         auto reply = read_reply<Reply>(socket.get());
         if (reply->message != "OK") {
           cerr << "[ERR] " << file_name << " doesn't exist." << endl;
-          delete reply;
           return EXIT_FAILURE;
         }
-        delete reply;
         cout << "[INFO] " << file_name << " is removed." << endl;
       }
       return 0;
@@ -327,10 +309,8 @@ namespace eclipse{
 
       if (reply->message != "OK") {
         cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
-        delete reply;
         return -1;
       } 
-      delete reply;
 
     }
     cout << "[INFO] dfs format is done." << endl;
