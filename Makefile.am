@@ -3,7 +3,7 @@ include tests/Makefile.am
 AM_CPPFLAGS         = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
 AM_CXXFLAGS         = -Wall -std=c++14 -ggdb3 
 
-bin_PROGRAMS        = eclipse_node dfsput dfsget dfsls dfsformat dfsrm dfsshow
+bin_PROGRAMS        = eclipse_node dfs dfsshow
 
 
 messages_files   = src/messages/boundaries.cc      \
@@ -55,35 +55,17 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
 
 eclipse_node_LDADD   = $(LDADD) -lsqlite3
 
-dfsput_SOURCES       = src/fs/dfsput.cc src/fs/directory.cc \
-											 $(messages_files)
-
-dfsput_LDADD         = $(LDADD) -lsqlite3
-
-dfsget_SOURCES       = src/fs/dfsget.cc src/fs/directory.cc \
-											 $(messages_files)
-
-dfsget_LDADD         = $(LDADD) -lsqlite3
-
-dfsls_SOURCES        = src/fs/dfsls.cc src/fs/directory.cc \
-											$(messages_files)
-
-dfsls_LDADD          = $(LDADD) -lsqlite3
-
-dfsformat_SOURCES      = src/fs/dfsformat.cc src/fs/directory.cc \
-											$(messages_files)
-
-dfsformat_LDADD        = $(LDADD) -lsqlite3
-
-dfsrm_SOURCES      = src/fs/dfsrm.cc src/fs/directory.cc \
-											$(messages_files)
-
-dfsrm_LDADD        = $(LDADD) -lsqlite3
-
 dfsshow_SOURCES      = src/fs/dfsshow.cc src/fs/directory.cc \
 											$(messages_files)
 
 dfsshow_LDADD        = $(LDADD) -lsqlite3
+
+dfs_SOURCES         = src/fs/dfs.cc \
+                      src/fs/directory.cc \
+                      src/fs/main.cc \
+											$(messages_files)
+
+dfs_LDADD        = $(LDADD) -lsqlite3
 
 pkginclude_HEADERS  = src/common/ecfs.hh src/common/settings.hh
 
