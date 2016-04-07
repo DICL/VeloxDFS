@@ -20,6 +20,7 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
+#include <memory>
 #include <boost/asio.hpp>
 
 namespace eclipse {
@@ -35,7 +36,7 @@ namespace eclipse {
       int port;
       std::vector<std::string> nodes;
 
-      tcp::socket* connect (uint32_t);
+      unique_ptr<tcp::socket> connect (uint32_t);
       void send_message (tcp::socket*, eclipse::messages::Message*);
       template <typename T>
       T* read_reply (tcp::socket*);

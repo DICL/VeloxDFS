@@ -13,15 +13,14 @@ namespace eclipse{
     nodes = con.settings.get<vector<string>>("network.nodes");
   }
 
-  tcp::socket* DFS::connect (uint32_t hash_value) { 
-    tcp::socket* socket = new tcp::socket (iosvc);
+  unique_ptr<tcp::socket> DFS::connect (uint32_t hash_value) { 
+		auto socket = make_unique<tcp::socket>(iosvc);
     string host = nodes[ hash_value % nodes.size() ];
     tcp::resolver resolver (iosvc);
     tcp::resolver::query query (host, to_string(port));
     tcp::resolver::iterator it (resolver.resolve(query));
-    auto ep = new tcp::endpoint (*it);
-    socket->connect(*ep);
-    delete ep;
+    auto ep = make_unique<tcp::endpoint>(*it);
+    socket->connect(*(ep.get()));
     return socket;
   }
 
@@ -39,11 +38,10 @@ namespace eclipse{
       header[16] = '\0';
       socket->receive(boost::asio::buffer(header, 16));
       size_t size_of_msg = atoi(header);
-      char* body = new char[size_of_msg];
-      socket->receive(boost::asio::buffer(body, size_of_msg));
-      string recv_msg(body, size_of_msg);
+			auto body = make_unique<char>(size_of_msg);
+      socket->receive(boost::asio::buffer(body.get(), size_of_msg));
+      string recv_msg(body.get(), size_of_msg);
       eclipse::messages::Message* m = load_message(recv_msg);
-      delete[] body;
       return dynamic_cast<T*>(m);
     }
 
@@ -68,8 +66,8 @@ namespace eclipse{
         fe.file_name = file_name;
         uint32_t file_hash_key = h(file_name);
         auto socket = connect(file_hash_key);
-        send_message(socket, &fe);
-        auto rep = read_reply<Reply> (socket);
+        send_message(socket.get(), &fe);
+        auto rep = read_reply<Reply> (socket.get());
 
         if (rep->message == "TRUE")
         {
@@ -139,8 +137,8 @@ namespace eclipse{
           //block_info.l_node = l_node.ip_address;
           //block_info.r_node = r_node.ip_address;
 
-          send_message(socket, &block_info);
-          auto reply = read_reply<Reply> (socket);
+          send_message(socket.get(), &block_info);
+          auto reply = read_reply<Reply> (socket.get());
 
           if (reply->message != "OK") {
             cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
@@ -159,8 +157,8 @@ namespace eclipse{
         }
 
         file_info.num_block = block_seq;
-        send_message(socket, &file_info);
-        auto reply = read_reply<Reply> (socket);
+        send_message(socket.get(), &file_info);
+        auto reply = read_reply<Reply> (socket.get());
 
         if (reply->message != "OK") {
           cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
@@ -168,8 +166,6 @@ namespace eclipse{
           return EXIT_FAILURE;
         } 
         delete reply;
-        socket->close();
-        delete socket;
         myfile.close();
       }
       delete[] chunk;
@@ -194,24 +190,20 @@ namespace eclipse{
         FileRequest fr;
         fr.file_name = file_name;
 
-        send_message (socket, &fr);
-        auto fd = read_reply<FileDescription> (socket);
-        socket->close(); 
-        delete socket;
+        send_message (socket.get(), &fr);
+        auto fd = read_reply<FileDescription> (socket.get());
 
         ofstream f (file_name);
         int block_seq = 0;
         for (auto block_name : fd->blocks) {
           uint32_t hash_key = fd->hash_keys[block_seq++];
-          auto* tmp_socket = connect(boundaries.get_index(hash_key));
+          auto tmp_socket = connect(boundaries.get_index(hash_key));
           BlockRequest br;
           br.block_name = block_name; 
           br.hash_key   = hash_key; 
-          send_message(tmp_socket, &br);
-          auto msg = read_reply<BlockInfo>(tmp_socket);
+          send_message(tmp_socket.get(), &br);
+          auto msg = read_reply<BlockInfo>(tmp_socket.get());
           f << msg->content;
-          tmp_socket->close();
-          delete tmp_socket;
           delete msg;
         }
 
@@ -230,11 +222,9 @@ namespace eclipse{
     for(unsigned int net_id=0; net_id<NUM_SERVERS; net_id++)
     {
       FileList file_list;
-      tcp::socket* socket = connect(net_id);
-      send_message(socket, &file_list);
-      auto file_list_reply = read_reply<FileList>(socket);
-      socket->close();
-      delete socket;
+      auto socket = connect(net_id);
+      send_message(socket.get(), &file_list);
+      auto file_list_reply = read_reply<FileList>(socket.get());
 
       std::copy(file_list_reply->data.begin(), file_list_reply->data.end(), back_inserter(total));
       delete file_list_reply;
@@ -287,20 +277,18 @@ namespace eclipse{
         FileRequest fr;
         fr.file_name = file_name;
 
-        send_message(socket, &fr);
-        auto fd = read_reply<FileDescription>(socket);
-        socket->close();
-        delete socket;
+        send_message(socket.get(), &fr);
+        auto fd = read_reply<FileDescription>(socket.get());
 
         unsigned int block_seq = 0;
         for (auto block_name : fd->blocks) {
-          auto *tmp_socket = connect(boundaries.get_index(fd->hash_keys[block_seq]));
+          auto tmp_socket = connect(boundaries.get_index(fd->hash_keys[block_seq]));
           BlockDel bd;
           bd.block_name = block_name;
           bd.file_name = file_name;
           bd.block_seq = block_seq++;
-          send_message(tmp_socket, &bd);
-          auto msg = read_reply<Reply>(tmp_socket);
+          send_message(tmp_socket.get(), &bd);
+          auto msg = read_reply<Reply>(tmp_socket.get());
           if (msg->message != "OK") {
             cerr << "[ERR] " << block_name << "doesn't exist." << endl;
             delete msg;
@@ -308,24 +296,20 @@ namespace eclipse{
           }
           delete msg;
 
-          tmp_socket->close();
-          delete tmp_socket;
         }
         delete fd;
 
         FileDel file_del;
         file_del.file_name = file_name;
         socket = connect(file_hash_key);
-        send_message(socket, &file_del);
-        auto reply = read_reply<Reply>(socket);
+        send_message(socket.get(), &file_del);
+        auto reply = read_reply<Reply>(socket.get());
         if (reply->message != "OK") {
           cerr << "[ERR] " << file_name << " doesn't exist." << endl;
           delete reply;
           return EXIT_FAILURE;
         }
         delete reply;
-        socket->close();
-        delete socket;
         cout << "[INFO] " << file_name << " is removed." << endl;
       }
       return 0;
@@ -337,9 +321,9 @@ namespace eclipse{
 
     for (unsigned int net_id = 0; net_id < NUM_SERVERS; net_id++) {
       FormatRequest fr;
-      tcp::socket* socket = connect(net_id);
-      send_message(socket, &fr);
-      auto reply = read_reply<Reply>(socket);
+      auto socket = connect(net_id);
+      send_message(socket.get(), &fr);
+      auto reply = read_reply<Reply>(socket.get());
 
       if (reply->message != "OK") {
         cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
@@ -348,8 +332,6 @@ namespace eclipse{
       } 
       delete reply;
 
-      socket->close();
-      delete socket;
     }
     cout << "[INFO] dfs format is done." << endl;
     return 0;
