@@ -34,13 +34,22 @@ namespace eclipse{
 
   template <typename T>
     unique_ptr<T> DFS::read_reply(tcp::socket* socket) {
+      using namespace boost::asio;
       char header[17] = {0};
       header[16] = '\0';
       socket->receive(boost::asio::buffer(header, 16));
       size_t size_of_msg = atoi(header);
-			vector<char> body(size_of_msg);
-      socket->receive(boost::asio::buffer(body.data(), size_of_msg));
-      string recv_msg(body.data(), size_of_msg);
+      char* body = new char[size_of_msg];
+
+//      size_t current_size = 0;
+ //     while (current_size < size_of_msg) {
+  //      current_size += socket->receive(boost::asio::buffer(&body[current_size], size_of_msg - current_size));
+   //   }
+      boost::system::error_code ec;
+      read(*socket, buffer(body, size_of_msg), transfer_exactly(size_of_msg), ec);
+
+      string recv_msg(body);
+      delete[] body;
       eclipse::messages::Message* m = load_message(recv_msg);
       return unique_ptr<T>(dynamic_cast<T*>(m));
     }
