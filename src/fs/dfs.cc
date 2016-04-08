@@ -38,7 +38,6 @@ namespace eclipse{
       header[16] = '\0';
       socket->receive(boost::asio::buffer(header, 16));
       size_t size_of_msg = atoi(header);
-			//auto body = make_unique<char>(size_of_msg);
 			vector<char> body(size_of_msg);
       socket->receive(boost::asio::buffer(body.data(), size_of_msg));
       string recv_msg(body.data(), size_of_msg);
@@ -56,7 +55,7 @@ namespace eclipse{
     }
     else
     {
-			auto chunk = make_unique<char>(BLOCK_SIZE);
+			vector<char> chunk(BLOCK_SIZE);
       Histogram boundaries(NUM_SERVERS, 0);
       boundaries.initialize();
 
@@ -111,11 +110,11 @@ namespace eclipse{
             }
           }
           block_size = (uint32_t) end - start;
-          bzero(chunk.get(), BLOCK_SIZE);
+          bzero(chunk.data(), BLOCK_SIZE);
           myfile.seekg(start, myfile.beg);
           block_info.content.reserve(block_size);
-          myfile.read(chunk.get(), block_size);
-          block_info.content = chunk.get();
+          myfile.read(chunk.data(), block_size);
+          block_info.content = chunk.data();
 
           block_info.block_name = file_name + "_" + to_string(block_seq);
           block_info.file_name = file_name;
