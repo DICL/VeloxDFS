@@ -3,6 +3,8 @@ dist: trusty
 language: cpp
 
 cache: apt
+git:
+  submodules: false
 
 addons:
   apt:
