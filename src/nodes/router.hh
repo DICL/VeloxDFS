@@ -23,8 +23,6 @@ class Router: public Node, public AsyncNode {
 
   protected:
     std::map<std::string, std::function<void(messages::Message*)>> routing_table;
-    std::unique_ptr<Node> peer;
-    Context& context;
     int port;
 };
 
