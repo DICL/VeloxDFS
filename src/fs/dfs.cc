@@ -38,9 +38,10 @@ namespace eclipse{
       header[16] = '\0';
       socket->receive(boost::asio::buffer(header, 16));
       size_t size_of_msg = atoi(header);
-			auto body = make_unique<char>(size_of_msg);
-      socket->receive(boost::asio::buffer(body.get(), size_of_msg));
-      string recv_msg(body.get(), size_of_msg);
+			//auto body = make_unique<char>(size_of_msg);
+			vector<char> body(size_of_msg);
+      socket->receive(boost::asio::buffer(body.data(), size_of_msg));
+      string recv_msg(body.data(), size_of_msg);
       eclipse::messages::Message* m = load_message(recv_msg);
       return unique_ptr<T>(dynamic_cast<T*>(m));
     }
