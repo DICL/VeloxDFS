@@ -39,7 +39,7 @@ namespace eclipse {
       unique_ptr<tcp::socket> connect (uint32_t);
       void send_message (tcp::socket*, eclipse::messages::Message*);
       template <typename T>
-      unique_ptr<T> read_reply (tcp::socket*);
+      auto read_reply (tcp::socket*);
 
     public:
       void load_settings ();
