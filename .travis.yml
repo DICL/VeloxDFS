@@ -2,9 +2,15 @@ sudo: false
 dist: trusty 
 language: cpp
 
-cache: apt
+cache: 
+  - apt
+  - ccache
+  
 git:
   submodules: false
+
+notifications:
+  slack: dicl:WvBJLVrHw7j1IaIZun64ncjE
 
 addons:
   apt:
