@@ -6,6 +6,9 @@ cache: apt
 git:
   submodules: false
 
+notifications:
+  slack: dicl:WvBJLVrHw7j1IaIZun64ncjE
+
 addons:
   apt:
     sources:
