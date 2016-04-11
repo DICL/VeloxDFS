@@ -6,28 +6,19 @@
 #include <istream>
 #include <boost/bind.hpp>
 
+namespace ph = boost::asio::placeholders;
 using namespace std;
 using namespace boost::asio;
-namespace ph = boost::asio::placeholders;
+using namespace eclipse::network;
 
-namespace eclipse {
-namespace network {
 // constructor {{{
-Server::Server(Context& c, int i, AsyncNode* node_) : 
-  AsyncChannel(c, i, node_)
+Server::Server(tcp::socket* s, Context& c, AsyncNode* node_) : 
+  AsyncChannel(c, i, node_),
+  server(s)
 { }
 // }}}
-// do_connect {{{
-void Server::do_connect () {
-  //The result of a bad design leads to this empty function :D
-}
-// }}}
-// on_accept {{{
-void Server::on_accept (tcp::socket* sock) {
-  if (server != nullptr) delete server;
-  server = sock;
-  do_read();
-}
+// is_multiple {{{
+bool P2P::is_multiple () { return false; }
 // }}}
 // do_read {{{
 void Server::do_read () {
@@ -100,5 +91,3 @@ void Server::read_coroutine (yield_context yield) {
   }
 }
 // }}}
-}
-} /* eclipse */

@@ -6,31 +6,26 @@
 #include "../messages/message.hh"
 #include <string>
 #include <vector>
+#include <utility>
 #include <boost/asio/spawn.hpp>
 
 namespace eclipse {
 namespace network {
 
+// @pre server and client socket should be open and not null
 class P2P: public AsyncChannel {
   public:
-    P2P (Context&, int, AsyncNode*);
-
-    void do_connect () override; 
+    P2P(tcp::socket*, tcp::socket*, Context&, AsyncNode*);
     void do_write (messages::Message*) override; 
-    void on_accept (tcp::socket*);
+    bool is_multiple() override;
+    void do_read ();
 
   protected:
-    void on_connect (const boost::system::error_code&);
     void on_write (const boost::system::error_code&, size_t, 
         Message*); 
 
-    void do_read ();
     void read_coroutine (boost::asio::yield_context);
-
-    tcp::socket client, *server;
-    tcp::endpoint* endpoint = nullptr;
-
-    bool client_connected = false, server_connected = false;
+    tcp::socket *client, *server;
 };
 
 }

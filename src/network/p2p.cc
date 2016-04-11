@@ -6,51 +6,20 @@
 #include <istream>
 #include <boost/bind.hpp>
 
+namespace ph = boost::asio::placeholders;
 using namespace std;
 using namespace boost::asio;
-namespace ph = boost::asio::placeholders;
+using namespace eclipse::network;
 
-namespace eclipse {
-namespace network {
 // constructor {{{
-P2P::P2P(Context& c, int i, AsyncNode* node_) : 
-  AsyncChannel(c, i, node_),
-  client(c.io)
+P2P::P2P(tcp::socket* c, tcp::socket* s, Context& c, AsyncNode* node_) : 
+  AsyncChannel(c, node_),
+  client(c),
+  server(s)
 { }
 // }}}
-// do_connect {{{
-void P2P::do_connect () {
-  tcp::resolver resolver (iosvc);
-  tcp::resolver::query query (host, to_string(port));
-  tcp::resolver::iterator it (resolver.resolve(query));
-  endpoint = new tcp::endpoint (*it);
-
-  client.async_connect (*endpoint, bind (&P2P::on_connect, this, 
-        ph::error));
-}
-// }}}
-// on_connect {{{
-void P2P::on_connect (const boost::system::error_code& ec) {
-  if(!ec) {
-    client_connected = true;
-    if(client_connected and server_connected) {
-      do_read();
-    }
-  } else {
-
-  client.async_connect (*endpoint, bind (&P2P::on_connect, this, 
-        ph::error));
-  }
-}
-// }}}
-// on_accept {{{
-void P2P::on_accept (tcp::socket* sock) {
-  server = sock;
-  server_connected = true;
-  if(client_connected and server_connected) {
-    do_read();
-  }
-}
+// is_multiple {{{
+bool P2P::is_multiple () { return true; }
 // }}}
 // do_read {{{
 void P2P::do_read () {
@@ -115,5 +84,3 @@ void P2P::read_coroutine (yield_context yield) {
   }
 }
 // }}}
-}
-} /* eclipse */

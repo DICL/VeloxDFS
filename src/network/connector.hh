@@ -1,5 +1,4 @@
 #pragma once
-
 #include "netobserver.hh"
 #include "../common/context.hh"
 #include <boost/asio.hpp>
@@ -11,23 +10,24 @@
 namespace eclipse {
 namespace network {
 
-using boost::asio::ip::tcp;
-using vec_str = std::vector<std::string>;
+using
 
-class Acceptor {
+class Connector {
   public:
-    Acceptor(Context&, int, NetObserver*);
-    void listen();
+    Connector(Context&, int, NetObserver*); 
+    ~Connector(); 
+
+    void establish ();
 
   protected:
-    void do_listen(boost::asio::yield_context );
+    void do_connect ();
+    void on_connect ();
 
-    std::unique_ptr<tcp::acceptor> acceptor;
+    vec_str& nodes;
     NetObserver* observer = nullptr;
     boost::asio::io_service& iosvc;
-    vec_str nodes;
     int port = 0;
 };
 
-} /* network  */ 
 }
+};

@@ -10,13 +10,13 @@ namespace network {
 
 class AsyncChannel: public Channel {
   public:
-    AsyncChannel(Context&, int, AsyncNode*);
+    AsyncChannel(Context&, AsyncNode*);
     virtual void do_connect () = 0;
     virtual void do_write (messages::Message*) = 0; 
+    virtual bool is_multiple () = 0;
 
   protected:
     AsyncNode* node = nullptr;
-    std::string host;
 };
 
 }
