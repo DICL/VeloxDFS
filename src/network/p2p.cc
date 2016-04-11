@@ -63,15 +63,16 @@ void P2P::do_write (Message* m) {
   string str = save_message (m);
   stringstream ss; 
   ss << setfill('0') << setw(header_size) << str.length() << str;
+  string* to_write = new string(ss.str());
 
-  async_write (client, 
-      buffer(ss.str()), boost::bind (&P2P::on_write, this, 
-      ph::error, ph::bytes_transferred, m));
+  async_write (client, buffer(*to_write), boost::bind (&P2P::on_write, this, 
+      ph::error, ph::bytes_transferred, m, to_write));
 }
 // }}}
 // on_write {{{
 void P2P::on_write (const boost::system::error_code& ec, 
-    size_t s, Message* m) {
+    size_t s, Message* m, string* str) {
+  delete str;
   if (ec) {
     logger->info ("Message could not reach err=%s", 
         ec.message().c_str());
@@ -83,7 +84,7 @@ void P2P::on_write (const boost::system::error_code& ec,
 // }}}
 // read_coroutine {{{
 void P2P::read_coroutine (yield_context yield) {
-  boost::asio::streambuf body; 
+  char * body;
   boost::system::error_code ec;
   char header [17]; 
   auto* sock = server;
@@ -95,13 +96,12 @@ void P2P::read_coroutine (yield_context yield) {
     if (l != (size_t)header_size) continue;
 
     size_t size = atoi(header);
-    l = async_read (*sock, body.prepare(size), yield[ec]);
+    body = new char[size];
+    l = async_read (*sock, buffer(body, size), yield[ec]);
 
     if (!ec)  {
-      body.commit (l);
-      string str ((istreambuf_iterator<char>(&body)), 
-          istreambuf_iterator<char>());
-      body.consume (l);
+      string str (body);
+      delete[] body;
 
       Message* msg = nullptr;
       msg = load_message(str);

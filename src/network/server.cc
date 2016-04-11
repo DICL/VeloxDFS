@@ -41,14 +41,16 @@ void Server::do_write (Message* m) {
   stringstream ss; 
   ss << setfill('0') << setw(header_size) << str.length() << str;
 
-  async_write (*server, 
-      buffer(ss.str()), boost::bind (&Server::on_write, this, 
-      ph::error, ph::bytes_transferred, m));
+  string* to_write = new string(ss.str());
+
+  async_write (*server, buffer(*to_write), boost::bind (&Server::on_write, this, 
+      ph::error, ph::bytes_transferred, m, to_write));
 }
 // }}}
 // on_write {{{
 void Server::on_write (const boost::system::error_code& ec, 
-    size_t s, Message* m) {
+    size_t s, Message* m, string* str) {
+  delete str;
   if (ec) {
     logger->info ("Message could not reach err=%s", 
         ec.message().c_str());
@@ -74,6 +76,7 @@ void Server::read_coroutine (yield_context yield) {
 
       size_t size = atoi(header);
       l = async_read (*sock, body.prepare(size), yield[ec]);
+      logger->info ("Server: l=%d", l);
       if (ec) throw 1;
 
       body.commit (l);
@@ -88,12 +91,14 @@ void Server::read_coroutine (yield_context yield) {
     }
   } catch (...) {
     if (ec == boost::asio::error::eof)
-      logger->info ("Closing server socket to client");
+      logger->info ("Server: Closing server socket to client");
     else
-      logger->info ("Message arrived error=%s", 
+      logger->info ("Server: Message arrived error=%s", 
           ec.message().c_str());
 
-      server->close();
+      if (server != nullptr) 
+        server->close();
+
       delete server;
       server = nullptr;
       node->on_disconnect();
