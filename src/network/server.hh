@@ -22,7 +22,7 @@ class Server: public AsyncChannel {
 
   protected:
     void on_write (const boost::system::error_code&, size_t, 
-        Message*); 
+        Message*, std::string*); 
 
     void read_coroutine (boost::asio::yield_context);
 

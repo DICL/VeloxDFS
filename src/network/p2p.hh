@@ -8,6 +8,7 @@
 #include <vector>
 #include <utility>
 #include <boost/asio/spawn.hpp>
+#include <sstream>
 
 namespace eclipse {
 namespace network {
@@ -22,7 +23,7 @@ class P2P: public AsyncChannel {
 
   protected:
     void on_write (const boost::system::error_code&, size_t, 
-        Message*); 
+        Message*, std::string*); 
 
     void read_coroutine (boost::asio::yield_context);
     tcp::socket *client, *server;
