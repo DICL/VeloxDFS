@@ -190,6 +190,7 @@ int DFS::get(int argc, char* argv[])
       auto fd = read_reply<FileDescription> (socket.get());
 
       ofstream f (file_name);
+      socket->close();
       int block_seq = 0;
       for (auto block_name : fd->blocks) {
         uint32_t hash_key = fd->hash_keys[block_seq++];
@@ -274,6 +275,7 @@ int DFS::rm(int argc, char* argv[])
 
       send_message(socket.get(), &fr);
       auto fd = read_reply<FileDescription>(socket.get());
+      socket->close();
 
       unsigned int block_seq = 0;
       for (auto block_name : fd->blocks) {
@@ -288,7 +290,7 @@ int DFS::rm(int argc, char* argv[])
           cerr << "[ERR] " << block_name << "doesn't exist." << endl;
           return EXIT_FAILURE;
         }
-
+        socket->close();
       }
 
       FileDel file_del;

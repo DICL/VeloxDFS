@@ -56,6 +56,7 @@ void PeerDFS::insert (uint32_t hash_key, std::string name, std::string v) {
   int which_node = boundaries->get_index(hash_key);
 
   if (which_node == id) {
+    logger->info ("[DFS] Saving locally KEY: %s", name.c_str());
     string file_path = disk_path + string("/") + name;
     ofstream file (file_path);
     file << v;
