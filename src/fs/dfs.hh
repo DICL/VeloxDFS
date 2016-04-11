@@ -22,6 +22,7 @@
 #include <iomanip>
 #include <memory>
 #include <boost/asio.hpp>
+#include <stdint.h>
 
 namespace eclipse {
   using namespace messages;

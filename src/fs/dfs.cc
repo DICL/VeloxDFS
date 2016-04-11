@@ -209,54 +209,91 @@ namespace eclipse{
 
   int DFS::ls(int argc, char* argv[])
   {
-    vector<FileInfo> total;
-    string op = argv[2];
+    vector<FileInfo> total; 
+    string op = "";
+    if(argc >= 3)
     {
-        for(unsigned int net_id=0; net_id<NUM_SERVERS; net_id++)
-        {
-          FileList file_list;
-          auto socket = connect(net_id);
-          send_message(socket.get(), &file_list);
-          auto file_list_reply = read_reply<FileList>(socket.get());
+      op = argv[2];
+    }
+    for(unsigned int net_id=0; net_id<NUM_SERVERS; net_id++)
+    {
+      FileList file_list;
+      auto socket = connect(net_id);
+      send_message(socket.get(), &file_list);
+      auto file_list_reply = read_reply<FileList>(socket.get());
 
-          std::copy(file_list_reply->data.begin(), file_list_reply->data.end(), back_inserter(total));
-        }
+      std::copy(file_list_reply->data.begin(), file_list_reply->data.end(), back_inserter(total));
+    }
 
-      std::sort(total.begin(), total.end(), [] (const FileInfo& a, const FileInfo& b) {
-          return (a.file_name < b.file_name);
-          });
+    std::sort(total.begin(), total.end(), [] (const FileInfo& a, const FileInfo& b) {
+        return (a.file_name < b.file_name);
+        });
 
+    cout 
+      << setw(25) << "FileName" 
+      << setw(14) << "Hash Key"
+      << setw(14) << "Size"
+      << setw(8)  << "Blocks"
+      << setw(14) << "Host"
+      << setw(5)  << "Repl"
+      << endl << string(80,'-') << endl;
+
+
+    for (auto& fl: total) {
       cout 
-        << setw(25) << "FileName" 
-        << setw(14) << "Hash Key"
-        << setw(14) << "Size"
-        << setw(8)  << "Blocks"
-        << setw(14) << "Host"
-        << setw(5)  << "Repl"
-        << endl << string(80,'-') << endl;
-
-
-      for (auto& fl: total) {
-        cout 
-          << setw(25) << fl.file_name
-          << setw(14) << fl.file_hash_key;
-        if(op.compare("-h") == 0) {
-          unsigned int KB = 1024;
-          unsigned int MB = 1024 * 1024;
-          unsigned int GB = 1024 * 1024 * 1024;
-          uint64_t TB = 1024 * 1024 * 1024 * 1024;
-
-          cout << setw(14) << fl.file_size;
+        << setw(25) << fl.file_name
+        << setw(14) << fl.file_hash_key;
+      if(op.compare("-h") == 0) {
+        uint32_t KB = 1024;
+        uint32_t MB = 1024 * 1024;
+        uint32_t GB = 1024 * 1024 * 1024;
+        uint64_t TB = (uint64_t) 1024 * 1024 * 1024 * 1024;
+        uint64_t PB = (uint64_t) 1024 * 1024 * 1024 * 1024 * 1024;
+        float hsize = 0;
+        int tabsize = 12;
+        string unit;
+        if(fl.file_size <= KB)
+        {
+          unit = "B";
+          tabsize++;
         }
-        else {
-          cout << setw(14) << fl.file_size;
+        else if(fl.file_size <= MB)
+        {
+          hsize = (float)fl.file_size / KB;
+          unit = "KB";
         }
-
-        << setw(8) << fl.num_block
-          << setw(14) << nodes[fl.file_hash_key % NUM_SERVERS]
-          << setw(5) << fl.replica
-          << endl;
+        else if(fl.file_size <= GB)
+        {
+          hsize = (float)fl.file_size / MB;
+          unit = "MB";
+        }
+        else if(fl.file_size <= TB)
+        {
+          hsize = (float)fl.file_size / GB;
+          unit = "GB";
+        }
+        else if(fl.file_size <= PB)
+        {
+          hsize = (float)fl.file_size / TB;
+          unit = "TB";
+        }
+        else
+        {
+          unit = "";
+        }
+        cout << fixed;
+        cout.precision(1);
+        cout << setw(tabsize) << hsize << unit;
       }
+      else {
+        cout << setw(14) << fl.file_size;
+      }
+
+      cout
+        << setw(8) << fl.num_block
+        << setw(14) << nodes[fl.file_hash_key % NUM_SERVERS]
+        << setw(5) << fl.replica
+        << endl;
     }
     return 0;
   }
