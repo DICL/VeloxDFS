@@ -60,6 +60,7 @@ namespace eclipse{
     }
     else
     {
+      srand((uint32_t)time(NULL));
       vector<char> chunk(BLOCK_SIZE);
       Histogram boundaries(NUM_SERVERS, 0);
       boundaries.initialize();
@@ -151,13 +152,13 @@ namespace eclipse{
         file_info.num_block = block_seq;
         send_message(socket.get(), &file_info);
         auto reply = read_reply<Reply> (socket.get());
+        myfile.close();
+        socket->close();
 
         if (reply->message != "OK") {
           cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
           return EXIT_FAILURE;
         } 
-        myfile.close();
-        socket->close();
         cout << "[INFO] " << argv[i] << " is uploaded." << endl;
       }
     }
@@ -252,10 +253,13 @@ namespace eclipse{
         float hsize = 0;
         int tabsize = 12;
         string unit;
+        cout.precision(1);
         if(fl.file_size <= KB)
         {
+          hsize = (float)fl.file_size;
           unit = "B";
           tabsize++;
+          cout.precision(0);
         }
         else if(fl.file_size <= MB)
         {
@@ -279,10 +283,10 @@ namespace eclipse{
         }
         else
         {
-          unit = "";
+          hsize = (float)fl.file_size / PB;
+          unit = "PB";
         }
         cout << fixed;
-        cout.precision(1);
         cout << setw(tabsize) << hsize << unit;
       }
       else {
@@ -370,5 +374,34 @@ namespace eclipse{
     }
     cout << "[INFO] dfs format is done." << endl;
     return 0;
+  }
+
+  int DFS::show(int argc, char* argv[]) {
+    if (argc < 3) {
+      cout << "usage: dfs bl file_name1 file_name2 ..." << endl;
+      return EXIT_FAILURE;
+    } else {
+      Histogram boundaries(NUM_SERVERS, 0);
+      boundaries.initialize();
+      for (int i=2; i<argc; i++) {
+        string file_name = argv[i];
+        uint32_t file_hash_key = h(file_name);
+        auto socket = connect (file_hash_key);
+        FileRequest fr;
+        fr.file_name = file_name;
+
+        send_message (socket.get(), &fr);
+        auto fd = read_reply<FileDescription>(socket.get());
+        cout << file_name << endl;
+        int block_seq = 0;
+        for (auto block_name : fd->blocks) {
+          uint32_t hash_key = fd->hash_keys[block_seq++];
+          string node = nodes[boundaries.get_index(hash_key)];
+          cout << "\t- " << setw(15) << block_name << " : " << setw(15) << node << endl;
+        }
+        socket->close(); 
+      }
+    }
+    return EXIT_SUCCESS;
   }
 }
