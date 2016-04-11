@@ -87,16 +87,16 @@ void Server::read_coroutine (yield_context yield) {
       delete msg;
     }
   } catch (...) {
-    if (ec == boost::asio::error::eof) {
+    if (ec == boost::asio::error::eof)
       logger->info ("Closing server socket to client");
+    else
+      logger->info ("Message arrived error=%s", 
+          ec.message().c_str());
+
       server->close();
       delete server;
       server = nullptr;
       node->on_disconnect();
-    } else {
-      logger->info ("Message arrived error=%s", 
-          ec.message().c_str());
-    }
   }
 }
 // }}}
