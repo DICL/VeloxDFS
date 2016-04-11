@@ -33,7 +33,7 @@ PeerDFS::PeerDFS (Context& context) : Node (context) {
   size           = setted.get<vec_str>("network.nodes").size();
   disk_path      = setted.get<string>("path.scratch");
 
-  network   = new AsyncNetwork<P2P>(this, context, 10, port);
+  network   = new AsyncNetwork<P2P>(this, context, port);
   boundaries.reset( new Histogram {size, 0});
   boundaries->initialize();
 

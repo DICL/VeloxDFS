@@ -11,7 +11,7 @@ namespace eclipse {
 namespace network {
 
 using vec_str = std::vector<std::string>;
-using tcp::socket  = boost::asio::ip::tcp::socket;
+using boost::asio::ip::tcp;
 
 template<typename TYPE>
 class AsyncNetwork: public Network, public NetObserver {
@@ -25,12 +25,12 @@ class AsyncNetwork: public Network, public NetObserver {
     bool send(int, messages::Message*) override;
     void on_accept(tcp::socket*) override;
     void on_connect(tcp::socket*) override;
-    void on_disconnect() override;
+    void on_disconnect(tcp::socket*) override;
 
   private:
     int id_of(tcp::socket*);
     void start_reading();
-    int completed_network();
+    bool is_completed_network();
 
     Context& context;
     AsyncNode* node;
@@ -40,7 +40,7 @@ class AsyncNetwork: public Network, public NetObserver {
     Connector connector;
     int accepted_size = 0, connected_size = 0, net_size = 0;
 
-    std::map<int, std::pair<tcp::socket*, tcp::socket*> sockets;
+    std::map<int, std::pair<tcp::socket*, tcp::socket*>> sockets;
     std::map<int, u_ptr<TYPE>> channels;
 };
 // Constructor {{{
@@ -53,7 +53,7 @@ AsyncNetwork<TYPE>::AsyncNetwork (AsyncNode* n, Context& c, int port):
   connector(c, port, this)
 { 
  if (TYPE::is_multiple())
-   net_size = nodes.size();
+   net_size = nodes.size() - 1;
  
  else 
    net_size = 1;
@@ -94,15 +94,18 @@ bool AsyncNetwork<TYPE>::send (int i, messages::Message* m) {
 template<typename TYPE>
 void AsyncNetwork<TYPE>::on_accept (tcp::socket* sock) {
   auto i = id_of (sock);
+  if (not TYPE::is_multiple()) 
+    i = 0;
 
-  if (sockets.find(i) != sockets.end())
-    sockets.insert(i, {nullptr, sock})
+  if (sockets.find(i) == sockets.end())
+    sockets.insert({i, {nullptr, sock}});
   else
     sockets[i].second = sock; 
     
   accepted_size++;
 
-  if (is_completed_network) start_reading();
+  if (is_completed_network()) 
+    start_reading();
 }
 // }}}
 // on_connect {{{
@@ -110,14 +113,14 @@ template<typename TYPE>
 void AsyncNetwork<TYPE>::on_connect (tcp::socket* sock) {
   auto i = id_of (sock);
 
-  if (sockets.find(i) != sockets.end())
-    sockets.insert(i, {sock, nullptr})
+  if (sockets.find(i) == sockets.end())
+    sockets.insert({i, {sock, nullptr}});
   else
     sockets[i].first= sock; 
     
   connected_size++;
 
-  if (is_completed_network) start_reading();
+  if (is_completed_network()) start_reading();
 }
 // }}}
 // on_disconnect {{{
@@ -130,7 +133,8 @@ void AsyncNetwork<TYPE>::on_disconnect (tcp::socket* sock) {
 }
 // }}}
 // completed_network {{{
-bool AsyncNetwork::is_completed_network () {
+template<typename TYPE>
+bool AsyncNetwork<TYPE>::is_completed_network () {
   if (TYPE::is_multiple() and accepted_size >= net_size  and connected_size >= net_size)
     return true;
 
@@ -140,7 +144,8 @@ bool AsyncNetwork::is_completed_network () {
 }
 // }}}
 // id_of {{{
-int AsyncNetwork::id_of (tcp::socket* sock) {
+template<typename TYPE>
+int AsyncNetwork<TYPE>::id_of (tcp::socket* sock) {
   auto ip = sock->remote_endpoint().address().to_string();
 
   auto idx = std::find(nodes.begin(), nodes.end(), ip) - nodes.begin();
@@ -148,16 +153,19 @@ int AsyncNetwork::id_of (tcp::socket* sock) {
 }
 // }}}
 // start_reading {{{
-void AsyncNetwork::start_reading () {
-    for (auto sp : sockets) {
-      if (TYPE::is_multiple())
-        channels.insert (sp.first, {sp.second.first, sp.second.second, context, node});
-      else 
-        channels.insert (sp.first, {sp.second.second, context, node});
+template<typename TYPE>
+void AsyncNetwork<TYPE>::start_reading () {
+    for (auto& sp : sockets) {
+      if (channels.find(sp.first) != channels.end())
+        channels.erase(sp.first);
+
+      channels.emplace (sp.first, std::make_unique<TYPE> (sp.second.first, sp.second.second, context, node));
     }
     sockets.clear();
-    for (auto channel : channels)
-      channel->do_read();
+    for (auto& channel : channels)
+      channel.second->do_read();
+
+    node->on_connect();
 }
 // }}}
 }

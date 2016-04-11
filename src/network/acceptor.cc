@@ -1,5 +1,7 @@
 #include "acceptor.hh"
 
+using namespace eclipse::network;
+
 // Constructor {{{
 Acceptor::Acceptor(Context& c, int port_, NetObserver* o):
   observer(o),

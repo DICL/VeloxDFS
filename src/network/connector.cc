@@ -1,14 +1,23 @@
 #include "connector.hh"
+#include <string>
+
+using namespace std;
+using namespace eclipse::network;
+namespace ph = boost::asio::placeholders;
 
 Connector::Connector(Context& c, int p, NetObserver* o) : 
   nodes (c.settings.get<vec_str>("network.nodes")),
+  ip_of_this(c.settings.getip()),
   observer(o), 
   iosvc(c.io),
   port(p) {}
 
 // establish {{{
 void Connector::establish () {
-  for (auto node : nodes) do_connect(node);
+  for (auto node : nodes) {
+    if (node != ip_of_this)
+      do_connect(node);
+  }
 }
 // }}}
 // do_connect {{{
@@ -16,10 +25,10 @@ void Connector::do_connect (std::string node) {
   tcp::resolver resolver (iosvc);
   tcp::resolver::query query (node, to_string(port));
   tcp::resolver::iterator it (resolver.resolve(query));
-  ep = new tcp::endpoint (*it);
-  auto sock = tcp::socket(iosvc);
+  auto ep = new tcp::endpoint (*it);
+  auto sock = new tcp::socket(iosvc);
 
-  sock->async_connect (*ep, bind (&Connector::on_connect, this, 
+  sock->async_connect (*ep, boost::bind (&Connector::on_connect, this, 
         ph::error, ep, sock));
 }
 // }}}
