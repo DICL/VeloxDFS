@@ -14,7 +14,7 @@ using vec_str = std::vector<std::string>;
 
 class Connector {
   public:
-    Connector(Context&, int, NetObserver*); 
+    Connector(int, NetObserver*); 
     ~Connector() = default; 
 
     void establish ();

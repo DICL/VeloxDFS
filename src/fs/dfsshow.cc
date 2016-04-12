@@ -73,14 +73,13 @@ eclipse::messages::BlockInfo* read_block(tcp::socket* socket) {
 }
 
 int main(int argc, char* argv[]) {
-  Context con;
   if (argc < 2) {
     cout << "usage: dfsget file_name1 file_name2 ..." << endl;
     return EXIT_FAILURE;
 
   } else {
-    string path = con.settings.get<string>("path.scratch");
-    vec_str nodes = con.settings.get<vec_str> ("network.nodes");
+    string path = context.settings.get<string>("path.scratch");
+    vec_str nodes = context.settings.get<vec_str> ("network.nodes");
 
     for (int i=1; i<argc; i++) {
       string file_name = argv[i];

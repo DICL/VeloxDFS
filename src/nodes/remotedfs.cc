@@ -7,7 +7,7 @@ using namespace eclipse;
 namespace ph = std::placeholders;
 
 // Constructor {{{
-RemoteDFS::RemoteDFS (Context& c) : Router(c) {
+RemoteDFS::RemoteDFS () : Router() {
   routing_table.insert({"BlockInfo",  bind(&RemoteDFS::insert_block, this, ph::_1)});
   routing_table.insert({"FileInfo",   bind(&RemoteDFS::insert_file, this, ph::_1)});
   routing_table.insert({"FileRequest", bind(&RemoteDFS::request_file, this, ph::_1)});
@@ -21,7 +21,7 @@ RemoteDFS::RemoteDFS (Context& c) : Router(c) {
 // }}}
 // establish {{{
 bool RemoteDFS::establish () {
-  peer  = make_unique<PeerDFS> (context);
+  peer  = make_unique<PeerDFS> ();
   peer_dfs = dynamic_cast<PeerDFS*> (peer.get());
   peer_dfs->establish();
   Router::establish();

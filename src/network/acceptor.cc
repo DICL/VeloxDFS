@@ -3,10 +3,10 @@
 using namespace eclipse::network;
 
 // Constructor {{{
-Acceptor::Acceptor(Context& c, int port_, NetObserver* o):
+Acceptor::Acceptor(int port_, NetObserver* o):
   observer(o),
-  iosvc (c.io),
-  nodes (c.settings.get<vec_str>("network.nodes")),
+  iosvc (context.io),
+  nodes (context.settings.get<vec_str>("network.nodes")),
   port  (port_)
 { }
 // }}}

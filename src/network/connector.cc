@@ -5,11 +5,11 @@ using namespace std;
 using namespace eclipse::network;
 namespace ph = boost::asio::placeholders;
 
-Connector::Connector(Context& c, int p, NetObserver* o) : 
-  nodes (c.settings.get<vec_str>("network.nodes")),
-  ip_of_this(c.settings.getip()),
+Connector::Connector(int p, NetObserver* o) : 
+  nodes (context.settings.get<vec_str>("network.nodes")),
+  ip_of_this(context.settings.getip()),
   observer(o), 
-  iosvc(c.io),
+  iosvc(context.io),
   port(p) {}
 
 // establish {{{

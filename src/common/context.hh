@@ -7,22 +7,29 @@
 #include <vector>
 #include <thread>
 
-struct Context {
-  boost::asio::io_service io;
-  std::unique_ptr<Logger, decltype(&Logger::disconnect)>
-    logger {nullptr, Logger::disconnect};
-  Settings settings;
-  int id;
+class Context {
+  public:
+    boost::asio::io_service io;
+    std::unique_ptr<Logger, decltype(&Logger::disconnect)>
+      logger {nullptr, Logger::disconnect};
+    Settings settings;
+    int id;
 
-  void run ();
-  bool join ();
+    void run ();
+    bool join ();
 
-  Context(std::string);
-  Context();
-  ~Context();
+    static Context* singleton;
+    static Context* connect(std::string);
+    static Context* connect();
 
   protected:
+    Context(std::string);
+    Context();
+    ~Context();
+
     void init();
     std::vector<std::unique_ptr<std::thread>> threads;
     boost::asio::io_service::work work;
 };
+
+extern Context& context;

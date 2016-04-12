@@ -4,8 +4,7 @@ using namespace std;
 namespace eclipse{
   Directory::Directory()
   {
-    Context con;
-    path = con.settings.get<string>("path.metadata") + "/metadata.db";
+    path = context.settings.get<string>("path.metadata") + "/metadata.db";
     zErrMsg = 0;
   }
 
@@ -15,16 +14,15 @@ namespace eclipse{
 
   void Directory::open_db()
   {
-    Context con;
     // Open database
     rc = sqlite3_open(path.c_str(), &db);
     if(rc)
     {
-      con.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
+      context.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
     }
     else
     {
-      con.logger->info("Opened database successfully\n");
+      context.logger->info("Opened database successfully\n");
     }
   }
 
@@ -61,9 +59,8 @@ namespace eclipse{
 
   int Directory::display_callback(void *NotUsed, int argc, char **argv, char **azColName)
   {
-    Context con;
     for(int i=0; i<argc; i++)
-      con.logger->info("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+      context.logger->info("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
     printf("\n");
     return 0;
   }
@@ -115,7 +112,6 @@ namespace eclipse{
 
   void Directory::init_db()
   {
-    Context con;
     // Open database
     open_db();
 
@@ -132,12 +128,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("file_table created successfully\n");
+      context.logger->info("file_table created successfully\n");
     }
 
     // Create SQL statement
@@ -158,12 +154,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("block_table created successfully\n");
+      context.logger->info("block_table created successfully\n");
     }
     // Close Database
     sqlite3_close(db);
@@ -171,7 +167,6 @@ namespace eclipse{
 
   void Directory::insert_file_metadata(FileInfo file_info)
   {
-    Context con;
     // Open database
     open_db();
 
@@ -190,12 +185,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("file_metadata inserted successfully\n");
+      context.logger->info("file_metadata inserted successfully\n");
     }
 
     // Close Database
@@ -204,7 +199,6 @@ namespace eclipse{
 
   void Directory::insert_block_metadata(BlockInfo block_info)
   {
-    Context con;
     // Open database
     open_db();
 
@@ -229,12 +223,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("block_metadata inserted successfully\n");
+      context.logger->info("block_metadata inserted successfully\n");
     }
 
     // Close Database
@@ -243,7 +237,6 @@ namespace eclipse{
 
   void Directory::select_file_metadata(string file_name, FileInfo *file_info)
   {
-    Context con;
     // Open database
     open_db();
 
@@ -254,12 +247,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, file_callback, (void*)file_info, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("file_metadata selected successfully\n");
+      context.logger->info("file_metadata selected successfully\n");
     }
 
     // Close Database
@@ -268,7 +261,6 @@ namespace eclipse{
 
   void Directory::select_block_metadata(string file_name, unsigned int block_seq, BlockInfo *block_info)
   {
-    Context con;
     // Open database
     open_db();
 
@@ -280,12 +272,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, block_callback, (void*)block_info, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("block_metadata selected successfully\n");
+      context.logger->info("block_metadata selected successfully\n");
     }
 
     // Close Database
@@ -294,7 +286,6 @@ namespace eclipse{
 
   void Directory::select_all_file_metadata(vector<FileInfo> &file_list)
   {
-    Context con;
     // Open database
     open_db();
 
@@ -305,12 +296,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, file_list_callback, (void*)&file_list, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("file_metadata selected successfully\n");
+      context.logger->info("file_metadata selected successfully\n");
     }
 
     // Close Database
@@ -319,7 +310,6 @@ namespace eclipse{
 
   void Directory::select_all_block_metadata(vector<BlockInfo> &block_info)
   {
-    Context con;
     // Open database
     open_db();
 
@@ -330,12 +320,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, block_list_callback, (void*)&block_info, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("block_metadata selected successfully\n");
+      context.logger->info("block_metadata selected successfully\n");
     }
 
     // Close Database
@@ -344,7 +334,6 @@ namespace eclipse{
 
   void Directory::update_file_metadata(string file_name, FileInfo file_info)
   {
-    Context con;
     // Open database
     open_db();
 
@@ -364,12 +353,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("file_metadata updated successfully\n");
+      context.logger->info("file_metadata updated successfully\n");
     }
 
     // Close Database
@@ -378,7 +367,6 @@ namespace eclipse{
 
   void Directory::update_block_metadata(string file_name, unsigned int block_seq, BlockInfo block_info)
   {
-    Context con;
     // Open database
     open_db();
 
@@ -404,12 +392,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("block_metadata updated successfully\n");
+      context.logger->info("block_metadata updated successfully\n");
     }
 
     // Close Database
@@ -418,7 +406,6 @@ namespace eclipse{
 
   void Directory::delete_file_metadata(string file_name)
   {
-    Context con;
     // Open database
     open_db();
 
@@ -429,12 +416,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("file_metadata deleted successfully\n");
+      context.logger->info("file_metadata deleted successfully\n");
     }
 
     // Close Database
@@ -443,7 +430,6 @@ namespace eclipse{
 
   void Directory::delete_block_metadata(string file_name, unsigned int block_seq)
   {
-    Context con;
     // Open database
     open_db();
 
@@ -454,12 +440,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("block_metadata deleted successfully\n");
+      context.logger->info("block_metadata deleted successfully\n");
     }
 
     // Close Database
@@ -468,7 +454,6 @@ namespace eclipse{
 
   void Directory::display_file_metadata()
   {
-    Context con;
     // Open database
     open_db();
 
@@ -479,12 +464,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, display_callback, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("file_metadata displayed successfully\n");
+      context.logger->info("file_metadata displayed successfully\n");
     }
 
     // Close Database
@@ -493,7 +478,6 @@ namespace eclipse{
 
   void Directory::display_block_metadata()
   {
-    Context con;
     // Open database
     open_db();
 
@@ -504,12 +488,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, display_callback, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("block_metadata displayed successfully\n");
+      context.logger->info("block_metadata displayed successfully\n");
     }
 
     // Close Database
@@ -518,7 +502,6 @@ namespace eclipse{
 
   bool Directory::file_exist(string file_name)
   {
-    Context con;
     bool result = false;
 
     // Open database
@@ -531,12 +514,12 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, exist_callback, &result, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      con.logger->error("SQL error: %s\n", zErrMsg);
+      context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     }
     else
     {
-      con.logger->info("file_exist executed successfully\n");
+      context.logger->info("file_exist executed successfully\n");
     }
 
     // Close Database

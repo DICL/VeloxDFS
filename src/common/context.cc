@@ -3,7 +3,33 @@
 
 using namespace std;
 
+Context& context = *Context::connect();
+
+Context* Context::singleton = nullptr;
+
 // Constructors {{{
+Context* Context::connect (string title) {
+
+  if (singleton == nullptr) {
+    singleton = new Context(title);
+    singleton->init();
+    singleton->run();
+  }
+
+  return singleton;
+}
+
+Context* Context::connect () {
+
+  if (singleton == nullptr) {
+    singleton = new Context();
+    singleton->init();
+    singleton->run();
+  }
+
+  return singleton;
+}
+
 Context::Context(string s): settings(s), work(io) {
   init();
 }
