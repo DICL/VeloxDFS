@@ -5,10 +5,7 @@
 using namespace eclipse;
 
 int main (int argc, char ** argv) {
-  Context context;
-  context.run();
-
-  RemoteDFS nl (context);
+  RemoteDFS nl;
   nl.establish();
 
   return context.join();
