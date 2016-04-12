@@ -16,7 +16,7 @@ using boost::asio::ip::tcp;
 template<typename TYPE>
 class AsyncNetwork: public Network, public NetObserver {
   public:
-    AsyncNetwork(AsyncNode*, Context&, int);
+    AsyncNetwork(AsyncNode*, int);
     ~AsyncNetwork ();
 
     bool establish() override;
@@ -32,7 +32,6 @@ class AsyncNetwork: public Network, public NetObserver {
     void start_reading();
     bool is_completed_network();
 
-    Context& context;
     AsyncNode* node;
     vec_str nodes;
 
@@ -45,12 +44,11 @@ class AsyncNetwork: public Network, public NetObserver {
 };
 // Constructor {{{
 template<typename TYPE>
-AsyncNetwork<TYPE>::AsyncNetwork (AsyncNode* n, Context& c, int port):
-  context(c),
+AsyncNetwork<TYPE>::AsyncNetwork (AsyncNode* n, int port):
   node(n),
-  nodes(c.settings.get<vec_str> ("network.nodes")),
-  acceptor(c, port, this),
-  connector(c, port, this)
+  nodes(context.settings.get<vec_str> ("network.nodes")),
+  acceptor(port, this),
+  connector(port, this)
 { 
  if (TYPE::is_multiple())
    net_size = nodes.size() - 1;
@@ -159,7 +157,7 @@ void AsyncNetwork<TYPE>::start_reading () {
       if (channels.find(sp.first) != channels.end())
         channels.erase(sp.first);
 
-      channels.emplace (sp.first, std::make_unique<TYPE> (sp.second.first, sp.second.second, context, node));
+      channels.emplace (sp.first, std::make_unique<TYPE> (sp.second.first, sp.second.second, node));
     }
     sockets.clear();
     for (auto& channel : channels)

@@ -10,7 +10,7 @@ using boost::asio::ip::tcp;
 
 class RemoteDFS: public Router {
   public:
-    RemoteDFS (Context&);
+    RemoteDFS ();
     ~RemoteDFS () = default;
 
     virtual bool establish ();

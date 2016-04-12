@@ -14,9 +14,7 @@ using namespace eclipse::messages;
 using namespace boost::system;
 
 // constructor {{{
-AsyncChannel::AsyncChannel(tcp::socket* s, tcp::socket* r,
-    Context& c, AsyncNode* node_) : 
-  Channel(c),
+AsyncChannel::AsyncChannel(tcp::socket* s, tcp::socket* r, AsyncNode* node_) : 
   node (node_),
   sender(s),
   receiver(r)
@@ -68,7 +66,6 @@ void AsyncChannel::read_coroutine (yield_context yield) {
 
       size_t size = atoi(header);
       l = async_read (*receiver, body.prepare(size), yield[ec]);
-      logger->info ("AsyncChannel: l=%d", l);
       if (ec) throw 1;
 
       body.commit (l);

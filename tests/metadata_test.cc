@@ -8,9 +8,8 @@ using namespace eclipse;
 using namespace std;
 
 int main() {
-  Context con;
   Directory dir;
-  con.logger->info("==========Start dir test==========");
+  context.logger->info("==========Start dir test==========");
 
   // Basic metadata io example
   dir.init_db();
@@ -96,6 +95,6 @@ int main() {
   dir.display_file_metadata();
   dir.display_block_metadata();
   */
-  con.logger->info("==========End dir test==========");
+  context.logger->info("==========End dir test==========");
   return 0;
 }

@@ -10,13 +10,10 @@ using vec_str    = std::vector<std::string>;
 
 namespace eclipse {
 // Constructor & destructor {{{
-Node::Node(Context& context) : 
+Node::Node() : 
   Machine(context.id),
-  logger    (context.logger.get()),
-  settings (context.settings),
-  ip_of_this(context.settings.getip()),
-  io_service(context.io),
-  port      (context.settings.get<int>("network.port_cache"))
+  logger (context.logger.get()),
+  port   (context.settings.get<int>("network.port_cache"))
 {
 }
 

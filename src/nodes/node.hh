@@ -13,18 +13,16 @@ namespace eclipse {
 
 class Node: public Machine {
   public:
-    Node(Context&);
+    Node();
     ~Node();
 
     std::string get_ip () const override;
     virtual bool establish() = 0;
 
   protected:
-    Logger* logger;
     network::Network* network;
-    Settings& settings;
+    Logger* logger;
     std::string ip_of_this;
-    boost::asio::io_service& io_service;
     int port;
 };
 
