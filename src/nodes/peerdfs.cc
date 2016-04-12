@@ -26,14 +26,14 @@ using namespace std;
 
 namespace eclipse {
 // Constructor & destructor {{{
-PeerDFS::PeerDFS (Context& context) : Node (context) { 
+PeerDFS::PeerDFS () : Node () { 
   Settings& setted = context.settings;
 
   int port       = setted.get<int>("network.port_cache");
   size           = setted.get<vec_str>("network.nodes").size();
   disk_path      = setted.get<string>("path.scratch");
 
-  network   = new AsyncNetwork<P2P>(this, context, port);
+  network   = new AsyncNetwork<P2P>(this, port);
   boundaries.reset( new Histogram {size, 0});
   boundaries->initialize();
 
@@ -254,8 +254,8 @@ bool PeerDFS::list (messages::FileList* m) {
 bool PeerDFS::format () {
   logger->info ("Formating DFS");
 
-  string fs_path = settings.get<string>("path.scratch");
-  string md_path = settings.get<string>("path.metadata");
+  string fs_path = context.settings.get<string>("path.scratch");
+  string md_path = context.settings.get<string>("path.metadata");
 
   DIR *theFolder = opendir(fs_path.c_str());
   struct dirent *next_file;

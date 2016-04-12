@@ -16,7 +16,7 @@ using vec_str = std::vector<std::string>;
 
 class Acceptor {
   public:
-    Acceptor(Context&, int, NetObserver*);
+    Acceptor(int, NetObserver*);
     void listen();
 
   protected:

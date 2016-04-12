@@ -24,7 +24,7 @@ typedef std::function<void(std::string, std::string)> req_func;
 
 class PeerDFS: public Node, public AsyncNode {
   public:
-    PeerDFS (Context&);
+    PeerDFS ();
     ~PeerDFS ();
 
     bool establish () override;

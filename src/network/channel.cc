@@ -2,8 +2,8 @@
 
 using namespace eclipse::network;
 
-Channel::Channel (Context& c) :
-  iosvc  (c.io), 
-  port   (c.settings.get<int>("network.port_cache")),
-  logger (c.logger.get()) 
+Channel::Channel () :
+  iosvc  (context.io), 
+  port   (context.settings.get<int>("network.port_cache")),
+  logger (context.logger.get()) 
 {}

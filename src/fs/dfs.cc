@@ -4,13 +4,12 @@ using namespace eclipse;
 
 namespace eclipse{
   void DFS::load_settings () {
-    Context con;
-    BLOCK_SIZE = con.settings.get<int>("filesystem.block");
-    NUM_SERVERS = con.settings.get<vector<string>>("network.nodes").size();
-    path = con.settings.get<string>("path.scratch");
-    replica = con.settings.get<int>("filesystem.replica");
-    port = con.settings.get<int> ("network.port_mapreduce");
-    nodes = con.settings.get<vector<string>>("network.nodes");
+    BLOCK_SIZE = context.settings.get<int>("filesystem.block");
+    NUM_SERVERS = context.settings.get<vector<string>>("network.nodes").size();
+    path = context.settings.get<string>("path.scratch");
+    replica = context.settings.get<int>("filesystem.replica");
+    port = context.settings.get<int> ("network.port_mapreduce");
+    nodes = context.settings.get<vector<string>>("network.nodes");
   }
 
   unique_ptr<tcp::socket> DFS::connect (uint32_t hash_value) { 
@@ -52,7 +51,6 @@ namespace eclipse{
 
   int DFS::put(int argc, char* argv[])
   {
-    Context con;
     if(argc < 3)
     {
       cout << "[INFO] dfs put file_1 file_2 ..." << endl;

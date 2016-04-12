@@ -11,7 +11,7 @@ namespace network {
 
 class AsyncChannel: public Channel {
   public:
-    AsyncChannel(tcp::socket*, tcp::socket*, Context&, AsyncNode*);
+    AsyncChannel(tcp::socket*, tcp::socket*, AsyncNode*);
     void do_write (messages::Message*) override; 
     void do_read ();
 

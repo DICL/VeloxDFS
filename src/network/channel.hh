@@ -13,7 +13,7 @@ const int header_size = 16;
 
 class Channel {
   public:
-    Channel (Context&);
+    Channel ();
     ~Channel () = default;
 
     virtual void do_write (messages::Message*) = 0; 
