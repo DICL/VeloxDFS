@@ -51,7 +51,7 @@ class PeerDFS: public Node, public AsyncNode {
     std::unique_ptr<Histogram> boundaries;
     std::map<std::string, req_func> requested_blocks;
     bool connected = false;
-    uint32_t size;
+    int size;
     std::string disk_path;
 
     template <typename T> void process (T);

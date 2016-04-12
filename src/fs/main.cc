@@ -36,6 +36,10 @@ int main(int argc, char* argv[])
     {
       dfs.format(argc, argv);
     }
+    else if(op.compare("show") == 0)
+    {
+      dfs.show(argc, argv);
+    }
     else
     {
       cerr << "[ERR] Unknown operation" << endl;
