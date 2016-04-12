@@ -23,6 +23,8 @@ units_SOURCES      = $(messages_files) \
                      src/network/channel.cc \
                      src/network/asyncchannel.cc \
                      src/network/p2p.cc \
+										 src/network/acceptor.cc \
+										 src/network/connector.cc \
                      src/nodes/machine.cc \
                      src/nodes/node.cc 
 
@@ -34,6 +36,8 @@ nodes_SOURCES   = tests/nodes.cc \
                   src/network/asyncchannel.cc \
                   src/network/p2p.cc \
                   src/network/server.cc \
+                  src/network/acceptor.cc \
+                  src/network/connector.cc \
                   src/nodes/machine.cc \
                   src/nodes/peerdfs.cc \
                   src/nodes/remotedfs.cc \
