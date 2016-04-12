@@ -12,6 +12,7 @@
 #include "../messages/blockdel.hh"
 #include "../messages/filedescription.hh"
 #include "../messages/reply.hh"
+#include "../messages/blockrequest.hh"
 #include "directory.hh"
 
 #include <iostream>
@@ -22,6 +23,8 @@
 #include <iomanip>
 #include <memory>
 #include <boost/asio.hpp>
+#include <stdint.h>
+#include <ctime>
 
 namespace eclipse {
   using namespace messages;
@@ -48,5 +51,6 @@ namespace eclipse {
       int ls (int argc, char* argv[]);
       int rm (int argc, char* argv[]);
       int format (int argc, char* argv[]);
+      int show (int argc, char* argv[]);
   };
 }
