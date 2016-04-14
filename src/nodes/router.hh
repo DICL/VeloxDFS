@@ -18,11 +18,11 @@ class Router: public Node, public AsyncNode {
 
     bool establish() override; 
     void on_connect() override;
-    void on_disconnect() override;
-    void on_read(messages::Message*) override;
+    void on_disconnect(int) override;
+    void on_read(messages::Message*, int) override;
 
   protected:
-    std::map<std::string, std::function<void(messages::Message*)>> routing_table;
+    std::map<std::string, std::function<void(messages::Message*, int)>> routing_table;
     std::unique_ptr<Node> peer;
     int port;
 };

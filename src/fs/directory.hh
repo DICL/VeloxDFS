@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <cinttypes>
 #include <vector>
+#include <mutex>
 #include "../common/context.hh"
 #include "../messages/blockinfo.hh"
 #include "../messages/fileinfo.hh"
@@ -14,6 +15,7 @@ namespace eclipse {
   using namespace messages;
   class Directory {
     private:
+      std::mutex mutex;
       sqlite3 *db;
       char *zErrMsg;
       std::string path;

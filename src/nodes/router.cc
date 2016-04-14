@@ -29,14 +29,13 @@ bool Router::establish () {
 }
 // }}}
 // on_read {{{
-void Router::on_read (Message* m) {
+void Router::on_read (Message* m, int n_channel) {
   string type = m->get_type();
-  routing_table[type](m);
+  routing_table[type](m, n_channel);
 }
 // }}}
 // on_disconnect {{{
-void Router::on_disconnect () {
-  //network->on_disconnect(nullptr);
+void Router::on_disconnect (int id) {
 }
 // }}}
 // on_connect() {{{

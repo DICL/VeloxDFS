@@ -14,6 +14,7 @@ namespace eclipse{
 
   void Directory::open_db()
   {
+    mutex.lock();
     // Open database
     rc = sqlite3_open(path.c_str(), &db);
     if(rc)
@@ -24,6 +25,7 @@ namespace eclipse{
     {
       context.logger->info("Opened database successfully\n");
     }
+    mutex.unlock();
   }
 
   int Directory::file_callback(void *file_info, int argc, char **argv, char **azColName)
@@ -115,6 +117,7 @@ namespace eclipse{
     // Open database
     open_db();
 
+    mutex.lock();
     // Create SQL statement
     sprintf(sql, "CREATE TABLE file_table( \
         file_name       TEXT  NOT NULL, \
@@ -163,6 +166,7 @@ namespace eclipse{
     }
     // Close Database
     sqlite3_close(db);
+    mutex.unlock();
   }
 
   void Directory::insert_file_metadata(FileInfo file_info)
@@ -289,6 +293,8 @@ namespace eclipse{
     // Open database
     open_db();
 
+    mutex.lock();
+
     // Create sql statement
     sprintf(sql, "SELECT * from file_table;");
 
@@ -306,6 +312,7 @@ namespace eclipse{
 
     // Close Database
     sqlite3_close(db);
+    mutex.unlock();
   }
 
   void Directory::select_all_block_metadata(vector<BlockInfo> &block_info)

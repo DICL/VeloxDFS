@@ -138,7 +138,7 @@ template<> void PeerDFS::process (Control* m) {
 }
 // }}}
 // on_read (Message*) {{{
-void PeerDFS::on_read (Message* m) {
+void PeerDFS::on_read (Message* m, int) {
   string type = m->get_type();
 
   if (type == "KeyValue") {
@@ -162,8 +162,7 @@ void PeerDFS::on_connect () {
 }
 // }}}
 // on_disconnect {{{
-void PeerDFS::on_disconnect () {
-
+void PeerDFS::on_disconnect (int id) {
 }
 // }}}
 // insert_file {{{
