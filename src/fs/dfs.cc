@@ -8,7 +8,7 @@ namespace eclipse{
     NUM_SERVERS = context.settings.get<vector<string>>("network.nodes").size();
     path = context.settings.get<string>("path.scratch");
     replica = context.settings.get<int>("filesystem.replica");
-    port = context.settings.get<int> ("network.port_mapreduce");
+    port = context.settings.get<int> ("network.ports.client");
     nodes = context.settings.get<vector<string>>("network.nodes");
   }
 

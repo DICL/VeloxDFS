@@ -13,7 +13,7 @@ namespace eclipse {
 Node::Node() : 
   Machine(context.id),
   logger (context.logger.get()),
-  port   (context.settings.get<int>("network.port_cache"))
+  port   (context.settings.get<int>("network.ports.internal"))
 {
 }
 
