@@ -1,24 +1,16 @@
 {
- "name"    : "Ferrari cluster eclipseMR file",
+ "name"    : "Raven cluster eclipseMR file",
  "max_job" : 1024,
 
  "log" : {
-   "type" : "LOG_LOCAL7",
+   "type" : "LOG_LOCAL6",
    "name" : "ECLIPSE"
  },
 
  "path" : {
-   "filesystem" : "/home/inthound/eclipse_storage/",
-   "scratch"    : "/scratch/inthound/mr_storage",
-   "idata"      : "/scratch/inthound/mr_storage/idata",
-   "metadata"   : "/scratch/inthound/mr_storage/mdata",
-   "ipc"        : "/scratch/inthound/socket"
- },
-
- "filesystem" : {
-   "block"  : 134217728,
-   "buffer" : 8192,
-   "replica" : 3
+   "scratch"    : "/scratch/vicente/storage",
+   "idata"      : "/scratch/vicente/idata",
+   "metadata"   : "/scratch/vicente/"
  },
 
  "cache" : {
@@ -28,21 +20,23 @@
  },
 
  "network" : {
-   "port_mapreduce" : 8008,   
-   "port_cache"     : 8009,
-   "port_dht"       : 8010,
-   "topology"       : "mesh",
+   "ports" : {
+     "internal" : 8008,
+     "client"   : 8009
+   },
+
    "iface"          : "em1",
-   "master"         : "10.20.13.123",
    "nodes"          : [
      "10.20.13.123",
      "10.20.13.124",
-     "10.20.13.125",
-     "10.20.13.126",
-     "10.20.13.127",
-     "10.20.13.128",
-     "10.20.13.129",
-     "10.20.13.130"
+     "10.20.13.125"
    ]
+ },
+
+ "filesystem" : {
+   "block"  : 134217728,
+   "buffer" : 512,
+   "replica" : 3
  }
+
 }

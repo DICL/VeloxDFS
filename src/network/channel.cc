@@ -4,6 +4,6 @@ using namespace eclipse::network;
 
 Channel::Channel () :
   iosvc  (context.io), 
-  port   (context.settings.get<int>("network.port_cache")),
+  port   (context.settings.get<int>("network.ports.internal")),
   logger (context.logger.get()) 
 {}
