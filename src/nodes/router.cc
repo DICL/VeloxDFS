@@ -16,7 +16,7 @@ using namespace std;
 namespace eclipse {
 // Constructor {{{
 Router::Router() : Node () {
-  port = context.settings.get<int>("network.port_mapreduce");
+  port = context.settings.get<int>("network.ports.client");
   network = new AsyncNetwork<Server> (this, port);
 }
 
