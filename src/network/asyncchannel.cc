@@ -14,35 +14,47 @@ using namespace eclipse::messages;
 using namespace boost::system;
 
 // constructor {{{
-AsyncChannel::AsyncChannel(tcp::socket* s, tcp::socket* r, AsyncNode* node_) : 
+AsyncChannel::AsyncChannel(tcp::socket* s, tcp::socket* r, NetObserver* node_, int i) : 
   node (node_),
   sender(s),
-  receiver(r)
+  receiver(r),
+  id(i)
 { }
+AsyncChannel::~AsyncChannel() {
+  if (receiver!= nullptr) {
+    receiver->close();
+    delete receiver;
+  }
+}
 // }}}
 // do_write {{{
 void AsyncChannel::do_write (Message* m) {
   string str = save_message (m);
+  if (m == nullptr)
+    logger->error ("Null pointer to be sent");
+
   stringstream ss; 
   ss << setfill('0') << setw(header_size) << str.length() << str;
-
   string* to_write = new string(ss.str());
-
-  async_write (*sender, buffer(*to_write), boost::bind (&AsyncChannel::on_write, this, 
-      ph::error, ph::bytes_transferred, m, to_write));
+  do_write_impl(to_write);
+}
+// }}}
+// do_write_impl {{{
+void AsyncChannel::do_write_impl (string* to_write) {
+  async_write (*sender, buffer(*to_write), boost::bind (&AsyncChannel::on_write, 
+        this, ph::error, ph::bytes_transferred, to_write));
 }
 // }}}
 // on_write {{{
 void AsyncChannel::on_write (const boost::system::error_code& ec, 
-    size_t s, Message* m, string* str) {
+    size_t s, string* str) {
   delete str;
   if (ec) {
     logger->info ("Message could not reach err=%s", 
         ec.message().c_str());
 
-    do_write(m);
-
-  } 
+    do_write_impl(str);
+  }
 }
 // }}}
 // do_read {{{
@@ -61,12 +73,11 @@ void AsyncChannel::read_coroutine (yield_context yield) {
   try {
     while (true) {
       size_t l = async_read (*receiver, buffer(header, header_size), yield[ec]);
-      if (ec) throw 1;
-      if (l != (size_t)header_size) continue;
+      if (l != (size_t)header_size or ec) throw 1;
 
       size_t size = atoi(header);
-      l = async_read (*receiver, body.prepare(size), yield[ec]);
-      if (ec) throw 1;
+      l = read (*receiver, body.prepare(size));
+      //if (ec) throw 1;
 
       body.commit (l);
       string str ((istreambuf_iterator<char>(&body)), 
@@ -75,8 +86,9 @@ void AsyncChannel::read_coroutine (yield_context yield) {
 
       Message* msg = nullptr;
       msg = load_message(str);
-      node->on_read(msg);
+      node->on_read(msg, id);
       delete msg;
+      msg=nullptr;
     }
   } catch (...) {
     if (ec == boost::asio::error::eof)
@@ -85,12 +97,7 @@ void AsyncChannel::read_coroutine (yield_context yield) {
       logger->info ("AsyncChannel: Message arrived error=%s", 
           ec.message().c_str());
 
-      if (receiver!= nullptr) 
-        receiver->close();
-
-      delete receiver;
-      receiver = nullptr;
-      node->on_disconnect();
+      node->on_disconnect(nullptr, id);
   }
 }
 // }}}

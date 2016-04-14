@@ -2,6 +2,7 @@
 #include "channel.hh"
 #include "asyncnode.hh"
 #include "../messages/message.hh"
+#include "netobserver.hh"
 #include <string>
 #include <vector>
 #include <boost/asio/spawn.hpp>
@@ -11,18 +12,20 @@ namespace network {
 
 class AsyncChannel: public Channel {
   public:
-    AsyncChannel(tcp::socket*, tcp::socket*, AsyncNode*);
+    AsyncChannel(tcp::socket*, tcp::socket*, NetObserver*, int);
+    ~AsyncChannel();
     void do_write (messages::Message*) override; 
+    void do_write_impl (std::string*); 
     void do_read ();
 
   protected:
-    void on_write (const boost::system::error_code&, size_t, 
-        messages::Message*, std::string*); 
+    void on_write (const boost::system::error_code&, size_t, std::string*); 
 
     void read_coroutine (boost::asio::yield_context);
 
-    AsyncNode* node = nullptr;
+    NetObserver* node = nullptr;
     tcp::socket *sender, *receiver;
+    int id;
 };
 
 }
