@@ -3,8 +3,8 @@
 using namespace eclipse::network;
 
 // constructor {{{
-Server::Server(tcp::socket*, tcp::socket* s, AsyncNode* node_) : 
-  AsyncChannel(s, s, node_)
+Server::Server(tcp::socket*, tcp::socket* s, NetObserver* node_, int i) : 
+  AsyncChannel(s, s, node_, i)
 { }
 // }}}
 // is_multiple {{{

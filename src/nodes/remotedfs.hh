@@ -14,16 +14,16 @@ class RemoteDFS: public Router {
     ~RemoteDFS () = default;
 
     virtual bool establish ();
-    void insert_block (messages::Message*);
-    void insert_file (messages::Message*);
-    void request_file (messages::Message*);
-    void request_block (messages::Message*);
-    void request_ls (messages::Message*);
-    void delete_file (messages::Message*);
-    void delete_block (messages::Message*);
-    void send_block (std::string, std::string);
-    void request_format (messages::Message*);
-    void file_exist (messages::Message*);
+    void insert_block (messages::Message*, int);
+    void insert_file (messages::Message*, int);
+    void request_file (messages::Message*, int);
+    void request_block (messages::Message*, int);
+    void request_ls (messages::Message*, int);
+    void delete_file (messages::Message*, int);
+    void delete_block (messages::Message*, int);
+    void send_block (std::string, std::string, int);
+    void request_format (messages::Message*, int);
+    void file_exist (messages::Message*, int);
 
   private:
     PeerDFS* peer_dfs = nullptr;
