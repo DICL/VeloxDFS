@@ -1,0 +1,19 @@
+<map id="eclipse::messages::Message" name="eclipse::messages::Message">
+<area shape="rect" id="node2" href="$structeclipse_1_1messages_1_1BlockDel.html" title="eclipse::messages::\lBlockDel" alt="" coords="207,5,345,47"/>
+<area shape="rect" id="node3" href="$structeclipse_1_1messages_1_1BlockInfo.html" title="eclipse::messages::\lBlockInfo" alt="" coords="207,71,345,112"/>
+<area shape="rect" id="node4" href="$structeclipse_1_1messages_1_1BlockRequest.html" title="eclipse::messages::\lBlockRequest" alt="" coords="207,136,345,177"/>
+<area shape="rect" id="node5" href="$structeclipse_1_1messages_1_1Boundaries.html" title="eclipse::messages::\lBoundaries" alt="" coords="207,201,345,243"/>
+<area shape="rect" id="node6" href="$structeclipse_1_1messages_1_1CacheInfo.html" title="eclipse::messages::\lCacheInfo" alt="" coords="207,267,345,308"/>
+<area shape="rect" id="node7" href="$structeclipse_1_1messages_1_1Control.html" title="eclipse::messages::\lControl" alt="" coords="207,332,345,373"/>
+<area shape="rect" id="node8" href="$structeclipse_1_1messages_1_1FileDel.html" title="eclipse::messages::\lFileDel" alt="" coords="207,397,345,439"/>
+<area shape="rect" id="node9" href="$structeclipse_1_1messages_1_1FileDescription.html" title="eclipse::messages::\lFileDescription" alt="" coords="207,463,345,504"/>
+<area shape="rect" id="node10" href="$structeclipse_1_1messages_1_1FileExist.html" title="eclipse::messages::\lFileExist" alt="" coords="207,528,345,569"/>
+<area shape="rect" id="node11" href="$structeclipse_1_1messages_1_1FileInfo.html" title="eclipse::messages::\lFileInfo" alt="" coords="207,593,345,635"/>
+<area shape="rect" id="node12" href="$structeclipse_1_1messages_1_1FileList.html" title="eclipse::messages::\lFileList" alt="" coords="207,659,345,700"/>
+<area shape="rect" id="node13" href="$structeclipse_1_1messages_1_1FileRequest.html" title="eclipse::messages::\lFileRequest" alt="" coords="207,724,345,765"/>
+<area shape="rect" id="node14" href="$structeclipse_1_1messages_1_1FormatRequest.html" title="eclipse::messages::\lFormatRequest" alt="" coords="207,789,345,831"/>
+<area shape="rect" id="node15" href="$structeclipse_1_1messages_1_1KeyRequest.html" title="eclipse::messages::\lKeyRequest" alt="" coords="207,855,345,896"/>
+<area shape="rect" id="node16" href="$structeclipse_1_1messages_1_1KeyValue.html" title="eclipse::messages::\lKeyValue" alt="" coords="207,920,345,961"/>
+<area shape="rect" id="node17" href="$structeclipse_1_1messages_1_1Reply.html" title="eclipse::messages::\lReply" alt="" coords="207,985,345,1027"/>
+<area shape="rect" id="node18" href="$structeclipse_1_1messages_1_1Task.html" title="eclipse::messages::Task" alt="" coords="192,1051,360,1078"/>
+</map>
