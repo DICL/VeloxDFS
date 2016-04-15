@@ -1,38 +1,54 @@
-sudo: false 
-dist: trusty 
+sudo: false
+dist: trusty
 language: cpp
-
-cache: 
-  - apt
-  - ccache
-  
+cache:
+- apt
+- ccache
 git:
   submodules: false
-
 notifications:
   slack: dicl:WvBJLVrHw7j1IaIZun64ncjE
-
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
-      - boost-latest
-
+    - ubuntu-toolchain-r-test
+    - boost-latest
     packages:
-      - libboost1.55-all-dev
-      - build-essential
-      - gcc-4.9
-      - g++-4.9
-      - libunittest++-dev
-
+    - libboost1.55-all-dev
+    - build-essential
+    - gcc-4.9
+    - g++-4.9
+    - libunittest++-dev
+    - doxygen
 before_script:
   - export CXX=g++-4.9
   - mkdir build
 
-script: 
+script:
   - sh autogen.sh
   - cd build
   - sh ../configure --prefix=`pwd`
   - make -j4
-  - make install 
-  - make -j4 check 
+  - make install
+  - make -j4 check
+
+after_success: |
+  if ([ "$TRAVIS_BRANCH" == "master" ] || [ ! -z "$TRAVIS_TAG" ]) && 
+        [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+        cd ..
+        git config --global user.email "vicente.bolea@gmail.com"
+        git config --global user.name  "Vicente Adolfo Bolea Sanchez"
+        git submodule update --init -- ./doc/html
+        cd doc/html
+        git checkout gh-pages
+        cd ../
+        doxygen
+        cd html
+        git add .
+        git commit -m 'One more release'
+        git push origin gh-pages
+  fi
+
+env:
+  global:
+    secure: Hps2JSAXgZx/1UWonUwY7ZYfs1U3TwJzlfjK0qmUmJiHMLKOJjxexIjVAMWj6AVNmX5uQ9IccgKv4uAYPve5fwYhKXiwlnevgtOOyvKgWGFziXeqHBY0GZ1/zakPE9+rdPEBMXut3u2gEsWU30GaiwFECqvc6AEB6PCvCHIUrRZHtPfq+MFf9NulxLJIBIJnkvmFrZ3lbh+7kWYJW9XZ+HC270w2azRPjrv21tVNTpptjLvPFH8MZ0shNkUaDp8poyiqP5VNJyxNq7WtXUYsb9OlrA6MZiVAv0b365ada6NLxkuChcR0RAvW/yRDBowD0oMSZTbPiSfREjsHru0czOkEjCOfksuXKLLcp1mXzlwSXthdyx5/2zFslMwa2FISZmDiJoI+Q6cO24nMrXarM/dotB0WnBVaL1xVHZgZ+XAu5/N0AFymNZKMUDal8DrB2dZLJLNiQeGBqkW55yr7U1WxOsY0Jyd0aUbR60Iv5/wVxOrugV5y0NztAc/AU1vQB2GyLeNBhV9FDdZyYAcgmQrdYA0+KzYurU5TA46g8rALErRU2awHx0uSLNr3GXu7+nEq79hmSOCvAhk8Hh7F3QzQS/juSaHBbdqpLdRitkzMrf0uzkj5QXxa8qDqIJn3v3QrFJ3IJLGQWpoO1a4Ynch1pyKzWQIGwnE3UPV9Wo8=
