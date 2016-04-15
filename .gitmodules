@@ -1,3 +1,7 @@
 [submodule "doc/manual"]
 	path = doc/manual
 	url = git@github.com:DICL/EclipseDFS.wiki.git
+[submodule "gh-pages"]
+	path = doc/html
+	url = git@github.com:DICL/EclipseDFS
+	branch = gh-pages
