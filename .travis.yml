@@ -1,13 +1,21 @@
 sudo: false
 dist: trusty
 language: cpp
+
 cache:
-- apt
-- ccache
+ - apt
+ - ccache
+
 git:
   submodules: false
+
 notifications:
   slack: dicl:WvBJLVrHw7j1IaIZun64ncjE
+
+branches:
+  only:
+    - master
+
 addons:
   apt:
     sources:
@@ -36,8 +44,8 @@ after_success: |
   if ([ "$TRAVIS_BRANCH" == "master" ] || [ ! -z "$TRAVIS_TAG" ]) && 
         [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
         cd ..
-        git config --global user.email "vicente.bolea@gmail.com"
-        git config --global user.name  "Vicente Adolfo Bolea Sanchez"
+        git config --global user.email "Travis"
+        git config --global user.name  "Travis"
         git submodule update --init -- ./doc/html
         cd doc/html
         git checkout gh-pages
@@ -45,7 +53,7 @@ after_success: |
         doxygen
         cd html
         git add .
-        git commit -m 'One more release'
+        git commit -m "API: $TRAVIS_TAG"
         git push origin gh-pages
   fi
 
