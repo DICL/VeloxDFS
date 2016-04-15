@@ -1,0 +1,49 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+.tags
+
+*.swp
+*.swo
+*.blg
+*.log
+*.aux
+*.pdf
+*.dvi
+
+#autotools files
+config.h
+config.h.in
+config.h.in~
+config.log
+config.status
+configure
+./Makefile
+autom4te.cache/*
+configure.scan
+autoscan.log
+src/common/settings.hh.gch
+
+#Build
+build/bin/*
+.autotools_aux
+.deps
+.dirstamp
+aclocal.m4
+Makefile.in
+m4/libtool.m4
+m4/ltoptions.m4
+m4/ltsugar.m4
+m4/ltversion.m4
+m4/lt~obsolete.m4
+m4/pkg.m4
