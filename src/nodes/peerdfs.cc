@@ -271,7 +271,6 @@ bool PeerDFS::format () {
   return true;
 }
 // }}}
-
 // file_exist {{{
 // FIXME need to think better name for this function
 /**

@@ -40,6 +40,11 @@ script:
   - make install
   - make -j4 check
 
+before_install:
+  - openssl aes-256-cbc -K $encrypted_ef049681a331_key -iv $encrypted_ef049681a331_iv -in ./doc/deploy_key.enc -out deploy_key -d
+  - cp -f deploy_key ~/.ssh/id_rsa
+  - chmod 600 ~/.ssh/id_rsa
+
 after_success: |
   if ([ "$TRAVIS_BRANCH" == "master" ] || [ ! -z "$TRAVIS_TAG" ]) && 
         [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
@@ -56,7 +61,3 @@ after_success: |
         git commit -m "API: $TRAVIS_TAG"
         git push origin gh-pages
   fi
-
-env:
-  global:
-    secure: Hps2JSAXgZx/1UWonUwY7ZYfs1U3TwJzlfjK0qmUmJiHMLKOJjxexIjVAMWj6AVNmX5uQ9IccgKv4uAYPve5fwYhKXiwlnevgtOOyvKgWGFziXeqHBY0GZ1/zakPE9+rdPEBMXut3u2gEsWU30GaiwFECqvc6AEB6PCvCHIUrRZHtPfq+MFf9NulxLJIBIJnkvmFrZ3lbh+7kWYJW9XZ+HC270w2azRPjrv21tVNTpptjLvPFH8MZ0shNkUaDp8poyiqP5VNJyxNq7WtXUYsb9OlrA6MZiVAv0b365ada6NLxkuChcR0RAvW/yRDBowD0oMSZTbPiSfREjsHru0czOkEjCOfksuXKLLcp1mXzlwSXthdyx5/2zFslMwa2FISZmDiJoI+Q6cO24nMrXarM/dotB0WnBVaL1xVHZgZ+XAu5/N0AFymNZKMUDal8DrB2dZLJLNiQeGBqkW55yr7U1WxOsY0Jyd0aUbR60Iv5/wVxOrugV5y0NztAc/AU1vQB2GyLeNBhV9FDdZyYAcgmQrdYA0+KzYurU5TA46g8rALErRU2awHx0uSLNr3GXu7+nEq79hmSOCvAhk8Hh7F3QzQS/juSaHBbdqpLdRitkzMrf0uzkj5QXxa8qDqIJn3v3QrFJ3IJLGQWpoO1a4Ynch1pyKzWQIGwnE3UPV9Wo8=
