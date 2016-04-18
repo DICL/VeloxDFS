@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/DICL/EclipseDFS.svg?token=MaWCP2sHsbC2FaU6ztsx&branch=master)](https://magnum.travis-ci.com/DICL/EclipseDFS)
+[![Build Status](https://travis-ci.org/DICL/EclipseDFS.svg?branch=master)](https://travis-ci.org/DICL/EclipseDFS)
 [![Slack room](https://img.shields.io/badge/slack-join-pink.svg)](https://dicl.slack.com/messages/general/)
 BRIEFING
 ========
