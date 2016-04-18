@@ -79,45 +79,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">/home/travis/build/DICL/EclipseDFS/src/common/settings.hh</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/* \file       settings.hh</span>
-<a name="l00002"></a>00002 <span class="comment"> * @author     Vicente Adolfo Bolea Sanchez</span>
-<a name="l00003"></a>00003 <span class="comment"> * @brief      This is the implementation file of Settings </span>
-<a name="l00004"></a>00004 <span class="comment"> * </span>
-<a name="l00005"></a>00005 <span class="comment"> * @section 1 Configuration file path</span>
-<a name="l00006"></a>00006 <span class="comment"> * Settings will read the configuration file eclipse.json and</span>
-<a name="l00007"></a>00007 <span class="comment"> * load all the necessary properties. The path of the eclipse.json</span>
-<a name="l00008"></a>00008 <span class="comment"> * will be:</span>
-<a name="l00009"></a>00009 <span class="comment"> *  -# ~/.eclipse.json</span>
-<a name="l00010"></a>00010 <span class="comment"> *  -# /etc/eclipse.json</span>
-<a name="l00011"></a>00011 <span class="comment"> *  -# Constructor path @see Settings::Settings(std::string)</span>
-<a name="l00012"></a>00012 <span class="comment"> *  -# Hardcoded path, setted using autoconf</span>
-<a name="l00013"></a>00013 <span class="comment"> *</span>
-<a name="l00014"></a>00014 <span class="comment"> * @section 2 Usage</span>
-<a name="l00015"></a>00015 <span class="comment"> * The way it was designed to be used was:</span>
-<a name="l00016"></a>00016 <span class="comment"> *</span>
-<a name="l00017"></a>00017 <span class="comment"> * @code</span>
-<a name="l00018"></a>00018 <span class="comment"> * Settings setted = Settings().load();</span>
-<a name="l00019"></a>00019 <span class="comment"> * string path1 = setted.get&lt;string&gt;(&quot;path1&quot;);</span>
-<a name="l00020"></a>00020 <span class="comment"> * @endcode</span>
-<a name="l00021"></a>00021 <span class="comment"> *</span>
-<a name="l00022"></a>00022 <span class="comment"> * @attention This class uses the P.I.M.P.L. (Pointer to implementation) idiom</span>
-<a name="l00023"></a>00023 <span class="comment"> *            this reduces the complexity of the interface and compilation time. </span>
-<a name="l00024"></a>00024 <span class="comment"> *</span>
-<a name="l00025"></a>00025 <span class="comment"> * Copyright © 2015 Vicente Adolfo Bolea Sanchez</span>
-<a name="l00026"></a>00026 <span class="comment"> * </span>
-<a name="l00027"></a>00027 <span class="comment"> * This library is free software; you can redistribute it and/or modify</span>
-<a name="l00028"></a>00028 <span class="comment"> * It under the terms of the GNU Lesser General Public License as published</span>
-<a name="l00029"></a>00029 <span class="comment"> * By the Free Software Foundation; either version 3 of the License, or</span>
-<a name="l00030"></a>00030 <span class="comment"> * (at your option) any later version.</span>
-<a name="l00031"></a>00031 <span class="comment"> * </span>
-<a name="l00032"></a>00032 <span class="comment"> * This library is distributed in the hope that it will be useful,</span>
-<a name="l00033"></a>00033 <span class="comment"> * But WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<a name="l00034"></a>00034 <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
-<a name="l00035"></a>00035 <span class="comment"> * GNU Lesser General Public License for more details.</span>
-<a name="l00036"></a>00036 <span class="comment"> * </span>
-<a name="l00037"></a>00037 <span class="comment"> * You should have received a copy of the GNU Lesser General Public License</span>
-<a name="l00038"></a>00038 <span class="comment"> * Along with this library; if not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-<a name="l00039"></a>00039 <span class="comment"> */</span>
+<a href="settings_8hh.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
 <a name="l00040"></a>00040 <span class="preprocessor">#ifndef __SETTINGS_HH_</span>
 <a name="l00041"></a>00041 <span class="preprocessor"></span><span class="preprocessor">#define __SETTINGS_HH_</span>
 <a name="l00042"></a>00042 <span class="preprocessor"></span>
@@ -153,7 +115,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -165,7 +127,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 15 2016 08:25:43 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Apr 18 2016 06:32:05 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
