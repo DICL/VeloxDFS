@@ -1,4 +1,4 @@
-/* \file       settings.hh
+/** \file       settings.hh
  * @author     Vicente Adolfo Bolea Sanchez
  * @brief      This is the implementation file of Settings 
  * 
