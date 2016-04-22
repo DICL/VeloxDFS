@@ -50,6 +50,8 @@ void RemoteDFS::insert_block (messages::Message* m_, int n_channel) {
 
   network->send(n_channel, &reply);
 }
+// delete_block {{{
+// }}}
 void RemoteDFS::delete_block (messages::Message* m_, int n_channel) {
   auto m = dynamic_cast<messages::BlockDel*> (m_);
   logger->info ("BlockDel received");
@@ -66,7 +68,6 @@ void RemoteDFS::delete_block (messages::Message* m_, int n_channel) {
 
   network->send(n_channel, &reply);
 }
-
 // }}}
 // FileInfo* {{{
 void RemoteDFS::insert_file (messages::Message* m_, int n_channel) {

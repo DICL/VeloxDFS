@@ -177,6 +177,16 @@ namespace eclipse{
         string file_name = argv[i];
         uint32_t file_hash_key = h(file_name);
         auto socket = connect (file_hash_key % NUM_SERVERS);
+        FileExist fe;
+        fe.file_name = file_name;
+        send_message(socket.get(), &fe);
+        auto rep = read_reply<Reply> (socket.get());
+
+        if (rep->message != "TRUE")
+        {
+          cerr << "[ERR] " << file_name << " doesn't exist." << endl;
+          continue;
+        }
         FileRequest fr;
         fr.file_name = file_name;
 

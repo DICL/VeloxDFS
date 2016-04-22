@@ -182,9 +182,8 @@ bool PeerDFS::insert_file (messages::FileInfo* f) {
 // }}}
 // insert_block {{{
 bool PeerDFS::insert_block (messages::BlockInfo* m) {
-  string key = m->block_name;
   directory.insert_block_metadata(*m);
-  insert(m->block_hash_key, key, m->content);
+  insert(m->block_hash_key, m->block_name, m->content);
   return true;
 }
 // }}}
