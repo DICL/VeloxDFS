@@ -131,7 +131,9 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      context.logger->error("SQL error: %s\n", zErrMsg);
+      if (rc != SQLITE_ERROR)
+        context.logger->error("SQL error: %s\n", zErrMsg);
+
       sqlite3_free(zErrMsg);
     }
     else
@@ -157,7 +159,9 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      context.logger->error("SQL error: %s\n", zErrMsg);
+      if (rc != SQLITE_ERROR)
+        context.logger->error("SQL error: %s\n", zErrMsg);
+
       sqlite3_free(zErrMsg);
     }
     else
