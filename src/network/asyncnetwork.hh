@@ -89,9 +89,8 @@ size_t AsyncNetwork<TYPE>::size () {
 // send {{{
 template<typename TYPE>
 bool AsyncNetwork<TYPE>::send (int i, messages::Message* m) {
-  acceptor_mutex.lock(); 
+  std::lock_guard<std::mutex> lck (acceptor_mutex); 
   channels[i]->do_write(m);
-  acceptor_mutex.unlock(); 
   return true;
 }
 // }}}
@@ -99,11 +98,10 @@ bool AsyncNetwork<TYPE>::send (int i, messages::Message* m) {
 template<typename TYPE>
 void AsyncNetwork<TYPE>::on_accept (tcp::socket* sock) {
   if (not TYPE::is_multiple()) {
-    acceptor_mutex.lock(); 
+    std::lock_guard<std::mutex> lck (acceptor_mutex); 
     channels.emplace (accepted_size.load(), std::make_unique<TYPE> (sock, sock, this, accepted_size.load()));
     accepted_size++;
     channels[accepted_size.load() - 1]->do_read();
-    acceptor_mutex.unlock(); 
 
   } else {
     auto i = id_of (sock);
@@ -142,9 +140,8 @@ void AsyncNetwork<TYPE>::on_disconnect (tcp::socket* sock, int id) {
 
   accepted_size--;
 
-  acceptor_mutex.lock(); 
+  std::lock_guard<std::mutex> lck (acceptor_mutex); 
   channels.erase(id);
-  acceptor_mutex.unlock(); 
 }
 // }}}
 // completed_network {{{

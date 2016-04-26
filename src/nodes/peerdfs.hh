@@ -1,6 +1,7 @@
 #pragma once
 
 #include "node.hh"
+#include "local_io.hh"
 #include "../network/asyncnode.hh"
 #include "../messages/blockinfo.hh"
 #include "../messages/fileinfo.hh"
@@ -35,7 +36,6 @@ class PeerDFS: public Node, public AsyncNode {
     virtual void insert (uint32_t, std::string, std::string);
     virtual void request (uint32_t, std::string, req_func);
 
-    void Delete (std::string);
     void close ();
     bool insert_block (messages::BlockInfo*);
     bool insert_file (messages::FileInfo*);
@@ -48,6 +48,7 @@ class PeerDFS: public Node, public AsyncNode {
 
   protected:
     Directory directory;
+    Local_io local_io;
     std::unique_ptr<Histogram> boundaries;
     std::map<std::string, req_func> requested_blocks;
     bool connected = false;
