@@ -17,17 +17,20 @@ using boost::asio::ip::tcp;
 template<typename TYPE>
 class AsyncNetwork: public Network, public NetObserver {
   public:
-    AsyncNetwork(AsyncNode*, int);
+    AsyncNetwork(int);
     ~AsyncNetwork ();
 
     bool establish() override;
     bool close () override;
     size_t size () override;
     bool send(int, messages::Message*) override;
+    void attach(AsyncNode*) override;
+
     void on_accept(tcp::socket*) override;
     void on_connect(tcp::socket*) override;
     void on_disconnect(tcp::socket*, int) override;
     void on_read(messages::Message*, int) override;
+
 
   private:
     int id_of(tcp::socket*);
@@ -48,8 +51,7 @@ class AsyncNetwork: public Network, public NetObserver {
 };
 // Constructor {{{
 template<typename TYPE>
-AsyncNetwork<TYPE>::AsyncNetwork (AsyncNode* n, int port):
-  node(n),
+AsyncNetwork<TYPE>::AsyncNetwork (int port):
   nodes(context.settings.get<vec_str> ("network.nodes")),
   acceptor(port, this),
   connector(port, this),
@@ -193,6 +195,12 @@ void AsyncNetwork<TYPE>::start_reading () {
 template <typename TYPE>
 void AsyncNetwork<TYPE>::on_read (messages::Message* m , int id) {
   node->on_read(m, id);
+}
+// }}}
+// attach {{{
+template <typename TYPE>
+void AsyncNetwork<TYPE>::attach (AsyncNode* node_) {
+  node = node_;
 }
 // }}}
 }

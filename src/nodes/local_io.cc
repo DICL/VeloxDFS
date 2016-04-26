@@ -7,9 +7,11 @@
 using namespace eclipse;
 using namespace std;
 
+// constructors {{{
 Local_io::Local_io() {
   disk_path = context.settings.get<string>("path.scratch");
 }
+//  }}}
 // write {{{
 void Local_io::write (std::string name, std::string v) {
   string file_path = disk_path + string("/") + name;

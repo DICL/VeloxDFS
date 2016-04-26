@@ -1,13 +1,8 @@
 // includes & usings {{{
 #include "peerdfs.hh"
-#include "../network/asyncnetwork.hh"
-#include "../network/p2p.hh"
-#include "../common/settings.hh"
-#include "../common/definitions.hh"
 #include "../messages/factory.hh"
 #include "../messages/boost_impl.hh"
 
-#include <boost/range/adaptor/map.hpp>
 #include <boost/asio.hpp>
 #include <algorithm>
 #include <iterator>
@@ -23,14 +18,11 @@ using namespace std;
 
 namespace eclipse {
 // Constructor & destructor {{{
-PeerDFS::PeerDFS () : Node () { 
-  Settings& setted = context.settings;
+PeerDFS::PeerDFS (Network* net) : Node () { 
+  network = net;
+  net->attach(this);
 
-  int port       = setted.get<int>("network.ports.internal");
-  size           = setted.get<vec_str>("network.nodes").size();
-  disk_path      = setted.get<string>("path.scratch");
-
-  network   = new AsyncNetwork<P2P>(this, port);
+  int size = context.settings.get<vec_str>("network.nodes").size();
   boundaries.reset( new Histogram {size, 0});
   boundaries->initialize();
 
@@ -38,15 +30,6 @@ PeerDFS::PeerDFS () : Node () {
 }
 
 PeerDFS::~PeerDFS() { }
-// }}}
-// establish {{{
-bool PeerDFS::establish () {
- logger->info ("Running Eclipse id=%d", id);
- network->establish();
-
- while (not connected) sleep(1);
- return true;
-}
 // }}}
 // insert {{{
 void PeerDFS::insert (uint32_t hash_key, std::string name, std::string v) {
@@ -142,7 +125,6 @@ void PeerDFS::on_read (Message* m, int) {
 // }}}
 // on_connect {{{
 void PeerDFS::on_connect () {
-  connected = true;
   INFO("Network established id=%d", id);
 }
 // }}}
@@ -230,7 +212,7 @@ bool PeerDFS::list (messages::FileList* m) {
 // }}}
 // format {{{
 bool PeerDFS::format () {
-  logger->info ("Formating DFS");
+  INFO("Formating DFS");
   local_io.format();
   directory.init_db();
   return true;
