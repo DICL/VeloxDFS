@@ -46,7 +46,7 @@ void AsyncChannel::do_write_impl (string* to_write) {
 }
 // }}}
 // on_write {{{
-void AsyncChannel::on_write (const error_code& ec, size_t s, string* str) {
+void AsyncChannel::on_write (const boost::system::error_code& ec, size_t s, string* str) {
   delete str;
   if (ec) {
     INFO("Message could not reach err=%s", ec.message().c_str());

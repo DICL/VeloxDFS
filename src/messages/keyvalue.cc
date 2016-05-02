@@ -7,5 +7,9 @@ KeyValue::KeyValue (uint32_t k, std::string n, std::string v) : key(k), name(n),
 
 std::string KeyValue::get_type() const { return "KeyValue"; }
 
+void KeyValue::exec(PeerDFS* p, message_fun f) { 
+  p->insert_key(key, name, value);
+}
+
 }
 }

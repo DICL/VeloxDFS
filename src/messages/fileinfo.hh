@@ -1,21 +1,20 @@
 #pragma once
 
-#include "message.hh"
+#include "executable.hh"
+#include "file.hh"
+#include "../nodes/peerdfs.hh"
 
 namespace eclipse {
 namespace messages {
 
-struct FileInfo: public Message {
+struct FileInfo: public Executable<PeerDFS> {
   FileInfo() = default;
   ~FileInfo() = default;
 
   std::string get_type() const override;
 
-  std::string file_name;
-  uint32_t file_hash_key;
-  uint64_t file_size;
-  unsigned int num_block;
-  unsigned int replica;
+  File file;
+  void exec(PeerDFS*, message_fun) override;
 };
 
 }

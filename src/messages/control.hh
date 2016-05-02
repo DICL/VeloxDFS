@@ -1,6 +1,7 @@
 #pragma once
 
-#include "message.hh"
+#include "executable.hh"
+#include "../nodes/peerdfs.hh"
 #include <string>
 
 namespace eclipse {
@@ -11,7 +12,7 @@ enum {
   RESTART  = 1,
   PING     = 2
 };
-struct Control: public Message {
+struct Control: public Executable<PeerDFS> {
   public:
     Control () = default;
     Control (int);
@@ -19,6 +20,8 @@ struct Control: public Message {
     std::string get_type() const override;
 
     int type;
+
+    void exec(PeerDFS* p, message_fun) override { }
 };
 
 } /* messages */ 

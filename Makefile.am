@@ -24,6 +24,9 @@ messages_files   = src/messages/boundaries.cc      \
                    src/messages/blockdel.cc        \
                    src/messages/filedel.cc         \
 									 src/messages/formatrequest.cc   \
+									 src/messages/file.cc            \
+									 src/messages/block.cc           \
+									 src/messages/list_files.cc      \
 									 src/messages/fileexist.cc
 
 # libs -----
@@ -48,7 +51,6 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
 											 src/nodes/machine.cc \
 											 src/nodes/peerdfs.cc \
 											 src/nodes/local_io.cc \
-											 src/nodes/remotedfs.cc \
 											 src/nodes/router.cc \
 											 src/fs/directory.cc \
 											 src/nodes/node.cc \
@@ -59,6 +61,10 @@ eclipse_node_LDADD  = $(LDADD) -lsqlite3
 dfs_SOURCES         = src/fs/dfs.cc \
                       src/fs/directory.cc \
                       src/fs/main.cc \
+                      src/nodes/peerdfs.cc \
+											 src/nodes/node.cc \
+											 src/nodes/local_io.cc \
+											 src/nodes/machine.cc \
 											$(messages_files)
 
 dfs_LDADD           = $(LDADD) -lsqlite3

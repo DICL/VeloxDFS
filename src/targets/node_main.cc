@@ -13,10 +13,11 @@ int main (int argc, char ** argv) {
 
   network::Network* internal_net = new network::AsyncNetwork<P2P>(in_port);
   PeerDFS peer (internal_net);
+  Router router (internal_net, &peer);
   internal_net->establish();
 
   network::Network* external_net = new network::AsyncNetwork<Server>(ex_port);
-  RemoteDFS remote (&peer, external_net);
+  Router router2 (external_net, &peer);
   external_net->establish();
 
   context.join();
