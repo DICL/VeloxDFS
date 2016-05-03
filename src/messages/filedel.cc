@@ -5,7 +5,7 @@ namespace eclipse {
 namespace messages {
 std::string FileDel::get_type() const { return "FileDel"; }
 
-void FileDel::exec(PeerDFS* p, message_fun f) {
+void FileDel::exec(FS* p, message_fun f) {
   bool ret = p->delete_file(file_name);
   auto* reply = new Reply();
 

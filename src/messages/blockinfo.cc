@@ -5,7 +5,7 @@ using namespace eclipse::messages;
 
 std::string BlockInfo::get_type() const { return "BlockInfo"; }
 
-void BlockInfo::exec (PeerDFS* p, message_fun f) {
+void BlockInfo::exec (FS* p, message_fun f) {
   bool ret = p->insert_block(&block);
   Reply* reply = new Reply();
 

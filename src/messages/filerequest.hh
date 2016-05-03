@@ -1,18 +1,18 @@
 #pragma once
 
 #include "executable.hh"
-#include "../nodes/peerdfs.hh"
+#include "../nodes/fs.hh"
 #include <string>
 
 namespace eclipse {
 namespace messages {
 
-struct FileRequest: public Executable<PeerDFS> {
+struct FileRequest: public Executable<FS> {
   FileRequest () = default;
 
   std::string get_type() const override;
   std::string file_name;
-  void exec(PeerDFS*, message_fun) override;
+  void exec(FS*, message_fun) override;
 
 };
 

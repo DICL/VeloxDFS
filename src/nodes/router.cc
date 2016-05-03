@@ -9,7 +9,7 @@ namespace ph = std::placeholders;
 
 namespace eclipse {
 // Constructor {{{
-Router::Router(network::Network* net, PeerDFS* p) : Node () {
+Router::Router(network::Network* net, FS* p) : Node () {
   network = net;
   net->attach(this);
   peer = p;
@@ -19,14 +19,14 @@ Router::~Router() { }
 // }}}
 // on_read {{{
 void Router::on_read (Message* m, int n_channel) {
-  if(dynamic_cast<Executable<PeerDFS>*>(m)) {
+  if(dynamic_cast<Executable<FS>*>(m)) {
     on_read_peerdfs(m, n_channel);
   }
 }
 // }}}
 // on_read_peerdfs {{{
 void Router::on_read_peerdfs (Message* m, int n_channel) {
-  auto ex = dynamic_cast<Executable<PeerDFS>*>(m);
+  auto ex = dynamic_cast<Executable<FS>*>(m);
   ex->exec(peer, std::bind(&Router::async_reply, this, ph::_1, n_channel));
 }
 // }}}

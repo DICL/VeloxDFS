@@ -1,5 +1,6 @@
 #pragma once
-#include "../nodes/peerdfs.hh"
+#include "../nodes/node.hh"
+#include "../nodes/fs.hh"
 #include "../messages/boost_impl.hh"
 #include <functional>
 
@@ -8,7 +9,7 @@ using namespace eclipse::network;
 
 class Router: public Node, public AsyncNode {
   public:
-    Router (network::Network*, PeerDFS*);
+    Router (network::Network*, FS*);
     ~Router ();
 
     void on_connect() override;
@@ -18,7 +19,7 @@ class Router: public Node, public AsyncNode {
     void async_reply(messages::Message*, int);
 
   protected:
-    PeerDFS* peer;
+    FS* peer;
     Network* network;
 };
 

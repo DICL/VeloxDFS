@@ -1,8 +1,11 @@
-#include <nodes/remotedfs.hh>
+//#include <nodes/remotedfs.hh>
 #include <common/context.hh>
 #include <network/p2p.hh>
 #include <network/server.hh>
 #include <network/asyncnetwork.hh>
+#include <nodes/router.hh>
+#include <nodes/dio.hh>
+#include <nodes/dfs.hh>
 #include <string>
 
 using namespace eclipse;
@@ -12,12 +15,13 @@ int main (int argc, char ** argv) {
   int ex_port = context.settings.get<int>("network.ports.client");
 
   network::Network* internal_net = new network::AsyncNetwork<P2P>(in_port);
-  PeerDFS peer (internal_net);
-  Router router (internal_net, &peer);
+  DIO dio (internal_net);
+  DFS dfs (&dio);
+  Router router (internal_net, &dfs);
   internal_net->establish();
 
   network::Network* external_net = new network::AsyncNetwork<Server>(ex_port);
-  Router router2 (external_net, &peer);
+  Router router2 (external_net, &dfs);
   external_net->establish();
 
   context.join();

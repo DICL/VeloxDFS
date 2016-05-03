@@ -5,7 +5,7 @@ using namespace eclipse::messages;
 
 std::string BlockDel::get_type() const { return "BlockDel"; }
 
-void BlockDel::exec(PeerDFS* p, message_fun f) {
+void BlockDel::exec(FS* p, message_fun f) {
 
   bool ret = p->delete_block(&block);
   Reply* reply = new Reply();

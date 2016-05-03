@@ -7,7 +7,7 @@ namespace messages {
 std::string FileList::get_type() const { return "FileList"; }
 
 
-void FileList::exec(PeerDFS* p, message_fun f) {
+void FileList::exec(FS* p, message_fun f) {
   p->list(&list_of_files);
   f(this);
 }

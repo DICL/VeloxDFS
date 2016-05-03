@@ -49,7 +49,8 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
 											 src/network/acceptor.cc \
 											 src/network/connector.cc \
 											 src/nodes/machine.cc \
-											 src/nodes/peerdfs.cc \
+											 src/nodes/dfs.cc \
+											 src/nodes/dio.cc \
 											 src/nodes/local_io.cc \
 											 src/nodes/router.cc \
 											 src/fs/directory.cc \
@@ -61,10 +62,6 @@ eclipse_node_LDADD  = $(LDADD) -lsqlite3
 dfs_SOURCES         = src/fs/dfs.cc \
                       src/fs/directory.cc \
                       src/fs/main.cc \
-                      src/nodes/peerdfs.cc \
-											 src/nodes/node.cc \
-											 src/nodes/local_io.cc \
-											 src/nodes/machine.cc \
 											$(messages_files)
 
 dfs_LDADD           = $(LDADD) -lsqlite3

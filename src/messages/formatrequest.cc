@@ -5,7 +5,7 @@ using namespace eclipse::messages;
 
 std::string FormatRequest::get_type() const { return "FormatRequest"; }
 
-void FormatRequest::exec(PeerDFS* p, message_fun f) {
+void FormatRequest::exec(FS* p, message_fun f) {
   bool ret = p->format();
   Reply* reply = new Reply();
 

@@ -5,7 +5,7 @@ namespace eclipse {
 namespace messages {
 std::string FileInfo::get_type() const { return "FileInfo"; }
 
-void FileInfo::exec(PeerDFS* p, message_fun f) {
+void FileInfo::exec(FS* p, message_fun f) {
   bool ret = p->file_exist(file.file_name);
   Reply* reply = new Reply();
 

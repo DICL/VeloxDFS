@@ -11,10 +11,10 @@ namespace eclipse {
 using vec_str = std::vector<std::string>;
 typedef std::function<void(std::string, std::string)> req_func;
 
-class PeerDFS: public Node {
+class DIO: public Node {
   public:
-    PeerDFS (network::Network*);
-    ~PeerDFS ();
+    DIO (network::Network*);
+    ~DIO ();
 
     void insert_key (uint32_t, std::string, std::string);
     void request_key (std::string, int);

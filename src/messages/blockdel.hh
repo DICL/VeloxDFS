@@ -1,15 +1,15 @@
 #pragma once
 #include "executable.hh"
-#include "../nodes/peerdfs.hh"
+#include "../nodes/fs.hh"
 
 namespace eclipse {
 namespace messages {
 
-struct BlockDel: public Executable<PeerDFS> {
+struct BlockDel: public Executable<FS> {
   std::string get_type() const override;
   
   Block block;
-  void exec(PeerDFS*, message_fun) override; 
+  void exec(FS*, message_fun) override; 
 };
 
 }

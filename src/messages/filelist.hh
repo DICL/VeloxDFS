@@ -1,7 +1,7 @@
 #pragma once
 
 #include "executable.hh"
-#include "../nodes/peerdfs.hh"
+#include "../nodes/fs.hh"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -10,13 +10,13 @@
 namespace eclipse {
 namespace messages {
 
-struct FileList: public Executable<PeerDFS> {
+struct FileList: public Executable<FS> {
   FileList() = default;
 
   List_files list_of_files;
 
   std::string get_type() const override;
-  void exec(PeerDFS*, message_fun) override;
+  void exec(FS*, message_fun) override;
 };
 
 }

@@ -2,12 +2,12 @@
 
 #include "executable.hh"
 #include "reply.hh"
-#include "../nodes/peerdfs.hh"
+#include "../nodes/fs.hh"
 
 namespace eclipse {
 namespace messages {
 
-struct FileDel: public Executable<PeerDFS> {
+struct FileDel: public Executable<FS> {
   FileDel() = default;
   ~FileDel() = default;
   
@@ -15,7 +15,7 @@ struct FileDel: public Executable<PeerDFS> {
 
   std::string file_name;
 
-  void exec(PeerDFS*, message_fun) override;
+  void exec(FS*, message_fun) override;
 };
 
 }

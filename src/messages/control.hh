@@ -1,7 +1,7 @@
 #pragma once
 
 #include "executable.hh"
-#include "../nodes/peerdfs.hh"
+#include "../nodes/fs.hh"
 #include <string>
 
 namespace eclipse {
@@ -12,7 +12,7 @@ enum {
   RESTART  = 1,
   PING     = 2
 };
-struct Control: public Executable<PeerDFS> {
+struct Control: public Executable<FS> {
   public:
     Control () = default;
     Control (int);
@@ -21,7 +21,7 @@ struct Control: public Executable<PeerDFS> {
 
     int type;
 
-    void exec(PeerDFS* p, message_fun) override { }
+    void exec(FS* p, message_fun) override { }
 };
 
 } /* messages */ 

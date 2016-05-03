@@ -13,7 +13,7 @@ void BlockRequest::on_exec(std::string v, std::string k, message_fun f) {
   f(&bi);
 }
 
-void BlockRequest::exec(PeerDFS* p, message_fun f) {
+void BlockRequest::exec(FS* p, message_fun f) {
   p->request(hash_key, block_name, std::bind(&BlockRequest::on_exec, this, 
         ph::_1, ph::_2, f));
 }
