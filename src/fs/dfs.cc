@@ -177,6 +177,16 @@ namespace eclipse{
         string file_name = argv[i];
         uint32_t file_hash_key = h(file_name);
         auto socket = connect (file_hash_key % NUM_SERVERS);
+        FileExist fe;
+        fe.file_name = file_name;
+        send_message(socket.get(), &fe);
+        auto rep = read_reply<Reply> (socket.get());
+
+        if (rep->message != "TRUE")
+        {
+          cerr << "[ERR] " << file_name << " doesn't exist." << endl;
+          continue;
+        }
         FileRequest fr;
         fr.file_name = file_name;
 
@@ -200,6 +210,55 @@ namespace eclipse{
 
         cout << "[INFO] " << file_name << " is downloaded." << endl;
         f.close();
+        socket->close();
+      }
+    }
+    return 0;
+  }
+
+  int DFS::cat(int argc, char* argv[])
+  {
+    if (argc < 3) {
+      cout << "[INFO] dfs cat file_1 file_2 ..." << endl;
+      return -1;
+
+    } else {
+      Histogram boundaries(NUM_SERVERS, 0);
+      boundaries.initialize();
+
+      for (int i=2; i<argc; i++) {
+        string file_name = argv[i];
+        uint32_t file_hash_key = h(file_name);
+        auto socket = connect (file_hash_key % NUM_SERVERS);
+        FileExist fe;
+        fe.file_name = file_name;
+        send_message(socket.get(), &fe);
+        auto rep = read_reply<Reply> (socket.get());
+
+        if (rep->message != "TRUE")
+        {
+          cerr << "[ERR] " << file_name << " doesn't exist." << endl;
+          continue;
+        }
+        FileRequest fr;
+        fr.file_name = file_name;
+
+        send_message (socket.get(), &fr);
+        auto fd = read_reply<FileDescription> (socket.get());
+
+        socket->close();
+        int block_seq = 0;
+        for (auto block_name : fd->blocks) {
+          uint32_t hash_key = fd->hash_keys[block_seq++];
+          auto tmp_socket = connect(boundaries.get_index(hash_key));
+          BlockRequest br;
+          br.block_name = block_name; 
+          br.hash_key   = hash_key; 
+          send_message(tmp_socket.get(), &br);
+          auto msg = read_reply<BlockInfo>(tmp_socket.get());
+          cout << msg->content;
+          tmp_socket->close();
+        }
         socket->close();
       }
     }

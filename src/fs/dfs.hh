@@ -48,6 +48,7 @@ namespace eclipse {
       void load_settings ();
       int put (int argc, char* argv[]);
       int get (int argc, char* argv[]);
+      int cat (int argc, char* argv[]);
       int ls (int argc, char* argv[]);
       int rm (int argc, char* argv[]);
       int format (int argc, char* argv[]);

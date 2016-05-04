@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 {
   if(argc < 2)
   {
-    cout << "[INFO] dfs put|get|ls|rm|format" << endl;
+    cout << "[INFO] dfs put|get|cat|ls|rm|format" << endl;
     return -1;
   }
   else
@@ -23,6 +23,10 @@ int main(int argc, char* argv[])
     else if(op.compare("get") == 0)
     {
       dfs.get(argc, argv);
+    }
+    else if(op.compare("cat") == 0)
+    {
+      dfs.cat(argc, argv);
     }
     else if(op.compare("ls") == 0)
     {
@@ -43,7 +47,7 @@ int main(int argc, char* argv[])
     else
     {
       cerr << "[ERR] Unknown operation" << endl;
-      cout << "[INFO] dfs put|get|ls|rm|format" << endl;
+      cout << "[INFO] dfs put|get|cat|ls|rm|format" << endl;
       return -1;
     }
   }
