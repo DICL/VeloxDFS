@@ -5,7 +5,6 @@
 #include <functional>
 
 namespace eclipse {
-using namespace eclipse::network;
 
 class Router: public Node, public AsyncNode {
   public:
@@ -20,7 +19,7 @@ class Router: public Node, public AsyncNode {
 
   protected:
     FS* peer;
-    Network* network;
+    network::Network* network;
 };
 
 } /* eclipse  */ 

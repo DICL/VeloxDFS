@@ -6,7 +6,7 @@ namespace ph = std::placeholders;
 
 std::string BlockRequest::get_type() const { return "BlockRequest"; }
 
-void BlockRequest::on_exec(std::string v, std::string k, message_fun f) {
+void BlockRequest::on_exec(std::string k, std::string v, message_fun f) {
   Block bi;
   bi.block_name = k;
   bi.content = v;

@@ -1,4 +1,5 @@
 #include "dfs.hh"
+#include "../messages/block.hh"
 using namespace std;
 using namespace eclipse;
 
@@ -197,8 +198,8 @@ namespace eclipse{
           br.block_name = block_name; 
           br.hash_key   = hash_key; 
           send_message(tmp_socket.get(), &br);
-          auto msg = read_reply<BlockInfo>(tmp_socket.get());
-          f << msg->block.content;
+          auto msg = read_reply<Block>(tmp_socket.get());
+          f << msg->content;
           tmp_socket->close();
         }
 
