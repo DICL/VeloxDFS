@@ -17,7 +17,6 @@ class Node: public Machine {
     ~Node();
 
     std::string get_ip () const override;
-    virtual bool establish() = 0;
 
   protected:
     network::Network* network;

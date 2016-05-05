@@ -31,7 +31,7 @@ namespace eclipse{
   int Directory::file_callback(void *file_info, int argc, char **argv, char **azColName)
   {
     int i = 0;
-    auto file = reinterpret_cast<FileInfo*>(file_info);
+    auto file = reinterpret_cast<File*>(file_info);
     file->file_name     = argv[i++];
     file->file_hash_key = atoi(argv[i++]);
     file->file_size     = atoi(argv[i++]);
@@ -43,7 +43,7 @@ namespace eclipse{
   int Directory::block_callback(void *block_info, int argc, char **argv, char **azColName)
   {
     int i = 0;
-    auto block = reinterpret_cast<BlockInfo*>(block_info);
+    auto block = reinterpret_cast<Block*>(block_info);
     block->block_name     = argv[i++];
     block->file_name      = argv[i++];
     block->block_seq      = atoi(argv[i++]);
@@ -69,10 +69,10 @@ namespace eclipse{
 
   int Directory::file_list_callback(void *list, int argc, char **argv, char **azColName)
   {
-    auto file_list = reinterpret_cast<vector<FileInfo>*>(list);
+    auto file_list = reinterpret_cast<vector<File>*>(list);
     for(int i=0; i<argc; i++)
     {
-      FileInfo tmp_file;
+      File tmp_file;
       tmp_file.file_name     = argv[i++];
       tmp_file.file_hash_key = atoi(argv[i++]);
       tmp_file.file_size     = atoi(argv[i++]);
@@ -85,10 +85,10 @@ namespace eclipse{
 
   int Directory::block_list_callback(void *list, int argc, char **argv, char **azColName)
   {
-    auto block_list = reinterpret_cast<vector<BlockInfo>*>(list);
+    auto block_list = reinterpret_cast<vector<Block>*>(list);
     for(int i=0; i<argc; i++)
     {
-      BlockInfo tmp_block;
+      Block tmp_block;
       tmp_block.block_name     = argv[i++];
       tmp_block.file_name      = atoi(argv[i++]);
       tmp_block.block_seq      = atoi(argv[i++]);
@@ -131,7 +131,9 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      context.logger->error("SQL error: %s\n", zErrMsg);
+      if (rc != SQLITE_ERROR)
+        context.logger->error("SQL error: %s\n", zErrMsg);
+
       sqlite3_free(zErrMsg);
     }
     else
@@ -157,7 +159,9 @@ namespace eclipse{
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if(rc != SQLITE_OK)
     {
-      context.logger->error("SQL error: %s\n", zErrMsg);
+      if (rc != SQLITE_ERROR)
+        context.logger->error("SQL error: %s\n", zErrMsg);
+
       sqlite3_free(zErrMsg);
     }
     else
@@ -169,7 +173,7 @@ namespace eclipse{
     mutex.unlock();
   }
 
-  void Directory::insert_file_metadata(FileInfo file_info)
+  void Directory::insert_file_metadata(File file_info)
   {
     // Open database
     open_db();
@@ -201,7 +205,7 @@ namespace eclipse{
     sqlite3_close(db);
   }
 
-  void Directory::insert_block_metadata(BlockInfo block_info)
+  void Directory::insert_block_metadata(Block block_info)
   {
     // Open database
     open_db();
@@ -239,7 +243,7 @@ namespace eclipse{
     sqlite3_close(db);
   }
 
-  void Directory::select_file_metadata(string file_name, FileInfo *file_info)
+  void Directory::select_file_metadata(string file_name, File *file_info)
   {
     // Open database
     open_db();
@@ -263,7 +267,7 @@ namespace eclipse{
     sqlite3_close(db);
   }
 
-  void Directory::select_block_metadata(string file_name, unsigned int block_seq, BlockInfo *block_info)
+  void Directory::select_block_metadata(string file_name, unsigned int block_seq, Block *block_info)
   {
     // Open database
     open_db();
@@ -288,7 +292,7 @@ namespace eclipse{
     sqlite3_close(db);
   } 
 
-  void Directory::select_all_file_metadata(vector<FileInfo> &file_list)
+  void Directory::select_all_file_metadata(vector<File> &file_list)
   {
     // Open database
     open_db();
@@ -315,7 +319,7 @@ namespace eclipse{
     mutex.unlock();
   }
 
-  void Directory::select_all_block_metadata(vector<BlockInfo> &block_info)
+  void Directory::select_all_block_metadata(vector<Block> &block_info)
   {
     // Open database
     open_db();
@@ -339,7 +343,7 @@ namespace eclipse{
     sqlite3_close(db);
   } 
 
-  void Directory::update_file_metadata(string file_name, FileInfo file_info)
+  void Directory::update_file_metadata(string file_name, File file_info)
   {
     // Open database
     open_db();
@@ -372,7 +376,7 @@ namespace eclipse{
     sqlite3_close(db);
   }
 
-  void Directory::update_block_metadata(string file_name, unsigned int block_seq, BlockInfo block_info)
+  void Directory::update_block_metadata(string file_name, unsigned int block_seq, Block block_info)
   {
     // Open database
     open_db();

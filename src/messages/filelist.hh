@@ -1,6 +1,7 @@
 #pragma once
 
-#include "message.hh"
+#include "executable.hh"
+#include "../nodes/fs.hh"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -9,12 +10,13 @@
 namespace eclipse {
 namespace messages {
 
-struct FileList: public Message {
+struct FileList: public Executable<FS> {
   FileList() = default;
-  FileList(std::vector<FileInfo>);
+
+  List_files list_of_files;
 
   std::string get_type() const override;
-  std::vector<FileInfo> data;
+  void exec(FS*, message_fun) override;
 };
 
 }

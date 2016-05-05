@@ -23,15 +23,14 @@ units_SOURCES      = $(messages_files) \
                      src/network/channel.cc \
                      src/network/asyncchannel.cc \
                      src/network/p2p.cc \
-										 src/network/acceptor.cc \
-										 src/network/connector.cc \
+                     src/network/acceptor.cc \
+                     src/network/connector.cc \
                      src/nodes/machine.cc \
                      src/nodes/node.cc 
 
 nodes_LDADD     = $(LDADD_T)
 nodes_CPPFLAGS  = $(AM_CPPFLAGS_T)
 nodes_SOURCES   = tests/nodes.cc \
-                  $(messages_files) \
                   src/network/channel.cc \
                   src/network/asyncchannel.cc \
                   src/network/p2p.cc \
@@ -39,11 +38,13 @@ nodes_SOURCES   = tests/nodes.cc \
                   src/network/acceptor.cc \
                   src/network/connector.cc \
                   src/nodes/machine.cc \
-                  src/nodes/peerdfs.cc \
-                  src/nodes/remotedfs.cc \
+                  src/nodes/dfs.cc \
+                  src/nodes/dio.cc \
+                  src/nodes/local_io.cc \
                   src/nodes/router.cc \
                   src/fs/directory.cc \
-                  src/nodes/node.cc 
+                  src/nodes/node.cc \
+                  $(messages_files)
 
 metadata_LDADD     = $(LDADD_T)
 metadata_CPPFLAGS  = $(AM_CPPFLAGS_T)

@@ -1,5 +1,5 @@
 // includes & usings {{{
-#include "peerdfs.hh"
+#include "dio.hh"
 #include "../messages/factory.hh"
 #include "../messages/boost_impl.hh"
 #include "../messages/keyrequest.hh"
@@ -17,7 +17,7 @@ using namespace std;
 
 namespace eclipse {
 // Constructor & destructor {{{
-PeerDFS::PeerDFS (Network* net) : Node () { 
+DIO::DIO (Network* net) : Node () { 
   network = net;
 
   int size = context.settings.get<vec_str>("network.nodes").size();
@@ -25,10 +25,10 @@ PeerDFS::PeerDFS (Network* net) : Node () {
   boundaries->initialize();
 }
 
-PeerDFS::~PeerDFS() { }
+DIO::~DIO() { }
 // }}}
 // insert {{{
-void PeerDFS::insert (uint32_t hash_key, std::string name, std::string v) {
+void DIO::insert (uint32_t hash_key, std::string name, std::string v) {
   int which_node = boundaries->get_index(hash_key);
 
   if (which_node == id) {
@@ -43,7 +43,7 @@ void PeerDFS::insert (uint32_t hash_key, std::string name, std::string v) {
 }
 // }}}
 // request {{{
-void PeerDFS::request (uint32_t key, string name , req_func f) {
+void DIO::request (uint32_t key, string name , req_func f) {
  int idx = boundaries->get_index(key);
 
  if (idx != id) {
@@ -59,10 +59,10 @@ void PeerDFS::request (uint32_t key, string name , req_func f) {
 }
 // }}}
 // close {{{
-void PeerDFS::close() { exit(EXIT_SUCCESS); }
+void DIO::close() { exit(EXIT_SUCCESS); }
 // }}}
 // insert_key {{{
-void PeerDFS::insert_key (uint32_t key, std::string name, std::string value) {
+void DIO::insert_key (uint32_t key, std::string name, std::string value) {
   int which_node = boundaries->get_index(key);
   if (which_node == id)  {
     logger->info ("Instering key = %s", name.c_str());
@@ -77,7 +77,7 @@ void PeerDFS::insert_key (uint32_t key, std::string name, std::string value) {
 }
 // }}}
 // request_key {{{
-void PeerDFS::request_key (std::string key, int origin) {
+void DIO::request_key (std::string key, int origin) {
   INFO("Arrived req key = %s", key.c_str());
   string value = local_io.read(key);
 

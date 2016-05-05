@@ -13,8 +13,8 @@ int main() {
 
   // Basic metadata io example
   dir.init_db();
-  FileInfo file_info;
-  BlockInfo block_info;
+  File file_info;
+  Block block_info;
 
   file_info.file_name = "test.txt";
   file_info.file_hash_key = 1;

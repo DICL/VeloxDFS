@@ -3,8 +3,8 @@
 BRIEFING
 ========
 
-EclipseDFS is a state-of-the-art distribute file system. It was designed to be an essential layer of EclipseMR middle-ware.
-Key feature of EclipseDFS are:
+EclipseDFS is an state-of-the-art distributed file system. It was designed to be an essential layer of EclipseMR middle-ware.
+Key features of EclipseDFS are:
  - Efficient block distribution over the nodes.
  - Fast time response.
  - High efficient balancing algorithm.
@@ -13,7 +13,7 @@ USAGE
 =====
 EclipseDFS default launcher is not included in this repository, if you want to use it you can find it [here][eclipsed].
 
-The reason to not to include the launcher inside the package is to let the user to chose any launcher, options are:
+The reason for not to include the launcher inside the package is to let the user to chose any launcher, options are:
  - systemd/init.d
  - puppet/chef/salt
  
@@ -24,6 +24,15 @@ Once the system is running, you can interact with EclipseDFS with the following 
 
 COMPILING & INSTALLING
 =====================
+Before compiling & installing 
+-----------------------------
+
+EclipseDFS has certain dependencies that normally are already installed such as 
+syslog. For more specific dependencies here is a list with its minimum recommended version:
+ - libboost > 1.40           (ASIO, serialization, and property tree lib)
+ - gcc > 4.9 or clang >= 3.5 (support for c++14)
+ - [optional] libunittest++  (For unit testing)
+
 
 For single user installation for developers
 -------------------------------------------
@@ -56,6 +65,7 @@ AUTHOR
  - __AUTHOR:__ [MooHyeon Nam] [mh]
  - __AUTHOR:__ [WonBae Kim] [wb]
  - __AUTHOR:__ [KiBeom Jin] [kb]
+ - __AUTHOR:__ [Beomseok Nam] [nam]
  - __INSTITUTION:__ [DICL laboratory] [dicl] at [UNIST]
 
 <!-- Links -->
@@ -66,3 +76,4 @@ AUTHOR
 [wb]:       https://github.com/zwigul
 [kb]:       https://github.com/kbjin
 [eclipsed]: https://github.com/DICL/eclipsed
+[nam]:      http://dicl.unist.ac.kr/~bsnam/

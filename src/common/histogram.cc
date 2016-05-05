@@ -132,7 +132,7 @@ void Histogram::set_count (int index, double count)
 void Histogram::updateboundary()   // update the boundary according to the query counts
 {
     // sum up the count of all bin and divide it by number of servers(query per server)
-    double qps = 0.0;
+    double qps = 0.0;              // query per server
     double temp = 0.0;
     double stmeter = 0.0;
     int j = 0;

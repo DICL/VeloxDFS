@@ -1,4 +1,5 @@
 #include "dfs.hh"
+#include "../messages/block.hh"
 using namespace std;
 using namespace eclipse;
 
@@ -86,13 +87,13 @@ namespace eclipse{
         uint32_t block_size = 0;
         unsigned int block_seq = 0;
 
-        FileInfo file_info;
+        File file_info;
         file_info.file_name = file_name;
         file_info.file_hash_key = file_hash_key;
         file_info.replica = replica;
         myfile.seekg(0, myfile.end);
         file_info.file_size = myfile.tellg();
-        BlockInfo block_info;
+        Block block_info;
 
         while(1)
         {
@@ -130,7 +131,9 @@ namespace eclipse{
           block_info.r_node = nodes[(which_server+1+NUM_SERVERS)%NUM_SERVERS];
           block_info.is_committed = 1;
 
-          send_message(socket.get(), &block_info);
+          BlockInfo bi;
+          bi.block = block_info;
+          send_message(socket.get(), &bi);
           auto reply = read_reply<Reply> (socket.get());
 
           if (reply->message != "OK") {
@@ -148,7 +151,9 @@ namespace eclipse{
         }
 
         file_info.num_block = block_seq;
-        send_message(socket.get(), &file_info);
+        FileInfo fi;
+        fi.file = file_info;
+        send_message(socket.get(), &fi);
         auto reply = read_reply<Reply> (socket.get());
         myfile.close();
         socket->close();
@@ -203,7 +208,7 @@ namespace eclipse{
           br.block_name = block_name; 
           br.hash_key   = hash_key; 
           send_message(tmp_socket.get(), &br);
-          auto msg = read_reply<BlockInfo>(tmp_socket.get());
+          auto msg = read_reply<Block>(tmp_socket.get());
           f << msg->content;
           tmp_socket->close();
         }
@@ -255,7 +260,7 @@ namespace eclipse{
           br.block_name = block_name; 
           br.hash_key   = hash_key; 
           send_message(tmp_socket.get(), &br);
-          auto msg = read_reply<BlockInfo>(tmp_socket.get());
+          auto msg = read_reply<Block>(tmp_socket.get());
           cout << msg->content;
           tmp_socket->close();
         }
@@ -267,7 +272,7 @@ namespace eclipse{
 
   int DFS::ls(int argc, char* argv[])
   {
-    vector<FileInfo> total; 
+    vector<File> total; 
     string op = "";
     if(argc >= 3)
     {
@@ -280,10 +285,10 @@ namespace eclipse{
       send_message(socket.get(), &file_list);
       auto file_list_reply = read_reply<FileList>(socket.get());
 
-      std::copy(file_list_reply->data.begin(), file_list_reply->data.end(), back_inserter(total));
+      std::copy(file_list_reply->list_of_files.data.begin(), file_list_reply->list_of_files.data.end(), back_inserter(total));
     }
 
-    std::sort(total.begin(), total.end(), [] (const FileInfo& a, const FileInfo& b) {
+    std::sort(total.begin(), total.end(), [] (const File& a, const File& b) {
         return (a.file_name < b.file_name);
         });
 
@@ -386,11 +391,13 @@ namespace eclipse{
         unsigned int block_seq = 0;
         for (auto block_name : fd->blocks) {
           auto tmp_socket = connect(boundaries.get_index(fd->hash_keys[block_seq]));
-          BlockDel bd;
+          Block bd;
           bd.block_name = block_name;
           bd.file_name = file_name;
           bd.block_seq = block_seq++;
-          send_message(tmp_socket.get(), &bd);
+          BlockDel block_to_delete;
+          block_to_delete.block = bd;
+          send_message(tmp_socket.get(), &block_to_delete);
           auto msg = read_reply<Reply>(tmp_socket.get());
           if (msg->message != "OK") {
             cerr << "[ERR] " << block_name << "doesn't exist." << endl;

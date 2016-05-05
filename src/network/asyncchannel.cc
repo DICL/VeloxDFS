@@ -46,38 +46,34 @@ void AsyncChannel::do_write_impl (string* to_write) {
 }
 // }}}
 // on_write {{{
-void AsyncChannel::on_write (const boost::system::error_code& ec, 
-    size_t s, string* str) {
+void AsyncChannel::on_write (const boost::system::error_code& ec, size_t s, string* str) {
   delete str;
   if (ec) {
-    logger->info ("Message could not reach err=%s", 
-        ec.message().c_str());
-
+    INFO("Message could not reach err=%s", ec.message().c_str());
     do_write_impl(str);
   }
 }
 // }}}
 // do_read {{{
 void AsyncChannel::do_read () {
-  logger->info("Connection established, starting to read");
+  DEBUG("Connection established, starting to read");
   spawn(iosvc, bind(&AsyncChannel::read_coroutine, this, _1));
 }
 // }}}
 // read_coroutine {{{
 void AsyncChannel::read_coroutine (yield_context yield) {
-  boost::asio::streambuf body; 
-  boost::system::error_code ec;
-  char header [header_size + 1]; 
-  header[16] = '\0';
-
   try {
+    boost::asio::streambuf body; 
+    boost::system::error_code ec;
+    char header [header_size + 1] = {'\0'}; 
+    header[16] = '\0';
+
     while (true) {
       size_t l = async_read (*receiver, buffer(header, header_size), yield[ec]);
-      if (l != (size_t)header_size or ec) throw 1;
+      if (l != (size_t)header_size or ec) throw ec;
 
       size_t size = atoi(header);
       l = read (*receiver, body.prepare(size));
-      //if (ec) throw 1;
 
       body.commit (l);
       string str ((istreambuf_iterator<char>(&body)), 
@@ -90,14 +86,18 @@ void AsyncChannel::read_coroutine (yield_context yield) {
       delete msg;
       msg=nullptr;
     }
-  } catch (...) {
+  } catch (boost::system::error_code& ec) {
     if (ec == boost::asio::error::eof)
-      logger->info ("AsyncChannel: Closing server socket to client");
+      INFO("AsyncChannel: Closing server socket to client");
+
     else
-      logger->info ("AsyncChannel: Message arrived error=%s", 
+      ERROR("AsyncChannel: Message arrived error=%s", 
           ec.message().c_str());
 
-      node->on_disconnect(nullptr, id);
+  } catch (std::exception& e) {
+      INFO("AsyncChannel: Exception raised");
   }
+
+  node->on_disconnect(nullptr, id);
 }
 // }}}

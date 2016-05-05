@@ -1,37 +1,33 @@
 #include "router.hh"
-#include "../common/dl_loader.hh"
-#include "../network/asyncnetwork.hh"
-#include "../network/server.hh"
+#include "../messages/executable.hh"
 #include "../messages/factory.hh"
-#include "../messages/boost_impl.hh"
-
-#include <string>
-#include <sstream>
 
 using namespace eclipse;
 using namespace eclipse::messages;
-using namespace eclipse::network;
 using namespace std;
+namespace ph = std::placeholders;
 
 namespace eclipse {
 // Constructor {{{
-Router::Router() : Node () {
-  port = context.settings.get<int>("network.ports.client");
-  network = new AsyncNetwork<Server> (this, port);
+Router::Router(network::Network* net, FS* p) : Node () {
+  network = net;
+  net->attach(this);
+  peer = p;
 }
 
 Router::~Router() { }
 // }}}
-// establish {{{
-bool Router::establish () {
-  network->establish();
-  return true;
-}
-// }}}
 // on_read {{{
 void Router::on_read (Message* m, int n_channel) {
-  string type = m->get_type();
-  routing_table[type](m, n_channel);
+  if(dynamic_cast<Executable<FS>*>(m)) {
+    on_read_peerdfs(m, n_channel);
+  }
+}
+// }}}
+// on_read_peerdfs {{{
+void Router::on_read_peerdfs (Message* m, int n_channel) {
+  auto ex = dynamic_cast<Executable<FS>*>(m);
+  ex->exec(peer, std::bind(&Router::async_reply, this, ph::_1, n_channel));
 }
 // }}}
 // on_disconnect {{{
@@ -40,7 +36,12 @@ void Router::on_disconnect (int id) {
 // }}}
 // on_connect() {{{
 void Router::on_connect () {
-  logger->info("Client connected to executor #%d", id);
+  INFO("Client connected to executor #%d", id);
+}
+// }}}
+// async_reply {{{
+void Router::async_reply (messages::Message* m, int n_channel) {
+  network->send(n_channel, m);
 }
 // }}}
 } /* eclipse  */

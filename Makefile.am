@@ -24,6 +24,9 @@ messages_files   = src/messages/boundaries.cc      \
                    src/messages/blockdel.cc        \
                    src/messages/filedel.cc         \
 									 src/messages/formatrequest.cc   \
+									 src/messages/file.cc            \
+									 src/messages/block.cc           \
+									 src/messages/list_files.cc      \
 									 src/messages/fileexist.cc
 
 # libs -----
@@ -46,8 +49,9 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
 											 src/network/acceptor.cc \
 											 src/network/connector.cc \
 											 src/nodes/machine.cc \
-											 src/nodes/peerdfs.cc \
-											 src/nodes/remotedfs.cc \
+											 src/nodes/dfs.cc \
+											 src/nodes/dio.cc \
+											 src/nodes/local_io.cc \
 											 src/nodes/router.cc \
 											 src/fs/directory.cc \
 											 src/nodes/node.cc \
