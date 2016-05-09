@@ -149,7 +149,6 @@ void RemoteDFS::request_format (messages::Message* m_, int n_channel) {
 
   } else {
     reply.message = "FAIL";
-    reply.details = "File already exists";
   }
 
   network->send(n_channel, &reply);

@@ -53,6 +53,8 @@ class PeerDFS: public Node, public AsyncNode {
     bool connected = false;
     int size;
     std::string disk_path;
+    int replica;
+    std::vector<std::string> nodes;
 
     template <typename T> void process (T);
 };
