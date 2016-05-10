@@ -454,9 +454,13 @@ namespace eclipse{
         cout << file_name << endl;
         int block_seq = 0;
         for (auto block_name : fd->blocks) {
-          uint32_t hash_key = fd->hash_keys[block_seq++];
-          string node = nodes[boundaries.get_index(hash_key)];
+          uint32_t hash_key = fd->hash_keys[block_seq++]; 
+          string node = nodes[boundaries.get_index(hash_key)]; // When replication policy is changed, this line should be changed!
+          string r_node = nodes[(boundaries.get_index(hash_key)+1+NUM_SERVERS)%NUM_SERVERS]; // When replication policy is changed, this line should be changed!
+          string l_node = nodes[(boundaries.get_index(hash_key)-1+NUM_SERVERS)%NUM_SERVERS]; // When replication policy is changed, this line should be changed!
           cout << "\t- " << setw(15) << block_name << " : " << setw(15) << node << endl;
+          cout << "\t- " << setw(15) << block_name << " : " << setw(15) << r_node << endl;
+          cout << "\t- " << setw(15) << block_name << " : " << setw(15) << l_node << endl;
         }
         socket->close(); 
       }
