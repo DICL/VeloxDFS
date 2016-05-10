@@ -15,7 +15,7 @@ class Histogram
         int numbin; // number of bin -> number of histogram bin
         // int digit; // number of digits to represent the problem space
         double* querycount; // the data access count to each
-        unsigned* boundaries; // the index of end point of each node
+        uint32_t* boundaries; // the index of end point of each node
         
     public:
         Histogram(); // constructs an uninitialized object
