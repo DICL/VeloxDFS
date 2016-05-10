@@ -79,7 +79,7 @@ namespace eclipse{
           continue;
         }
 
-        int which_server = rand()%NUM_SERVERS;
+        int which_server = file_hash_key % NUM_SERVERS;
         ifstream myfile (file_name);
         uint64_t start = 0;
         uint64_t end = start + BLOCK_SIZE - 1;
@@ -121,8 +121,8 @@ namespace eclipse{
 
           block_info.block_name = file_name + "_" + to_string(block_seq);
           block_info.file_name = file_name;
-          block_info.block_seq = block_seq++;
           block_info.block_hash_key = boundaries.random_within_boundaries(which_server);
+          block_info.block_seq = block_seq++;
           block_info.block_size = block_size;
           block_info.is_inter = 0;
           block_info.node = nodes[which_server];
@@ -176,7 +176,7 @@ namespace eclipse{
       for (int i=2; i<argc; i++) {
         string file_name = argv[i];
         uint32_t file_hash_key = h(file_name);
-        auto socket = connect (file_hash_key % NUM_SERVERS);
+        auto socket = connect (file_hash_key);
         FileExist fe;
         fe.file_name = file_name;
         send_message(socket.get(), &fe);
@@ -385,10 +385,12 @@ namespace eclipse{
 
         unsigned int block_seq = 0;
         for (auto block_name : fd->blocks) {
-          auto tmp_socket = connect(boundaries.get_index(fd->hash_keys[block_seq]));
+          uint32_t block_hash_key = fd->hash_keys[block_seq];
+          auto tmp_socket = connect(boundaries.get_index(block_hash_key));
           BlockDel bd;
           bd.block_name = block_name;
           bd.file_name = file_name;
+          bd.block_hash_key = block_hash_key;
           bd.block_seq = block_seq++;
           send_message(tmp_socket.get(), &bd);
           auto msg = read_reply<Reply>(tmp_socket.get());
