@@ -307,33 +307,38 @@ namespace eclipse{
         uint32_t GB = 1024 * 1024 * 1024;
         uint64_t TB = (uint64_t) 1024 * 1024 * 1024 * 1024;
         uint64_t PB = (uint64_t) 1024 * 1024 * 1024 * 1024 * 1024;
+        uint32_t K = 1000;
+        uint32_t M = 1000 * 1000;
+        uint32_t G = 1000 * 1000 * 1000;
+        uint64_t T = (uint64_t) 1000 * 1000 * 1000 * 1000;
+        uint64_t P = (uint64_t) 1000 * 1000 * 1000 * 1000 * 1000;
         float hsize = 0;
         int tabsize = 12;
         string unit;
         cout.precision(1);
-        if(fl.file_size <= KB)
+        if(fl.file_size < K)
         {
           hsize = (float)fl.file_size;
           unit = "B";
           tabsize++;
           cout.precision(0);
         }
-        else if(fl.file_size <= MB)
+        else if(fl.file_size < M)
         {
           hsize = (float)fl.file_size / KB;
           unit = "KB";
         }
-        else if(fl.file_size <= GB)
+        else if(fl.file_size < G)
         {
           hsize = (float)fl.file_size / MB;
           unit = "MB";
         }
-        else if(fl.file_size <= TB)
+        else if(fl.file_size < T)
         {
           hsize = (float)fl.file_size / GB;
           unit = "GB";
         }
-        else if(fl.file_size <= PB)
+        else if(fl.file_size < P)
         {
           hsize = (float)fl.file_size / TB;
           unit = "TB";

@@ -15,6 +15,7 @@
 #include <fstream>
 #include <cstdio>
 #include <dirent.h>
+#include <unistd.h>
 
 using namespace eclipse;
 using namespace eclipse::messages;
@@ -220,17 +221,9 @@ bool PeerDFS::insert_block (messages::BlockInfo* m) {
     {
       tmp_node = (which_node - i/2 + nodes.size()) % nodes.size();
     }
-    if(id == tmp_node)
-    {
-      string file_path = disk_path + string("/") + m->block_name;
-      ofstream file (file_path);
-      file << m->content;
-      file.close();
-    }
-    else
-    {
-      network->send(tmp_node, m);
-    }
+    uint32_t tmp_hash_key = boundaries->random_within_boundaries(tmp_node);
+    insert(tmp_hash_key, m->block_name, m->content);
+    sleep(1);
   }
   return true;
 }
