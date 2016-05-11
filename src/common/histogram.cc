@@ -39,7 +39,7 @@ void Histogram::initialize()
     
     // initialize the boundary
     for (int i = 0; i < numserver - 1; i++) //boundaries[i] = (inf/10) * i
-      boundaries[i] = (int) ( ( (double) max / (double) numserver) * ( (double) (i + 1)));
+      boundaries[i] = (uint32_t) ( ( (double) max / (double) numserver) * ( (double) (i + 1)));
     
     boundaries[numserver - 1] = max;
     
@@ -246,17 +246,17 @@ int Histogram::get_index (unsigned query)     // return the server index range o
 }
 
 // random_within_boundaries {{{
-uint32_t Histogram::random_within_boundaries (unsigned int index) {
-  unsigned int which_server = index;
-  int lower_boundary ;
+uint32_t Histogram::random_within_boundaries (uint32_t index) {
+  uint32_t which_server = index;
+  uint32_t lower_boundary ;
 
   if (which_server != 0)
     lower_boundary = boundaries[which_server-1];
   else 
     lower_boundary = boundaries[numserver-1];
 
-  int upper_boundary = boundaries[which_server];
-  int range = upper_boundary - lower_boundary;
+  uint32_t upper_boundary = boundaries[which_server];
+  uint32_t range = upper_boundary - lower_boundary;
   uint32_t result = rand() % range + lower_boundary;
 
   return result;

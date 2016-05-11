@@ -57,6 +57,7 @@ void RemoteDFS::delete_block (messages::Message* m_, int n_channel) {
   logger->info ("BlockDel received");
 
   bool ret = peer_dfs->delete_block(m);
+
   Reply reply;
 
   if (ret) {
@@ -149,7 +150,6 @@ void RemoteDFS::request_format (messages::Message* m_, int n_channel) {
 
   } else {
     reply.message = "FAIL";
-    reply.details = "File already exists";
   }
 
   network->send(n_channel, &reply);

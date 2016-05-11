@@ -79,7 +79,7 @@ namespace eclipse{
           continue;
         }
 
-        int which_server = rand()%NUM_SERVERS;
+        int which_server = file_hash_key % NUM_SERVERS;
         ifstream myfile (file_name);
         uint64_t start = 0;
         uint64_t end = start + BLOCK_SIZE - 1;
@@ -121,8 +121,8 @@ namespace eclipse{
 
           block_info.block_name = file_name + "_" + to_string(block_seq);
           block_info.file_name = file_name;
-          block_info.block_seq = block_seq++;
           block_info.block_hash_key = boundaries.random_within_boundaries(which_server);
+          block_info.block_seq = block_seq++;
           block_info.block_size = block_size;
           block_info.is_inter = 0;
           block_info.node = nodes[which_server];
@@ -176,7 +176,7 @@ namespace eclipse{
       for (int i=2; i<argc; i++) {
         string file_name = argv[i];
         uint32_t file_hash_key = h(file_name);
-        auto socket = connect (file_hash_key % NUM_SERVERS);
+        auto socket = connect (file_hash_key);
         FileExist fe;
         fe.file_name = file_name;
         send_message(socket.get(), &fe);
@@ -307,33 +307,38 @@ namespace eclipse{
         uint32_t GB = 1024 * 1024 * 1024;
         uint64_t TB = (uint64_t) 1024 * 1024 * 1024 * 1024;
         uint64_t PB = (uint64_t) 1024 * 1024 * 1024 * 1024 * 1024;
+        uint32_t K = 1000;
+        uint32_t M = 1000 * 1000;
+        uint32_t G = 1000 * 1000 * 1000;
+        uint64_t T = (uint64_t) 1000 * 1000 * 1000 * 1000;
+        uint64_t P = (uint64_t) 1000 * 1000 * 1000 * 1000 * 1000;
         float hsize = 0;
         int tabsize = 12;
         string unit;
         cout.precision(1);
-        if(fl.file_size <= KB)
+        if(fl.file_size < K)
         {
           hsize = (float)fl.file_size;
           unit = "B";
           tabsize++;
           cout.precision(0);
         }
-        else if(fl.file_size <= MB)
+        else if(fl.file_size < M)
         {
           hsize = (float)fl.file_size / KB;
           unit = "KB";
         }
-        else if(fl.file_size <= GB)
+        else if(fl.file_size < G)
         {
           hsize = (float)fl.file_size / MB;
           unit = "MB";
         }
-        else if(fl.file_size <= TB)
+        else if(fl.file_size < T)
         {
           hsize = (float)fl.file_size / GB;
           unit = "GB";
         }
-        else if(fl.file_size <= PB)
+        else if(fl.file_size < P)
         {
           hsize = (float)fl.file_size / TB;
           unit = "TB";
@@ -385,10 +390,12 @@ namespace eclipse{
 
         unsigned int block_seq = 0;
         for (auto block_name : fd->blocks) {
-          auto tmp_socket = connect(boundaries.get_index(fd->hash_keys[block_seq]));
+          uint32_t block_hash_key = fd->hash_keys[block_seq];
+          auto tmp_socket = connect(boundaries.get_index(block_hash_key));
           BlockDel bd;
           bd.block_name = block_name;
           bd.file_name = file_name;
+          bd.block_hash_key = block_hash_key;
           bd.block_seq = block_seq++;
           send_message(tmp_socket.get(), &bd);
           auto msg = read_reply<Reply>(tmp_socket.get());
@@ -452,9 +459,13 @@ namespace eclipse{
         cout << file_name << endl;
         int block_seq = 0;
         for (auto block_name : fd->blocks) {
-          uint32_t hash_key = fd->hash_keys[block_seq++];
-          string node = nodes[boundaries.get_index(hash_key)];
+          uint32_t hash_key = fd->hash_keys[block_seq++]; 
+          string node = nodes[boundaries.get_index(hash_key)]; // When replication policy is changed, this line should be changed!
+          string r_node = nodes[(boundaries.get_index(hash_key)+1+NUM_SERVERS)%NUM_SERVERS]; // When replication policy is changed, this line should be changed!
+          string l_node = nodes[(boundaries.get_index(hash_key)-1+NUM_SERVERS)%NUM_SERVERS]; // When replication policy is changed, this line should be changed!
           cout << "\t- " << setw(15) << block_name << " : " << setw(15) << node << endl;
+          cout << "\t- " << setw(15) << block_name << " : " << setw(15) << r_node << endl;
+          cout << "\t- " << setw(15) << block_name << " : " << setw(15) << l_node << endl;
         }
         socket->close(); 
       }

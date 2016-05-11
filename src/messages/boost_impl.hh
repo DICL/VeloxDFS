@@ -161,6 +161,7 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.file_name);
     ar & BOOST_SERIALIZATION_NVP(c.block_seq);
     ar & BOOST_SERIALIZATION_NVP(c.block_name);
+    ar & BOOST_SERIALIZATION_NVP(c.block_hash_key);
   }
 
 template <typename Archive>

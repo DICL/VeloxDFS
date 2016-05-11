@@ -15,6 +15,7 @@
 #include <fstream>
 #include <cstdio>
 #include <dirent.h>
+#include <unistd.h>
 
 using namespace eclipse;
 using namespace eclipse::messages;
@@ -32,6 +33,8 @@ PeerDFS::PeerDFS () : Node () {
   int port       = setted.get<int>("network.ports.internal");
   size           = setted.get<vec_str>("network.nodes").size();
   disk_path      = setted.get<string>("path.scratch");
+  replica        = setted.get<int>("filesystem.replica");
+  nodes          = setted.get<vector<string>>("network.nodes");
 
   network   = new AsyncNetwork<P2P>(this, port);
   boundaries.reset( new Histogram {size, 0});
@@ -61,7 +64,6 @@ void PeerDFS::insert (uint32_t hash_key, std::string name, std::string v) {
     ofstream file (file_path);
     file << v;
     file.close();
-
   } else {
     logger->info ("[DFS] Forwaring KEY: %s -> %d", name.c_str(), which_node);
     KeyValue kv (hash_key, name, v);
@@ -137,6 +139,23 @@ template<> void PeerDFS::process (Control* m) {
   }
 }
 // }}}
+// process (BlockInfo* m) {{{
+template<> void PeerDFS::process (BlockInfo* m) {
+  string file_path = disk_path + string("/") + m->block_name;
+  ofstream file (file_path);
+  file << m->content;
+  file.close();
+  logger->info("ideal host = %s", m->node.c_str());
+  logger->info("real host = %d", id);
+}
+// }}}
+// process (BlockDel* m) {{{
+template<> void PeerDFS::process (BlockDel* m) {
+  string block_name = m->block_name;
+  string block_path = disk_path + string("/") + block_name;
+  remove(block_path.c_str());
+}
+// }}}
 // on_read (Message*) {{{
 void PeerDFS::on_read (Message* m, int) {
   string type = m->get_type();
@@ -152,10 +171,17 @@ void PeerDFS::on_read (Message* m, int) {
   } else if (type == "KeyRequest") {
     auto m_ = dynamic_cast<KeyRequest*>(m);
     process(m_);
+
+  } else if (type == "BlockInfo") {
+    auto m_ = dynamic_cast<BlockInfo*>(m);
+    process(m_);
+  } else if (type == "BlockDel") {
+    auto m_ = dynamic_cast<BlockDel*>(m);
+    process(m_);
   }
 }
 // }}}
-// on_connect {{{
+// {{{ on_connect
 void PeerDFS::on_connect () {
   connected = true;
   logger->info ("Network established id=%d", id);
@@ -183,23 +209,52 @@ bool PeerDFS::insert_file (messages::FileInfo* f) {
 // insert_block {{{
 bool PeerDFS::insert_block (messages::BlockInfo* m) {
   directory.insert_block_metadata(*m);
-  insert(m->block_hash_key, m->block_name, m->content);
+  int which_node = boundaries->get_index(m->block_hash_key);
+  int tmp_node = which_node;
+  for(int i=0; i<replica; i++)
+  {
+    if(i%2 == 1)
+    {
+      tmp_node = (which_node + (i+1)/2 + nodes.size()) % nodes.size();
+    }
+    else
+    {
+      tmp_node = (which_node - i/2 + nodes.size()) % nodes.size();
+    }
+    uint32_t tmp_hash_key = boundaries->random_within_boundaries(tmp_node);
+    insert(tmp_hash_key, m->block_name, m->content);
+    sleep(1);
+  }
   return true;
-}
-// }}}
-// Delete {{{
-void PeerDFS::Delete (std::string k) {
-  string file_path = disk_path + string("/") + k;
-  remove(file_path.c_str());
 }
 // }}}
 // delete_block {{{
 bool PeerDFS::delete_block (messages::BlockDel* m) {
-  string file_name = m->file_name;
-  unsigned int block_seq = m->block_seq;
-  string key = m->block_name;
-  Delete(key);
-  directory.delete_block_metadata(file_name, block_seq);
+  directory.delete_block_metadata(m->file_name, m->block_seq);
+  int which_node = boundaries->get_index(m->block_hash_key);
+  int tmp_node = which_node;
+  
+  for(int i=0; i<replica; i++)
+  {
+    if(i%2 == 1)
+    {
+      tmp_node = (which_node + (i+1)/2 + nodes.size()) % nodes.size();
+    }
+    else
+    {
+      tmp_node = (which_node - i/2 + nodes.size()) % nodes.size();
+    }
+    if(id == tmp_node)
+    {
+      string block_name = m->block_name;
+      string block_path = disk_path + string("/") + block_name;
+      remove(block_path.c_str());
+    }
+    else
+    {
+      network->send(tmp_node, m);
+    }
+  }
   return true;
 }
 // }}}

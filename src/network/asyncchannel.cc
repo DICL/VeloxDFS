@@ -5,6 +5,8 @@
 #include <iomanip>
 #include <istream>
 #include <boost/bind.hpp>
+#include <unistd.h>
+#include <stdexcept>
 
 namespace ph = boost::asio::placeholders;
 using namespace std;
@@ -19,7 +21,9 @@ AsyncChannel::AsyncChannel(tcp::socket* s, tcp::socket* r, NetObserver* node_, i
   sender(s),
   receiver(r),
   id(i)
-{ }
+{ 
+  is_writing.store(false);
+}
 AsyncChannel::~AsyncChannel() {
   if (receiver!= nullptr) {
     receiver->close();
@@ -35,25 +39,38 @@ void AsyncChannel::do_write (Message* m) {
 
   stringstream ss; 
   ss << setfill('0') << setw(header_size) << str.length() << str;
-  string* to_write = new string(ss.str());
-  do_write_impl(to_write);
+  //string* to_write = new string(ss.str());
+  // TODO messages_queue may not be thread-safe.
+  messages_queue.emplace (new string(ss.str()));
+  if (!is_writing.exchange(true)) {
+    do_write_impl ();
+  }
 }
 // }}}
 // do_write_impl {{{
-void AsyncChannel::do_write_impl (string* to_write) {
-  async_write (*sender, buffer(*to_write), boost::bind (&AsyncChannel::on_write, 
-        this, ph::error, ph::bytes_transferred, to_write));
+void AsyncChannel::do_write_impl () {
+  auto to_write =  messages_queue.front();
+  async_write (*sender, buffer(*to_write), boost::asio::transfer_exactly(to_write->length()) ,boost::bind (&AsyncChannel::on_write, 
+        this, ph::error, ph::bytes_transferred));
 }
 // }}}
 // on_write {{{
 void AsyncChannel::on_write (const boost::system::error_code& ec, 
-    size_t s, string* str) {
-  delete str;
+    size_t s) {
   if (ec) {
     logger->info ("Message could not reach err=%s", 
         ec.message().c_str());
 
-    do_write_impl(str);
+    //sleep(10);
+    do_write_impl();
+  } else {
+    delete messages_queue.front();
+    messages_queue.pop();
+    if (!messages_queue.empty()) {
+      do_write_impl ();
+    } else {
+      is_writing.exchange(false);
+    }
   }
 }
 // }}}
@@ -73,10 +90,17 @@ void AsyncChannel::read_coroutine (yield_context yield) {
   try {
     while (true) {
       size_t l = async_read (*receiver, buffer(header, header_size), yield[ec]);
-      if (l != (size_t)header_size or ec) throw 1;
+      if (l != (size_t)header_size or ec)  {
+        logger->info ("HEADER size %d", l);
+        throw std::runtime_error("header size");
+      }
 
       size_t size = atoi(header);
       l = read (*receiver, body.prepare(size));
+      if (l != size)  {
+        logger->info ("Body size %d != %d", l, size);
+        throw std::runtime_error("body size");
+      }
       //if (ec) throw 1;
 
       body.commit (l);
@@ -90,12 +114,13 @@ void AsyncChannel::read_coroutine (yield_context yield) {
       delete msg;
       msg=nullptr;
     }
-  } catch (...) {
+  } catch (std::exception& e) {
     if (ec == boost::asio::error::eof)
       logger->info ("AsyncChannel: Closing server socket to client");
     else
-      logger->info ("AsyncChannel: Message arrived error=%s", 
-          ec.message().c_str());
+      logger->info ("AsyncChannel: unformed header arrived from host %s, ex: %s", 
+          receiver->remote_endpoint().address().to_string().c_str(), e.what());
+
 
       node->on_disconnect(nullptr, id);
   }
