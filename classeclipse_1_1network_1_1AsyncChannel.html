@@ -148,10 +148,11 @@ Protected Attributes</h2></td></tr>
 tcp::socket *&#160;</td><td class="memItemRight" valign="bottom"><b>sender</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a196bb4deeaf5f24a6bdd69f63b5c4fe7"></a><!-- doxytag: member="eclipse::network::AsyncChannel::receiver" ref="a196bb4deeaf5f24a6bdd69f63b5c4fe7" args="" -->
 tcp::socket *&#160;</td><td class="memItemRight" valign="bottom"><b>receiver</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab065cedb45639881a4f452c6e2314f67"></a><!-- doxytag: member="eclipse::network::AsyncChannel::messages_queue" ref="ab065cedb45639881a4f452c6e2314f67" args="" -->
-std::queue&lt; std::string * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>messages_queue</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0f1bac403e50ca383996dd8d29056b8"></a><!-- doxytag: member="eclipse::network::AsyncChannel::id" ref="ab0f1bac403e50ca383996dd8d29056b8" args="" -->
 int&#160;</td><td class="memItemRight" valign="bottom"><b>id</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad968c43c4cca0bfc379d0bb8f1168808"></a><!-- doxytag: member="eclipse::network::AsyncChannel::messages_queue" ref="ad968c43c4cca0bfc379d0bb8f1168808" args="" -->
+std::queue&lt; std::unique_ptr<br class="typebreak"/>
+&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>messages_queue</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e72d8d2d4e19e33b9576298414a9d96"></a><!-- doxytag: member="eclipse::network::AsyncChannel::is_writing" ref="a0e72d8d2d4e19e33b9576298414a9d96" args="" -->
 std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>is_writing</b></td></tr>
 </table>
@@ -177,7 +178,7 @@ std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 11 2016 11:44:14 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun May 15 2016 07:40:52 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
