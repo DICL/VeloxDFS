@@ -27,8 +27,8 @@ class AsyncChannel: public Channel {
 
     NetObserver* node = nullptr;
     tcp::socket *sender, *receiver;
-    std::queue<std::string*> messages_queue;
     int id;
+    std::queue<std::unique_ptr<std::string>> messages_queue;
     std::atomic<bool> is_writing;
 };
 

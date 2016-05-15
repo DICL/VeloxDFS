@@ -39,9 +39,9 @@ void AsyncChannel::do_write (Message* m) {
 
   stringstream ss; 
   ss << setfill('0') << setw(header_size) << str.length() << str;
-  //string* to_write = new string(ss.str());
-  // TODO messages_queue may not be thread-safe.
-  messages_queue.emplace (new string(ss.str()));
+
+  // TODO messages_queue may not be thread-safe: Let's leave that task to PeerDFS
+  messages_queue.emplace (make_unique<string>(ss.str()));
   if (!is_writing.exchange(true)) {
     do_write_impl ();
   }
@@ -49,9 +49,9 @@ void AsyncChannel::do_write (Message* m) {
 // }}}
 // do_write_impl {{{
 void AsyncChannel::do_write_impl () {
-  auto to_write =  messages_queue.front();
-  async_write (*sender, buffer(*to_write), boost::asio::transfer_exactly(to_write->length()) ,boost::bind (&AsyncChannel::on_write, 
-        this, ph::error, ph::bytes_transferred));
+  auto& to_write =  messages_queue.front();
+  async_write (*sender, buffer(*to_write), transfer_exactly(to_write->length()),
+      boost::bind (&AsyncChannel::on_write, this, ph::error, ph::bytes_transferred));
 }
 // }}}
 // on_write {{{
@@ -61,11 +61,10 @@ void AsyncChannel::on_write (const boost::system::error_code& ec,
     logger->info ("Message could not reach err=%s", 
         ec.message().c_str());
 
-    //sleep(10);
     do_write_impl();
   } else {
-    delete messages_queue.front();
     messages_queue.pop();
+
     if (!messages_queue.empty()) {
       do_write_impl ();
     } else {
@@ -91,17 +90,14 @@ void AsyncChannel::read_coroutine (yield_context yield) {
     while (true) {
       size_t l = async_read (*receiver, buffer(header, header_size), yield[ec]);
       if (l != (size_t)header_size or ec)  {
-        logger->info ("HEADER size %d", l);
         throw std::runtime_error("header size");
       }
 
       size_t size = atoi(header);
       l = read (*receiver, body.prepare(size));
       if (l != size)  {
-        logger->info ("Body size %d != %d", l, size);
         throw std::runtime_error("body size");
       }
-      //if (ec) throw 1;
 
       body.commit (l);
       string str ((istreambuf_iterator<char>(&body)), 
