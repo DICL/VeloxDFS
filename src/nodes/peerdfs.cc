@@ -223,7 +223,6 @@ bool PeerDFS::insert_block (messages::BlockInfo* m) {
     }
     uint32_t tmp_hash_key = boundaries->random_within_boundaries(tmp_node);
     insert(tmp_hash_key, m->block_name, m->content);
-    sleep(1);
   }
   return true;
 }
