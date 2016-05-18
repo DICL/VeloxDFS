@@ -1,18 +1,19 @@
 #include "dfs.hh"
+
 using namespace std;
 using namespace eclipse;
 
 namespace eclipse{
-  void DFS::load_settings () {
+  void DFS::load_settings() {
     BLOCK_SIZE = context.settings.get<int>("filesystem.block");
-    NUM_SERVERS = context.settings.get<vector<string>>("network.nodes").size();
+    NUM_NODES = context.settings.get<vector<string>>("network.nodes").size();
     path = context.settings.get<string>("path.scratch");
     replica = context.settings.get<int>("filesystem.replica");
     port = context.settings.get<int> ("network.ports.client");
     nodes = context.settings.get<vector<string>>("network.nodes");
   }
 
-  unique_ptr<tcp::socket> DFS::connect (uint32_t hash_value) { 
+  unique_ptr<tcp::socket> DFS::connect(uint32_t hash_value) { 
     auto socket = make_unique<tcp::socket>(iosvc);
     string host = nodes[ hash_value % nodes.size() ];
     tcp::resolver resolver (iosvc);
@@ -23,11 +24,10 @@ namespace eclipse{
     return socket;
   }
 
-  void DFS::send_message (tcp::socket* socket, eclipse::messages::Message* msg) {
+  void DFS::send_message(tcp::socket* socket, eclipse::messages::Message* msg) {
     string out = save_message(msg);
     stringstream ss;
     ss << setfill('0') << setw(16) << out.length() << out;
-
     socket->send(boost::asio::buffer(ss.str()));
   }
 
@@ -49,22 +49,16 @@ namespace eclipse{
       return unique_ptr<T>(m);
     }
 
-  int DFS::put(int argc, char* argv[])
-  {
-    if(argc < 3)
-    {
+  int DFS::put(int argc, char* argv[]) {
+    if (argc < 3) {
       cout << "[INFO] dfs put file_1 file_2 ..." << endl;
-      return -1;
-    }
-    else
-    {
-      srand((uint32_t)time(NULL));
+      return EXIT_FAILURE;
+    } else {
       vector<char> chunk(BLOCK_SIZE);
-      Histogram boundaries(NUM_SERVERS, 0);
+      Histogram boundaries(NUM_NODES, 0);
       boundaries.initialize();
 
-      for(int i=2; i<argc; i++)
-      {
+      for (int i=2; i<argc; i++) {
         string file_name = argv[i];
         FileExist fe;
         fe.file_name = file_name;
@@ -73,13 +67,12 @@ namespace eclipse{
         send_message(socket.get(), &fe);
         auto rep = read_reply<Reply> (socket.get());
 
-        if (rep->message == "TRUE")
-        {
+        if (rep->message == "TRUE") {
           cerr << "[ERR] " << file_name << " already exists." << endl;
           continue;
         }
 
-        int which_server = file_hash_key % NUM_SERVERS;
+        int which_server = file_hash_key % NUM_NODES;
         ifstream myfile (file_name);
         uint64_t start = 0;
         uint64_t end = start + BLOCK_SIZE - 1;
@@ -94,19 +87,13 @@ namespace eclipse{
         file_info.file_size = myfile.tellg();
         BlockInfo block_info;
 
-        while(1)
-        {
-          if(end < file_info.file_size)
-          {
+        while (1) {
+          if (end < file_info.file_size) {
             myfile.seekg(start+BLOCK_SIZE-1, myfile.beg);
-            while(1)
-            {
-              if(myfile.peek() =='\n')
-              {
+            while (1) {
+              if (myfile.peek() =='\n') {
                 break;
-              }
-              else
-              {
+              } else {
                 myfile.seekg(-1, myfile.cur);
                 end--;
               }
@@ -126,8 +113,8 @@ namespace eclipse{
           block_info.block_size = block_size;
           block_info.is_inter = 0;
           block_info.node = nodes[which_server];
-          block_info.l_node = nodes[(which_server-1+NUM_SERVERS)%NUM_SERVERS];
-          block_info.r_node = nodes[(which_server+1+NUM_SERVERS)%NUM_SERVERS];
+          block_info.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
+          block_info.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
           block_info.is_committed = 1;
 
           send_message(socket.get(), &block_info);
@@ -138,13 +125,12 @@ namespace eclipse{
             return EXIT_FAILURE;
           } 
 
-          if(end >= file_info.file_size)
-          {
+          if (end >= file_info.file_size) {
             break;
           }
           start = end;
           end = start + BLOCK_SIZE - 1;
-          which_server = (which_server + 1) % NUM_SERVERS;
+          which_server = (which_server + 1) % NUM_NODES;
         }
 
         file_info.num_block = block_seq;
@@ -160,17 +146,16 @@ namespace eclipse{
         cout << "[INFO] " << argv[i] << " is uploaded." << endl;
       }
     }
-    return 0;
+    return EXIT_SUCCESS;
   }
 
   int DFS::get(int argc, char* argv[])
   {
     if (argc < 3) {
       cout << "[INFO] dfs get file_1 file_2 ..." << endl;
-      return -1;
-
+      return EXIT_FAILURE;
     } else {
-      Histogram boundaries(NUM_SERVERS, 0);
+      Histogram boundaries(NUM_NODES, 0);
       boundaries.initialize();
 
       for (int i=2; i<argc; i++) {
@@ -182,8 +167,7 @@ namespace eclipse{
         send_message(socket.get(), &fe);
         auto rep = read_reply<Reply> (socket.get());
 
-        if (rep->message != "TRUE")
-        {
+        if (rep->message != "TRUE") {
           cerr << "[ERR] " << file_name << " doesn't exist." << endl;
           continue;
         }
@@ -213,30 +197,27 @@ namespace eclipse{
         socket->close();
       }
     }
-    return 0;
+    return EXIT_SUCCESS;
   }
 
-  int DFS::cat(int argc, char* argv[])
-  {
+  int DFS::cat(int argc, char* argv[]) {
     if (argc < 3) {
       cout << "[INFO] dfs cat file_1 file_2 ..." << endl;
-      return -1;
-
+      return EXIT_FAILURE;
     } else {
-      Histogram boundaries(NUM_SERVERS, 0);
+      Histogram boundaries(NUM_NODES, 0);
       boundaries.initialize();
 
       for (int i=2; i<argc; i++) {
         string file_name = argv[i];
         uint32_t file_hash_key = h(file_name);
-        auto socket = connect (file_hash_key % NUM_SERVERS);
+        auto socket = connect (file_hash_key % NUM_NODES);
         FileExist fe;
         fe.file_name = file_name;
         send_message(socket.get(), &fe);
         auto rep = read_reply<Reply> (socket.get());
 
-        if (rep->message != "TRUE")
-        {
+        if (rep->message != "TRUE") {
           cerr << "[ERR] " << file_name << " doesn't exist." << endl;
           continue;
         }
@@ -262,31 +243,26 @@ namespace eclipse{
         socket->close();
       }
     }
-    return 0;
+    return EXIT_SUCCESS;
   }
 
-  int DFS::ls(int argc, char* argv[])
-  {
+  int DFS::ls(int argc, char* argv[]) {
     vector<FileInfo> total; 
     string op = "";
-    if(argc >= 3)
-    {
+    if (argc >= 3) {
       op = argv[2];
     }
-    for(unsigned int net_id=0; net_id<NUM_SERVERS; net_id++)
-    {
+    for (unsigned int net_id=0; net_id<NUM_NODES; net_id++) {
       FileList file_list;
       auto socket = connect(net_id);
       send_message(socket.get(), &file_list);
       auto file_list_reply = read_reply<FileList>(socket.get());
-
       std::copy(file_list_reply->data.begin(), file_list_reply->data.end(), back_inserter(total));
     }
 
     std::sort(total.begin(), total.end(), [] (const FileInfo& a, const FileInfo& b) {
         return (a.file_name < b.file_name);
         });
-
     cout 
       << setw(25) << "FileName" 
       << setw(14) << "Hash Key"
@@ -301,7 +277,7 @@ namespace eclipse{
       cout 
         << setw(25) << fl.file_name
         << setw(14) << fl.file_hash_key;
-      if(op.compare("-h") == 0) {
+      if (op.compare("-h") == 0) {
         uint32_t KB = 1024;
         uint32_t MB = 1024 * 1024;
         uint32_t GB = 1024 * 1024 * 1024;
@@ -316,68 +292,51 @@ namespace eclipse{
         int tabsize = 12;
         string unit;
         cout.precision(1);
-        if(fl.file_size < K)
-        {
+        if (fl.file_size < K) {
           hsize = (float)fl.file_size;
           unit = "B";
           tabsize++;
           cout.precision(0);
-        }
-        else if(fl.file_size < M)
-        {
+        } else if (fl.file_size < M) {
           hsize = (float)fl.file_size / KB;
           unit = "KB";
-        }
-        else if(fl.file_size < G)
-        {
+        } else if (fl.file_size < G) {
           hsize = (float)fl.file_size / MB;
           unit = "MB";
-        }
-        else if(fl.file_size < T)
-        {
+        } else if (fl.file_size < T) {
           hsize = (float)fl.file_size / GB;
           unit = "GB";
-        }
-        else if(fl.file_size < P)
-        {
+        } else if (fl.file_size < P) {
           hsize = (float)fl.file_size / TB;
           unit = "TB";
-        }
-        else
-        {
+        } else {
           hsize = (float)fl.file_size / PB;
           unit = "PB";
         }
         cout << fixed;
         cout << setw(tabsize) << hsize << unit;
-      }
-      else {
+      } else {
         cout << setw(14) << fl.file_size;
       }
 
       cout
         << setw(8) << fl.num_block
-        << setw(14) << nodes[fl.file_hash_key % NUM_SERVERS]
+        << setw(14) << nodes[fl.file_hash_key % NUM_NODES]
         << setw(5) << fl.replica
         << endl;
     }
-    return 0;
+    return EXIT_SUCCESS;
   }
 
-  int DFS::rm(int argc, char* argv[])
-  {
-    if(argc < 3)
-    {
+  int DFS::rm(int argc, char* argv[]) {
+    if (argc < 3) {
       cout << "[INFO] dfs rm file_1 file_2 ..." << endl;
-      return -1;
-    }
-    else
-    {
-      Histogram boundaries(NUM_SERVERS, 0);
+      return EXIT_FAILURE;
+    } else {
+      Histogram boundaries(NUM_NODES, 0);
       boundaries.initialize();
 
-      for(int i=2; i<argc; i++)
-      {
+      for (int i=2; i<argc; i++) {
         string file_name = argv[i];
         uint32_t file_hash_key = h(file_name);
         auto socket = connect(file_hash_key);
@@ -417,14 +376,14 @@ namespace eclipse{
         }
         cout << "[INFO] " << file_name << " is removed." << endl;
       }
-      return 0;
+      return EXIT_SUCCESS;
     }
   }
 
   int DFS::format(int argc, char* argv[]) {
     vector<FileInfo> total;
 
-    for (unsigned int net_id = 0; net_id < NUM_SERVERS; net_id++) {
+    for (unsigned int net_id = 0; net_id < NUM_NODES; net_id++) {
       FormatRequest fr;
       auto socket = connect(net_id);
       send_message(socket.get(), &fr);
@@ -432,12 +391,12 @@ namespace eclipse{
 
       if (reply->message != "OK") {
         cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
-        return -1;
+        return EXIT_FAILURE;
       } 
 
     }
     cout << "[INFO] dfs format is done." << endl;
-    return 0;
+    return EXIT_SUCCESS;
   }
 
   int DFS::show(int argc, char* argv[]) {
@@ -445,7 +404,7 @@ namespace eclipse{
       cout << "usage: dfs bl file_name1 file_name2 ..." << endl;
       return EXIT_FAILURE;
     } else {
-      Histogram boundaries(NUM_SERVERS, 0);
+      Histogram boundaries(NUM_NODES, 0);
       boundaries.initialize();
       for (int i=2; i<argc; i++) {
         string file_name = argv[i];
@@ -461,13 +420,113 @@ namespace eclipse{
         for (auto block_name : fd->blocks) {
           uint32_t hash_key = fd->hash_keys[block_seq++]; 
           string node = nodes[boundaries.get_index(hash_key)]; // When replication policy is changed, this line should be changed!
-          string r_node = nodes[(boundaries.get_index(hash_key)+1+NUM_SERVERS)%NUM_SERVERS]; // When replication policy is changed, this line should be changed!
-          string l_node = nodes[(boundaries.get_index(hash_key)-1+NUM_SERVERS)%NUM_SERVERS]; // When replication policy is changed, this line should be changed!
+          string r_node = nodes[(boundaries.get_index(hash_key)+1+NUM_NODES)%NUM_NODES]; // When replication policy is changed, this line should be changed!
+          string l_node = nodes[(boundaries.get_index(hash_key)-1+NUM_NODES)%NUM_NODES]; // When replication policy is changed, this line should be changed!
           cout << "\t- " << setw(15) << block_name << " : " << setw(15) << node << endl;
           cout << "\t- " << setw(15) << block_name << " : " << setw(15) << r_node << endl;
           cout << "\t- " << setw(15) << block_name << " : " << setw(15) << l_node << endl;
         }
         socket->close(); 
+      }
+    }
+    return EXIT_SUCCESS;
+  }
+
+  int DFS::bcast(int argc, char* argv[]) {
+    if (argc < 3) {
+      cout << "[INFO] dfs bcast file_1 file_2 ..." << endl;
+      return EXIT_FAILURE;
+    } else {
+      vector<char> chunk(BLOCK_SIZE);
+      Histogram boundaries(NUM_NODES, 0);
+      boundaries.initialize();
+
+      for (int i=2; i<argc; i++) {
+        string file_name = argv[i];
+        FileExist fe;
+        fe.file_name = file_name;
+        uint32_t file_hash_key = h(file_name);
+        auto socket = connect(file_hash_key);
+        send_message(socket.get(), &fe);
+        auto rep = read_reply<Reply> (socket.get());
+
+        if (rep->message == "TRUE") {
+          cerr << "[ERR] " << file_name << " already exists." << endl;
+          continue;
+        }
+
+        int which_server = file_hash_key % NUM_NODES;
+        ifstream myfile (file_name);
+        uint64_t start = 0;
+        uint64_t end = start + BLOCK_SIZE - 1;
+        uint32_t block_size = 0;
+        unsigned int block_seq = 0;
+
+        FileInfo file_info;
+        file_info.file_name = file_name;
+        file_info.file_hash_key = file_hash_key;
+        file_info.replica = replica;
+        myfile.seekg(0, myfile.end);
+        file_info.file_size = myfile.tellg();
+        BlockInfo block_info;
+
+        while (1) {
+          if (end < file_info.file_size) {
+            myfile.seekg(start+BLOCK_SIZE-1, myfile.beg);
+            while (1) {
+              if (myfile.peek() =='\n') {
+                break;
+              } else {
+                myfile.seekg(-1, myfile.cur);
+                end--;
+              }
+            }
+          }
+          block_size = (uint32_t) end - start;
+          bzero(chunk.data(), BLOCK_SIZE);
+          myfile.seekg(start, myfile.beg);
+          block_info.content.reserve(block_size);
+          myfile.read(chunk.data(), block_size);
+          block_info.content = chunk.data();
+
+          block_info.block_name = file_name + "_" + to_string(block_seq);
+          block_info.file_name = file_name;
+          block_info.block_hash_key = boundaries.random_within_boundaries(which_server);
+          block_info.block_seq = block_seq++;
+          block_info.block_size = block_size;
+          block_info.is_inter = 0;
+          block_info.node = nodes[which_server];
+          block_info.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
+          block_info.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
+          block_info.is_committed = 1;
+
+          send_message(socket.get(), &block_info);
+          auto reply = read_reply<Reply> (socket.get());
+
+          if (reply->message != "OK") {
+            cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
+            return EXIT_FAILURE;
+          } 
+
+          if (end >= file_info.file_size) {
+            break;
+          }
+          start = end;
+          end = start + BLOCK_SIZE - 1;
+          which_server = (which_server + 1) % NUM_NODES;
+        }
+
+        file_info.num_block = block_seq;
+        send_message(socket.get(), &file_info);
+        auto reply = read_reply<Reply> (socket.get());
+        myfile.close();
+        socket->close();
+
+        if (reply->message != "OK") {
+          cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
+          return EXIT_FAILURE;
+        } 
+        cout << "[INFO] " << argv[i] << " is uploaded." << endl;
       }
     }
     return EXIT_SUCCESS;

@@ -247,6 +247,7 @@ int Histogram::get_index (unsigned query)     // return the server index range o
 
 // random_within_boundaries {{{
 uint32_t Histogram::random_within_boundaries (uint32_t index) {
+  srand((uint32_t)time(NULL));
   uint32_t which_server = index;
   uint32_t lower_boundary ;
 
