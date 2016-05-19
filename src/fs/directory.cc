@@ -12,7 +12,6 @@ namespace eclipse {
 
   void Directory::open_db() {
     mutex.lock();
-    // Open database
     rc = sqlite3_open(path.c_str(), &db);
     if (rc) {
       context.logger->error("Can't open database: %s\n", sqlite3_errmsg(db));
@@ -49,7 +48,7 @@ namespace eclipse {
     i++;
     block->r_node       = argv[i] ? argv[i] : "NULL";
     i++;
-    block->is_committed       = argv[i] ? atoi(argv[i]) : 0;
+    block->is_committed = argv[i] ? atoi(argv[i]) : 0;
     return 0;
   } 
 
@@ -103,13 +102,10 @@ namespace eclipse {
   }
 
   void Directory::init_db() {
-    // Open database
     open_db();
-
     mutex.lock();
-    // Create SQL statement
     sprintf(sql, "CREATE TABLE file_table( \
-        name       TEXT  NOT NULL, \
+      name       TEXT  NOT NULL, \
         hash_key   INT   NOT NULL, \
         size       INT   NOT NULL, \
         num_block  INT   NOT NULL, \
@@ -117,8 +113,7 @@ namespace eclipse {
         replica    INT   NOT NULL, \
         PRIMARY KEY (name));"); 
 
-    // Execute SQL statement
-    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
+        rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
@@ -126,39 +121,33 @@ namespace eclipse {
       context.logger->info("file_table created successfully\n");
     }
 
-    // Create SQL statement
     sprintf(sql, "CREATE TABLE block_table( \
-        name       TEXT      NOT NULL, \
-        file_name  TEXT      NOT NULL, \
-        seq        INT       NOT NULL, \
-        hash_key   INT       NOT NULL, \
-        size       INT       NOT NULL, \
-        type       INT       NOT NULL, \
-        replica    INT       NOT NULL, \
-        node       TEXT      NOT NULL, \
-        l_node     TEXT              , \
-        r_node     TEXT              , \
-        is_committed      INT               , \
+      name       TEXT      NOT NULL, \
+        file_name     TEXT      NOT NULL, \
+        seq           INT       NOT NULL, \
+        hash_key      INT       NOT NULL, \
+        size          INT       NOT NULL, \
+        type          INT       NOT NULL, \
+        replica       INT       NOT NULL, \
+        node          TEXT      NOT NULL, \
+        l_node        TEXT              , \
+        r_node        TEXT              , \
+        is_committed  INT               , \
         PRIMARY KEY (name));"); 
 
-    // Execute SQL statement
-    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
+        rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
       sqlite3_free(zErrMsg);
     } else {
       context.logger->info("block_table created successfully\n");
     }
-    // Close Database
     sqlite3_close(db);
     mutex.unlock();
   }
 
   void Directory::insert_file_metadata(FileInfo file_info) {
-    // Open database
     open_db();
-
-    // Create sql statement
     sprintf(sql, "INSERT INTO file_table (\
       name, hash_key, size, num_block, type, replica)\
       VALUES('%s', %" PRIu32 ", %" PRIu64 ", %u, %u, %u);",
@@ -169,7 +158,6 @@ namespace eclipse {
         file_info.type,
         file_info.replica);
 
-    // Execute SQL statement
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
@@ -178,15 +166,11 @@ namespace eclipse {
       context.logger->info("file_metadata inserted successfully\n");
     }
 
-    // Close Database
     sqlite3_close(db);
   }
 
   void Directory::insert_block_metadata(BlockInfo block_info) {
-    // Open database
     open_db();
-
-    // Create sql statement
     sprintf(sql, "INSERT INTO block_table (\
       name, file_name, seq, hash_key, size, type, replica, node, l_node, r_node, is_committed)\
       VALUES ('%s', '%s', %u, %" PRIu32 ", %" PRIu32 ", %u, %u, '%s', '%s', '%s', %u);",
@@ -202,7 +186,6 @@ namespace eclipse {
         block_info.r_node.c_str(),
         block_info.is_committed);
 
-    // Execute SQL statement
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
@@ -210,19 +193,12 @@ namespace eclipse {
     } else {
       context.logger->info("block_metadata inserted successfully\n");
     }
-
-    // Close Database
     sqlite3_close(db);
   }
 
   void Directory::select_file_metadata(string name, FileInfo *file_info) {
-    // Open database
     open_db();
-
-    // Create sql statement
     sprintf(sql, "SELECT * from file_table where name='%s';", name.c_str());
-
-    // Execute SQL statement
     rc = sqlite3_exec(db, sql, file_callback, (void*)file_info, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
@@ -230,20 +206,13 @@ namespace eclipse {
     } else {
       context.logger->info("file_metadata selected successfully\n");
     }
-
-    // Close Database
     sqlite3_close(db);
   }
 
   void Directory::select_block_metadata(string file_name, unsigned int block_seq, BlockInfo *block_info) {
-    // Open database
     open_db();
-
-    // Create sql statement
     sprintf(sql, "SELECT * from block_table where (file_name='%s') and \
         (seq=%u);", file_name.c_str(), block_seq);
-
-    // Execute SQL statement
     rc = sqlite3_exec(db, sql, block_callback, (void*)block_info, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
@@ -251,21 +220,13 @@ namespace eclipse {
     } else {
       context.logger->info("block_metadata selected successfully\n");
     }
-
-    // Close Database
     sqlite3_close(db);
   } 
 
   void Directory::select_all_file_metadata(vector<FileInfo> &file_list) {
-    // Open database
     open_db();
-
     mutex.lock();
-
-    // Create sql statement
     sprintf(sql, "SELECT * from file_table;");
-
-    // Execute SQL statement
     rc = sqlite3_exec(db, sql, file_list_callback, (void*)&file_list, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
@@ -274,19 +235,13 @@ namespace eclipse {
       context.logger->info("file_metadata selected successfully\n");
     }
 
-    // Close Database
     sqlite3_close(db);
     mutex.unlock();
   }
 
   void Directory::select_all_block_metadata(vector<BlockInfo> &block_info) {
-    // Open database
     open_db();
-
-    // Create sql statement
     sprintf(sql, "SELECT * from block_table;");
-
-    // Execute SQL statement
     rc = sqlite3_exec(db, sql, block_list_callback, (void*)&block_info, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
@@ -295,15 +250,11 @@ namespace eclipse {
       context.logger->info("block_metadata selected successfully\n");
     }
 
-    // Close Database
     sqlite3_close(db);
   } 
 
   void Directory::update_file_metadata(string name, FileInfo file_info) {
-    // Open database
     open_db();
-
-    // Create sql statement
     sprintf(sql, "UPDATE file_table set \
         name='%s', hash_key=%" PRIu32 ", size=%" PRIu64 ", \
         num_block=%u, type=%u, replica=%u where name='%s';",
@@ -315,7 +266,6 @@ namespace eclipse {
         file_info.replica,
         name.c_str());
 
-    // Execute SQL statement
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
@@ -323,16 +273,11 @@ namespace eclipse {
     } else {
       context.logger->info("file_metadata updated successfully\n");
     }
-
-    // Close Database
     sqlite3_close(db);
   }
 
   void Directory::update_block_metadata(string file_name, unsigned int seq, BlockInfo block_info) {
-    // Open database
     open_db();
-
-    // Create sql statement
     sprintf(sql, "UPDATE block_table set \
         name='%s', file_name='%s', seq=%u, hash_key=%" PRIu32 ", \
         size=%" PRIu32 ", type=%u, replica=%u, node='%s', l_node='%s', r_node='%s' \
@@ -351,7 +296,6 @@ namespace eclipse {
         file_name.c_str(),
         seq);
 
-    // Execute SQL statement
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
@@ -359,19 +303,12 @@ namespace eclipse {
     } else {
       context.logger->info("block_metadata updated successfully\n");
     }
-
-    // Close Database
     sqlite3_close(db);
   }
 
   void Directory::delete_file_metadata(string name) {
-    // Open database
     open_db();
-
-    // Create sql statement
     sprintf(sql, "DELETE from file_table where name='%s';", name.c_str());
-
-    // Execute SQL statement
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
@@ -379,20 +316,13 @@ namespace eclipse {
     } else {
       context.logger->info("file_metadata deleted successfully\n");
     }
-
-    // Close Database
     sqlite3_close(db);
   }
 
   void Directory::delete_block_metadata(string file_name, unsigned int seq)
   {
-    // Open database
     open_db();
-
-    // Create sql statement
     sprintf(sql, "DELETE from block_table where (file_name='%s') and (seq=%u);", file_name.c_str(), seq);
-
-    // Execute SQL statement
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
@@ -400,20 +330,13 @@ namespace eclipse {
     } else {
       context.logger->info("block_metadata deleted successfully\n");
     }
-
-    // Close Database
     sqlite3_close(db);
   }
 
   void Directory::display_file_metadata()
   {
-    // Open database
     open_db();
-
-    // Create sql statement
     sprintf(sql, "SELECT * from file_table");
-
-    // Execute SQL statement
     rc = sqlite3_exec(db, sql, display_callback, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
@@ -421,19 +344,12 @@ namespace eclipse {
     } else {
       context.logger->info("file_metadata displayed successfully\n");
     }
-
-    // Close Database
     sqlite3_close(db);
   }
 
   void Directory::display_block_metadata() {
-    // Open database
     open_db();
-
-    // Create sql statement
     sprintf(sql, "SELECT * from block_table");
-
-    // Execute SQL statement
     rc = sqlite3_exec(db, sql, display_callback, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
@@ -441,21 +357,13 @@ namespace eclipse {
     } else {
       context.logger->info("block_metadata displayed successfully\n");
     }
-
-    // Close Database
     sqlite3_close(db);
   }
 
   bool Directory::file_exist(string name) {
     bool result = false;
-
-    // Open database
     open_db();
-
-    // Create SQL statement
     sprintf(sql, "SELECT name from file_table where name='%s';", name.c_str());
-
-    // Execute SQL statement
     rc = sqlite3_exec(db, sql, exist_callback, &result, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);
@@ -463,8 +371,6 @@ namespace eclipse {
     } else {
       context.logger->info("file_exist executed successfully\n");
     }
-
-    // Close Database
     sqlite3_close(db);
     return result;
   }
