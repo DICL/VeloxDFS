@@ -28,6 +28,11 @@
 namespace eclipse {
   using namespace messages;
   using boost::asio::ip::tcp;
+  enum class FILETYPE {
+    Normal,
+    App,
+    Idata
+  };
   class DFS {
     private:
       uint32_t BLOCK_SIZE;

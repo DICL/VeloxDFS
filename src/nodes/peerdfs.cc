@@ -225,7 +225,6 @@ bool PeerDFS::delete_block(messages::BlockDel* m) {
   int tmp_node;
   
   for (int i=0; i<m->replica; i++) {
-    logger->info ("i(%d), tmp_node(%d)", i,tmp_node);
     if (i%2 == 1) {
       tmp_node = (which_node + (i+1)/2 + nodes.size()) % nodes.size();
     } else {

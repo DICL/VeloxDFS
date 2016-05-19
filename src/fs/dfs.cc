@@ -57,11 +57,11 @@ namespace eclipse{
       Histogram boundaries(NUM_NODES, 0);
       boundaries.initialize();
       string op = argv[2];
-      int type = 0;
+      FILETYPE type = FILETYPE::Normal;
       int i=2;
       if (op.compare("-b") == 0) {
         replica = NUM_NODES;
-        type = 1;
+        type = FILETYPE::App;
         i++;
       }
       for (; i<argc; i++) {
@@ -88,7 +88,7 @@ namespace eclipse{
         FileInfo file_info;
         file_info.name = file_name;
         file_info.hash_key = file_hash_key;
-        file_info.type = type; //0:data, 1:app, 2:idata
+        file_info.type = static_cast<unsigned int>(type);
         file_info.replica = replica;
         myfile.seekg(0, myfile.end);
         file_info.size = myfile.tellg();
@@ -118,7 +118,7 @@ namespace eclipse{
           block_info.hash_key = boundaries.random_within_boundaries(which_server);
           block_info.seq = block_seq++;
           block_info.size = block_size;
-          block_info.type = 0;
+          block_info.type = static_cast<unsigned int>(FILETYPE::Normal);
           block_info.replica = replica;
           block_info.node = nodes[which_server];
           block_info.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
@@ -401,7 +401,6 @@ namespace eclipse{
         cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
         return EXIT_FAILURE;
       } 
-
     }
     cout << "[INFO] dfs format is done." << endl;
     return EXIT_SUCCESS;
@@ -427,12 +426,17 @@ namespace eclipse{
         int block_seq = 0;
         for (auto block_name : fd->blocks) {
           uint32_t hash_key = fd->hash_keys[block_seq++]; 
-          string node = nodes[boundaries.get_index(hash_key)]; // When replication policy is changed, this line should be changed!
-          string r_node = nodes[(boundaries.get_index(hash_key)+1+NUM_NODES)%NUM_NODES]; // When replication policy is changed, this line should be changed!
-          string l_node = nodes[(boundaries.get_index(hash_key)-1+NUM_NODES)%NUM_NODES]; // When replication policy is changed, this line should be changed!
-          cout << "\t- " << setw(15) << block_name << " : " << setw(15) << node << endl;
-          cout << "\t- " << setw(15) << block_name << " : " << setw(15) << r_node << endl;
-          cout << "\t- " << setw(15) << block_name << " : " << setw(15) << l_node << endl;
+          int which_node = boundaries.get_index(hash_key);
+          int tmp_node;
+          for (int i=0; i<fd->replica; i++) {
+            if (i%2 == 1) {
+              tmp_node = (which_node + (i+1)/2 + nodes.size()) % nodes.size();
+            } else {
+              tmp_node = (which_node - i/2 + nodes.size()) % nodes.size();
+            }
+            string ip = nodes[tmp_node];
+            cout << "\t- " << setw(15) << block_name << " : " << setw(15) << ip << endl;
+          }
         }
         socket->close(); 
       }
