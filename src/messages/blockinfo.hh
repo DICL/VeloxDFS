@@ -7,12 +7,13 @@ namespace messages {
   struct BlockInfo: public Message {
     std::string get_type() const override;
 
-    std::string block_name;
+    std::string name;
     std::string file_name;
-    unsigned int block_seq;
-    uint32_t block_hash_key;
-    uint32_t block_size;
-    unsigned int is_inter;
+    unsigned int seq;
+    uint32_t hash_key;
+    uint32_t size;
+    unsigned int type;
+    int replica;
     std::string node;
     std::string l_node;
     std::string r_node;
