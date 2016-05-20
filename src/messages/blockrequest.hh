@@ -10,7 +10,7 @@ struct BlockRequest: public Message {
   BlockRequest () = default;
 
   std::string get_type() const override;
-  std::string block_name;
+  std::string name;
   uint32_t hash_key;
 };
 

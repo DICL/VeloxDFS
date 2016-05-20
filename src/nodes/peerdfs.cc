@@ -27,13 +27,12 @@ using namespace std;
 
 namespace eclipse {
 // Constructor & destructor {{{
-PeerDFS::PeerDFS () : Node () { 
+PeerDFS::PeerDFS() : Node() { 
   Settings& setted = context.settings;
 
   int port       = setted.get<int>("network.ports.internal");
   size           = setted.get<vec_str>("network.nodes").size();
   disk_path      = setted.get<string>("path.scratch");
-  replica        = setted.get<int>("filesystem.replica");
   nodes          = setted.get<vector<string>>("network.nodes");
 
   network   = new AsyncNetwork<P2P>(this, port);
@@ -46,7 +45,7 @@ PeerDFS::PeerDFS () : Node () {
 PeerDFS::~PeerDFS() { }
 // }}}
 // establish {{{
-bool PeerDFS::establish () {
+bool PeerDFS::establish() {
  logger->info ("Running Eclipse id=%d", id);
  network->establish();
 
@@ -55,7 +54,7 @@ bool PeerDFS::establish () {
 }
 // }}}
 // insert {{{
-void PeerDFS::insert (uint32_t hash_key, std::string name, std::string v) {
+void PeerDFS::insert(uint32_t hash_key, std::string name, std::string v) {
   int which_node = boundaries->get_index(hash_key);
 
   if (which_node == id) {
@@ -72,7 +71,7 @@ void PeerDFS::insert (uint32_t hash_key, std::string name, std::string v) {
 }
 // }}}
 // request {{{
-void PeerDFS::request (uint32_t key, string name , req_func f) {
+void PeerDFS::request(uint32_t key, string name , req_func f) {
  int idx = boundaries->get_index(key);
 
  if (idx != id) {
@@ -95,7 +94,7 @@ void PeerDFS::request (uint32_t key, string name , req_func f) {
 void PeerDFS::close() { exit(EXIT_SUCCESS); }
 // }}}
 // process (KeyValue* m) {{{
-template<> void PeerDFS::process (KeyValue* m) {
+template<> void PeerDFS::process(KeyValue* m) {
   auto key = m->key;
   auto name =  m->name;
 
@@ -105,7 +104,7 @@ template<> void PeerDFS::process (KeyValue* m) {
     insert(key, m->name, m->value);
   }
 
-  if (requested_blocks.find(name) != requested_blocks.end()){
+  if (requested_blocks.find(name) != requested_blocks.end()) {
     logger->info ("Executing func");
     requested_blocks[name](name, m->value);
     requested_blocks.erase(name);
@@ -113,7 +112,7 @@ template<> void PeerDFS::process (KeyValue* m) {
 }
 // }}}
 // process (KeyRequest* m) {{{
-template<> void PeerDFS::process (KeyRequest* m) {
+template<> void PeerDFS::process(KeyRequest* m) {
   logger->info ("Arrived req key = %s", m->key.c_str());
   string& key = m->key;
   string value;
@@ -128,7 +127,7 @@ template<> void PeerDFS::process (KeyRequest* m) {
 }
 // }}}
 // process (Control* m) {{{
-template<> void PeerDFS::process (Control* m) {
+template<> void PeerDFS::process(Control* m) {
   switch (m->type) {
     case messages::SHUTDOWN:
       this->close();
@@ -140,8 +139,8 @@ template<> void PeerDFS::process (Control* m) {
 }
 // }}}
 // process (BlockInfo* m) {{{
-template<> void PeerDFS::process (BlockInfo* m) {
-  string file_path = disk_path + string("/") + m->block_name;
+template<> void PeerDFS::process(BlockInfo* m) {
+  string file_path = disk_path + string("/") + m->name;
   ofstream file (file_path);
   file << m->content;
   file.close();
@@ -151,7 +150,7 @@ template<> void PeerDFS::process (BlockInfo* m) {
 // }}}
 // process (BlockDel* m) {{{
 template<> void PeerDFS::process (BlockDel* m) {
-  string block_name = m->block_name;
+  string block_name = m->name;
   string block_path = disk_path + string("/") + block_name;
   remove(block_path.c_str());
 }
@@ -159,19 +158,15 @@ template<> void PeerDFS::process (BlockDel* m) {
 // on_read (Message*) {{{
 void PeerDFS::on_read (Message* m, int) {
   string type = m->get_type();
-
   if (type == "KeyValue") {
     auto m_ = dynamic_cast<KeyValue*>(m);
     process(m_);
-
   } else if (type == "Control") {
     auto m_ = dynamic_cast<Control*>(m);
     process(m_);
-
   } else if (type == "KeyRequest") {
     auto m_ = dynamic_cast<KeyRequest*>(m);
     process(m_);
-
   } else if (type == "BlockInfo") {
     auto m_ = dynamic_cast<BlockInfo*>(m);
     process(m_);
@@ -182,75 +177,64 @@ void PeerDFS::on_read (Message* m, int) {
 }
 // }}}
 // {{{ on_connect
-void PeerDFS::on_connect () {
+void PeerDFS::on_connect() {
   connected = true;
-  logger->info ("Network established id=%d", id);
+  logger->info("Network established id=%d", id);
 }
 // }}}
 // on_disconnect {{{
-void PeerDFS::on_disconnect (int id) {
+void PeerDFS::on_disconnect(int id) {
 }
 // }}}
 // insert_file {{{
-bool PeerDFS::insert_file (messages::FileInfo* f) {
- bool ret = directory.file_exist(f->file_name.c_str());
+bool PeerDFS::insert_file(messages::FileInfo* f) {
+ bool ret = directory.file_exist(f->name.c_str());
 
  if (ret) {
-   logger->info ("File:%s exists in db, ret = %i", f->file_name.c_str(), ret);
+   logger->info ("File:%s exists in db, ret = %i", f->name.c_str(), ret);
    return false;
  }
 
  directory.insert_file_metadata(*f);
 
- logger->info ("Saving to SQLite db");
+ logger->info("Saving to SQLite db");
  return true;
 }
 // }}}
 // insert_block {{{
-bool PeerDFS::insert_block (messages::BlockInfo* m) {
+bool PeerDFS::insert_block(messages::BlockInfo* m) {
   directory.insert_block_metadata(*m);
-  int which_node = boundaries->get_index(m->block_hash_key);
-  int tmp_node = which_node;
-  for(int i=0; i<replica; i++)
-  {
-    if(i%2 == 1)
-    {
+  int which_node = boundaries->get_index(m->hash_key);
+  int tmp_node;
+  for (int i=0; i<m->replica; i++) {
+    if(i%2 == 1) {
       tmp_node = (which_node + (i+1)/2 + nodes.size()) % nodes.size();
-    }
-    else
-    {
+    } else {
       tmp_node = (which_node - i/2 + nodes.size()) % nodes.size();
     }
     uint32_t tmp_hash_key = boundaries->random_within_boundaries(tmp_node);
-    insert(tmp_hash_key, m->block_name, m->content);
+    insert(tmp_hash_key, m->name, m->content);
   }
   return true;
 }
 // }}}
 // delete_block {{{
-bool PeerDFS::delete_block (messages::BlockDel* m) {
-  directory.delete_block_metadata(m->file_name, m->block_seq);
-  int which_node = boundaries->get_index(m->block_hash_key);
-  int tmp_node = which_node;
+bool PeerDFS::delete_block(messages::BlockDel* m) {
+  directory.delete_block_metadata(m->file_name, m->seq);
+  int which_node = boundaries->get_index(m->hash_key);
+  int tmp_node;
   
-  for(int i=0; i<replica; i++)
-  {
-    if(i%2 == 1)
-    {
+  for (int i=0; i<m->replica; i++) {
+    if (i%2 == 1) {
       tmp_node = (which_node + (i+1)/2 + nodes.size()) % nodes.size();
-    }
-    else
-    {
+    } else {
       tmp_node = (which_node - i/2 + nodes.size()) % nodes.size();
     }
-    if(id == tmp_node)
-    {
-      string block_name = m->block_name;
+    if (id == tmp_node) {
+      string block_name = m->name;
       string block_path = disk_path + string("/") + block_name;
       remove(block_path.c_str());
-    }
-    else
-    {
+    } else {
       network->send(tmp_node, m);
     }
   }
@@ -259,38 +243,36 @@ bool PeerDFS::delete_block (messages::BlockDel* m) {
 // }}}
 // delete_file {{{
 bool PeerDFS::delete_file (messages::FileDel* f) {
-  bool ret = directory.file_exist(f->file_name.c_str());
-
+  bool ret = directory.file_exist(f->name.c_str());
   if (!ret) {
-    logger->info ("File:%s doesn't exist in db, ret = %i", f->file_name.c_str(),
+    logger->info ("File:%s doesn't exist in db, ret = %i", f->name.c_str(),
         ret);
     return false;
   }
- 
-  directory.delete_file_metadata(f->file_name);
- 
+  directory.delete_file_metadata(f->name);
   logger->info ("Removing from SQLite db");
   return true;
 }
 // }}}
 // request_file {{{
 FileDescription PeerDFS::request_file (messages::FileRequest* m) {
-  string file_name = m->file_name;
+  string file_name = m->name;
 
   FileInfo fi;
   fi.num_block = 0;
   FileDescription fd;
-  fd.file_name  = file_name;
+  fd.name  = file_name;
 
   directory.select_file_metadata(file_name, &fi);
+  fd.replica = fi.replica;
 
   int num_blocks = fi.num_block;
   for (int i = 0; i< num_blocks; i++) {
     BlockInfo bi;
     directory.select_block_metadata (file_name, i, &bi);
-    string block_name = bi.block_name;
+    string block_name = bi.name;
     fd.blocks.push_back(block_name);
-    fd.hash_keys.push_back(bi.block_hash_key);
+    fd.hash_keys.push_back(bi.hash_key);
   }
 
   return fd;
@@ -325,12 +307,6 @@ bool PeerDFS::format () {
 }
 // }}}
 // file_exist {{{
-// FIXME need to think better name for this function
-/**
- *@brief check we have given file name on our database
- *@param f is file name
- *@return return true if found that file on database otherwise return false
- */
 bool PeerDFS::file_exist (std::string file_name) {
   return directory.file_exist(file_name.c_str());
 }

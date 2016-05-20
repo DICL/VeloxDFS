@@ -10,7 +10,7 @@ struct FileRequest: public Message {
   FileRequest () = default;
 
   std::string get_type() const override;
-  std::string file_name;
+  std::string name;
 };
 
 }

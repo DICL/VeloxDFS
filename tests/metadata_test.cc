@@ -16,18 +16,20 @@ int main() {
   FileInfo file_info;
   BlockInfo block_info;
 
-  file_info.file_name = "test.txt";
-  file_info.file_hash_key = 1;
-  file_info.file_size = 1;
+  file_info.name = "test.txt";
+  file_info.hash_key = 1;
+  file_info.size = 1;
   file_info.num_block = 1;
+  file_info.type = 0;
   file_info.replica = 3;
 
   block_info.file_name = "text.txt";
-  block_info.block_seq = 1;
-  block_info.block_hash_key = 1;
-  block_info.block_name = "test.txt_1";
-  block_info.block_size = 1;
-  block_info.is_inter = 1;
+  block_info.seq = 1;
+  block_info.hash_key = 1;
+  block_info.name = "test.txt_1";
+  block_info.size = 1;
+  block_info.type = 0;
+  file_info.replica = 3;
   block_info.node = "1.1.1.1";
   block_info.l_node = "1.1.1.0";
   block_info.r_node = "1.1.1.2";
@@ -36,10 +38,10 @@ int main() {
   dir.insert_file_metadata(file_info);
   dir.insert_block_metadata(block_info);
 
-  file_info.file_name = "test2.txt";
+  file_info.name = "test2.txt";
   dir.insert_file_metadata(file_info);
 
-  file_info.file_name = "test3.txt";
+  file_info.name = "test3.txt";
   dir.insert_file_metadata(file_info);
 
   //dir.display_file_metadata();
@@ -54,17 +56,17 @@ int main() {
   BlockInfo block_info;
 
   file_info.file_id = 1;
-  file_info.file_name = "test.txt";
-  file_info.file_hash_key = 1;
-  file_info.file_size = 1;
+  file_info.name = "test.txt";
+  file_info.hash_key = 1;
+  file_info.size = 1;
   file_info.num_block = 1;
   file_info.replica = 1;
 
   block_info.file_id = 1;
-  block_info.block_seq = 1;
-  block_info.block_hash_key = 1;
-  block_info.block_name = "test.txt_1";
-  block_info.block_size = 1;
+  block_info.seq = 1;
+  block_info.hash_key = 1;
+  block_info.name = "test.txt_1";
+  block_info.size = 1;
   block_info.is_inter = 1;
   block_info.node = "1.1.1.1";
   block_info.l_node = "1.1.1.0";

@@ -12,9 +12,10 @@ struct FileDescription: public Message {
 
   std::string get_type() const override;
 
-  std::string file_name;
+  std::string name;
   std::vector<std::string> blocks;
   std::vector<uint32_t> hash_keys;
+  int replica;
 };
 
 }
