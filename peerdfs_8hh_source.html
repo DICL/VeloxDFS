@@ -125,7 +125,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00044"></a>00044     <span class="keywordtype">bool</span> list (<a class="code" href="structeclipse_1_1messages_1_1FileList.html">messages::FileList</a>*);
 <a name="l00045"></a>00045     <span class="keywordtype">bool</span> format ();
 <a name="l00046"></a>00046     <a class="code" href="structeclipse_1_1messages_1_1FileDescription.html">FileDescription</a> request_file (<a class="code" href="structeclipse_1_1messages_1_1FileRequest.html">messages::FileRequest</a>*);
-<a name="l00047"></a>00047     <span class="keywordtype">bool</span> <a class="code" href="classeclipse_1_1PeerDFS.html#a135f881e1df18800d9746247fa9a7c7b" title="check we have given file name on our database">file_exist</a> (std::string);
+<a name="l00047"></a>00047     <span class="keywordtype">bool</span> file_exist (std::string);
 <a name="l00048"></a>00048 
 <a name="l00049"></a>00049   <span class="keyword">protected</span>:
 <a name="l00050"></a>00050     <a class="code" href="classeclipse_1_1Directory.html">Directory</a> directory;
@@ -134,13 +134,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00053"></a>00053     <span class="keywordtype">bool</span> connected = <span class="keyword">false</span>;
 <a name="l00054"></a>00054     <span class="keywordtype">int</span> size;
 <a name="l00055"></a>00055     std::string disk_path;
-<a name="l00056"></a>00056     <span class="keywordtype">int</span> replica;
-<a name="l00057"></a>00057     std::vector&lt;std::string&gt; nodes;
-<a name="l00058"></a>00058 
-<a name="l00059"></a>00059     <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keywordtype">void</span> process (T);
-<a name="l00060"></a>00060 };
-<a name="l00061"></a>00061 
-<a name="l00062"></a>00062 }
+<a name="l00056"></a>00056     std::vector&lt;std::string&gt; nodes;
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058     <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keywordtype">void</span> process (T);
+<a name="l00059"></a>00059 };
+<a name="l00060"></a>00060 
+<a name="l00061"></a>00061 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -159,7 +158,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 16 2016 06:42:59 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 20 2016 05:00:49 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
