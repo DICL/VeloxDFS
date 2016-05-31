@@ -33,10 +33,11 @@ For single user installation for developers
 
     $ mkdir -p local_eclipse/{tmp,sandbox}                 # Create a sandbox directories
     $ cd local_eclipse                                     # enter in the directory
-    $ git clone git@github.com:DICL/Eclipse.git            # Clone the project from github
+    $ git clone git@github.com:DICL/EclipseDFS.git         # Clone the project from github
+    $ cd EclipseDFS
     $ sh autogen.sh                                        # Generate configure script 
     $ cd ../tmp                                            # Go to building folder
-    $ sh ../Eclipse/configure --prefix=`pwd`/../sandbox    # Generate Makefile
+    $ sh ../EclipseDFS/configure --prefix=`pwd`/../sandbox    # Generate Makefile
 
     ### This last command will be needed whenever you want to recompile the source
     $ make [-j#] install                                   # Compile & install add -j flag to speed up
@@ -59,6 +60,7 @@ AUTHOR
  - __AUTHOR:__ [MooHyeon Nam] [mh]
  - __AUTHOR:__ [WonBae Kim] [wb]
  - __AUTHOR:__ [KiBeom Jin] [kb]
+ - __AUTHOR:__ [Prof. Nam Beomseok] [nb]
  - __INSTITUTION:__ [DICL laboratory] [dicl] at [UNIST]
 
 <!-- Links -->
@@ -69,3 +71,4 @@ AUTHOR
 [wb]:       https://github.com/zwigul
 [kb]:       https://github.com/kbjin
 [eclipsed]: https://github.com/DICL/eclipsed
+[nb]:       http://dicl.unist.ac.kr
