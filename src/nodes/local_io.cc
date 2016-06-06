@@ -41,7 +41,10 @@ bool Local_io::format () {
 
   while ( (next_file = readdir(theFolder)) != NULL ) {
     sprintf(filepath, "%s/%s", fs_path.c_str(), next_file->d_name);
-    remove(filepath);
+    DEBUG("FORMAT: Removing %s", filepath);
+    if (0 != ::remove(filepath)) {
+      ERROR("FORMAT: Can't remove %s.", filepath);
+    }
   }
   closedir(theFolder);
 

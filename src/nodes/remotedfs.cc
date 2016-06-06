@@ -43,11 +43,13 @@ void RemoteDFS::insert_block (messages::Message* m_, int n_channel) {
 
   network->send(n_channel, &reply);
 }
+// delete_block {{{
 void RemoteDFS::delete_block (messages::Message* m_, int n_channel) {
   auto m = dynamic_cast<messages::BlockDel*> (m_);
   logger->info ("BlockDel received");
 
   bool ret = peer_dfs->delete_block(m);
+
   Reply reply;
 
   if (ret) {
@@ -59,7 +61,6 @@ void RemoteDFS::delete_block (messages::Message* m_, int n_channel) {
 
   network->send(n_channel, &reply);
 }
-
 // }}}
 // FileInfo* {{{
 void RemoteDFS::insert_file (messages::Message* m_, int n_channel) {
@@ -99,7 +100,7 @@ void RemoteDFS::delete_file (messages::Message* m_, int n_channel) {
 // request_file {{{
 void RemoteDFS::request_file (messages::Message* m_, int n_channel) {
   auto m = dynamic_cast<messages::FileRequest*> (m_);
-  logger->info ("File Info received %s", m->file_name.c_str());
+  logger->info ("File Info received %s", m->name.c_str());
 
   auto fd = peer_dfs->request_file (m);
   network->send(n_channel, &fd);
@@ -109,7 +110,7 @@ void RemoteDFS::request_file (messages::Message* m_, int n_channel) {
 void RemoteDFS::request_block (messages::Message* m_, int n_channel) {
   auto m = dynamic_cast<messages::BlockRequest*> (m_);
   auto key = m->hash_key;
-  auto name= m->block_name;
+  auto name= m->name;
   peer_dfs->request(key, name, std::bind(&RemoteDFS::send_block, this, 
         ph::_1, ph::_2, n_channel));
 }
@@ -125,7 +126,7 @@ void RemoteDFS::request_ls (messages::Message* m_, int n_channel) {
 void RemoteDFS::send_block (std::string k, std::string v, int n_channel) {
   logger->info ("Sending Block %s", k.c_str());
   BlockInfo bi;
-  bi.block_name = k;
+  bi.name = k;
   bi.content = v;
 
   network->send(n_channel, &bi);
@@ -141,7 +142,6 @@ void RemoteDFS::request_format (messages::Message* m_, int n_channel) {
 
   } else {
     reply.message = "FAIL";
-    reply.details = "File already exists";
   }
 
   network->send(n_channel, &reply);
@@ -150,7 +150,7 @@ void RemoteDFS::request_format (messages::Message* m_, int n_channel) {
 // file_exist {{{
 void RemoteDFS::file_exist (messages::Message* m_, int n_channel) {
   auto m = dynamic_cast<messages::FileExist*> (m_);
-  bool ret = peer_dfs->file_exist(m->file_name);
+  bool ret = peer_dfs->file_exist(m->name);
   Reply reply;
 
   if (ret) {

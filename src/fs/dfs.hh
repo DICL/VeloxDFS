@@ -24,15 +24,19 @@
 #include <memory>
 #include <boost/asio.hpp>
 #include <stdint.h>
-#include <ctime>
 
 namespace eclipse {
   using namespace messages;
   using boost::asio::ip::tcp;
+  enum class FILETYPE {
+    Normal,
+    App,
+    Idata
+  };
   class DFS {
     private:
       uint32_t BLOCK_SIZE;
-      uint32_t NUM_SERVERS;
+      uint32_t NUM_NODES;
       std::string path;
       boost::asio::io_service iosvc;
       int replica;
@@ -40,17 +44,19 @@ namespace eclipse {
       std::vector<std::string> nodes;
 
       unique_ptr<tcp::socket> connect (uint32_t);
-      void send_message (tcp::socket*, eclipse::messages::Message*);
+      void send_message(tcp::socket*, eclipse::messages::Message*);
       template <typename T>
-      auto read_reply (tcp::socket*);
+      auto read_reply(tcp::socket*);
 
     public:
       void load_settings ();
-      int put (int argc, char* argv[]);
-      int get (int argc, char* argv[]);
-      int ls (int argc, char* argv[]);
-      int rm (int argc, char* argv[]);
-      int format (int argc, char* argv[]);
-      int show (int argc, char* argv[]);
+      int put(int argc, char* argv[]);
+      int get(int argc, char* argv[]);
+      int cat(int argc, char* argv[]);
+      int ls(int argc, char* argv[]);
+      int rm(int argc, char* argv[]);
+      int format(int argc, char* argv[]);
+      int show(int argc, char* argv[]);
+      int bcast(int argc, char* argv[]);
   };
 }
