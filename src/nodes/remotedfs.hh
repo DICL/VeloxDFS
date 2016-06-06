@@ -10,10 +10,9 @@ using boost::asio::ip::tcp;
 
 class RemoteDFS: public Router {
   public:
-    RemoteDFS ();
+    RemoteDFS (PeerDFS*, network::Network*);
     ~RemoteDFS () = default;
 
-    virtual bool establish ();
     void insert_block (messages::Message*, int);
     void insert_file (messages::Message*, int);
     void request_file (messages::Message*, int);

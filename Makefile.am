@@ -47,6 +47,7 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
 											 src/network/connector.cc \
 											 src/nodes/machine.cc \
 											 src/nodes/peerdfs.cc \
+											 src/nodes/local_io.cc \
 											 src/nodes/remotedfs.cc \
 											 src/nodes/router.cc \
 											 src/fs/directory.cc \
