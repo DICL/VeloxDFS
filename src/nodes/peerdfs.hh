@@ -50,7 +50,7 @@ class PeerDFS: public Node, public AsyncNode {
     Local_io local_io;
     std::unique_ptr<Histogram> boundaries;
     std::map<std::string, req_func> requested_blocks;
-    int size;
+    int network_size;
 
     template <typename T> void process (T);
 };

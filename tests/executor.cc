@@ -1,5 +1,5 @@
 #include <mapreduce/executor.hh>
-#include <common/context.hh>
+#include <common/context_singleton.hh>
 #include <string>
 
 using namespace eclipse;

@@ -3,6 +3,10 @@
 
 namespace eclipse {
 
+/**
+ * Represents the local disk. 
+ * Local_io automatically computes the prefix of the path.
+ */
 class Local_io {
   public:
     void write (std::string, std::string);

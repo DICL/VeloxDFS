@@ -1,7 +1,7 @@
 #pragma once
 
 #include "machine.hh"
-#include "../common/context.hh"
+#include "../common/context_singleton.hh"
 #include "../messages/message.hh"
 #include "../network/network.hh"
 

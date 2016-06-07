@@ -3,9 +3,6 @@
 
 using namespace std;
 
-Context& context = *Context::connect();
-
-Context* Context::singleton = nullptr;
 
 // Constructors {{{
 Context* Context::connect (string title) {

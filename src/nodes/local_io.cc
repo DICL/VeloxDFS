@@ -1,5 +1,5 @@
 #include "local_io.hh"
-#include "../common/context.hh"
+#include "../common/context_singleton.hh"
 #include <cstdio>
 #include <dirent.h>
 #include <fstream>

@@ -6,6 +6,10 @@
 namespace eclipse {
 using namespace eclipse::network;
 
+/**
+ * This class handle every incomming message.
+ * It inherits from Node and implements AsyncNode
+ */
 class Router: public Node, public AsyncNode {
   public:
     Router (network::Network*);

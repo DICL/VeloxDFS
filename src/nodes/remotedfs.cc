@@ -43,6 +43,7 @@ void RemoteDFS::insert_block (messages::Message* m_, int n_channel) {
 
   network->send(n_channel, &reply);
 }
+// }}}
 // delete_block {{{
 void RemoteDFS::delete_block (messages::Message* m_, int n_channel) {
   auto m = dynamic_cast<messages::BlockDel*> (m_);

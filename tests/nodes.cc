@@ -1,5 +1,5 @@
 #include <nodes/remotedfs.hh>
-#include <common/context.hh>
+#include <common/context_singleton.hh>
 #include <network/p2p.hh>
 #include <network/server.hh>
 #include <network/asyncnetwork.hh>

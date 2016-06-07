@@ -22,8 +22,8 @@ PeerDFS::PeerDFS (Network* net) : Node () {
   network = net;
   net->attach(this);
 
-  size = context.settings.get<vec_str>("network.nodes").size();
-  boundaries.reset( new Histogram {size, 0});
+  network_size = context.settings.get<vec_str>("network.nodes").size();
+  boundaries.reset( new Histogram {network_size, 0});
   boundaries->initialize();
 
   directory.init_db();
@@ -169,9 +169,9 @@ bool PeerDFS::insert_block(messages::BlockInfo* m) {
   int tmp_node;
   for (int i=0; i<m->replica; i++) {
     if(i%2 == 1) {
-      tmp_node = (which_node + (i+1)/2 + size) % size;
+      tmp_node = (which_node + (i+1)/2 + network_size) % network_size;
     } else {
-      tmp_node = (which_node - i/2 + size) % size;
+      tmp_node = (which_node - i/2 + network_size) % network_size;
     }
     uint32_t tmp_hash_key = boundaries->random_within_boundaries(tmp_node);
     insert(tmp_hash_key, m->name, m->content);
@@ -187,9 +187,9 @@ bool PeerDFS::delete_block(messages::BlockDel* m) {
   
   for (int i=0; i<m->replica; i++) {
     if (i%2 == 1) {
-      tmp_node = (which_node + (i+1)/2 + size) % size;
+      tmp_node = (which_node + (i+1)/2 + network_size) % network_size;
     } else {
-      tmp_node = (which_node - i/2 + size) % size;
+      tmp_node = (which_node - i/2 + network_size) % network_size;
     }
     if (id == tmp_node) {
       string block_name = m->name;

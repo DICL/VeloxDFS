@@ -31,10 +31,3 @@ class Context {
     std::vector<std::unique_ptr<std::thread>> threads;
     boost::asio::io_service::work work;
 };
-
-extern Context& context;
-
-#define ERROR(X, ...) context.logger->error(X, ##__VA_ARGS__ )
-#define WARN(X, ...) context.logger->warn(X, ##__VA_ARGS__)
-#define INFO(X, ...) context.logger->info(X, ##__VA_ARGS__)
-#define DEBUG(X, ...) context.logger->debug(X, ##__VA_ARGS__)
