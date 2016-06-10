@@ -1,6 +1,6 @@
 #pragma once
 #include "../common/hash.hh"
-#include "../common/context.hh"
+#include "../common/context_singleton.hh"
 #include "../messages/boost_impl.hh"
 #include "../messages/fileinfo.hh"
 #include "../messages/factory.hh"

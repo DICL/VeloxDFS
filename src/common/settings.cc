@@ -22,6 +22,8 @@
 #include <netinet/in.h>
 #include <net/if.h>
 #include <sstream>
+#include <cstdlib>
+#include <algorithm>
 
 #define FINAL_PATH "/eclipse.json"
 
@@ -109,12 +111,34 @@ string Settings::SettingsImpl::getip () const
 }
 // }}}
 // Get specializations {{{
-template<typename T> T Settings::SettingsImpl::get (string& str) {
-   return pt.get<T> (str.c_str());
+char* get_env (std::string in) {
+  char* property;
+  auto env_str = in;
+  std::replace(env_str.begin(), env_str.end(), '.', '_'); 
+  std::transform(env_str.begin(), env_str.end(), env_str.begin(), toupper);
+  property = std::getenv(env_str.c_str());
+  return property;
 }
 
-template string Settings::SettingsImpl::get (string& str);
-template int    Settings::SettingsImpl::get (string& str);
+template<> string Settings::SettingsImpl::get (string& str) {
+  auto property = get_env(str);
+  if (property != nullptr) {
+    return string(property);
+  
+  } else {
+   return pt.get<string> (str.c_str());
+  }
+}
+
+template<> int    Settings::SettingsImpl::get (string& str) {
+  auto property = get_env(str);
+  if (property != nullptr) {
+    return stoi(string(property));
+  
+  } else {
+   return pt.get<int> (str.c_str());
+  }
+}
 
 template<> vector<string> Settings::SettingsImpl::get (string& str) {
   vector<string> output;

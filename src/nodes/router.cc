@@ -1,32 +1,18 @@
 #include "router.hh"
-#include "../common/dl_loader.hh"
-#include "../network/asyncnetwork.hh"
-#include "../network/server.hh"
 #include "../messages/factory.hh"
-#include "../messages/boost_impl.hh"
-
-#include <string>
-#include <sstream>
 
 using namespace eclipse;
 using namespace eclipse::messages;
-using namespace eclipse::network;
 using namespace std;
 
 namespace eclipse {
 // Constructor {{{
-Router::Router() : Node () {
-  port = context.settings.get<int>("network.ports.client");
-  network = new AsyncNetwork<Server> (this, port);
+Router::Router(network::Network* net) : Node () {
+  network = net;
+  net->attach(this);
 }
 
 Router::~Router() { }
-// }}}
-// establish {{{
-bool Router::establish () {
-  network->establish();
-  return true;
-}
 // }}}
 // on_read {{{
 void Router::on_read (Message* m, int n_channel) {

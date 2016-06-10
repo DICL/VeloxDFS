@@ -3,11 +3,14 @@
 BRIEFING
 ========
 
-EclipseDFS is a state-of-the-art distribute file system. It was designed to be an essential layer of EclipseMR middle-ware.
-Key feature of EclipseDFS are:
- - Efficient block distribution over the nodes.
- - Fast time response.
- - High efficient balancing algorithm.
+EclipseDFS is a decentralized distributed file system based on Chord DHT. 
+
+Key features of current EclipseDFS include:
+ - There's no central directory service such as HDFS NameNode. 
+ - The decentralized file metadata are managed by SQLite in each data node. 
+ - It is fault tolerant. (Each block is replicated in successor and decessor by default)
+ 
+Current EclipseDFS does not support update operation as in HDFS, but we are working on it.
 
 USAGE
 =====

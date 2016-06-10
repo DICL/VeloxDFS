@@ -42,6 +42,7 @@ nodes_SOURCES   = tests/nodes.cc \
                   src/nodes/peerdfs.cc \
                   src/nodes/remotedfs.cc \
                   src/nodes/router.cc \
+                  src/nodes/local_io.cc \
                   src/fs/directory.cc \
                   src/nodes/node.cc 
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../messages/message.hh"
-#include "../common/context.hh"
+#include "../common/context_singleton.hh"
 #include <boost/asio.hpp>
 #include <boost/asio/error.hpp>
 
