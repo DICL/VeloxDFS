@@ -94,14 +94,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00013"></a>00013   std::string get_type() <span class="keyword">const override</span>;
 <a name="l00014"></a>00014 
 <a name="l00015"></a>00015   std::string name;
-<a name="l00016"></a>00016   std::vector&lt;std::string&gt; blocks;
-<a name="l00017"></a>00017   std::vector&lt;uint32_t&gt; hash_keys;
-<a name="l00018"></a>00018   <span class="keywordtype">int</span> replica;
-<a name="l00019"></a>00019 };
-<a name="l00020"></a>00020 
-<a name="l00021"></a>00021 }
-<a name="l00022"></a>00022 }
-<a name="l00023"></a>00023 
+<a name="l00016"></a>00016   uint64_t size;
+<a name="l00017"></a>00017   std::vector&lt;std::string&gt; blocks;
+<a name="l00018"></a>00018   std::vector&lt;uint32_t&gt; hash_keys;
+<a name="l00019"></a>00019   std::vector&lt;uint32_t&gt; block_size;
+<a name="l00020"></a>00020   <span class="keywordtype">int</span> replica;
+<a name="l00021"></a>00021 };
+<a name="l00022"></a>00022 
+<a name="l00023"></a>00023 }
+<a name="l00024"></a>00024 }
+<a name="l00025"></a>00025 
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -120,7 +122,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 10 2016 07:31:49 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 10 2016 08:29:57 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
