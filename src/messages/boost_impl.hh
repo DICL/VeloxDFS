@@ -147,8 +147,10 @@ template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::FileDescription& c, unsigned int) {
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.name);
+    ar & BOOST_SERIALIZATION_NVP(c.size);
     ar & BOOST_SERIALIZATION_NVP(c.blocks);
     ar & BOOST_SERIALIZATION_NVP(c.hash_keys);
+    ar & BOOST_SERIALIZATION_NVP(c.block_size);
     ar & BOOST_SERIALIZATION_NVP(c.replica);
   }
 
