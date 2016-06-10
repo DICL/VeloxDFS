@@ -474,7 +474,8 @@ namespace eclipse{
         cerr << "[ERR] Wrong read byte." << endl;
         return EXIT_FAILURE;
       }
-      ofstream f(file_name);
+      string outfile = "partial_" + file_name;
+      ofstream f(outfile);
       int block_seq = 0;
       uint64_t passed_byte = 0;
       uint64_t read_byte_cnt = 0;
