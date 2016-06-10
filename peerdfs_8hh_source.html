@@ -82,33 +82,33 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#pragma once</span>
 <a name="l00002"></a>00002 <span class="preprocessor"></span>
 <a name="l00003"></a>00003 <span class="preprocessor">#include &quot;node.hh&quot;</span>
-<a name="l00004"></a>00004 <span class="preprocessor">#include &quot;../network/asyncnode.hh&quot;</span>
-<a name="l00005"></a>00005 <span class="preprocessor">#include &quot;../messages/blockinfo.hh&quot;</span>
-<a name="l00006"></a>00006 <span class="preprocessor">#include &quot;../messages/fileinfo.hh&quot;</span>
-<a name="l00007"></a>00007 <span class="preprocessor">#include &quot;../messages/keyrequest.hh&quot;</span>
-<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;../messages/filerequest.hh&quot;</span>
-<a name="l00009"></a>00009 <span class="preprocessor">#include &quot;../messages/filedescription.hh&quot;</span>
-<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;../messages/filelist.hh&quot;</span>
-<a name="l00011"></a>00011 <span class="preprocessor">#include &quot;../messages/filedel.hh&quot;</span>
-<a name="l00012"></a>00012 <span class="preprocessor">#include &quot;../messages/blockdel.hh&quot;</span>
-<a name="l00013"></a>00013 <span class="preprocessor">#include &quot;../messages/fileexist.hh&quot;</span>
-<a name="l00014"></a>00014 <span class="preprocessor">#include &quot;../fs/directory.hh&quot;</span>
-<a name="l00015"></a>00015 <span class="preprocessor">#include &quot;../common/histogram.hh&quot;</span>
-<a name="l00016"></a>00016 
-<a name="l00017"></a>00017 <span class="preprocessor">#include &lt;string&gt;</span>
-<a name="l00018"></a>00018 <span class="preprocessor">#include &lt;boost/asio.hpp&gt;</span>
-<a name="l00019"></a>00019 
-<a name="l00020"></a>00020 <span class="keyword">namespace </span>eclipse {
-<a name="l00021"></a>00021 
-<a name="l00022"></a>00022 <span class="keyword">using</span> vec_str = std::vector&lt;std::string&gt;;
-<a name="l00023"></a>00023 <span class="keyword">typedef</span> std::function&lt;void(std::string, std::string)&gt; req_func;
-<a name="l00024"></a>00024 
-<a name="l00025"></a><a class="code" href="classeclipse_1_1PeerDFS.html">00025</a> <span class="keyword">class </span><a class="code" href="classeclipse_1_1PeerDFS.html">PeerDFS</a>: <span class="keyword">public</span> <a class="code" href="classeclipse_1_1Node.html">Node</a>, <span class="keyword">public</span> <a class="code" href="classeclipse_1_1AsyncNode.html">AsyncNode</a> {
-<a name="l00026"></a>00026   <span class="keyword">public</span>:
-<a name="l00027"></a>00027     <a class="code" href="classeclipse_1_1PeerDFS.html">PeerDFS</a> ();
-<a name="l00028"></a>00028     ~<a class="code" href="classeclipse_1_1PeerDFS.html">PeerDFS</a> ();
-<a name="l00029"></a>00029 
-<a name="l00030"></a>00030     <span class="keywordtype">bool</span> establish () <span class="keyword">override</span>;
+<a name="l00004"></a>00004 <span class="preprocessor">#include &quot;local_io.hh&quot;</span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &quot;../network/asyncnode.hh&quot;</span>
+<a name="l00006"></a>00006 <span class="preprocessor">#include &quot;../messages/blockinfo.hh&quot;</span>
+<a name="l00007"></a>00007 <span class="preprocessor">#include &quot;../messages/fileinfo.hh&quot;</span>
+<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;../messages/keyrequest.hh&quot;</span>
+<a name="l00009"></a>00009 <span class="preprocessor">#include &quot;../messages/filerequest.hh&quot;</span>
+<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;../messages/filedescription.hh&quot;</span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &quot;../messages/filelist.hh&quot;</span>
+<a name="l00012"></a>00012 <span class="preprocessor">#include &quot;../messages/filedel.hh&quot;</span>
+<a name="l00013"></a>00013 <span class="preprocessor">#include &quot;../messages/blockdel.hh&quot;</span>
+<a name="l00014"></a>00014 <span class="preprocessor">#include &quot;../messages/fileexist.hh&quot;</span>
+<a name="l00015"></a>00015 <span class="preprocessor">#include &quot;../fs/directory.hh&quot;</span>
+<a name="l00016"></a>00016 <span class="preprocessor">#include &quot;../common/histogram.hh&quot;</span>
+<a name="l00017"></a>00017 
+<a name="l00018"></a>00018 <span class="preprocessor">#include &lt;string&gt;</span>
+<a name="l00019"></a>00019 <span class="preprocessor">#include &lt;boost/asio.hpp&gt;</span>
+<a name="l00020"></a>00020 
+<a name="l00021"></a>00021 <span class="keyword">namespace </span>eclipse {
+<a name="l00022"></a>00022 
+<a name="l00023"></a>00023 <span class="keyword">using</span> vec_str = std::vector&lt;std::string&gt;;
+<a name="l00024"></a>00024 <span class="keyword">typedef</span> std::function&lt;void(std::string, std::string)&gt; req_func;
+<a name="l00025"></a>00025 
+<a name="l00026"></a><a class="code" href="classeclipse_1_1PeerDFS.html">00026</a> <span class="keyword">class </span><a class="code" href="classeclipse_1_1PeerDFS.html">PeerDFS</a>: <span class="keyword">public</span> <a class="code" href="classeclipse_1_1Node.html">Node</a>, <span class="keyword">public</span> <a class="code" href="classeclipse_1_1AsyncNode.html">AsyncNode</a> {
+<a name="l00027"></a>00027   <span class="keyword">public</span>:
+<a name="l00028"></a>00028     <a class="code" href="classeclipse_1_1PeerDFS.html">PeerDFS</a> (<a class="code" href="classeclipse_1_1network_1_1Network.html">network::Network</a>*);
+<a name="l00029"></a>00029     ~<a class="code" href="classeclipse_1_1PeerDFS.html">PeerDFS</a> ();
+<a name="l00030"></a>00030 
 <a name="l00031"></a>00031     <span class="keywordtype">void</span> on_read (<a class="code" href="structeclipse_1_1messages_1_1Message.html">messages::Message</a>*, <span class="keywordtype">int</span>) <span class="keyword">override</span>;
 <a name="l00032"></a>00032     <span class="keywordtype">void</span> on_connect () <span class="keyword">override</span>;
 <a name="l00033"></a>00033     <span class="keywordtype">void</span> on_disconnect(<span class="keywordtype">int</span>) <span class="keyword">override</span>;
@@ -116,37 +116,34 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00035"></a>00035     <span class="keyword">virtual</span> <span class="keywordtype">void</span> insert (uint32_t, std::string, std::string);
 <a name="l00036"></a>00036     <span class="keyword">virtual</span> <span class="keywordtype">void</span> request (uint32_t, std::string, req_func);
 <a name="l00037"></a>00037 
-<a name="l00038"></a>00038     <span class="keywordtype">void</span> Delete (std::string);
-<a name="l00039"></a>00039     <span class="keywordtype">void</span> close ();
-<a name="l00040"></a>00040     <span class="keywordtype">bool</span> insert_block (<a class="code" href="structeclipse_1_1messages_1_1BlockInfo.html">messages::BlockInfo</a>*);
-<a name="l00041"></a>00041     <span class="keywordtype">bool</span> insert_file (<a class="code" href="structeclipse_1_1messages_1_1FileInfo.html">messages::FileInfo</a>*);
-<a name="l00042"></a>00042     <span class="keywordtype">bool</span> delete_block (<a class="code" href="structeclipse_1_1messages_1_1BlockDel.html">messages::BlockDel</a>*);
-<a name="l00043"></a>00043     <span class="keywordtype">bool</span> delete_file (<a class="code" href="structeclipse_1_1messages_1_1FileDel.html">messages::FileDel</a>*);
-<a name="l00044"></a>00044     <span class="keywordtype">bool</span> list (<a class="code" href="structeclipse_1_1messages_1_1FileList.html">messages::FileList</a>*);
-<a name="l00045"></a>00045     <span class="keywordtype">bool</span> format ();
-<a name="l00046"></a>00046     <a class="code" href="structeclipse_1_1messages_1_1FileDescription.html">FileDescription</a> request_file (<a class="code" href="structeclipse_1_1messages_1_1FileRequest.html">messages::FileRequest</a>*);
-<a name="l00047"></a>00047     <span class="keywordtype">bool</span> file_exist (std::string);
-<a name="l00048"></a>00048 
-<a name="l00049"></a>00049   <span class="keyword">protected</span>:
-<a name="l00050"></a>00050     <a class="code" href="classeclipse_1_1Directory.html">Directory</a> directory;
+<a name="l00038"></a>00038     <span class="keywordtype">void</span> close ();
+<a name="l00039"></a>00039     <span class="keywordtype">bool</span> insert_block (<a class="code" href="structeclipse_1_1messages_1_1BlockInfo.html">messages::BlockInfo</a>*);
+<a name="l00040"></a>00040     <span class="keywordtype">bool</span> insert_file (<a class="code" href="structeclipse_1_1messages_1_1FileInfo.html">messages::FileInfo</a>*);
+<a name="l00041"></a>00041     <span class="keywordtype">bool</span> delete_block (<a class="code" href="structeclipse_1_1messages_1_1BlockDel.html">messages::BlockDel</a>*);
+<a name="l00042"></a>00042     <span class="keywordtype">bool</span> delete_file (<a class="code" href="structeclipse_1_1messages_1_1FileDel.html">messages::FileDel</a>*);
+<a name="l00043"></a>00043     <span class="keywordtype">bool</span> list (<a class="code" href="structeclipse_1_1messages_1_1FileList.html">messages::FileList</a>*);
+<a name="l00044"></a>00044     <span class="keywordtype">bool</span> format ();
+<a name="l00045"></a>00045     <a class="code" href="structeclipse_1_1messages_1_1FileDescription.html">FileDescription</a> request_file (<a class="code" href="structeclipse_1_1messages_1_1FileRequest.html">messages::FileRequest</a>*);
+<a name="l00046"></a>00046     <span class="keywordtype">bool</span> file_exist (std::string);
+<a name="l00047"></a>00047 
+<a name="l00048"></a>00048   <span class="keyword">protected</span>:
+<a name="l00049"></a>00049     <a class="code" href="classeclipse_1_1Directory.html">Directory</a> directory;
+<a name="l00050"></a>00050     <a class="code" href="classeclipse_1_1Local__io.html">Local_io</a> local_io;
 <a name="l00051"></a>00051     std::unique_ptr&lt;Histogram&gt; boundaries;
 <a name="l00052"></a>00052     std::map&lt;std::string, req_func&gt; requested_blocks;
-<a name="l00053"></a>00053     <span class="keywordtype">bool</span> connected = <span class="keyword">false</span>;
-<a name="l00054"></a>00054     <span class="keywordtype">int</span> size;
-<a name="l00055"></a>00055     std::string disk_path;
-<a name="l00056"></a>00056     std::vector&lt;std::string&gt; nodes;
+<a name="l00053"></a>00053     <span class="keywordtype">int</span> network_size;
+<a name="l00054"></a>00054 
+<a name="l00055"></a>00055     <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keywordtype">void</span> process (T);
+<a name="l00056"></a>00056 };
 <a name="l00057"></a>00057 
-<a name="l00058"></a>00058     <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keywordtype">void</span> process (T);
-<a name="l00059"></a>00059 };
-<a name="l00060"></a>00060 
-<a name="l00061"></a>00061 }
+<a name="l00058"></a>00058 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -158,7 +155,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jun 6 2016 15:16:24 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 10 2016 07:31:49 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -125,6 +125,8 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>close</b> ()=
 virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> ()=0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a37fcbfebc2361832ee0e5e1b1eb1f5ce"></a><!-- doxytag: member="eclipse::network::Network::send" ref="a37fcbfebc2361832ee0e5e1b1eb1f5ce" args="(int, messages::Message *)=0" -->
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>send</b> (int, <a class="el" href="structeclipse_1_1messages_1_1Message.html">messages::Message</a> *)=0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a046a9b89d610896d8578b74125e6090e"></a><!-- doxytag: member="eclipse::network::Network::attach" ref="a046a9b89d610896d8578b74125e6090e" args="(AsyncNode *)=0" -->
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>attach</b> (<a class="el" href="classeclipse_1_1AsyncNode.html">AsyncNode</a> *)=0</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/DICL/EclipseDFS/src/network/<a class="el" href="network_8hh_source.html">network.hh</a></li>
@@ -135,7 +137,7 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>send</b> (int
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -147,7 +149,7 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>send</b> (int
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jun 6 2016 15:16:25 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 10 2016 07:31:49 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

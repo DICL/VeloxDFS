@@ -3,16 +3,5 @@ digraph G
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="eclipse::AsyncNode",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1AsyncNode.html"];
-  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="eclipse::PeerDFS",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1PeerDFS.html"];
-  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node3 [label="eclipse::Router",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1Router.html"];
-  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node4 [label="eclipse::RemoteDFS",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1RemoteDFS.html"];
-  Node5 [label="eclipse::Machine",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1Machine.html"];
-  Node5 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node6 [label="eclipse::Node",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1Node.html"];
-  Node6 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node6 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 [label="eclipse::Local_io",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1Local__io.html"];
 }

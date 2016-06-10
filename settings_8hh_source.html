@@ -79,43 +79,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">/home/travis/build/DICL/EclipseDFS/src/common/settings.hh</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="settings_8hh.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
-<a name="l00040"></a>00040 <span class="preprocessor">#ifndef __SETTINGS_HH_</span>
-<a name="l00041"></a>00041 <span class="preprocessor"></span><span class="preprocessor">#define __SETTINGS_HH_</span>
-<a name="l00042"></a>00042 <span class="preprocessor"></span>
-<a name="l00043"></a>00043 <span class="preprocessor">#include &lt;string&gt;</span>
-<a name="l00044"></a>00044 <span class="preprocessor">#include &lt;memory&gt;</span>
-<a name="l00045"></a>00045 
-<a name="l00046"></a><a class="code" href="classSettings.html">00046</a> <span class="keyword">class </span><a class="code" href="classSettings.html">Settings</a> 
-<a name="l00047"></a>00047 {
-<a name="l00048"></a>00048   <span class="keyword">private</span>:
-<a name="l00049"></a>00049     <span class="keyword">class </span><a class="code" href="classSettings_1_1SettingsImpl.html">SettingsImpl</a>;
-<a name="l00050"></a>00050     std::unique_ptr&lt;SettingsImpl&gt; impl;
-<a name="l00051"></a>00051 
-<a name="l00052"></a>00052   <span class="keyword">public</span>:
-<a name="l00053"></a>00053     <a class="code" href="classSettings.html">Settings</a>();
-<a name="l00054"></a>00054     <a class="code" href="classSettings.html">Settings</a>(std::string);
-<a name="l00055"></a>00055 
-<a name="l00056"></a>00056     <a class="code" href="classSettings.html">Settings</a>(<a class="code" href="classSettings.html">Settings</a>&amp;&amp;);          
-<a name="l00057"></a>00057     <span class="keywordtype">void</span> <a class="code" href="classSettings.html#a6f7ebd270d9257b41358bc2897bdc2a6" title="Move operators.">operator=</a>(<a class="code" href="classSettings.html">Settings</a>&amp;&amp;);    
+<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
+<a name="l00038"></a>00038 <span class="preprocessor">#ifndef __SETTINGS_HH_</span>
+<a name="l00039"></a>00039 <span class="preprocessor"></span><span class="preprocessor">#define __SETTINGS_HH_</span>
+<a name="l00040"></a>00040 <span class="preprocessor"></span>
+<a name="l00041"></a>00041 <span class="preprocessor">#include &lt;string&gt;</span>
+<a name="l00042"></a>00042 <span class="preprocessor">#include &lt;memory&gt;</span>
+<a name="l00043"></a>00043 
+<a name="l00044"></a><a class="code" href="classSettings.html">00044</a> <span class="keyword">class </span><a class="code" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a> 
+<a name="l00045"></a>00045 {
+<a name="l00046"></a>00046   <span class="keyword">private</span>:
+<a name="l00047"></a>00047     <span class="keyword">class </span><a class="code" href="classSettings_1_1SettingsImpl.html">SettingsImpl</a>;
+<a name="l00048"></a>00048     std::unique_ptr&lt;SettingsImpl&gt; impl;
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050   <span class="keyword">public</span>:
+<a name="l00051"></a>00051     <a class="code" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a>();
+<a name="l00052"></a>00052     <a class="code" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a>(std::string);
+<a name="l00053"></a>00053 
+<a name="l00054"></a>00054     <a class="code" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a>(<a class="code" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a>&amp;&amp;);          
+<a name="l00055"></a>00055     <span class="keywordtype">void</span> <a class="code" href="classSettings.html#a6f7ebd270d9257b41358bc2897bdc2a6" title="Move operators.">operator=</a>(<a class="code" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a>&amp;&amp;);    
+<a name="l00056"></a>00056 
+<a name="l00057"></a>00057     ~<a class="code" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a>();
 <a name="l00058"></a>00058 
-<a name="l00059"></a>00059     ~<a class="code" href="classSettings.html">Settings</a>();
-<a name="l00060"></a>00060 
-<a name="l00061"></a>00061     <a class="code" href="classSettings.html">Settings</a>&amp; load () &amp;;
-<a name="l00062"></a>00062     <a class="code" href="classSettings.html">Settings</a>&amp;&amp; load () &amp;&amp;;
-<a name="l00063"></a>00063 
-<a name="l00064"></a>00064     <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; T <span class="keyword">get</span> (std::string) <span class="keyword">const</span>;
-<a name="l00065"></a>00065     std::string getip () <span class="keyword">const</span>;
-<a name="l00066"></a>00066 };
-<a name="l00067"></a>00067 
-<a name="l00068"></a>00068 <span class="preprocessor">#endif</span>
+<a name="l00059"></a>00059     <a class="code" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a>&amp; load () &amp;;
+<a name="l00060"></a>00060     <a class="code" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a>&amp;&amp; load () &amp;&amp;;
+<a name="l00061"></a>00061 
+<a name="l00062"></a>00062     <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; T <span class="keyword">get</span> (std::string) <span class="keyword">const</span>;
+<a name="l00063"></a>00063     std::string getip () <span class="keyword">const</span>;
+<a name="l00064"></a>00064 };
+<a name="l00065"></a>00065 
+<a name="l00066"></a>00066 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -127,7 +127,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jun 6 2016 15:16:24 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 10 2016 07:31:49 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

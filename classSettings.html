@@ -86,6 +86,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <!-- doxytag: class="Settings" -->
+<p>This is the implementation file of <a class="el" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a>.  
+ <a href="classSettings.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="settings_8hh_source.html">settings.hh</a>&gt;</code></p>
+
 <p><a href="classSettings-members.html">List of all members.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
@@ -110,7 +115,26 @@ template&lt;typename T &gt; </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8a3334552df4fed5c0764f268c94d530"></a><!-- doxytag: member="Settings::getip" ref="a8a3334552df4fed5c0764f268c94d530" args="() const " -->
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getip</b> () const </td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>This is the implementation file of <a class="el" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a>. </p>
+<dl class="author"><dt><b>Author:</b></dt><dd>Vicente Adolfo Bolea Sanchez</dd></dl>
+<p><a class="el" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a> will read the configuration file eclipse.json and load all the necessary properties. The path of the eclipse.json will be:</p>
+<ol type="1">
+<li>~/.eclipse.json</li>
+<li>/etc/eclipse.json</li>
+<li>Constructor path <dl class="see"><dt><b>See also:</b></dt><dd>Settings::Settings(std::string)</dd></dl>
+</li>
+<li>Hardcoded path, setted using autoconf</li>
+</ol>
+<p>The way it was designed to be used was:</p>
+<div class="fragment"><pre class="fragment"> <a class="code" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a> setted = <a class="code" href="classSettings.html" title="This is the implementation file of Settings.">Settings</a>().load();
+ <span class="keywordtype">string</span> path1 = setted.get&lt;<span class="keywordtype">string</span>&gt;(<span class="stringliteral">&quot;path1&quot;</span>);
+</pre></div><dl class="attention"><dt><b>Attention:</b></dt><dd>This class uses the P.I.M.P.L. (Pointer to implementation) idiom this reduces the complexity of the interface and compilation time.</dd></dl>
+<p>Copyright © 2015 Vicente Adolfo Bolea Sanchez</p>
+<p>This library is free software; you can redistribute it and/or modify It under the terms of the GNU Lesser General Public License as published By the Free Software Foundation; either version 3 of the License, or (at your option) any later version.</p>
+<p>This library is distributed in the hope that it will be useful, But WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.</p>
+<p>You should have received a copy of the GNU Lesser General Public License Along with this library; if not, see &lt;<a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;. </p>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/DICL/EclipseDFS/src/common/<a class="el" href="settings_8hh_source.html">settings.hh</a></li>
 <li>/home/travis/build/DICL/EclipseDFS/src/common/settings.cc</li>
 </ul>
@@ -120,7 +144,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getip</b> () c
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -132,7 +156,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getip</b> () c
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jun 6 2016 15:16:25 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 10 2016 07:31:49 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -105,7 +105,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">eclipse::Router Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<!-- doxytag: class="eclipse::Router" --><!-- doxytag: inherits="eclipse::Node,eclipse::AsyncNode" --><div class="dynheader">
+<!-- doxytag: class="eclipse::Router" --><!-- doxytag: inherits="eclipse::Node,eclipse::AsyncNode" -->
+<p><code>#include &lt;<a class="el" href="router_8hh_source.html">router.hh</a>&gt;</code></p>
+<div class="dynheader">
 Inheritance diagram for eclipse::Router:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeclipse_1_1Router__inherit__graph.png" border="0" usemap="#eclipse_1_1Router_inherit__map" alt="Inheritance graph"/></div>
@@ -124,8 +126,8 @@ Collaboration diagram for eclipse::Router:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ae17d8445f953e9050d522ef3eced69"></a><!-- doxytag: member="eclipse::Router::establish" ref="a4ae17d8445f953e9050d522ef3eced69" args="() override" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>establish</b> () override</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0926f742c593d011fe7a412c478e6e78"></a><!-- doxytag: member="eclipse::Router::Router" ref="a0926f742c593d011fe7a412c478e6e78" args="(network::Network *)" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>Router</b> (<a class="el" href="classeclipse_1_1network_1_1Network.html">network::Network</a> *)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aad5cf31f3fd710affcf5eba889b6f0d3"></a><!-- doxytag: member="eclipse::Router::on_connect" ref="aad5cf31f3fd710affcf5eba889b6f0d3" args="() override" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>on_connect</b> () override</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad412d5af2c2f177b56d433d8962709b2"></a><!-- doxytag: member="eclipse::Router::on_disconnect" ref="ad412d5af2c2f177b56d433d8962709b2" args="(int) override" -->
@@ -143,7 +145,9 @@ std::unique_ptr&lt; <a class="el" href="classeclipse_1_1Node.html">Node</a> &gt;
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a61c46d6401bb84a1e778d333ae4d2143"></a><!-- doxytag: member="eclipse::Router::port" ref="a61c46d6401bb84a1e778d333ae4d2143" args="" -->
 int&#160;</td><td class="memItemRight" valign="bottom"><b>port</b></td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>This class handle every incomming message. It inherits from <a class="el" href="classeclipse_1_1Node.html">Node</a> and implements <a class="el" href="classeclipse_1_1AsyncNode.html">AsyncNode</a> </p>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/DICL/EclipseDFS/src/nodes/<a class="el" href="router_8hh_source.html">router.hh</a></li>
 <li>/home/travis/build/DICL/EclipseDFS/src/nodes/router.cc</li>
 </ul>
@@ -153,7 +157,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>port</b></td></tr>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -165,7 +169,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>port</b></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jun 6 2016 15:16:25 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 10 2016 07:31:49 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

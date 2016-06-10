@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -125,8 +125,8 @@ Collaboration diagram for eclipse::PeerDFS:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a03d60bfebc95ced688d66951f42640e6"></a><!-- doxytag: member="eclipse::PeerDFS::establish" ref="a03d60bfebc95ced688d66951f42640e6" args="() override" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>establish</b> () override</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a57b0c0c86159222d0b3b0654b3016bf7"></a><!-- doxytag: member="eclipse::PeerDFS::PeerDFS" ref="a57b0c0c86159222d0b3b0654b3016bf7" args="(network::Network *)" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>PeerDFS</b> (<a class="el" href="classeclipse_1_1network_1_1Network.html">network::Network</a> *)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a456744f17cd9691044686db35039ef82"></a><!-- doxytag: member="eclipse::PeerDFS::on_read" ref="a456744f17cd9691044686db35039ef82" args="(messages::Message *, int) override" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>on_read</b> (<a class="el" href="structeclipse_1_1messages_1_1Message.html">messages::Message</a> *, int) override</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aab12f9e0f19d7bc180c334a66d92d2b6"></a><!-- doxytag: member="eclipse::PeerDFS::on_connect" ref="aab12f9e0f19d7bc180c334a66d92d2b6" args="() override" -->
@@ -137,8 +137,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>on_disconnect</b> (in
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (uint32_t, std::string, std::string)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a72d626f1ad6bc1ab3250bb3c524f32d9"></a><!-- doxytag: member="eclipse::PeerDFS::request" ref="a72d626f1ad6bc1ab3250bb3c524f32d9" args="(uint32_t, std::string, req_func)" -->
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>request</b> (uint32_t, std::string, req_func)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae183154bc6d7e58ab9ea625d84355950"></a><!-- doxytag: member="eclipse::PeerDFS::Delete" ref="ae183154bc6d7e58ab9ea625d84355950" args="(std::string)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Delete</b> (std::string)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ec1db2ba6f61cc9b48534c650f03bc1"></a><!-- doxytag: member="eclipse::PeerDFS::close" ref="a4ec1db2ba6f61cc9b48534c650f03bc1" args="()" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>close</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a411599f44add7a995632fa4534328a65"></a><!-- doxytag: member="eclipse::PeerDFS::insert_block" ref="a411599f44add7a995632fa4534328a65" args="(messages::BlockInfo *)" -->
@@ -181,18 +179,14 @@ template&lt;typename T &gt; </td></tr>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a83208ee888edfa600d4df042c9ad8125"></a><!-- doxytag: member="eclipse::PeerDFS::directory" ref="a83208ee888edfa600d4df042c9ad8125" args="" -->
 <a class="el" href="classeclipse_1_1Directory.html">Directory</a>&#160;</td><td class="memItemRight" valign="bottom"><b>directory</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a066331c4ac105aa99a0be3afd5f8b441"></a><!-- doxytag: member="eclipse::PeerDFS::local_io" ref="a066331c4ac105aa99a0be3afd5f8b441" args="" -->
+<a class="el" href="classeclipse_1_1Local__io.html">Local_io</a>&#160;</td><td class="memItemRight" valign="bottom"><b>local_io</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7932d67c03afc0e3d496a21a810f41f2"></a><!-- doxytag: member="eclipse::PeerDFS::boundaries" ref="a7932d67c03afc0e3d496a21a810f41f2" args="" -->
 std::unique_ptr&lt; <a class="el" href="classHistogram.html">Histogram</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>boundaries</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a877ada12a6265d5c199213fcb573149e"></a><!-- doxytag: member="eclipse::PeerDFS::requested_blocks" ref="a877ada12a6265d5c199213fcb573149e" args="" -->
 std::map&lt; std::string, req_func &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>requested_blocks</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a43ab688396c46d42011df1931985efb7"></a><!-- doxytag: member="eclipse::PeerDFS::connected" ref="a43ab688396c46d42011df1931985efb7" args="" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>connected</b> = false</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a59caf6c14dbb8d666e5dc40ee98a82df"></a><!-- doxytag: member="eclipse::PeerDFS::size" ref="a59caf6c14dbb8d666e5dc40ee98a82df" args="" -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>size</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a04315ad4b3526e522ad4e54ff7c4f814"></a><!-- doxytag: member="eclipse::PeerDFS::disk_path" ref="a04315ad4b3526e522ad4e54ff7c4f814" args="" -->
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>disk_path</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af91328faff92499966649a3f68c23b05"></a><!-- doxytag: member="eclipse::PeerDFS::nodes" ref="af91328faff92499966649a3f68c23b05" args="" -->
-std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>nodes</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac09f328ba907d312a72f9ba6082afa87"></a><!-- doxytag: member="eclipse::PeerDFS::network_size" ref="ac09f328ba907d312a72f9ba6082afa87" args="" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>network_size</b></td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/DICL/EclipseDFS/src/nodes/<a class="el" href="peerdfs_8hh_source.html">peerdfs.hh</a></li>
@@ -204,7 +198,7 @@ std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bott
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -216,7 +210,7 @@ std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bott
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jun 6 2016 15:16:25 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 10 2016 07:31:49 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

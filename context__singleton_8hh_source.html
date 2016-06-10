@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>EclipseDFS: Member List</title>
+<title>EclipseDFS: /home/travis/build/DICL/EclipseDFS/src/common/context_singleton.hh Source File</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -48,8 +48,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
-      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
-      <li><a href="files.html"><span>Files</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -70,29 +70,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
-      <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
-      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
-      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
+      <li><a href="files.html"><span>File&#160;List</span></a></li>
     </ul>
   </div>
 </div>
 <div class="header">
   <div class="headertitle">
-<div class="title">Settings Member List</div>  </div>
+<div class="title">/home/travis/build/DICL/EclipseDFS/src/common/context_singleton.hh</div>  </div>
 </div><!--header-->
 <div class="contents">
-This is the complete list of members for <a class="el" href="classSettings.html">Settings</a>, including all inherited members.<table>
-  <tr bgcolor="#f0f0f0"><td><b>get</b>(std::string) const  (defined in <a class="el" href="classSettings.html">Settings</a>)</td><td><a class="el" href="classSettings.html">Settings</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>getip</b>() const  (defined in <a class="el" href="classSettings.html">Settings</a>)</td><td><a class="el" href="classSettings.html">Settings</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>load</b>()&amp; (defined in <a class="el" href="classSettings.html">Settings</a>)</td><td><a class="el" href="classSettings.html">Settings</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>load</b>()&amp;&amp; (defined in <a class="el" href="classSettings.html">Settings</a>)</td><td><a class="el" href="classSettings.html">Settings</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classSettings.html#a6f7ebd270d9257b41358bc2897bdc2a6">operator=</a>(Settings &amp;&amp;)</td><td><a class="el" href="classSettings.html">Settings</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>Settings</b>() (defined in <a class="el" href="classSettings.html">Settings</a>)</td><td><a class="el" href="classSettings.html">Settings</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>Settings</b>(std::string) (defined in <a class="el" href="classSettings.html">Settings</a>)</td><td><a class="el" href="classSettings.html">Settings</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>Settings</b>(Settings &amp;&amp;) (defined in <a class="el" href="classSettings.html">Settings</a>)</td><td><a class="el" href="classSettings.html">Settings</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>~Settings</b>() (defined in <a class="el" href="classSettings.html">Settings</a>)</td><td><a class="el" href="classSettings.html">Settings</a></td><td></td></tr>
-</table></div><!-- contents -->
+<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#pragma once</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#include &quot;context.hh&quot;</span>
+<a name="l00003"></a>00003 
+<a name="l00004"></a>00004 <span class="keyword">extern</span> <a class="code" href="classContext.html">Context</a>&amp; context;
+<a name="l00005"></a>00005 
+<a name="l00006"></a>00006 <span class="preprocessor">#define ERROR(X, ...) context.logger-&gt;error(X, ##__VA_ARGS__ )</span>
+<a name="l00007"></a>00007 <span class="preprocessor"></span><span class="preprocessor">#define WARN(X, ...) context.logger-&gt;warn(X, ##__VA_ARGS__)</span>
+<a name="l00008"></a>00008 <span class="preprocessor"></span><span class="preprocessor">#define INFO(X, ...) context.logger-&gt;info(X, ##__VA_ARGS__)</span>
+<a name="l00009"></a>00009 <span class="preprocessor"></span><span class="preprocessor">#define DEBUG(X, ...) context.logger-&gt;debug(X, ##__VA_ARGS__)</span>
+</pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
