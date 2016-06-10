@@ -88,9 +88,9 @@ void Logger::warn (const char* fmt, ...) {
 void Logger::error (const char* fmt, ...) { 
   va_list ap;
   char msg [256];
-
-  strncpy(msg, fmt, 256 );
-  strncat(msg," [ERR:%m]", 256);
+  strncpy(msg,"ERROR ", 256);
+  strncat(msg, fmt, 256);
+  strncat(msg," ERRSTR:%m", 256);
   va_start(ap, fmt);
   log(LOG_ERR, msg, ap);
   va_end(ap);
@@ -121,8 +121,9 @@ void Logger::error_if (bool cmp, const char* fmt, ...) {
     va_list ap;
     char msg [256];
 
-    strncpy(msg, fmt, 256 );
-    strncat(msg," [ERR:%m]", 256);
+    strncpy(msg,"ERROR ", 256);
+    strncat(msg, fmt, 256 );
+    strncat(msg," ERRSTR:%m", 256);
     va_start(ap, fmt);
     log(LOG_ERR, msg, ap);
     va_end(ap);

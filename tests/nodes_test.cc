@@ -1,5 +1,5 @@
 #include <nodes/remotedfs.hh>
-#include <common/context.hh>
+#include <common/context_singleton.hh>
 
 using namespace eclipse;
 

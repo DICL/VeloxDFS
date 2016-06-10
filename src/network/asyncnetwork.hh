@@ -17,17 +17,20 @@ using boost::asio::ip::tcp;
 template<typename TYPE>
 class AsyncNetwork: public Network, public NetObserver {
   public:
-    AsyncNetwork(AsyncNode*, int);
+    AsyncNetwork(int);
     ~AsyncNetwork ();
 
     bool establish() override;
     bool close () override;
     size_t size () override;
     bool send(int, messages::Message*) override;
+    void attach(AsyncNode*) override;
+
     void on_accept(tcp::socket*) override;
     void on_connect(tcp::socket*) override;
     void on_disconnect(tcp::socket*, int) override;
     void on_read(messages::Message*, int) override;
+
 
   private:
     int id_of(tcp::socket*);
@@ -48,8 +51,7 @@ class AsyncNetwork: public Network, public NetObserver {
 };
 // Constructor {{{
 template<typename TYPE>
-AsyncNetwork<TYPE>::AsyncNetwork (AsyncNode* n, int port):
-  node(n),
+AsyncNetwork<TYPE>::AsyncNetwork (int port):
   nodes(context.settings.get<vec_str> ("network.nodes")),
   acceptor(port, this),
   connector(port, this),
@@ -89,9 +91,8 @@ size_t AsyncNetwork<TYPE>::size () {
 // send {{{
 template<typename TYPE>
 bool AsyncNetwork<TYPE>::send (int i, messages::Message* m) {
-  acceptor_mutex.lock(); 
+  std::lock_guard<std::mutex> lck (acceptor_mutex); 
   channels[i]->do_write(m);
-  acceptor_mutex.unlock(); 
   return true;
 }
 // }}}
@@ -99,11 +100,10 @@ bool AsyncNetwork<TYPE>::send (int i, messages::Message* m) {
 template<typename TYPE>
 void AsyncNetwork<TYPE>::on_accept (tcp::socket* sock) {
   if (not TYPE::is_multiple()) {
-    acceptor_mutex.lock(); 
+    std::lock_guard<std::mutex> lck (acceptor_mutex); 
     channels.emplace (accepted_size.load(), std::make_unique<TYPE> (sock, sock, this, accepted_size.load()));
     accepted_size++;
     channels[accepted_size.load() - 1]->do_read();
-    acceptor_mutex.unlock(); 
 
   } else {
     auto i = id_of (sock);
@@ -142,9 +142,8 @@ void AsyncNetwork<TYPE>::on_disconnect (tcp::socket* sock, int id) {
 
   accepted_size--;
 
-  acceptor_mutex.lock(); 
+  std::lock_guard<std::mutex> lck (acceptor_mutex); 
   channels.erase(id);
-  acceptor_mutex.unlock(); 
 }
 // }}}
 // completed_network {{{
@@ -196,6 +195,12 @@ void AsyncNetwork<TYPE>::start_reading () {
 template <typename TYPE>
 void AsyncNetwork<TYPE>::on_read (messages::Message* m , int id) {
   node->on_read(m, id);
+}
+// }}}
+// attach {{{
+template <typename TYPE>
+void AsyncNetwork<TYPE>::attach (AsyncNode* node_) {
+  node = node_;
 }
 // }}}
 }
