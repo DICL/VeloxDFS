@@ -37,12 +37,12 @@ int main(int argc, char* argv[]) {
       dfs.show(argc, argv);
       return 0;
     }
-    else if (op.compare("oread") == 0) {
-      dfs.oread(argc, argv);
+    else if (op.compare("partial_get") == 0) {
+      dfs.DFS::partial_get(argc, argv);
       return 0;
     }
   }
   cerr << "[ERR] Unknown operation" << endl;
-  cout << "[INFO] dfs put|get|cat|ls|rm|format|oread" << endl;
+  cout << "[INFO] dfs put|get|cat|ls|rm|format|partial_get" << endl;
   return -1;
 }

@@ -441,15 +441,16 @@ namespace eclipse{
     return EXIT_SUCCESS;
   }
 
-  int DFS::oread(int argc, char* argv[]) {
+  int DFS::partial_get(int argc, char* argv[]) {
+    string file_name = "";
     if (argc < 5) {
-      cout << "[INFO] dfs oread file_name start_offset read_byte" << endl;
+      cout << "[INFO] dfs partial_get file_name start_offset read_byte" << endl;
       return EXIT_FAILURE;
     } else {
       Histogram boundaries(NUM_NODES, 0);
       boundaries.initialize();
 
-      string file_name = argv[2];
+      file_name = argv[2];
       uint64_t start_offset = (uint64_t)atoi(argv[3]);
       uint64_t read_byte = (uint64_t)atoi(argv[4]);
       uint32_t file_hash_key = h(file_name);
