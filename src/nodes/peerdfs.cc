@@ -261,10 +261,11 @@ FileDescription PeerDFS::request_file (messages::FileRequest* m) {
   FileInfo fi;
   fi.num_block = 0;
   FileDescription fd;
-  fd.name  = file_name;
+  fd.name = file_name;
 
   directory.select_file_metadata(file_name, &fi);
   fd.replica = fi.replica;
+  fd.size = fi.size;
 
   int num_blocks = fi.num_block;
   for (int i = 0; i< num_blocks; i++) {
@@ -273,6 +274,7 @@ FileDescription PeerDFS::request_file (messages::FileRequest* m) {
     string block_name = bi.name;
     fd.blocks.push_back(block_name);
     fd.hash_keys.push_back(bi.hash_key);
+    fd.block_size.push_back(bi.size);
   }
 
   return fd;
