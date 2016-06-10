@@ -57,6 +57,7 @@ namespace eclipse {
       int rm(int argc, char* argv[]);
       int format(int argc, char* argv[]);
       int show(int argc, char* argv[]);
-      int bcast(int argc, char* argv[]);
+      int oread(int argc, char* argv[]);
+      int owrite(int argc, char* argv[]);
   };
 }

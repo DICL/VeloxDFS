@@ -4,52 +4,45 @@
 using namespace std;
 using namespace eclipse;
 
-int main(int argc, char* argv[])
-{
-  if(argc < 2)
-  {
-    cout << "[INFO] dfs put|get|cat|ls|rm|format" << endl;
-    return -1;
-  }
-  else
-  {
+int main(int argc, char* argv[]) {
+  if (argc >= 2) {
     DFS dfs;
     dfs.load_settings();
     string op = argv[1];
-    if(op.compare("put") == 0)
-    {
+    if (op.compare("put") == 0) {
       dfs.put(argc, argv);
+      return 0;
     }
-    else if(op.compare("get") == 0)
-    {
+    else if (op.compare("get") == 0) {
       dfs.get(argc, argv);
+      return 0;
     }
-    else if(op.compare("cat") == 0)
-    {
+    else if (op.compare("cat") == 0) {
       dfs.cat(argc, argv);
+      return 0;
     }
-    else if(op.compare("ls") == 0)
-    {
+    else if (op.compare("ls") == 0) {
       dfs.ls(argc, argv);
+      return 0;
     }
-    else if(op.compare("rm") == 0)
-    {
+    else if (op.compare("rm") == 0) {
       dfs.rm(argc, argv);
+      return 0;
     }
-    else if(op.compare("format") == 0)
-    {
+    else if (op.compare("format") == 0) {
       dfs.format(argc, argv);
+      return 0;
     }
-    else if(op.compare("show") == 0)
-    {
+    else if (op.compare("show") == 0) {
       dfs.show(argc, argv);
+      return 0;
     }
-    else
-    {
-      cerr << "[ERR] Unknown operation" << endl;
-      cout << "[INFO] dfs put|get|cat|ls|rm|format" << endl;
-      return -1;
+    else if (op.compare("oread") == 0) {
+      dfs.oread(argc, argv);
+      return 0;
     }
   }
-  return 0;
+  cerr << "[ERR] Unknown operation" << endl;
+  cout << "[INFO] dfs put|get|cat|ls|rm|format|oread" << endl;
+  return -1;
 }
