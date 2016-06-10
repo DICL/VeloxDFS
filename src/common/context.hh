@@ -31,5 +31,3 @@ class Context {
     std::vector<std::unique_ptr<std::thread>> threads;
     boost::asio::io_service::work work;
 };
-
-extern Context& context;

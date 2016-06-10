@@ -1,8 +1,7 @@
-/** \file       settings.hh
- * @author     Vicente Adolfo Bolea Sanchez
+/** \class      Settings
  * @brief      This is the implementation file of Settings 
+ * @author     Vicente Adolfo Bolea Sanchez
  * 
- * @section 1 Configuration file path
  * Settings will read the configuration file eclipse.json and
  * load all the necessary properties. The path of the eclipse.json
  * will be:
@@ -11,7 +10,6 @@
  *  -# Constructor path @see Settings::Settings(std::string)
  *  -# Hardcoded path, setted using autoconf
  *
- * @section 2 Usage
  * The way it was designed to be used was:
  *
  * @code

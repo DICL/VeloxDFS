@@ -58,7 +58,7 @@ void AsyncChannel::do_write_impl () {
 void AsyncChannel::on_write (const boost::system::error_code& ec, 
     size_t s) {
   if (ec) {
-    logger->info ("Message could not reach err=%s", 
+    INFO("Message could not reach err=%s", 
         ec.message().c_str());
 
     do_write_impl();
@@ -75,16 +75,16 @@ void AsyncChannel::on_write (const boost::system::error_code& ec,
 // }}}
 // do_read {{{
 void AsyncChannel::do_read () {
-  logger->info("Connection established, starting to read");
+  DEBUG("Connection established, starting to read");
   spawn(iosvc, bind(&AsyncChannel::read_coroutine, this, _1));
 }
 // }}}
 // read_coroutine {{{
 void AsyncChannel::read_coroutine (yield_context yield) {
-  boost::asio::streambuf body; 
-  boost::system::error_code ec;
-  char header [header_size + 1]; 
-  header[16] = '\0';
+    boost::asio::streambuf body; 
+    boost::system::error_code ec;
+    char header [header_size + 1] = {'\0'}; 
+    header[16] = '\0';
 
   try {
     while (true) {
@@ -112,13 +112,14 @@ void AsyncChannel::read_coroutine (yield_context yield) {
     }
   } catch (std::exception& e) {
     if (ec == boost::asio::error::eof)
-      logger->info ("AsyncChannel: Closing server socket to client");
+      INFO("AsyncChannel: Closing server socket to client");
+
     else
-      logger->info ("AsyncChannel: unformed header arrived from host %s, ex: %s", 
+      INFO("AsyncChannel: unformed header arrived from host %s, ex: %s", 
           receiver->remote_endpoint().address().to_string().c_str(), e.what());
 
-
-      node->on_disconnect(nullptr, id);
+    node->on_disconnect(nullptr, id);
   }
+
 }
 // }}}

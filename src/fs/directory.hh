@@ -7,7 +7,7 @@
 #include <cinttypes>
 #include <vector>
 #include <mutex>
-#include "../common/context.hh"
+#include "../common/context_singleton.hh"
 #include "../messages/blockinfo.hh"
 #include "../messages/fileinfo.hh"
 
