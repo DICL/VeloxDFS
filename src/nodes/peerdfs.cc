@@ -46,6 +46,21 @@ void PeerDFS::insert(uint32_t hash_key, std::string name, std::string v) {
   }
 }
 // }}}
+// update {{{
+void PeerDFS::update(uint32_t hash_key, std::string name, std::string v, uint32_t p, uint32_t l) {
+  int which_node = boundaries->get_index(hash_key);
+
+  if (which_node == id) {
+    INFO("[DFS] Updating locally KEY: %s", name.c_str());
+    local_io.update(name, v, p, l);
+
+  } else {
+    INFO("[DFS] Forwaring KEY: %s -> %d", name.c_str(), which_node);
+    OffsetKeyValue okv (hash_key, name, v, p, l);
+    network->send(which_node, &okv);
+  }
+}
+// }}}
 // request {{{
 void PeerDFS::request(uint32_t key, string name , req_func f) {
  int idx = boundaries->get_index(key);
@@ -68,7 +83,7 @@ void PeerDFS::close() { exit(EXIT_SUCCESS); }
 // process (KeyValue* m) {{{
 template<> void PeerDFS::process(KeyValue* m) {
   auto key = m->key;
-  auto name =  m->name;
+  auto name = m->name;
 
   int which_node = boundaries->get_index(key);
   if (which_node == id or m->destination == id)  {
@@ -80,6 +95,18 @@ template<> void PeerDFS::process(KeyValue* m) {
     INFO("Executing func");
     requested_blocks[name](name, m->value);
     requested_blocks.erase(name);
+  }
+}
+// }}}
+// process (OffsetKeyValue* m) {{{
+template<> void PeerDFS::process(OffsetKeyValue* m) {
+  auto key = m->key;
+  auto name = m->name;
+
+  int which_node = boundaries->get_index(key);
+  if (which_node == id or m->destination == id)  {
+    INFO("Update key = %s", name.c_str());
+    update(key, m->name, m->value, m->pos, m->len);
   }
 }
 // }}}
@@ -112,6 +139,12 @@ template<> void PeerDFS::process(BlockInfo* m) {
   logger->info("real host = %d", id);
 }
 // }}}
+// process (BlockUpdate* m) {{{
+template<> void PeerDFS::process(BlockUpdate* m) {
+  local_io.update(m->name, m->content, m->pos, m->len);
+  logger->info("block update real host = %d", id);
+}
+// }}}
 // process (BlockDel* m) {{{
 template<> void PeerDFS::process (BlockDel* m) {
   local_io.remove(m->name);
@@ -123,6 +156,9 @@ void PeerDFS::on_read (Message* m, int) {
   if (type == "KeyValue") {
     auto m_ = dynamic_cast<KeyValue*>(m);
     process(m_);
+  } else if (type == "OffsetKeyValue") {
+    auto m_ = dynamic_cast<OffsetKeyValue*>(m);
+    process(m_);
   } else if (type == "Control") {
     auto m_ = dynamic_cast<Control*>(m);
     process(m_);
@@ -131,6 +167,9 @@ void PeerDFS::on_read (Message* m, int) {
     process(m_);
   } else if (type == "BlockInfo") {
     auto m_ = dynamic_cast<BlockInfo*>(m);
+    process(m_);
+  } else if (type == "BlockUpdate") {
+    auto m_ = dynamic_cast<BlockUpdate*>(m);
     process(m_);
   } else if (type == "BlockDel") {
     auto m_ = dynamic_cast<BlockDel*>(m);
@@ -164,6 +203,7 @@ bool PeerDFS::insert_file(messages::FileInfo* f) {
 // }}}
 // insert_block {{{
 bool PeerDFS::insert_block(messages::BlockInfo* m) {
+  logger->info("DEBUG: insert_block\n");
   directory.insert_block_metadata(*m);
   int which_node = boundaries->get_index(m->hash_key);
   int tmp_node;
@@ -175,6 +215,23 @@ bool PeerDFS::insert_block(messages::BlockInfo* m) {
     }
     uint32_t tmp_hash_key = boundaries->random_within_boundaries(tmp_node);
     insert(tmp_hash_key, m->name, m->content);
+  }
+  return true;
+}
+// }}}
+// update_block {{{
+bool PeerDFS::update_block(messages::BlockUpdate* m) {
+  // directory.update_block_metadata(*m); maybe needed later
+  int which_node = boundaries->get_index(m->hash_key);
+  int tmp_node;
+  for (int i=0; i<m->replica; i++) {
+    if(i%2 == 1) {
+      tmp_node = (which_node + (i+1)/2 + network_size) % network_size;
+    } else {
+      tmp_node = (which_node - i/2 + network_size) % network_size;
+    }
+    uint32_t tmp_hash_key = boundaries->random_within_boundaries(tmp_node);
+    update(tmp_hash_key, m->name, m->content, m->pos, m->len);
   }
   return true;
 }

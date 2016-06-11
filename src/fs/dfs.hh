@@ -6,6 +6,7 @@
 #include "../messages/factory.hh"
 #include "../messages/fileinfo.hh"
 #include "../messages/blockinfo.hh"
+#include "../messages/blockupdate.hh"
 #include "../messages/fileexist.hh"
 #include "../messages/filerequest.hh"
 #include "../messages/filelist.hh"
@@ -57,7 +58,7 @@ namespace eclipse {
       int rm(int argc, char* argv[]);
       int format(int argc, char* argv[]);
       int show(int argc, char* argv[]);
-      int partial_get(int argc, char* argv[]);
+      int pget(int argc, char* argv[]);
       int update(int argc, char* argv[]);
   };
 }

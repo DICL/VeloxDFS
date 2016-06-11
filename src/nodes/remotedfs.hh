@@ -14,6 +14,7 @@ class RemoteDFS: public Router {
     ~RemoteDFS () = default;
 
     void insert_block (messages::Message*, int);
+    void update_block (messages::Message*, int);
     void insert_file (messages::Message*, int);
     void request_file (messages::Message*, int);
     void request_block (messages::Message*, int);

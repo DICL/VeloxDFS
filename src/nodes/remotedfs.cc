@@ -15,6 +15,7 @@ RemoteDFS::RemoteDFS (PeerDFS* p, network::Network* net) : Router(net) {
   using std::placeholders::_2;
   auto& rt = routing_table;
   rt.insert({"BlockInfo",  bind(&RemoteDFS::insert_block, this, _1, _2)});
+  rt.insert({"BlockUpdate",  bind(&RemoteDFS::update_block, this, _1, _2)});
   rt.insert({"FileInfo",   bind(&RemoteDFS::insert_file, this, _1, _2)});
   rt.insert({"FileRequest", bind(&RemoteDFS::request_file, this, _1, _2)});
   rt.insert({"BlockRequest", bind(&RemoteDFS::request_block, this, _1, _2)});
@@ -39,6 +40,25 @@ void RemoteDFS::insert_block (messages::Message* m_, int n_channel) {
   } else {
     reply.message = "FAIL";
     reply.details = "Block already exists";
+  }
+
+  network->send(n_channel, &reply);
+}
+// }}}
+// BlockUpdate {{{
+void RemoteDFS::update_block (messages::Message* m_, int n_channel) {
+  auto m = dynamic_cast<messages::BlockUpdate*> (m_);
+  logger->info ("BlockUpdate received");
+
+  bool ret = peer_dfs->update_block(m);
+  Reply reply;
+
+  if (ret) {
+    reply.message = "OK";
+
+  } else {
+    reply.message = "FAIL";
+    reply.details = "Block update failed";
   }
 
   network->send(n_channel, &reply);

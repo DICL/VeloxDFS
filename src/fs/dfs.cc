@@ -441,10 +441,10 @@ namespace eclipse{
     return EXIT_SUCCESS;
   }
 
-  int DFS::partial_get(int argc, char* argv[]) {
+  int DFS::pget(int argc, char* argv[]) {
     string file_name = "";
     if (argc < 5) {
-      cout << "[INFO] dfs partial_get file_name start_offset read_byte" << endl;
+      cout << "[INFO] dfs pget file_name start_offset read_byte" << endl;
       return EXIT_FAILURE;
     } else {
       Histogram boundaries(NUM_NODES, 0);
@@ -474,7 +474,7 @@ namespace eclipse{
         cerr << "[ERR] Wrong read byte." << endl;
         return EXIT_FAILURE;
       }
-      string outfile = "partial_" + file_name;
+      string outfile = "p_" + file_name;
       ofstream f(outfile);
       int block_seq = 0;
       uint64_t passed_byte = 0;
@@ -502,12 +502,12 @@ namespace eclipse{
           } else {
             start_pos = 0;
           }
-          string sub_str = block_content.substr(start_pos);
-          if (read_byte_cnt + sub_str.length() > read_byte) {
+          uint32_t read_length = block_content.length();
+          if (read_byte_cnt + read_length > read_byte) {
             final_block = true;
-            uint32_t sub_length = read_byte - read_byte_cnt;
-            sub_str = block_content.substr(start_pos, sub_length);
+            read_length = read_byte - read_byte_cnt;
           }
+          string sub_str = msg->content.substr(start_pos, read_length);
           f << sub_str;
           read_byte_cnt += sub_str.length();
           tmp_socket->close();
@@ -519,6 +519,96 @@ namespace eclipse{
       f.close();
     }
     cout << "[INFO] " << file_name << " is read." << endl;
+    return EXIT_SUCCESS;
+  }
+
+  int DFS::update(int argc, char* argv[]) {
+    string ori_file_name = "";
+    if (argc < 5) {
+      cout << "[INFO] dfs update original_file new_file start_offset" << endl;
+      return EXIT_FAILURE;
+    } else {
+      Histogram boundaries(NUM_NODES, 0);
+      boundaries.initialize();
+
+      ori_file_name = argv[2];
+      string new_file_name = argv[3];
+      uint64_t start_offset = (uint64_t)atoi(argv[4]);
+      uint32_t file_hash_key = h(ori_file_name);
+      auto socket = connect (file_hash_key);
+      FileExist fe;
+      fe.name = ori_file_name;
+      send_message(socket.get(), &fe);
+      auto rep = read_reply<Reply> (socket.get());
+
+      if (rep->message != "TRUE") {
+        cerr << "[ERR] " << ori_file_name << " doesn't exist." << endl;
+        return EXIT_FAILURE;
+      }
+      FileRequest fr;
+      fr.name = ori_file_name;
+
+      ifstream myfile(new_file_name);
+      myfile.seekg(0, myfile.end);
+      uint64_t new_file_size = myfile.tellg();
+
+      send_message(socket.get(), &fr);
+      auto fd = read_reply<FileDescription> (socket.get());
+      socket->close();
+      if (start_offset + new_file_size > fd->size) {
+        cerr << "[ERR] Wrong file size." << endl;
+        return EXIT_FAILURE;
+      }
+      myfile.seekg(0, myfile.beg);
+      char *buffer = new char[new_file_size];
+      myfile.read(buffer, new_file_size);
+      string sbuffer(buffer);
+      delete[] buffer;
+
+      int block_seq = 0;
+      uint64_t passed_byte = 0;
+      uint64_t write_byte_cnt = 0;
+      uint32_t ori_start_pos = 0;
+      uint32_t to_write_byte = new_file_size;
+      bool first_block = true;
+      bool final_block = false;
+      for (auto block_name : fd->blocks) {
+        if (passed_byte + fd->block_size[block_seq] < start_offset) {
+          passed_byte += fd->block_size[block_seq];
+          block_seq++;
+          continue;
+        } else {
+          uint32_t hash_key = fd->hash_keys[block_seq];
+          auto tmp_socket = connect(boundaries.get_index(hash_key));
+          if (first_block) {
+            first_block = false;
+            ori_start_pos = start_offset - passed_byte;
+          } else {
+            ori_start_pos = 0;
+          }
+          uint32_t write_length = fd->block_size[block_seq++];
+          if (to_write_byte < write_length) {
+            final_block = true;
+            write_length = to_write_byte;
+          }
+          BlockUpdate bu;
+          bu.name = block_name; 
+          bu.replica = fd->replica; 
+          bu.hash_key = hash_key; 
+          bu.pos = ori_start_pos;
+          bu.len = write_length;
+          bu.content = sbuffer.substr(write_byte_cnt, write_length);
+          send_message(tmp_socket.get(), &bu);
+          write_byte_cnt += write_length;
+          tmp_socket->close();
+          if (final_block) {
+            break;
+          }
+        }
+      }
+      myfile.close();
+    }
+    cout << "[INFO] " << ori_file_name << " is updated." << endl;
     return EXIT_SUCCESS;
   }
 }

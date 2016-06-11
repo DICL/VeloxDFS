@@ -20,6 +20,15 @@ void Local_io::write (std::string name, std::string v) {
   file.close();
 }
 // }}}
+// update {{{
+void Local_io::update (std::string name, std::string v, uint32_t pos, uint32_t len) {
+  string file_path = disk_path + string("/") + name;
+  fstream file (file_path, ios::out|ios::in);
+  file.seekp(pos, ios::beg);
+  file.write(v.c_str(), len);
+  file.close();
+}
+// }}}
 // read {{{
 std::string Local_io::read (string name) {
   ifstream in (disk_path + string("/") + name);
