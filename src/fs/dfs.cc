@@ -564,6 +564,7 @@ namespace eclipse{
       myfile.read(buffer, new_file_size);
       string sbuffer(buffer);
       delete[] buffer;
+      myfile.close();
 
       int block_seq = 0;
       uint64_t passed_byte = 0;
@@ -579,14 +580,15 @@ namespace eclipse{
           continue;
         } else {
           uint32_t hash_key = fd->hash_keys[block_seq];
-          auto tmp_socket = connect(boundaries.get_index(hash_key));
+          //          auto tmp_socket = connect(boundaries.get_index(hash_key));
           if (first_block) {
             first_block = false;
             ori_start_pos = start_offset - passed_byte;
           } else {
             ori_start_pos = 0;
           }
-          uint32_t write_length = fd->block_size[block_seq++];
+          uint32_t write_length = fd->block_size[block_seq] - ori_start_pos;
+          block_seq++;
           if (to_write_byte < write_length) {
             final_block = true;
             write_length = to_write_byte;
@@ -598,15 +600,21 @@ namespace eclipse{
           bu.pos = ori_start_pos;
           bu.len = write_length;
           bu.content = sbuffer.substr(write_byte_cnt, write_length);
+          auto tmp_socket = connect(boundaries.get_index(hash_key));
           send_message(tmp_socket.get(), &bu);
-          write_byte_cnt += write_length;
+          auto reply = read_reply<Reply> (tmp_socket.get());
           tmp_socket->close();
+          if (reply->message != "OK") {
+            cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
+            return EXIT_FAILURE;
+          } 
+          write_byte_cnt += write_length;
           if (final_block) {
             break;
           }
+          to_write_byte -= write_length;
         }
       }
-      myfile.close();
     }
     cout << "[INFO] " << ori_file_name << " is updated." << endl;
     return EXIT_SUCCESS;
