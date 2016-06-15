@@ -2,7 +2,7 @@
 #include "messages/fileinfo.hh"
 #include "messages/blockinfo.hh"
 #include "fs/directory.hh"
-#include "common/context.hh"
+#include "common/context_singleton.hh"
 
 using namespace eclipse;
 using namespace std;

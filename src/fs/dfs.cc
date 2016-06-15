@@ -14,10 +14,10 @@ namespace eclipse{
 
   unique_ptr<tcp::socket> DFS::connect(uint32_t hash_value) { 
     auto socket = make_unique<tcp::socket>(iosvc);
-    string host = nodes[ hash_value % nodes.size() ];
-    tcp::resolver resolver (iosvc);
-    tcp::resolver::query query (host, to_string(port));
-    tcp::resolver::iterator it (resolver.resolve(query));
+    string host = nodes[hash_value % nodes.size()];
+    tcp::resolver resolver(iosvc);
+    tcp::resolver::query query(host, to_string(port));
+    tcp::resolver::iterator it(resolver.resolve(query));
     auto ep = make_unique<tcp::endpoint>(*it);
     socket->connect(*ep);
     return socket;
@@ -44,7 +44,6 @@ namespace eclipse{
 
       string recv_msg(body.data());
       T* m = dynamic_cast<T*>(load_message(recv_msg));
-
       return unique_ptr<T>(m);
     }
 
@@ -79,7 +78,7 @@ namespace eclipse{
         }
 
         int which_server = file_hash_key % NUM_NODES;
-        ifstream myfile (file_name);
+        ifstream myfile(file_name);
         uint64_t start = 0;
         uint64_t end = start + BLOCK_SIZE - 1;
         uint32_t block_size = 0;
@@ -156,8 +155,7 @@ namespace eclipse{
     return EXIT_SUCCESS;
   }
 
-  int DFS::get(int argc, char* argv[])
-  {
+  int DFS::get(int argc, char* argv[]) {
     if (argc < 3) {
       cout << "[INFO] dfs get file_1 file_2 ..." << endl;
       return EXIT_FAILURE;
@@ -181,10 +179,10 @@ namespace eclipse{
         FileRequest fr;
         fr.name = file_name;
 
-        send_message (socket.get(), &fr);
+        send_message(socket.get(), &fr);
         auto fd = read_reply<FileDescription> (socket.get());
 
-        ofstream f (file_name);
+        ofstream f(file_name);
         socket->close();
         int block_seq = 0;
         for (auto block_name : fd->blocks) {
@@ -288,7 +286,6 @@ namespace eclipse{
       << setw(14) << "Host"
       << setw(5)  << "Repl"
       << endl << string(80,'-') << endl;
-
 
     for (auto& fl: total) {
       cout 
@@ -441,6 +438,87 @@ namespace eclipse{
         socket->close(); 
       }
     }
+    return EXIT_SUCCESS;
+  }
+
+  int DFS::partial_get(int argc, char* argv[]) {
+    string file_name = "";
+    if (argc < 5) {
+      cout << "[INFO] dfs partial_get file_name start_offset read_byte" << endl;
+      return EXIT_FAILURE;
+    } else {
+      Histogram boundaries(NUM_NODES, 0);
+      boundaries.initialize();
+
+      file_name = argv[2];
+      uint64_t start_offset = (uint64_t)atoi(argv[3]);
+      uint64_t read_byte = (uint64_t)atoi(argv[4]);
+      uint32_t file_hash_key = h(file_name);
+      auto socket = connect (file_hash_key);
+      FileExist fe;
+      fe.name = file_name;
+      send_message(socket.get(), &fe);
+      auto rep = read_reply<Reply> (socket.get());
+
+      if (rep->message != "TRUE") {
+        cerr << "[ERR] " << file_name << " doesn't exist." << endl;
+        return EXIT_FAILURE;
+      }
+      FileRequest fr;
+      fr.name = file_name;
+
+      send_message(socket.get(), &fr);
+      auto fd = read_reply<FileDescription> (socket.get());
+      socket->close();
+      if (start_offset + read_byte > fd->size) {
+        cerr << "[ERR] Wrong read byte." << endl;
+        return EXIT_FAILURE;
+      }
+      string outfile = "partial_" + file_name;
+      ofstream f(outfile);
+      int block_seq = 0;
+      uint64_t passed_byte = 0;
+      uint64_t read_byte_cnt = 0;
+      uint32_t start_pos = 0;
+      bool first_block = true;
+      bool final_block = false;
+      for (auto block_name : fd->blocks) {
+        if (passed_byte + fd->block_size[block_seq] < start_offset) {
+          passed_byte += fd->block_size[block_seq];
+          block_seq++;
+          continue;
+        } else {
+          uint32_t hash_key = fd->hash_keys[block_seq++];
+          auto tmp_socket = connect(boundaries.get_index(hash_key));
+          BlockRequest br;
+          br.name = block_name; 
+          br.hash_key = hash_key; 
+          send_message(tmp_socket.get(), &br);
+          auto msg = read_reply<BlockInfo>(tmp_socket.get());
+          string block_content = msg->content;
+          if (first_block) {
+            first_block = false;
+            start_pos = start_offset - passed_byte;
+          } else {
+            start_pos = 0;
+          }
+          string sub_str = block_content.substr(start_pos);
+          if (read_byte_cnt + sub_str.length() > read_byte) {
+            final_block = true;
+            uint32_t sub_length = read_byte - read_byte_cnt;
+            sub_str = block_content.substr(start_pos, sub_length);
+          }
+          f << sub_str;
+          read_byte_cnt += sub_str.length();
+          tmp_socket->close();
+          if (final_block) {
+            break;
+          }
+        }
+      }
+      f.close();
+    }
+    cout << "[INFO] " << file_name << " is read." << endl;
     return EXIT_SUCCESS;
   }
 }

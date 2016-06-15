@@ -1,6 +1,6 @@
 #pragma once
 #include "../common/hash.hh"
-#include "../common/context.hh"
+#include "../common/context_singleton.hh"
 #include "../messages/boost_impl.hh"
 #include "../messages/fileinfo.hh"
 #include "../messages/factory.hh"
@@ -57,6 +57,7 @@ namespace eclipse {
       int rm(int argc, char* argv[]);
       int format(int argc, char* argv[]);
       int show(int argc, char* argv[]);
-      int bcast(int argc, char* argv[]);
+      int partial_get(int argc, char* argv[]);
+      int update(int argc, char* argv[]);
   };
 }

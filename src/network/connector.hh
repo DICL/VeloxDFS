@@ -1,6 +1,6 @@
 #pragma once
 #include "netobserver.hh"
-#include "../common/context.hh"
+#include "../common/context_singleton.hh"
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/asio/error.hpp>

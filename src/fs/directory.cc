@@ -105,7 +105,7 @@ namespace eclipse {
     open_db();
     mutex.lock();
     sprintf(sql, "CREATE TABLE file_table( \
-      name       TEXT  NOT NULL, \
+        name       TEXT  NOT NULL, \
         hash_key   INT   NOT NULL, \
         size       INT   NOT NULL, \
         num_block  INT   NOT NULL, \
@@ -113,16 +113,20 @@ namespace eclipse {
         replica    INT   NOT NULL, \
         PRIMARY KEY (name));"); 
 
-        rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
-    if (rc != SQLITE_OK) {
-      context.logger->error("SQL error: %s\n", zErrMsg);
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      if (rc != SQLITE_ERROR)
+        context.logger->error("SQL error: %s\n", zErrMsg);
+
       sqlite3_free(zErrMsg);
     } else {
       context.logger->info("file_table created successfully\n");
     }
 
     sprintf(sql, "CREATE TABLE block_table( \
-      name       TEXT      NOT NULL, \
+        name       TEXT      NOT NULL, \
         file_name     TEXT      NOT NULL, \
         seq           INT       NOT NULL, \
         hash_key      INT       NOT NULL, \
@@ -135,9 +139,13 @@ namespace eclipse {
         is_committed  INT               , \
         PRIMARY KEY (name));"); 
 
-        rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
-    if (rc != SQLITE_OK) {
-      context.logger->error("SQL error: %s\n", zErrMsg);
+    // Execute SQL statement
+    rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
+    if(rc != SQLITE_OK)
+    {
+      if (rc != SQLITE_ERROR)
+        context.logger->error("SQL error: %s\n", zErrMsg);
+
       sqlite3_free(zErrMsg);
     } else {
       context.logger->info("block_table created successfully\n");

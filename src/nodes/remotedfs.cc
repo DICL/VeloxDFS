@@ -7,7 +7,9 @@ using namespace eclipse;
 namespace ph = std::placeholders;
 
 // Constructor {{{
-RemoteDFS::RemoteDFS () : Router() {
+RemoteDFS::RemoteDFS (PeerDFS* p, network::Network* net) : Router(net) {
+  peer_dfs = p;
+
   using namespace std::placeholders;
   using std::placeholders::_1;
   using std::placeholders::_2;
@@ -21,15 +23,6 @@ RemoteDFS::RemoteDFS () : Router() {
   rt.insert({"FileDel", bind(&RemoteDFS::delete_file, this, _1, _2)});
   rt.insert({"FormatRequest", bind(&RemoteDFS::request_format, this, _1, _2)});
   rt.insert({"FileExist", bind(&RemoteDFS::file_exist, this, _1, _2)});
-}
-// }}}
-// establish {{{
-bool RemoteDFS::establish () {
-  peer  = make_unique<PeerDFS> ();
-  peer_dfs = dynamic_cast<PeerDFS*> (peer.get());
-  peer_dfs->establish();
-  Router::establish();
-  return true;
 }
 // }}}
 // BlockInfo {{{
@@ -50,6 +43,7 @@ void RemoteDFS::insert_block (messages::Message* m_, int n_channel) {
 
   network->send(n_channel, &reply);
 }
+// }}}
 // delete_block {{{
 void RemoteDFS::delete_block (messages::Message* m_, int n_channel) {
   auto m = dynamic_cast<messages::BlockDel*> (m_);
