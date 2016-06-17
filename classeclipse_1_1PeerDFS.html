@@ -135,12 +135,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>on_connect</b> () ove
 void&#160;</td><td class="memItemRight" valign="bottom"><b>on_disconnect</b> (int) override</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4a32625e35a53baeb822bf89089d3d0d"></a><!-- doxytag: member="eclipse::PeerDFS::insert" ref="a4a32625e35a53baeb822bf89089d3d0d" args="(uint32_t, std::string, std::string)" -->
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (uint32_t, std::string, std::string)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abcdda3f787bd1257ae39ecb3d3161114"></a><!-- doxytag: member="eclipse::PeerDFS::update" ref="abcdda3f787bd1257ae39ecb3d3161114" args="(uint32_t, std::string, std::string, uint32_t, uint32_t)" -->
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (uint32_t, std::string, std::string, uint32_t, uint32_t)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a72d626f1ad6bc1ab3250bb3c524f32d9"></a><!-- doxytag: member="eclipse::PeerDFS::request" ref="a72d626f1ad6bc1ab3250bb3c524f32d9" args="(uint32_t, std::string, req_func)" -->
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>request</b> (uint32_t, std::string, req_func)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ec1db2ba6f61cc9b48534c650f03bc1"></a><!-- doxytag: member="eclipse::PeerDFS::close" ref="a4ec1db2ba6f61cc9b48534c650f03bc1" args="()" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>close</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a411599f44add7a995632fa4534328a65"></a><!-- doxytag: member="eclipse::PeerDFS::insert_block" ref="a411599f44add7a995632fa4534328a65" args="(messages::BlockInfo *)" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>insert_block</b> (<a class="el" href="structeclipse_1_1messages_1_1BlockInfo.html">messages::BlockInfo</a> *)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a24e33c2d9b23676e73c310c3d0dd7814"></a><!-- doxytag: member="eclipse::PeerDFS::update_block" ref="a24e33c2d9b23676e73c310c3d0dd7814" args="(messages::BlockUpdate *)" -->
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>update_block</b> (<a class="el" href="structeclipse_1_1messages_1_1BlockUpdate.html">messages::BlockUpdate</a> *)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a05268f8f4f794d9d180e03fa40a33225"></a><!-- doxytag: member="eclipse::PeerDFS::insert_file" ref="a05268f8f4f794d9d180e03fa40a33225" args="(messages::FileInfo *)" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>insert_file</b> (<a class="el" href="structeclipse_1_1messages_1_1FileInfo.html">messages::FileInfo</a> *)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="add91011f0cd70ff80c051e87e972dcda"></a><!-- doxytag: member="eclipse::PeerDFS::delete_block" ref="add91011f0cd70ff80c051e87e972dcda" args="(messages::BlockDel *)" -->
@@ -158,6 +162,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>file_exist</b> (std::
 <tr><td class="memTemplParams" colspan="2"><a class="anchor" id="aaaaf603bd7e9f6e1eacec01ef80f2ef4"></a><!-- doxytag: member="eclipse::PeerDFS::process" ref="aaaaf603bd7e9f6e1eacec01ef80f2ef4" args="(KeyValue *m)" -->
 template&lt;&gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>process</b> (<a class="el" href="structeclipse_1_1messages_1_1KeyValue.html">KeyValue</a> *m)</td></tr>
+<tr><td class="memTemplParams" colspan="2"><a class="anchor" id="a01a81dfc0de869d4721817903575464a"></a><!-- doxytag: member="eclipse::PeerDFS::process" ref="a01a81dfc0de869d4721817903575464a" args="(OffsetKeyValue *m)" -->
+template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>process</b> (<a class="el" href="structeclipse_1_1messages_1_1OffsetKeyValue.html">OffsetKeyValue</a> *m)</td></tr>
 <tr><td class="memTemplParams" colspan="2"><a class="anchor" id="a9e6787d8ba2aa4d2e04351a43b6ef89a"></a><!-- doxytag: member="eclipse::PeerDFS::process" ref="a9e6787d8ba2aa4d2e04351a43b6ef89a" args="(KeyRequest *m)" -->
 template&lt;&gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>process</b> (<a class="el" href="structeclipse_1_1messages_1_1KeyRequest.html">KeyRequest</a> *m)</td></tr>
@@ -167,6 +174,9 @@ template&lt;&gt; </td></tr>
 <tr><td class="memTemplParams" colspan="2"><a class="anchor" id="a14213037acddded887399cdbdcabba5f"></a><!-- doxytag: member="eclipse::PeerDFS::process" ref="a14213037acddded887399cdbdcabba5f" args="(BlockInfo *m)" -->
 template&lt;&gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>process</b> (<a class="el" href="structeclipse_1_1messages_1_1BlockInfo.html">BlockInfo</a> *m)</td></tr>
+<tr><td class="memTemplParams" colspan="2"><a class="anchor" id="a0033b7670d83e644c513e5f33c3fc062"></a><!-- doxytag: member="eclipse::PeerDFS::process" ref="a0033b7670d83e644c513e5f33c3fc062" args="(BlockUpdate *m)" -->
+template&lt;&gt; </td></tr>
+<tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>process</b> (<a class="el" href="structeclipse_1_1messages_1_1BlockUpdate.html">BlockUpdate</a> *m)</td></tr>
 <tr><td class="memTemplParams" colspan="2"><a class="anchor" id="a486faa7bdf1493c99693dd03b34fb4f8"></a><!-- doxytag: member="eclipse::PeerDFS::process" ref="a486faa7bdf1493c99693dd03b34fb4f8" args="(BlockDel *m)" -->
 template&lt;&gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>process</b> (<a class="el" href="structeclipse_1_1messages_1_1BlockDel.html">BlockDel</a> *m)</td></tr>
@@ -210,7 +220,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>network_size</b></td><
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jun 16 2016 10:50:43 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 17 2016 08:05:00 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
