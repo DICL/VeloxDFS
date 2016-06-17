@@ -4,6 +4,7 @@
 #include "local_io.hh"
 #include "../network/asyncnode.hh"
 #include "../messages/blockinfo.hh"
+#include "../messages/blockupdate.hh"
 #include "../messages/fileinfo.hh"
 #include "../messages/keyrequest.hh"
 #include "../messages/filerequest.hh"
@@ -33,10 +34,12 @@ class PeerDFS: public Node, public AsyncNode {
     void on_disconnect(int) override;
 
     virtual void insert (uint32_t, std::string, std::string);
+    virtual void update (uint32_t, std::string, std::string, uint32_t, uint32_t);
     virtual void request (uint32_t, std::string, req_func);
 
     void close ();
     bool insert_block (messages::BlockInfo*);
+    bool update_block (messages::BlockUpdate*);
     bool insert_file (messages::FileInfo*);
     bool delete_block (messages::BlockDel*);
     bool delete_file (messages::FileDel*);

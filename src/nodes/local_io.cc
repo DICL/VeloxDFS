@@ -20,12 +20,33 @@ void Local_io::write (std::string name, std::string v) {
   file.close();
 }
 // }}}
+// update {{{
+void Local_io::update (std::string name, std::string v, uint32_t pos, uint32_t len) {
+  string file_path = disk_path + string("/") + name;
+  fstream file (file_path, ios::out|ios::in);
+  file.seekp(pos, ios::beg);
+  file.write(v.c_str(), len);
+  file.close();
+}
+// }}}
 // read {{{
 std::string Local_io::read (string name) {
   ifstream in (disk_path + string("/") + name);
   string value ((std::istreambuf_iterator<char>(in)),
       std::istreambuf_iterator<char>());
 
+  in.close();
+  return value;
+}
+// }}}
+// pread {{{
+std::string Local_io::pread (string name, uint32_t pos, uint32_t len) {
+  ifstream in (disk_path + string("/") + name);
+  in.seekg(pos, in.beg);
+  char *buffer = new char[len];
+  in.read(buffer, len);
+  string value(buffer);
+  delete[] buffer;
   in.close();
   return value;
 }

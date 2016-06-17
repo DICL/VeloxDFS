@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <cstdint>
 
 namespace eclipse {
 
@@ -10,7 +11,9 @@ namespace eclipse {
 class Local_io {
   public:
     void write (std::string, std::string);
+    void update (std::string, std::string, uint32_t, uint32_t);
     std::string read (std::string);
+    std::string pread (std::string, uint32_t, uint32_t);
     void remove (std::string);
     bool format ();
 

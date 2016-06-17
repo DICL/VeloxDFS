@@ -8,12 +8,14 @@ bin_PROGRAMS     = eclipse_node dfs
 messages_files   = src/messages/boundaries.cc      \
                    src/messages/message.cc         \
                    src/messages/keyvalue.cc        \
+                   src/messages/offsetkv.cc        \
                    src/messages/keyrequest.cc      \
                    src/messages/control.cc         \
                    src/messages/boost_impl.cc      \
                    src/messages/factory.cc         \
                    src/messages/fileinfo.cc        \
                    src/messages/blockinfo.cc       \
+                   src/messages/blockupdate.cc     \
                    src/messages/task.cc            \
                    src/messages/reply.cc           \
                    src/messages/filerequest.cc     \
