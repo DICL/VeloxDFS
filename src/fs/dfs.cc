@@ -574,25 +574,33 @@ namespace eclipse{
       bool first_block = true;
       bool final_block = false;
       for (auto block_name : fd->blocks) {
+        // pass until find the block which has start_offset
         if (passed_byte + fd->block_size[block_seq] < start_offset) {
           passed_byte += fd->block_size[block_seq];
           block_seq++;
           continue;
         } else {
+          // If this block is the first one of updating blocks,
+          // start position will be start_offset - passed_byte.
+          // Otherwise, start position will be 0.
           uint32_t hash_key = fd->hash_keys[block_seq];
-          //          auto tmp_socket = connect(boundaries.get_index(hash_key));
           if (first_block) {
             first_block = false;
             ori_start_pos = start_offset - passed_byte;
           } else {
             ori_start_pos = 0;
           }
+          // write length means the lenght which should be repliaced in THIS block.
+          // to_write_byte means remaining total bytes to write
+          // If this block is the last one, write_length should be same as to_write_byte
+          // Otherwise, write_length should be same as block_size - start position
           uint32_t write_length = fd->block_size[block_seq] - ori_start_pos;
           block_seq++;
           if (to_write_byte < write_length) {
             final_block = true;
             write_length = to_write_byte;
           }
+          // send message
           BlockUpdate bu;
           bu.name = block_name; 
           bu.replica = fd->replica; 
@@ -608,6 +616,7 @@ namespace eclipse{
             cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
             return EXIT_FAILURE;
           } 
+          // calculate total write bytes and remaining write bytes
           write_byte_cnt += write_length;
           if (final_block) {
             break;
