@@ -17,6 +17,7 @@ RemoteDFS::RemoteDFS (PeerDFS* p, network::Network* net) : Router(net) {
   rt.insert({"BlockInfo",  bind(&RemoteDFS::insert_block, this, _1, _2)});
   rt.insert({"BlockUpdate",  bind(&RemoteDFS::update_block, this, _1, _2)});
   rt.insert({"FileInfo",   bind(&RemoteDFS::insert_file, this, _1, _2)});
+  rt.insert({"FileUpdate",   bind(&RemoteDFS::update_file, this, _1, _2)});
   rt.insert({"FileRequest", bind(&RemoteDFS::request_file, this, _1, _2)});
   rt.insert({"BlockRequest", bind(&RemoteDFS::request_block, this, _1, _2)});
   rt.insert({"FileList", bind(&RemoteDFS::request_ls, this, _1, _2)});
@@ -101,6 +102,27 @@ void RemoteDFS::insert_file (messages::Message* m_, int n_channel) {
 
   network->send(n_channel, &reply);
 }
+// }}}
+// FileUpdate* {{{
+void RemoteDFS::update_file (messages::Message* m_, int n_channel) {
+  auto m = dynamic_cast<messages::FileUpdate*> (m_);
+  logger->info ("FileUpdate received");
+
+  bool ret = peer_dfs->update_file (m);
+  Reply reply;
+
+  if (ret) {
+    reply.message = "OK";
+
+  } else {
+    reply.message = "FAIL";
+    reply.details = "File doesn't exist";
+  }
+
+  network->send(n_channel, &reply);
+}
+// }}}
+// {{{ FileDel
 void RemoteDFS::delete_file (messages::Message* m_, int n_channel) {
   auto m = dynamic_cast<messages::FileDel*> (m_);
   logger->info ("FileDel received");

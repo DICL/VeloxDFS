@@ -45,8 +45,12 @@ int main(int argc, char* argv[]) {
       dfs.DFS::update(argc, argv);
       return EXIT_SUCCESS;
     }
+    else if (op.compare("append") == 0) {
+      dfs.DFS::append(argc, argv);
+      return EXIT_SUCCESS;
+    }
   }
   cerr << "[ERR] Unknown operation" << endl;
-  cout << "[INFO] dfs put|get|cat|ls|rm|format|pget|update" << endl;
+  cout << "[INFO] dfs put|get|cat|ls|rm|format|pget|update|append" << endl;
   return EXIT_FAILURE;
 }
