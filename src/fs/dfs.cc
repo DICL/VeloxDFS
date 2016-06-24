@@ -297,7 +297,7 @@ namespace eclipse{
         float hsize = 0;
         int tabsize = 12;
         string unit;
-        cout.precision(1);
+        cout.precision(2);
         if (fl.size < K) {
           hsize = (float)fl.size;
           unit = "B";
@@ -687,123 +687,118 @@ namespace eclipse{
             if (BLOCK_SIZE - ori_start_pos <= 1) {
               update_block = false;
             }
-            if (update_block == true) {
-              if (ori_start_pos + to_write_byte < BLOCK_SIZE) {
-                myfile.seekg(to_write_byte-1, myfile.beg);
+          }
+          if (update_block == true) {
+            if (ori_start_pos + to_write_byte < BLOCK_SIZE) {
+              myfile.seekg(to_write_byte-1, myfile.beg);
+            } else {
+              myfile.seekg(BLOCK_SIZE - ori_start_pos - 1, myfile.beg);
+            }
+            while (1) {
+              if (myfile.tellg() <= 0) {
+                update_block = false;
+                break;
+              } else if (myfile.peek() =='\n') {
+                break;
               } else {
-                myfile.seekg(BLOCK_SIZE - ori_start_pos - 1, myfile.beg);
+                myfile.seekg(-1, myfile.cur);
               }
+            }
+          }
+          if (update_block == true) {
+            write_length = myfile.tellg();
+            myfile.seekg(0, myfile.beg);
+            char *buffer = new char[write_length+1];
+            bzero(buffer, write_length+1);
+            myfile.read(buffer, write_length);
+            string sbuffer(buffer);
+            delete[] buffer;
+            BlockUpdate bu;
+            bu.name = fd->blocks[block_seq];
+            bu.file_name = ori_file_name;
+            bu.seq = block_seq;
+            bu.replica = fd->replica;
+            bu.hash_key = hash_key;
+            bu.pos = ori_start_pos;
+            bu.len = write_length;
+            bu.content = sbuffer;
+            bu.size = ori_start_pos + write_length;
+            auto tmp_socket = connect(boundaries.get_index(file_hash_key));
+            send_message(tmp_socket.get(), &bu);
+            auto reply = read_reply<Reply> (tmp_socket.get());
+            tmp_socket->close();
+            if (reply->message != "OK") {
+              cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
+              return EXIT_FAILURE;
+            } 
+            // calculate total write bytes and remaining write bytes
+            to_write_byte -= write_length;
+            write_byte_cnt += write_length;
+            update_block = false;
+          } else {
+            // make new block
+            block_seq++;
+            int which_server = ((file_hash_key % NUM_NODES) + block_seq) % NUM_NODES;
+            start = write_byte_cnt;
+            end = start + BLOCK_SIZE -1;
+            BlockInfo block_info;
+
+            if (end < to_write_byte) {
+              // not final block
+              myfile.seekg(start+BLOCK_SIZE-1, myfile.beg);
               while (1) {
-                if (myfile.tellg() <= 0) {
-                  update_block = false;
-                  break;
-                } else if (myfile.peek() =='\n') {
+                if (myfile.peek() =='\n') {
                   break;
                 } else {
                   myfile.seekg(-1, myfile.cur);
+                  end--;
                 }
               }
-            }
-            if (update_block) {
-              write_length = myfile.tellg();
-              write_length++;
-              myfile.seekg(0, myfile.beg);
-              char *buffer = new char[write_length+1];
-              bzero(buffer, write_length+1);
-              myfile.read(buffer, write_length);
-              string sbuffer(buffer);
-              delete[] buffer;
-              BlockUpdate bu;
-              bu.name = fd->blocks[block_seq];
-              bu.file_name = ori_file_name;
-              bu.seq = block_seq;
-              bu.replica = fd->replica;
-              bu.hash_key = hash_key;
-              bu.pos = ori_start_pos;
-              bu.len = write_length;
-              bu.content = sbuffer;
-              bu.size = ori_start_pos + write_length;
-              auto tmp_socket = connect(boundaries.get_index(file_hash_key));
-              send_message(tmp_socket.get(), &bu);
-              auto reply = read_reply<Reply> (tmp_socket.get());
-              tmp_socket->close();
-              if (reply->message != "OK") {
-                cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
-                return EXIT_FAILURE;
-              } 
-              // calculate total write bytes and remaining write bytes
-              to_write_byte -= write_length;
-              write_byte_cnt += write_length;
-              update_block = false;
-              block_seq++;
             } else {
-              // make new block
-              block_seq++;
-              int which_server = ((file_hash_key % NUM_NODES) + block_seq) % NUM_NODES;
-              start = write_byte_cnt;
-              end = start + BLOCK_SIZE -1;
-              BlockInfo block_info;
-
-              if (end < to_write_byte) {
-                // not final block
-                myfile.seekg(start+BLOCK_SIZE-1, myfile.beg);
-                while (1) {
-                  if (myfile.peek() =='\n') {
-                    break;
-                  } else {
-                    myfile.seekg(-1, myfile.cur);
-                    end--;
-                  }
-                }
-              } else {
-                end = start + to_write_byte;
-              }
-              block_size = (uint32_t) end - start;
-              write_length = block_size;
-              char *buffer = new char[block_size+1];
-              bzero(buffer, block_size+1);
-              myfile.read(buffer, block_size);
-              string sbuffer(buffer);
-              delete[] buffer;
-              myfile.seekg(start, myfile.beg);
-              block_info.content = sbuffer;
-
-              block_info.name = ori_file_name + "_" + to_string(block_seq);
-              block_info.file_name = ori_file_name;
-              block_info.hash_key = boundaries.random_within_boundaries(which_server);
-              block_info.seq = block_seq++;
-              block_info.size = block_size;
-              block_info.type = static_cast<unsigned int>(FILETYPE::Normal);
-              block_info.replica = replica;
-              block_info.node = nodes[which_server];
-              block_info.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
-              block_info.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
-              block_info.is_committed = 1;
-
-              send_message(socket.get(), &block_info);
-              auto reply = read_reply<Reply> (socket.get());
-
-              if (reply->message != "OK") {
-                cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
-                return EXIT_FAILURE;
-              } 
-              to_write_byte -= write_length;
-              write_byte_cnt += write_length;
-              if (to_write_byte == 0) {
-                break;
-              }
-              start = end;
-              end = start + BLOCK_SIZE - 1;
-              which_server = (which_server + 1) % NUM_NODES;
+              end = start + to_write_byte;
             }
+            block_size = (uint32_t) end - start;
+            write_length = block_size;
+            char *buffer = new char[block_size+1];
+            bzero(buffer, block_size+1);
+            myfile.read(buffer, block_size);
+            string sbuffer(buffer);
+            delete[] buffer;
+            myfile.seekg(start, myfile.beg);
+            block_info.content = sbuffer;
+
+            block_info.name = ori_file_name + "_" + to_string(block_seq);
+            block_info.file_name = ori_file_name;
+            block_info.hash_key = boundaries.random_within_boundaries(which_server);
+            block_info.seq = block_seq;
+            block_info.size = block_size;
+            block_info.type = static_cast<unsigned int>(FILETYPE::Normal);
+            block_info.replica = replica;
+            block_info.node = nodes[which_server];
+            block_info.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
+            block_info.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
+            block_info.is_committed = 1;
+
+            send_message(socket.get(), &block_info);
+            auto reply = read_reply<Reply> (socket.get());
+
+            if (reply->message != "OK") {
+              cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
+              return EXIT_FAILURE;
+            } 
+            to_write_byte -= write_length;
+            write_byte_cnt += write_length;
+            if (to_write_byte == 0) {
+              break;
+            }
+            start = end;
+            end = start + BLOCK_SIZE - 1;
+            which_server = (which_server + 1) % NUM_NODES;
           }
-          if (to_write_byte == 0) {
-            break;
-          }
-        } 
+        }
         FileUpdate fu;
         fu.name = ori_file_name;
-        fu.num_block = block_seq;
+        fu.num_block = block_seq+1;
         fu.size = fd->size + new_file_size;
         send_message(socket.get(), &fu);
         auto reply = read_reply<Reply> (socket.get());
