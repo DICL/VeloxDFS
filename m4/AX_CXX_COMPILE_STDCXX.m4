@@ -96,7 +96,7 @@ AC_DEFUN([AX_CXX_COMPILE_STDCXX], [dnl
     dnl HP's aCC needs +std=c++11 according to:
     dnl http://h21007.www2.hp.com/portal/download/files/unprot/aCxx/PDF_Release_Notes/769149-001.pdf
     dnl Cray's crayCC needs "-h std=c++11"
-    for switch in -std=c++$1 -std=c++0x +std=c++$1 "-h std=c++$1"; do
+    for switch in -std=c++$1 -std=c++0x -std=c++$1 "-std=c++$1"; do
       cachevar=AS_TR_SH([ax_cv_cxx_compile_cxx$1_$switch])
       AC_CACHE_CHECK(whether $CXX supports C++$1 features with $switch,
                      $cachevar,
@@ -449,113 +449,9 @@ m4_define([_AX_CXX_COMPILE_STDCXX_testbody_new_in_14], [[
 
 #error "This is not a C++ compiler"
 
-#elif __cplusplus < 201402L
+#elif __cplusplus < 201300L
 
 #error "This is not a C++14 compiler"
-
-#else
-
-namespace cxx14
-{
-
-  namespace test_polymorphic_lambdas
-  {
-
-    int
-    test()
-    {
-      const auto lambda = [](auto&&... args){
-        const auto istiny = [](auto x){
-          return (sizeof(x) == 1UL) ? 1 : 0;
-        };
-        const int aretiny[] = { istiny(args)... };
-        return aretiny[0];
-      };
-      return lambda(1, 1L, 1.0f, '1');
-    }
-
-  }
-
-  namespace test_binary_literals
-  {
-
-    constexpr auto ivii = 0b0000000000101010;
-    static_assert(ivii == 42, "wrong value");
-
-  }
-
-  namespace test_generalized_constexpr
-  {
-
-    template < typename CharT >
-    constexpr unsigned long
-    strlen_c(const CharT *const s) noexcept
-    {
-      auto length = 0UL;
-      for (auto p = s; *p; ++p)
-        ++length;
-      return length;
-    }
-
-    static_assert(strlen_c("") == 0UL, "");
-    static_assert(strlen_c("x") == 1UL, "");
-    static_assert(strlen_c("test") == 4UL, "");
-    static_assert(strlen_c("another\0test") == 7UL, "");
-
-  }
-
-  namespace test_lambda_init_capture
-  {
-
-    int
-    test()
-    {
-      auto x = 0;
-      const auto lambda1 = [a = x](int b){ return a + b; };
-      const auto lambda2 = [a = lambda1(x)](){ return a; };
-      return lambda2();
-    }
-
-  }
-
-  namespace test_digit_seperators
-  {
-
-    constexpr auto ten_million = 100'000'000;
-    static_assert(ten_million == 100000000, "");
-
-  }
-
-  namespace test_return_type_deduction
-  {
-
-    auto f(int& x) { return x; }
-    decltype(auto) g(int& x) { return x; }
-
-    template < typename T1, typename T2 >
-    struct is_same
-    {
-      static constexpr auto value = false;
-    };
-
-    template < typename T >
-    struct is_same<T, T>
-    {
-      static constexpr auto value = true;
-    };
-
-    int
-    test()
-    {
-      auto x = 0;
-      static_assert(is_same<int, decltype(f(x))>::value, "");
-      static_assert(is_same<int&, decltype(g(x))>::value, "");
-      return x;
-    }
-
-  }
-
-}  // namespace cxx14
 
 #endif  // __cplusplus >= 201402L
 
