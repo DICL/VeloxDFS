@@ -16,6 +16,7 @@ AM_COND_IF([DEFAULT_CXXFLAGS], [CXXFLAGS='-g -O0 -march=native'])
 CXXFLAGS="$CXXFLAGS -std=c++14" #make sure the compiler support C++14
 AC_PROG_CXX
 AC_LANG([C++])
+AX_CXX_COMPILE_STDCXX([14], [noext], [mandatory])
 
 # Argumeznts {{{
 AC_ARG_ENABLE([samples],
