@@ -261,18 +261,13 @@ namespace eclipse {
     sqlite3_close(db);
   } 
 
-  void Directory::update_file_metadata(string name, FileInfo file_info) {
+  void Directory::update_file_metadata(FileUpdate file_update) {
     open_db();
     sprintf(sql, "UPDATE file_table set \
-        name='%s', hash_key=%" PRIu32 ", size=%" PRIu64 ", \
-        num_block=%u, type=%u, replica=%u where name='%s';",
-        file_info.name.c_str(),
-        file_info.hash_key,
-        file_info.size,
-        file_info.num_block,
-        file_info.type,
-        file_info.replica,
-        name.c_str());
+        size=%" PRIu64 ", num_block=%u where name='%s';",
+        file_update.size,
+        file_update.num_block,
+        file_update.name.c_str());
 
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
@@ -284,26 +279,13 @@ namespace eclipse {
     sqlite3_close(db);
   }
 
-  void Directory::update_block_metadata(string file_name, unsigned int seq, BlockInfo block_info) {
+  void Directory::update_block_metadata(BlockUpdate block_update) {
     open_db();
     sprintf(sql, "UPDATE block_table set \
-        name='%s', file_name='%s', seq=%u, hash_key=%" PRIu32 ", \
-        size=%" PRIu32 ", type=%u, replica=%u, node='%s', l_node='%s', r_node='%s' \
-        , is_committed=%u where (file_name='%s') and (seq=%u);",
-        block_info.name.c_str(),
-        block_info.file_name.c_str(),
-        block_info.seq,
-        block_info.hash_key,
-        block_info.size,
-        block_info.type,
-        block_info.replica,
-        block_info.node.c_str(),
-        block_info.l_node.c_str(),
-        block_info.r_node.c_str(),
-        block_info.is_committed,
-        file_name.c_str(),
-        seq);
-
+        size=%" PRIu32 " where (file_name='%s') and (seq=%u);",
+        block_update.size,
+        block_update.file_name.c_str(),
+        block_update.seq);
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
       context.logger->error("SQL error: %s\n", zErrMsg);

@@ -6,6 +6,7 @@
 #include "../messages/blockinfo.hh"
 #include "../messages/blockupdate.hh"
 #include "../messages/fileinfo.hh"
+#include "../messages/fileupdate.hh"
 #include "../messages/keyrequest.hh"
 #include "../messages/filerequest.hh"
 #include "../messages/filedescription.hh"
@@ -41,6 +42,7 @@ class PeerDFS: public Node, public AsyncNode {
     bool insert_block (messages::BlockInfo*);
     bool update_block (messages::BlockUpdate*);
     bool insert_file (messages::FileInfo*);
+    bool update_file (messages::FileUpdate*);
     bool delete_block (messages::BlockDel*);
     bool delete_file (messages::FileDel*);
     bool list (messages::FileList*);

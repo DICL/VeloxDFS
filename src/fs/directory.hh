@@ -9,7 +9,9 @@
 #include <mutex>
 #include "../common/context_singleton.hh"
 #include "../messages/blockinfo.hh"
+#include "../messages/blockupdate.hh"
 #include "../messages/fileinfo.hh"
+#include "../messages/fileupdate.hh"
 
 namespace eclipse {
   using namespace messages;
@@ -39,8 +41,8 @@ namespace eclipse {
       void select_block_metadata(std::string file_name, unsigned int block_seq, BlockInfo *block_info);
       void select_all_file_metadata(std::vector<FileInfo> &file_list);
       void select_all_block_metadata(std::vector<BlockInfo> &block_list);
-      void update_file_metadata(std::string file_name, FileInfo file_info);
-      void update_block_metadata(std::string file_name, unsigned int block_seq, BlockInfo block_info);
+      void update_file_metadata(FileUpdate file_update);
+      void update_block_metadata(BlockUpdate block_update);
       void delete_file_metadata(std::string file_name);
       void delete_block_metadata(std::string file_name, unsigned int block_seq);
       void display_file_metadata();
