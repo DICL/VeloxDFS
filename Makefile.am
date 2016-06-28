@@ -1,7 +1,7 @@
 include tests/Makefile.am
 
-AM_CPPFLAGS      = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h
-AM_CXXFLAGS      = -Wall -std=c++14 -ggdb3 
+AM_CPPFLAGS      = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h $(BOOST_CPPFLAGS)
+AM_CXXFLAGS      = $(CXXFLAGS) -Wall 
 
 bin_PROGRAMS     = eclipse_node dfs
 
@@ -35,11 +35,11 @@ libecfs_la_SOURCES  = src/common/hash.cc src/common/settings.cc \
 											src/common/context.cc src/common/dl_loader.cc \
 											src/common/context_singleton.cc
 
-libecfs_la_LDFLAGS  = -version-info 0:0:0 
+libecfs_la_LDFLAGS  = $(BOOST_LDFLAGS) -version-info 0:0:0 
 
 # Binaries ----
-AM_LDFLAGS          = -static
-LDADD               = libecfs.la -lboost_system -lboost_thread -lboost_serialization -lboost_system -lboost_coroutine -lboost_context
+AM_LDFLAGS          = -static $(BOOST_LDFLAGS)
+LDADD               = libecfs.la -lboost_system -lboost_serialization -lboost_coroutine -lboost_thread -lboost_context
 
 eclipse_node_SOURCES = src/targets/node_main.cc \
 											 src/network/channel.cc \
@@ -57,14 +57,10 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
 											 src/nodes/node.cc \
 											 $(messages_files)
 
-eclipse_node_LDADD  = $(LDADD) -lsqlite3
-
 dfs_SOURCES         = src/fs/dfs.cc \
                       src/fs/directory.cc \
                       src/fs/main.cc \
 											$(messages_files)
-
-dfs_LDADD           = $(LDADD) -lsqlite3
 
 pkginclude_HEADERS  = src/common/ecfs.hh src/common/settings.hh
 
