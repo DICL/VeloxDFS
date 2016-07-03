@@ -1,10 +1,13 @@
-AC_INIT([EclipseDFS], [01.04.00], [vicente.bolea@gmail.com], [], [dicl.unist.ac.kr])
+AC_INIT([EclipseDFS], 
+    m4_esyscmd_s([git describe --tags | grep -o "[[:digit:]]\.[[:digit:]]\.[[:digit:]]"]), 
+    [vicente.bolea@gmail.com], 
+    [], [dicl.unist.ac.kr])
 AC_CONFIG_AUX_DIR([./.autotools_aux])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 AM_SILENT_RULES([yes])
 LT_INIT([dlopen])
 
-AC_CONFIG_MACRO_DIR([./m4/])
+#AC_CONFIG_MACRO_DIR([./m4/])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile ])
 AC_CONFIG_FILES([tests/nodes_executor],    [chmod +x tests/nodes_executor])

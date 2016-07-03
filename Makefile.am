@@ -1,3 +1,4 @@
+ACLOCAL_AMFLAGS  = -I m4
 include tests/Makefile.am
 
 AM_CPPFLAGS      = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h $(BOOST_CPPFLAGS)
