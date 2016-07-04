@@ -1,4 +1,3 @@
-ACLOCAL_AMFLAGS  = -I m4
 include tests/Makefile.am
 
 AM_CPPFLAGS      = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h $(BOOST_CPPFLAGS)
@@ -39,8 +38,13 @@ libecfs_la_SOURCES  = src/common/hash.cc src/common/settings.cc \
 libecfs_la_LDFLAGS  = $(BOOST_LDFLAGS) -version-info 0:0:0 
 
 # Binaries ----
+if BOOST_STATIC
+AM_LDFLAGS          = -static $(BOOST_LDFLAGS) -Wl,--start-group -Wl,-Bstatic,-lboost_system,-lboost_serialization,-lboost_coroutine,-lboost_thread,-lboost_context,-Bdynamic
+LDADD               = libecfs.la -lrt
+else 
 AM_LDFLAGS          = -static $(BOOST_LDFLAGS)
 LDADD               = libecfs.la -lboost_system -lboost_serialization -lboost_coroutine -lboost_thread -lboost_context
+endif
 
 eclipse_node_SOURCES = src/targets/node_main.cc \
 											 src/network/channel.cc \

@@ -30,6 +30,7 @@ AC_ARG_ENABLE([debug],
     [debug="$withval"], [debug=no])
 
 AM_CONDITIONAL(COPY_SAMPLES, [test "$enable_samples" != no ])
+AX_BOOST_STATIC_LINKAGE
 
 #}}}
 # Dependencies checkings {{{
@@ -80,9 +81,10 @@ WARN([\
  Dependencies
  ------------
  [Required]
- Have Boost?......: ${HAVE_BOOST-YES}
- BOOST CPPFLAGS...: $BOOST_CPPFLAGS
- BOOST LDFLAGS....: $BOOST_LDFLAGS
+ Have Boost?.............: ${HAVE_BOOST-YES}
+ BOOST CPPFLAGS..........: $BOOST_CPPFLAGS
+ BOOST LDFLAGS...........: $BOOST_LDFLAGS
+ Static Boost linkage?...: ${enable_boost_static:-NO}
 
  [Optional]
  Have UnitTest++?.: $have_unittest
