@@ -132,6 +132,12 @@ template<> void PeerDFS::process(Control* m) {
   }
 }
 // }}}
+// process (MetaData* m) {{{
+template<> void PeerDFS::process(MetaData* m) {
+  std::string file_name = m->node + "_replica";
+  local_io.write(file_name, m->content);
+}
+// }}}
 // process (BlockInfo* m) {{{
 template<> void PeerDFS::process(BlockInfo* m) {
   local_io.write(m->name, m->content);
@@ -174,6 +180,10 @@ void PeerDFS::on_read (Message* m, int) {
   } else if (type == "BlockDel") {
     auto m_ = dynamic_cast<BlockDel*>(m);
     process(m_);
+
+  } else if (type == "MetaData") {
+    auto m_ = dynamic_cast<MetaData*>(m);
+    process(m_);
   }
 }
 // }}}
@@ -188,17 +198,18 @@ void PeerDFS::on_disconnect(int id) {
 // }}}
 // insert_file {{{
 bool PeerDFS::insert_file(messages::FileInfo* f) {
- bool ret = directory.file_exist(f->name.c_str());
+  bool ret = directory.file_exist(f->name.c_str());
 
- if (ret) {
-   INFO("File:%s exists in db, ret = %i", f->name.c_str(), ret);
-   return false;
- }
+  if (ret) {
+    INFO("File:%s exists in db, ret = %i", f->name.c_str(), ret);
+    return false;
+  }
 
- directory.insert_file_metadata(*f);
+  directory.insert_file_metadata(*f);
+  replicate_metadata();
 
- logger->info("Saving to SQLite db");
- return true;
+  logger->info("Saving to SQLite db");
+  return true;
 }
 // }}}
 // insert_block {{{
@@ -216,6 +227,7 @@ bool PeerDFS::insert_block(messages::BlockInfo* m) {
     uint32_t tmp_hash_key = boundaries->random_within_boundaries(tmp_node);
     insert(tmp_hash_key, m->name, m->content);
   }
+  replicate_metadata();
   return true;
 }
 // }}}
@@ -255,6 +267,7 @@ bool PeerDFS::delete_block(messages::BlockDel* m) {
       network->send(tmp_node, m);
     }
   }
+  replicate_metadata();
   return true;
 }
 // }}}
@@ -267,6 +280,7 @@ bool PeerDFS::delete_file (messages::FileDel* f) {
     return false;
   }
   directory.delete_file_metadata(f->name);
+  replicate_metadata();
   INFO("Removing from SQLite db");
   return true;
 }
@@ -314,6 +328,22 @@ bool PeerDFS::format () {
 // file_exist {{{
 bool PeerDFS::file_exist (std::string file_name) {
   return directory.file_exist(file_name.c_str());
+}
+// }}}
+// replicate_metadata {{{
+// This function replicates to its right and left neighbor
+// node the metadata db. This function is intended to be 
+// invoked whenever the metadata db is modified.
+void PeerDFS::replicate_metadata() {
+  MetaData md; 
+  md.node = context.settings.getip();
+  md.content = local_io.read_metadata();
+
+  int left_node = ((id - 1) < 0) ? network_size - 1: id - 1;
+  int right_node = ((id + 1) == network_size) ? 0 : id + 1;
+
+  network->send(left_node, &md);
+  network->send(right_node, &md);
 }
 // }}}
 }
