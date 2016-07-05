@@ -28,6 +28,14 @@ Once the system is running, you can interact with EclipseDFS with the following 
 COMPILING & INSTALLING
 =====================
 
+Compiling requirements
+----------------------
+ - C++14 support, this is: GCC >= 4.9, Clang >= 3.4, or ICC >= 16.0.
+ - Boost library >= 1.53.
+ - Sqlite3 library.
+ - GNU Autotools (Autoconf, Automake, Libtool).
+ - Unittest++ [optional].
+
 For single user installation for developers
 -------------------------------------------
 
@@ -37,7 +45,9 @@ For single user installation for developers
     $ cd EclipseDFS
     $ sh autogen.sh                                        # Generate configure script 
     $ cd ../tmp                                            # Go to building folder
-    $ sh ../EclipseDFS/configure --prefix=`pwd`/../sandbox    # Generate Makefile
+    $ sh ../EclipseDFS/configure --prefix=`pwd`/../sandbox # Check requirements and generate the Makefile
+
+    # If you get a boost error go the FAQ section of the README
 
     ### This last command will be needed whenever you want to recompile the source
     $ make [-j#] install                                   # Compile & install add -j flag to speed up
@@ -52,6 +62,18 @@ Now edit in your **~/.bashrc** or **~/.profile**:
 For the configuration refer to the manpage:
 
     $ man eclipsefs
+
+FAQ
+---
+
+- _Question_ : `configure` stops with errors related to boost library.
+- _Answer_ : It probably means that you do not have boost library installed in
+  the default location, in such case you should specify the boost library location.
+  ```
+  sh ../EclipseDFS/configure --prefix ~/sandbox --with-boost=/usr/local --with-boost-libdir=/usr/local/lib
+  ```
+  In this example we assume that the boost headers are in `/usr/local/include` while the library files
+  are inside `/usr/local/lib`.
 
 AUTHOR
 ======

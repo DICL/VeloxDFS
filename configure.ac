@@ -1,10 +1,13 @@
-AC_INIT([Eclipse], [00.18.04], [vicente.bolea@gmail.com], [], [dicl.unist.ac.kr])
+AC_INIT([EclipseDFS], 
+    m4_esyscmd_s([git describe --tags | grep -o "[[:digit:]]\.[[:digit:]]\.[[:digit:]]"]), 
+    [vicente.bolea@gmail.com], 
+    [], [dicl.unist.ac.kr])
 AC_CONFIG_AUX_DIR([./.autotools_aux])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 AM_SILENT_RULES([yes])
 LT_INIT([dlopen])
 
-AC_CONFIG_MACRO_DIR([./m4/])
+#AC_CONFIG_MACRO_DIR([./m4/])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile ])
 AC_CONFIG_FILES([tests/nodes_executor],    [chmod +x tests/nodes_executor])
@@ -13,38 +16,24 @@ AC_CONFIG_FILES([tests/eclipse_debug],    [chmod +x tests/eclipse_debug])
 AM_CONDITIONAL([DEFAULT_CXXFLAGS], [test -z "$CXXFLAGS"])
 AM_COND_IF([DEFAULT_CXXFLAGS], [CXXFLAGS='-g -O0 -march=native'])
 
-CXXFLAGS="$CXXFLAGS -std=c++14" #make sure the compiler support C++14
 AC_PROG_CXX
 AC_LANG([C++])
+AX_CXX_COMPILE_STDCXX([14], [noext], [mandatory])
 
-# Argumeznts {{{
+# Arguments {{{
 AC_ARG_ENABLE([samples],
     AS_HELP_STRING([--disable-samples], [copy sample of eclipse.json]))
-
-default_fs="DHT"
-AC_ARG_WITH([fs],
-    [AS_HELP_STRING([--with-fs], [File system <DHT|HDFS> ])],
-    [fs="$withval"], [fs="$default_fs"]) 
-
-AC_ARG_WITH([boost],
-    [AS_HELP_STRING([--with-boost@<:@=PATH@:>@], [specify boost path])],
-    [boost_path="$withval"], [boost_path=no]) 
-
-    if test "$boost_path" != no ; then
-      CPPFLAGS="$CPPFLAGS -I $boost_path"
-    fi
 
 # Configure options: --enable-debug[=no].
 AC_ARG_ENABLE([debug],
   [AS_HELP_STRING([--enable-debug], [enable debug code (default is no)])],
     [debug="$withval"], [debug=no])
 
-AM_CONDITIONAL(FS_IS_DHT, [test "$fs" = DHT])
 AM_CONDITIONAL(COPY_SAMPLES, [test "$enable_samples" != no ])
+AX_BOOST_STATIC_LINKAGE
 
 #}}}
 # Dependencies checkings {{{
-
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
 AC_TYPE_UINT16_T
@@ -53,16 +42,11 @@ AC_TYPE_UINT8_T
 AC_HEADER_STDC
 AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h sys/socket.h sys/time.h unistd.h])
 AC_SEARCH_LIBS([pthread_create], [pthread])
+AC_SEARCH_LIBS([sqlite3_exec], [sqlite3])
 
-# Check for binaries
-AC_CHECK_PROG([have_ssh], [ssh], [yes], [no])
-AC_CHECK_PROG([have_scp], [scp], [yes], [no])
-AC_CHECK_PROG([have_astyle], [astyle], [yes], [no])
-
-have_ruby=no
+AX_BOOST_BASE([1.53.0], ,
+              [AC_MSG_ERROR([Needs BOOST])])
 have_unittest=no
-ECLIPSE_FIND_BOOST
-AX_PROG_RUBY_VERSION([2.1.0], [have_ruby=yes], [have_ruby=no])
 PKG_CHECK_EXISTS([UnitTest++], [have_unittest=yes], [have_unittest=no])
 
 #}}}
@@ -93,20 +77,17 @@ WARN([\
  C++ Compiler.....: $CXX $CXXFLAGS $CPPFLAGS
  LIBS.............: $LIBS
  Copy samples?....: ${enable_samples:-NO}
- File System?.....: $fs
 
  Dependencies
  ------------
  [Required]
- Boost path.......: ${boost_path:-DEFAULT}
- Have Boost?......: $have_boost
- Have Ruby?.......: $have_ruby
- Have ssh?........: $have_ssh
- Have scp?........: $have_scp
+ Have Boost?.............: ${HAVE_BOOST-YES}
+ BOOST CPPFLAGS..........: $BOOST_CPPFLAGS
+ BOOST LDFLAGS...........: $BOOST_LDFLAGS
+ Static Boost linkage?...: ${enable_boost_static:-NO}
 
  [Optional]
  Have UnitTest++?.: $have_unittest
- Have astyle?.....: $have_astyle
  
  Next, type:
  AS_HELP_STRING([make @<:@-j<processors>@:>@], [Processors indicate how many threads you want to use])
