@@ -91,6 +91,7 @@ namespace eclipse{
         file_info.replica = replica;
         myfile.seekg(0, myfile.end);
         file_info.size = myfile.tellg();
+        cout << "filesize: " << file_info.size << endl;
         BlockInfo block_info;
 
         while (1) {
@@ -636,24 +637,24 @@ namespace eclipse{
 
   int DFS::append(int argc, char* argv[]) {
     string ori_file_name = "";
-    if (argc < 4) {
+    if (argc < 4) { // argument count check
       cout << "[INFO] dfs append original_file new_file1 new_file2 ..." << endl;
       return EXIT_FAILURE;
     } else {
       Histogram boundaries(NUM_NODES, 0);
       boundaries.initialize();
-
       ori_file_name = argv[2];
+
       for (int i=3; i<argc; i++) {
         string new_file_name = argv[i];
         uint32_t file_hash_key = h(ori_file_name);
-        auto socket = connect (file_hash_key);
+        auto socket = connect(file_hash_key);
         FileExist fe;
         fe.name = ori_file_name;
         send_message(socket.get(), &fe);
         auto rep = read_reply<Reply> (socket.get());
 
-        if (rep->message != "TRUE") {
+        if (rep->message != "TRUE") { // exist check
           cerr << "[ERR] " << ori_file_name << " doesn't exist." << endl;
           return EXIT_FAILURE;
         }
@@ -663,51 +664,51 @@ namespace eclipse{
         ifstream myfile(new_file_name);
         myfile.seekg(0, myfile.end);
         uint64_t new_file_size = myfile.tellg();
-        if (new_file_size == 0) {
-          cerr << "[ERR] " << ori_file_name << " size should not be 0." << endl;
+        if (new_file_size <= 0) { // input size check
+          cerr << "[ERR] " << new_file_name << " size should be greater than 0." << endl;
           return EXIT_FAILURE;
         }
+
+        // start normal append procedure
         send_message(socket.get(), &fr);
         auto fd = read_reply<FileDescription> (socket.get());
 
-        int block_seq = fd->blocks.size()-1;
-        uint32_t ori_start_pos = 0;
+        int block_seq = fd->blocks.size()-1; // last block
+        uint32_t ori_start_pos = 0; // original file's start position (in last block)
         uint32_t to_write_byte = new_file_size;
         uint32_t write_byte_cnt = 0;
-        bool update_block = true;
+        bool update_block = true; // 'false' for append
+        bool new_block = false;
         uint32_t hash_key = fd->hash_keys[block_seq];
         uint32_t write_length = 0;
         uint64_t start = 0;
         uint64_t end = 0;
         uint32_t block_size = 0;
 
-        while (1) {
-          if (update_block == true) {
+        while (to_write_byte > 0) { // repeat until to_write_byte == 0
+          if (update_block == true) { 
             ori_start_pos = fd->block_size[block_seq];
-            if (BLOCK_SIZE - ori_start_pos <= 1) {
-              update_block = false;
-            }
-          }
-          if (update_block == true) {
-            if (ori_start_pos + to_write_byte < BLOCK_SIZE) {
-              myfile.seekg(to_write_byte-1, myfile.beg);
-            } else {
-              myfile.seekg(BLOCK_SIZE - ori_start_pos - 1, myfile.beg);
-            }
-            while (1) {
+            if (BLOCK_SIZE - ori_start_pos > to_write_byte) { // can append within original block
+              myfile.seekg(start + to_write_byte, myfile.beg);
+            } else { // can't write whole contents in one block
+              myfile.seekg(start + BLOCK_SIZE - ori_start_pos - 1, myfile.beg);
+              new_block = true;
+              while (1) {
+                if (myfile.peek() =='\n' || myfile.tellg() == 0) {
+                  break;
+                } else {
+                  myfile.seekg(-1, myfile.cur);
+                }
+              }
               if (myfile.tellg() <= 0) {
                 update_block = false;
-                break;
-              } else if (myfile.peek() =='\n') {
-                break;
-              } else {
-                myfile.seekg(-1, myfile.cur);
               }
             }
           }
-          if (update_block == true) {
+          if (update_block == true) { // update block
             write_length = myfile.tellg();
-            myfile.seekg(0, myfile.beg);
+            write_length -= start;
+            myfile.seekg(start, myfile.beg);
             char *buffer = new char[write_length+1];
             bzero(buffer, write_length+1);
             myfile.read(buffer, write_length);
@@ -734,8 +735,11 @@ namespace eclipse{
             // calculate total write bytes and remaining write bytes
             to_write_byte -= write_length;
             write_byte_cnt += write_length;
-            update_block = false;
-          } else {
+            start += write_length;
+            if (new_block == true) { 
+              update_block = false;
+            }
+          } else { // append block
             // make new block
             block_seq++;
             int which_server = ((file_hash_key % NUM_NODES) + block_seq) % NUM_NODES;
@@ -745,7 +749,7 @@ namespace eclipse{
 
             if (end < to_write_byte) {
               // not final block
-              myfile.seekg(start+BLOCK_SIZE-1, myfile.beg);
+              myfile.seekg(end, myfile.beg);
               while (1) {
                 if (myfile.peek() =='\n') {
                   break;
@@ -757,6 +761,7 @@ namespace eclipse{
             } else {
               end = start + to_write_byte;
             }
+            myfile.seekg(start, myfile.beg);
             block_size = (uint32_t) end - start;
             write_length = block_size;
             char *buffer = new char[block_size+1];
@@ -788,7 +793,7 @@ namespace eclipse{
             } 
             to_write_byte -= write_length;
             write_byte_cnt += write_length;
-            if (to_write_byte == 0) {
+            if (to_write_byte == 0) { 
               break;
             }
             start = end;
