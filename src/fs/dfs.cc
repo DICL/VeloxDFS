@@ -91,7 +91,6 @@ namespace eclipse{
         file_info.replica = replica;
         myfile.seekg(0, myfile.end);
         file_info.size = myfile.tellg();
-        cout << "filesize: " << file_info.size << endl;
         BlockInfo block_info;
 
         while (1) {

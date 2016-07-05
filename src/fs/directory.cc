@@ -154,7 +154,7 @@ namespace eclipse {
     mutex.unlock();
   }
 
-  void Directory::insert_file_metadata(FileInfo file_info) {
+  void Directory::insert_file_metadata(FileInfo &file_info) {
     open_db();
     sprintf(sql, "INSERT INTO file_table (\
       name, hash_key, size, num_block, type, replica)\
@@ -177,7 +177,7 @@ namespace eclipse {
     sqlite3_close(db);
   }
 
-  void Directory::insert_block_metadata(BlockInfo block_info) {
+  void Directory::insert_block_metadata(BlockInfo &block_info) {
     open_db();
     sprintf(sql, "INSERT INTO block_table (\
       name, file_name, seq, hash_key, size, type, replica, node, l_node, r_node, is_committed)\
@@ -261,7 +261,7 @@ namespace eclipse {
     sqlite3_close(db);
   } 
 
-  void Directory::update_file_metadata(FileUpdate file_update) {
+  void Directory::update_file_metadata(FileUpdate &file_update) {
     open_db();
     sprintf(sql, "UPDATE file_table set \
         size=%" PRIu64 ", num_block=%u where name='%s';",
@@ -279,7 +279,7 @@ namespace eclipse {
     sqlite3_close(db);
   }
 
-  void Directory::update_block_metadata(BlockUpdate block_update) {
+  void Directory::update_block_metadata(BlockUpdate &block_update) {
     open_db();
     sprintf(sql, "UPDATE block_table set \
         size=%" PRIu32 " where (file_name='%s') and (seq=%u);",

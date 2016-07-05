@@ -35,14 +35,14 @@ namespace eclipse {
       ~Directory();
       void open_db();
       void init_db();
-      void insert_file_metadata(FileInfo file_info);
-      void insert_block_metadata(BlockInfo block_info);
+      void insert_file_metadata(FileInfo &file_info);
+      void insert_block_metadata(BlockInfo &block_info);
       void select_file_metadata(std::string file_name, FileInfo *file_info);
       void select_block_metadata(std::string file_name, unsigned int block_seq, BlockInfo *block_info);
       void select_all_file_metadata(std::vector<FileInfo> &file_list);
       void select_all_block_metadata(std::vector<BlockInfo> &block_list);
-      void update_file_metadata(FileUpdate file_update);
-      void update_block_metadata(BlockUpdate block_update);
+      void update_file_metadata(FileUpdate &file_update);
+      void update_block_metadata(BlockUpdate &block_update);
       void delete_file_metadata(std::string file_name);
       void delete_block_metadata(std::string file_name, unsigned int block_seq);
       void display_file_metadata();
