@@ -104,6 +104,8 @@ namespace eclipse{
                 end--;
               }
             }
+          } else {
+            end = file_info.size;
           }
           block_size = (uint32_t) end - start;
           bzero(chunk.data(), BLOCK_SIZE);
@@ -295,7 +297,7 @@ namespace eclipse{
         float hsize = 0;
         int tabsize = 12;
         string unit;
-        cout.precision(1);
+        cout.precision(2);
         if (fl.size < K) {
           hsize = (float)fl.size;
           unit = "B";
@@ -595,7 +597,6 @@ namespace eclipse{
           // If this block is the last one, write_length should be same as to_write_byte
           // Otherwise, write_length should be same as block_size - start position
           uint32_t write_length = fd->block_size[block_seq] - ori_start_pos;
-          block_seq++;
           if (to_write_byte < write_length) {
             final_block = true;
             write_length = to_write_byte;
@@ -603,12 +604,15 @@ namespace eclipse{
           // send message
           BlockUpdate bu;
           bu.name = block_name; 
+          bu.file_name = ori_file_name;
+          bu.seq = block_seq;
           bu.replica = fd->replica; 
           bu.hash_key = hash_key; 
           bu.pos = ori_start_pos;
           bu.len = write_length;
           bu.content = sbuffer.substr(write_byte_cnt, write_length);
-          auto tmp_socket = connect(boundaries.get_index(hash_key));
+          bu.size = fd->block_size[block_seq];
+          auto tmp_socket = connect(boundaries.get_index(file_hash_key));
           send_message(tmp_socket.get(), &bu);
           auto reply = read_reply<Reply> (tmp_socket.get());
           tmp_socket->close();
@@ -622,10 +626,196 @@ namespace eclipse{
             break;
           }
           to_write_byte -= write_length;
+          block_seq++;
         }
       }
     }
     cout << "[INFO] " << ori_file_name << " is updated." << endl;
+    return EXIT_SUCCESS;
+  }
+
+  int DFS::append(int argc, char* argv[]) {
+    string ori_file_name = "";
+    if (argc < 4) { // argument count check
+      cout << "[INFO] dfs append original_file new_file1 new_file2 ..." << endl;
+      return EXIT_FAILURE;
+    } else {
+      Histogram boundaries(NUM_NODES, 0);
+      boundaries.initialize();
+      ori_file_name = argv[2];
+
+      for (int i=3; i<argc; i++) {
+        string new_file_name = argv[i];
+        uint32_t file_hash_key = h(ori_file_name);
+        auto socket = connect(file_hash_key);
+        FileExist fe;
+        fe.name = ori_file_name;
+        send_message(socket.get(), &fe);
+        auto rep = read_reply<Reply> (socket.get());
+
+        if (rep->message != "TRUE") { // exist check
+          cerr << "[ERR] " << ori_file_name << " doesn't exist." << endl;
+          return EXIT_FAILURE;
+        }
+        FileRequest fr;
+        fr.name = ori_file_name;
+
+        ifstream myfile(new_file_name);
+        myfile.seekg(0, myfile.end);
+        uint64_t new_file_size = myfile.tellg();
+        if (new_file_size <= 0) { // input size check
+          cerr << "[ERR] " << new_file_name << " size should be greater than 0." << endl;
+          return EXIT_FAILURE;
+        }
+
+        // start normal append procedure
+        send_message(socket.get(), &fr);
+        auto fd = read_reply<FileDescription> (socket.get());
+
+        int block_seq = fd->blocks.size()-1; // last block
+        uint32_t ori_start_pos = 0; // original file's start position (in last block)
+        uint32_t to_write_byte = new_file_size;
+        uint32_t write_byte_cnt = 0;
+        bool update_block = true; // 'false' for append
+        bool new_block = false;
+        uint32_t hash_key = fd->hash_keys[block_seq];
+        uint32_t write_length = 0;
+        uint64_t start = 0;
+        uint64_t end = 0;
+        uint32_t block_size = 0;
+
+        while (to_write_byte > 0) { // repeat until to_write_byte == 0
+          if (update_block == true) { 
+            ori_start_pos = fd->block_size[block_seq];
+            if (BLOCK_SIZE - ori_start_pos > to_write_byte) { // can append within original block
+              myfile.seekg(start + to_write_byte, myfile.beg);
+            } else { // can't write whole contents in one block
+              myfile.seekg(start + BLOCK_SIZE - ori_start_pos - 1, myfile.beg);
+              new_block = true;
+              while (1) {
+                if (myfile.peek() =='\n' || myfile.tellg() == 0) {
+                  break;
+                } else {
+                  myfile.seekg(-1, myfile.cur);
+                }
+              }
+              if (myfile.tellg() <= 0) {
+                update_block = false;
+              }
+            }
+          }
+          if (update_block == true) { // update block
+            write_length = myfile.tellg();
+            write_length -= start;
+            myfile.seekg(start, myfile.beg);
+            char *buffer = new char[write_length+1];
+            bzero(buffer, write_length+1);
+            myfile.read(buffer, write_length);
+            string sbuffer(buffer);
+            delete[] buffer;
+            BlockUpdate bu;
+            bu.name = fd->blocks[block_seq];
+            bu.file_name = ori_file_name;
+            bu.seq = block_seq;
+            bu.replica = fd->replica;
+            bu.hash_key = hash_key;
+            bu.pos = ori_start_pos;
+            bu.len = write_length;
+            bu.content = sbuffer;
+            bu.size = ori_start_pos + write_length;
+            auto tmp_socket = connect(boundaries.get_index(file_hash_key));
+            send_message(tmp_socket.get(), &bu);
+            auto reply = read_reply<Reply> (tmp_socket.get());
+            tmp_socket->close();
+            if (reply->message != "OK") {
+              cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
+              return EXIT_FAILURE;
+            } 
+            // calculate total write bytes and remaining write bytes
+            to_write_byte -= write_length;
+            write_byte_cnt += write_length;
+            start += write_length;
+            if (new_block == true) { 
+              update_block = false;
+            }
+          } else { // append block
+            // make new block
+            block_seq++;
+            int which_server = ((file_hash_key % NUM_NODES) + block_seq) % NUM_NODES;
+            start = write_byte_cnt;
+            end = start + BLOCK_SIZE -1;
+            BlockInfo block_info;
+
+            if (end < to_write_byte) {
+              // not final block
+              myfile.seekg(end, myfile.beg);
+              while (1) {
+                if (myfile.peek() =='\n') {
+                  break;
+                } else {
+                  myfile.seekg(-1, myfile.cur);
+                  end--;
+                }
+              }
+            } else {
+              end = start + to_write_byte;
+            }
+            myfile.seekg(start, myfile.beg);
+            block_size = (uint32_t) end - start;
+            write_length = block_size;
+            char *buffer = new char[block_size+1];
+            bzero(buffer, block_size+1);
+            myfile.read(buffer, block_size);
+            string sbuffer(buffer);
+            delete[] buffer;
+            myfile.seekg(start, myfile.beg);
+            block_info.content = sbuffer;
+
+            block_info.name = ori_file_name + "_" + to_string(block_seq);
+            block_info.file_name = ori_file_name;
+            block_info.hash_key = boundaries.random_within_boundaries(which_server);
+            block_info.seq = block_seq;
+            block_info.size = block_size;
+            block_info.type = static_cast<unsigned int>(FILETYPE::Normal);
+            block_info.replica = replica;
+            block_info.node = nodes[which_server];
+            block_info.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
+            block_info.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
+            block_info.is_committed = 1;
+
+            send_message(socket.get(), &block_info);
+            auto reply = read_reply<Reply> (socket.get());
+
+            if (reply->message != "OK") {
+              cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
+              return EXIT_FAILURE;
+            } 
+            to_write_byte -= write_length;
+            write_byte_cnt += write_length;
+            if (to_write_byte == 0) { 
+              break;
+            }
+            start = end;
+            end = start + BLOCK_SIZE - 1;
+            which_server = (which_server + 1) % NUM_NODES;
+          }
+        }
+        FileUpdate fu;
+        fu.name = ori_file_name;
+        fu.num_block = block_seq+1;
+        fu.size = fd->size + new_file_size;
+        send_message(socket.get(), &fu);
+        auto reply = read_reply<Reply> (socket.get());
+        myfile.close();
+        socket->close();
+
+        if (reply->message != "OK") {
+          cerr << "[ERR] Failed to append file. Details: " << reply->details << endl;
+          return EXIT_FAILURE;
+        }
+        cout << "[INFO] " << argv[i] << " is appended." << endl;
+      }
+    }
     return EXIT_SUCCESS;
   }
 }

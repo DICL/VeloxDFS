@@ -87,7 +87,7 @@ template<> void PeerDFS::process(KeyValue* m) {
 
   int which_node = boundaries->get_index(key);
   if (which_node == id or m->destination == id)  {
-    INFO("Instering key = %s", name.c_str());
+    INFO("Inserting key = %s", name.c_str());
     insert(key, m->name, m->value);
   }
 
@@ -201,9 +201,22 @@ bool PeerDFS::insert_file(messages::FileInfo* f) {
  return true;
 }
 // }}}
+// update_file {{{
+bool PeerDFS::update_file(messages::FileUpdate* f) {
+ bool ret = directory.file_exist(f->name.c_str());
+
+ if (ret) {
+   directory.update_file_metadata(*f);
+   logger->info("Updating to SQLite db");
+   return true;
+ }
+ INFO("File:%s doesn't exist in db, ret = %i", f->name.c_str(), ret);
+ return false;
+
+}
+// }}}
 // insert_block {{{
 bool PeerDFS::insert_block(messages::BlockInfo* m) {
-  logger->info("DEBUG: insert_block\n");
   directory.insert_block_metadata(*m);
   int which_node = boundaries->get_index(m->hash_key);
   int tmp_node;
@@ -221,7 +234,7 @@ bool PeerDFS::insert_block(messages::BlockInfo* m) {
 // }}}
 // update_block {{{
 bool PeerDFS::update_block(messages::BlockUpdate* m) {
-  // directory.update_block_metadata(*m); maybe needed later
+  directory.update_block_metadata(*m);
   int which_node = boundaries->get_index(m->hash_key);
   int tmp_node;
   for (int i=0; i<m->replica; i++) {
