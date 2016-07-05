@@ -256,12 +256,12 @@ namespace eclipse{
   int DFS::ls(int argc, char* argv[]) {
     const uint32_t KB = 1024;
     const uint32_t MB = 1024 * 1024;
-    const uint32_t GB = 1024 * 1024 * 1024;
+    const uint64_t GB = (uint64_t) 1024 * 1024 * 1024;
     const uint64_t TB = (uint64_t) 1024 * 1024 * 1024 * 1024;
     const uint64_t PB = (uint64_t) 1024 * 1024 * 1024 * 1024 * 1024;
     const uint32_t K = 1000;
     const uint32_t M = 1000 * 1000;
-    const uint32_t G = 1000 * 1000 * 1000;
+    const uint64_t G = (uint64_t) 1000 * 1000 * 1000;
     const uint64_t T = (uint64_t) 1000 * 1000 * 1000 * 1000;
     const uint64_t P = (uint64_t) 1000 * 1000 * 1000 * 1000 * 1000;
     vector<FileInfo> total; 
