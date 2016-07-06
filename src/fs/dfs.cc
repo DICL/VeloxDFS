@@ -674,12 +674,12 @@ namespace eclipse{
 
         int block_seq = fd->blocks.size()-1; // last block
         uint32_t ori_start_pos = 0; // original file's start position (in last block)
-        uint32_t to_write_byte = new_file_size;
-        uint32_t write_byte_cnt = 0;
+        uint64_t to_write_byte = new_file_size;
+        uint64_t write_byte_cnt = 0;
         bool update_block = true; // 'false' for append
         bool new_block = false;
         uint32_t hash_key = fd->hash_keys[block_seq];
-        uint32_t write_length = 0;
+        uint64_t write_length = 0;
         uint64_t start = 0;
         uint64_t end = 0;
         uint32_t block_size = 0;
