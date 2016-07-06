@@ -60,5 +60,6 @@ namespace eclipse {
       int show(int argc, char* argv[]);
       int pget(int argc, char* argv[]);
       int update(int argc, char* argv[]);
+      int append(int argc, char* argv[]);
   };
 }

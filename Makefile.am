@@ -14,6 +14,7 @@ messages_files   = src/messages/boundaries.cc      \
                    src/messages/boost_impl.cc      \
                    src/messages/factory.cc         \
                    src/messages/fileinfo.cc        \
+                   src/messages/fileupdate.cc      \
                    src/messages/blockinfo.cc       \
                    src/messages/blockupdate.cc     \
                    src/messages/task.cc            \
