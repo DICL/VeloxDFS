@@ -26,7 +26,7 @@ namespace eclipse {
     auto file = reinterpret_cast<FileInfo*>(file_info);
     file->name          = argv[i++];
     file->hash_key      = atoi(argv[i++]);
-    file->size          = atoi(argv[i++]);
+    file->size          = atoll(argv[i++]);
     file->num_block     = atoi(argv[i++]);
     file->type          = atoi(argv[i++]);
     file->replica       = atoi(argv[i]);
@@ -65,7 +65,7 @@ namespace eclipse {
       FileInfo tmp_file;
       tmp_file.name      = argv[i++];
       tmp_file.hash_key  = atoi(argv[i++]);
-      tmp_file.size      = atoi(argv[i++]);
+      tmp_file.size      = atoll(argv[i++]);
       tmp_file.num_block = atoi(argv[i++]);
       tmp_file.type      = atoi(argv[i++]);
       tmp_file.replica   = atoi(argv[i]);
