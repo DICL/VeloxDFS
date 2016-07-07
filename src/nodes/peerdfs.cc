@@ -32,7 +32,7 @@ PeerDFS::PeerDFS (Network* net) : Node () {
 PeerDFS::~PeerDFS() { }
 // }}}
 // insert {{{
-void PeerDFS::insert(uint32_t hash_key, std::string name, std::string v) {
+void PeerDFS::insert(uint32_t hash_key, std::string name, std::string& v) {
   int which_node = boundaries->get_index(hash_key);
 
   if (which_node == id) {
@@ -229,6 +229,7 @@ bool PeerDFS::insert_block(messages::BlockInfo* m) {
     uint32_t tmp_hash_key = boundaries->random_within_boundaries(tmp_node);
     insert(tmp_hash_key, m->name, m->content);
   }
+  INFO("Block inserted");
   return true;
 }
 // }}}
