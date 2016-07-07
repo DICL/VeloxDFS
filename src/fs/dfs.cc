@@ -1,4 +1,6 @@
 #include "dfs.hh"
+#include <fcntl.h>
+#include <ext/stdio_filebuf.h>
 
 using namespace std;
 using namespace eclipse;
@@ -78,7 +80,11 @@ namespace eclipse{
         }
 
         int which_server = file_hash_key % NUM_NODES;
-        ifstream myfile(file_name);
+        int fd = open(file_name.c_str(), 0);
+
+         __gnu_cxx::stdio_filebuf<char> filebuf(fd, std::ios::in); // 1
+             //istream is(&filebuf); // 2
+        istream myfile(&filebuf);
         uint64_t start = 0;
         uint64_t end = start + BLOCK_SIZE - 1;
         uint32_t block_size = 0;
@@ -113,6 +119,8 @@ namespace eclipse{
           block_info.content.reserve(block_size);
           myfile.read(chunk.data(), block_size);
           block_info.content = chunk.data();
+          posix_fadvise(fd, end, block_size, POSIX_FADV_WILLNEED);
+
 
           block_info.name = file_name + "_" + to_string(block_seq);
           block_info.file_name = file_name;
@@ -129,6 +137,7 @@ namespace eclipse{
           send_message(socket.get(), &block_info);
           auto reply = read_reply<Reply> (socket.get());
 
+
           if (reply->message != "OK") {
             cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
             return EXIT_FAILURE;
@@ -144,7 +153,7 @@ namespace eclipse{
         file_info.num_block = block_seq;
         send_message(socket.get(), &file_info);
         auto reply = read_reply<Reply> (socket.get());
-        myfile.close();
+        close(fd);
         socket->close();
 
         if (reply->message != "OK") {
