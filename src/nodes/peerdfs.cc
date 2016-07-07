@@ -217,7 +217,7 @@ bool PeerDFS::update_file(messages::FileUpdate* f) {
 // }}}
 // insert_block {{{
 bool PeerDFS::insert_block(messages::BlockInfo* m) {
-  directory.insert_block_metadata(*m);
+  directory.insert_block_metadata(m);
   int which_node = boundaries->get_index(m->hash_key);
   int tmp_node;
   for (int i=0; i<m->replica; i++) {

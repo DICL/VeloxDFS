@@ -121,6 +121,7 @@ namespace eclipse{
           block_info.content = chunk.data();
           posix_fadvise(fd, end, block_size, POSIX_FADV_WILLNEED);
 
+
           block_info.name = file_name + "_" + to_string(block_seq);
           block_info.file_name = file_name;
           block_info.hash_key = boundaries.random_within_boundaries(which_server);
@@ -135,6 +136,7 @@ namespace eclipse{
 
           send_message(socket.get(), &block_info);
           auto reply = read_reply<Reply> (socket.get());
+
 
           if (reply->message != "OK") {
             cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;

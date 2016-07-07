@@ -81,11 +81,9 @@ void AsyncChannel::do_read () {
 // }}}
 // read_coroutine {{{
 void AsyncChannel::read_coroutine (yield_context yield) {
-    //boost::asio::streambuf body; 
     boost::system::error_code ec;
     char header [header_size + 1] = {'\0'}; 
     header[16] = '\0';
-    char* body;
 
   try {
     while (true) {
@@ -94,27 +92,22 @@ void AsyncChannel::read_coroutine (yield_context yield) {
         throw std::runtime_error("header size");
       }
 
-      INFO("Package have arrived");
+      DEBUG("Package have arrived");
       size_t size = atoi(header);
       char* body = new char[size];
       l = read (*receiver, buffer(body, size));
-      INFO("Package has been downloaded");
+      DEBUG("Package has been downloaded");
       if (l != size)  {
         throw std::runtime_error("body size");
       }
 
       string str (body);
       delete body;
-      //body.commit (l);
-      //string str ((istreambuf_iterator<char>(&body)), 
-       //   istreambuf_iterator<char>());
-      //body.consume (l);
-      INFO("Package has been copied to str");
-
+      DEBUG("Package has been copied to str");
 
       Message* msg = nullptr;
       msg = load_message(str);
-      INFO("Package has been deserialized");
+      DEBUG("Package has been deserialized");
       node->on_read(msg, id);
       delete msg;
       msg=nullptr;
