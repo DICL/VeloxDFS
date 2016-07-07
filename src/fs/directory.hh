@@ -36,7 +36,7 @@ namespace eclipse {
       void open_db();
       void init_db();
       void insert_file_metadata(FileInfo &file_info);
-      void insert_block_metadata(BlockInfo &block_info);
+      void insert_block_metadata(BlockInfo* block_info);
       void select_file_metadata(std::string file_name, FileInfo *file_info);
       void select_block_metadata(std::string file_name, unsigned int block_seq, BlockInfo *block_info);
       void select_all_file_metadata(std::vector<FileInfo> &file_list);

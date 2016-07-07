@@ -1,4 +1,5 @@
 #include "dfs.hh"
+#include <time.h>
 
 using namespace std;
 using namespace eclipse;
@@ -48,6 +49,8 @@ namespace eclipse{
     }
 
   int DFS::put(int argc, char* argv[]) {
+    clock_t t1, t2;
+    t1 = clock();
     if (argc < 3) {
       cout << "[INFO] dfs put file_1 file_2 ..." << endl;
       return EXIT_FAILURE;
@@ -63,6 +66,8 @@ namespace eclipse{
         type = FILETYPE::App;
         i++;
       }
+      t2 = clock();
+      cout << "time1: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
       for (; i<argc; i++) {
         string file_name = argv[i];
         FileExist fe;
@@ -83,6 +88,8 @@ namespace eclipse{
         uint64_t end = start + BLOCK_SIZE - 1;
         uint32_t block_size = 0;
         unsigned int block_seq = 0;
+      t2 = clock();
+      cout << "time2: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
 
         FileInfo file_info;
         file_info.name = file_name;
@@ -92,6 +99,8 @@ namespace eclipse{
         myfile.seekg(0, myfile.end);
         file_info.size = myfile.tellg();
         BlockInfo block_info;
+      t2 = clock();
+      cout << "time3: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
 
         while (1) {
           if (end < file_info.size) {
@@ -107,12 +116,16 @@ namespace eclipse{
           } else {
             end = file_info.size;
           }
+      t2 = clock();
+      cout << "time4: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
           block_size = (uint32_t) end - start;
           bzero(chunk.data(), BLOCK_SIZE);
           myfile.seekg(start, myfile.beg);
           block_info.content.reserve(block_size);
           myfile.read(chunk.data(), block_size);
           block_info.content = chunk.data();
+      t2 = clock();
+      cout << "time5: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
 
           block_info.name = file_name + "_" + to_string(block_seq);
           block_info.file_name = file_name;
@@ -126,8 +139,14 @@ namespace eclipse{
           block_info.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
           block_info.is_committed = 1;
 
+      t2 = clock();
+      cout << "time6: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
           send_message(socket.get(), &block_info);
+      t2 = clock();
+      cout << "time61: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
           auto reply = read_reply<Reply> (socket.get());
+      t2 = clock();
+      cout << "time62: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
 
           if (reply->message != "OK") {
             cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
@@ -136,24 +155,36 @@ namespace eclipse{
           if (end >= file_info.size) {
             break;
           }
+      t2 = clock();
+      cout << "time63: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
           start = end;
           end = start + BLOCK_SIZE - 1;
           which_server = (which_server + 1) % NUM_NODES;
+      t2 = clock();
+      cout << "time7: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
         }
+      t2 = clock();
+      cout << "time8: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
 
         file_info.num_block = block_seq;
         send_message(socket.get(), &file_info);
         auto reply = read_reply<Reply> (socket.get());
         myfile.close();
         socket->close();
+      t2 = clock();
+      cout << "time9: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
 
         if (reply->message != "OK") {
           cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
           return EXIT_FAILURE;
         } 
         cout << "[INFO] " << argv[i] << " is uploaded." << endl;
+      t2 = clock();
+      cout << "time10: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
       }
     }
+      t2 = clock();
+      cout << "time11: " << ((t2-t1)/CLOCKS_PER_SEC) << endl;
     return EXIT_SUCCESS;
   }
 
