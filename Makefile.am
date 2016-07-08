@@ -68,6 +68,8 @@ dfs_SOURCES         = src/fs/dfs.cc \
                       src/fs/main.cc \
 											$(messages_files)
 
+dfs_CXXFLAGS        = $(AM_CXXFLAGS)
+
 pkginclude_HEADERS  = src/common/ecfs.hh src/common/settings.hh
 
 if COPY_SAMPLES

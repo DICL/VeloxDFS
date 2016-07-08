@@ -219,16 +219,25 @@ bool PeerDFS::update_file(messages::FileUpdate* f) {
 bool PeerDFS::insert_block(messages::BlockInfo* m) {
   directory.insert_block_metadata(m);
   int which_node = boundaries->get_index(m->hash_key);
-  int tmp_node;
-  for (int i=0; i<m->replica; i++) {
-    if(i%2 == 1) {
-      tmp_node = (which_node + (i+1)/2 + network_size) % network_size;
-    } else {
-      tmp_node = (which_node - i/2 + network_size) % network_size;
+  vector<int> nodes;
+
+  if (which_node == id) {
+    for (int i=1; i<m->replica; i++) {
+      if(i%2 == 1) {
+        nodes.push_back ((which_node + (i+1)/2 + network_size) % network_size);
+      } else {
+        nodes.push_back ((which_node - i/2 + network_size) % network_size);
+      }
     }
-    uint32_t tmp_hash_key = boundaries->random_within_boundaries(tmp_node);
-    insert(tmp_hash_key, m->name, m->content);
+
+    INFO("[DFS] Saving locally KEY: %s", m->name.c_str());
+    local_io.write(m->name, m->content);
+    network->send_and_replicate(nodes, m);
+
+  } else {
+    insert(m->hash_key, m->name, m->content);
   }
+
   INFO("Block inserted");
   return true;
 }

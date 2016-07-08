@@ -1,6 +1,7 @@
 #pragma once
 #include "../common/hash.hh"
 #include "../common/context_singleton.hh"
+#include "../common/histogram.hh"
 #include "../messages/boost_impl.hh"
 #include "../messages/fileinfo.hh"
 #include "../messages/factory.hh"
@@ -39,7 +40,7 @@ namespace eclipse {
       uint32_t BLOCK_SIZE;
       uint32_t NUM_NODES;
       std::string path;
-      boost::asio::io_service iosvc;
+      boost::asio::io_service& iosvc;
       int replica;
       int port;
       std::vector<std::string> nodes;
@@ -49,7 +50,9 @@ namespace eclipse {
       template <typename T>
       auto read_reply(tcp::socket*);
 
+
     public:
+      DFS();
       void load_settings ();
       int put(int argc, char* argv[]);
       int get(int argc, char* argv[]);

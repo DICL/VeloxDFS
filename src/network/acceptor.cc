@@ -20,10 +20,12 @@ void Acceptor::listen () {
 // }}}
 // do_listen {{{
 void Acceptor::do_listen (boost::asio::yield_context yield) {
+  boost::system::error_code ec;
   for (;;) {
     auto socket = new tcp::socket(iosvc);
-    acceptor->async_accept (*socket, yield);
-    observer->on_accept(socket);
+    acceptor->async_accept (*socket, yield[ec]);
+    if (!ec) 
+      observer->on_accept(socket);
   }
 }
 // }}}
