@@ -24,3 +24,4 @@ BOOST_CLASS_EXPORT(eclipse::messages::FileDel);
 BOOST_CLASS_EXPORT(eclipse::messages::BlockDel);
 BOOST_CLASS_EXPORT(eclipse::messages::FormatRequest);
 BOOST_CLASS_EXPORT(eclipse::messages::FileExist);
+BOOST_CLASS_EXPORT(eclipse::messages::MetaData);
