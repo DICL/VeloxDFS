@@ -13,7 +13,7 @@ Local_io::Local_io() {
 }
 //  }}}
 // write {{{
-void Local_io::write (std::string name, std::string v) {
+void Local_io::write (std::string name, std::string& v) {
   string file_path = disk_path + string("/") + name;
   ofstream file (file_path);
   file << v;

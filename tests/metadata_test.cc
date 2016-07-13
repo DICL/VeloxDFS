@@ -36,7 +36,7 @@ int main() {
   block_info.is_committed = 3;
 
   dir.insert_file_metadata(file_info);
-  dir.insert_block_metadata(block_info);
+  dir.insert_block_metadata(&block_info);
 
   file_info.name = "test2.txt";
   dir.insert_file_metadata(file_info);

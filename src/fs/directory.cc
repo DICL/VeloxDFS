@@ -177,22 +177,22 @@ namespace eclipse {
     sqlite3_close(db);
   }
 
-  void Directory::insert_block_metadata(BlockInfo &block_info) {
+  void Directory::insert_block_metadata(BlockInfo* block_info) {
     open_db();
     sprintf(sql, "INSERT INTO block_table (\
       name, file_name, seq, hash_key, size, type, replica, node, l_node, r_node, is_committed)\
       VALUES ('%s', '%s', %u, %" PRIu32 ", %" PRIu32 ", %u, %u, '%s', '%s', '%s', %u);",
-        block_info.name.c_str(),
-        block_info.file_name.c_str(),
-        block_info.seq,
-        block_info.hash_key,
-        block_info.size,
-        block_info.type,
-        block_info.replica,
-        block_info.node.c_str(),
-        block_info.l_node.c_str(),
-        block_info.r_node.c_str(),
-        block_info.is_committed);
+        block_info->name.c_str(),
+        block_info->file_name.c_str(),
+        block_info->seq,
+        block_info->hash_key,
+        block_info->size,
+        block_info->type,
+        block_info->replica,
+        block_info->node.c_str(),
+        block_info->l_node.c_str(),
+        block_info->r_node.c_str(),
+        block_info->is_committed);
 
     rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK) {

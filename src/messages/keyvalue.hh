@@ -12,7 +12,8 @@ struct KeyValue: public Message {
 
   std::string get_type() const override;
   uint32_t key;
-  std::string name, value;
+  std::string name;
+  std::string  value;
 };
 
 }
