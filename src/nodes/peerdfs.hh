@@ -51,6 +51,8 @@ class PeerDFS: public Node, public AsyncNode {
     bool file_exist (std::string);
 
   protected:
+    void replicate_metadata();
+
     Directory directory;
     Local_io local_io;
     std::unique_ptr<Histogram> boundaries;

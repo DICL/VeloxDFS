@@ -39,6 +39,18 @@ std::string Local_io::read (string name) {
   return value;
 }
 // }}}
+// read_metadata {{{
+// This functions loads into a string the metadata db
+std::string Local_io::read_metadata() {
+  string replica_path = context.settings.get<string>("path.metadata") + "/metadata.db";
+  ifstream in (replica_path);
+  string value ((std::istreambuf_iterator<char>(in)),
+      std::istreambuf_iterator<char>());
+
+  in.close();
+  return value;
+}
+// }}}
 // pread {{{
 std::string Local_io::pread (string name, uint32_t pos, uint32_t len) {
   ifstream in (disk_path + string("/") + name);

@@ -27,6 +27,7 @@
 #include "offsetkv.hh"
 #include "blockupdate.hh"
 #include "fileupdate.hh"
+#include "metadata.hh"
 
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/access.hpp>
@@ -214,6 +215,14 @@ template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::FileExist& c, unsigned int) {
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.name);
+  }
+
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::MetaData& c, unsigned int) {
+    ar & BASE_OBJECT(Message, c);
+    ar & BOOST_SERIALIZATION_NVP(c.name);
+    ar & BOOST_SERIALIZATION_NVP(c.node);
+    ar & BOOST_SERIALIZATION_NVP(c.content);
   }
 }
 }
