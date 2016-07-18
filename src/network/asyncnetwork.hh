@@ -3,6 +3,7 @@
 #include "asyncnode.hh"
 #include "netobserver.hh"
 #include "acceptor.hh"
+#include "../messages/factory.hh"
 #include "connector.hh"
 #include <boost/asio.hpp>
 #include <mutex>
@@ -24,6 +25,7 @@ class AsyncNetwork: public Network, public NetObserver {
     bool close () override;
     size_t size () override;
     bool send(int, messages::Message*) override;
+    bool send_and_replicate(std::vector<int>, messages::Message* m) override;
     void attach(AsyncNode*) override;
 
     void on_accept(tcp::socket*) override;
@@ -42,11 +44,12 @@ class AsyncNetwork: public Network, public NetObserver {
 
     Acceptor acceptor;
     Connector connector;
-    int connected_size = 0, net_size = 0;
+    int net_size = 0;
 
     std::map<int, std::pair<tcp::socket*, tcp::socket*>> sockets;
     std::map<int, u_ptr<TYPE>> channels;
     std::atomic<int> accepted_size;
+    std::atomic<int> connected_size;
     std::mutex acceptor_mutex;
 };
 // Constructor {{{
@@ -55,7 +58,8 @@ AsyncNetwork<TYPE>::AsyncNetwork (int port):
   nodes(context.settings.get<vec_str> ("network.nodes")),
   acceptor(port, this),
   connector(port, this),
-  accepted_size(0)
+  accepted_size(0),
+  connected_size(0)
 { 
  if (TYPE::is_multiple())
    net_size = nodes.size() - 1;
@@ -88,6 +92,17 @@ size_t AsyncNetwork<TYPE>::size () {
   return channels.size();
 }
 // }}}
+// send_and_replicate {{{
+template<typename TYPE>
+bool AsyncNetwork<TYPE>::send_and_replicate(std::vector<int> node_indices, messages::Message* m) {
+  std::lock_guard<std::mutex> lck (acceptor_mutex); 
+  shared_ptr<std::string> message_serialized (save_message(m));
+  for (auto i : node_indices) {
+    channels[i]->do_write(message_serialized);
+  }
+  return true;
+}
+// }}}
 // send {{{
 template<typename TYPE>
 bool AsyncNetwork<TYPE>::send (int i, messages::Message* m) {
@@ -99,8 +114,8 @@ bool AsyncNetwork<TYPE>::send (int i, messages::Message* m) {
 // on_accept {{{
 template<typename TYPE>
 void AsyncNetwork<TYPE>::on_accept (tcp::socket* sock) {
+  std::lock_guard<std::mutex> lck (acceptor_mutex); 
   if (not TYPE::is_multiple()) {
-    std::lock_guard<std::mutex> lck (acceptor_mutex); 
     channels.emplace (accepted_size.load(), std::make_unique<TYPE> (sock, sock, this, accepted_size.load()));
     accepted_size++;
     channels[accepted_size.load() - 1]->do_read();
@@ -122,6 +137,7 @@ void AsyncNetwork<TYPE>::on_accept (tcp::socket* sock) {
 // on_connect {{{
 template<typename TYPE>
 void AsyncNetwork<TYPE>::on_connect (tcp::socket* sock) {
+  std::lock_guard<std::mutex> lck (acceptor_mutex); 
   auto i = id_of (sock);
 
   if (sockets.find(i) == sockets.end())
@@ -137,6 +153,7 @@ void AsyncNetwork<TYPE>::on_connect (tcp::socket* sock) {
 // on_disconnect {{{
 template<typename TYPE>
 void AsyncNetwork<TYPE>::on_disconnect (tcp::socket* sock, int id) {
+  INFO("Socket disconnecting");
   if (TYPE::is_multiple())
     connected_size--;
 
@@ -149,7 +166,7 @@ void AsyncNetwork<TYPE>::on_disconnect (tcp::socket* sock, int id) {
 // completed_network {{{
 template<typename TYPE>
 bool AsyncNetwork<TYPE>::is_completed_network () {
-  if (TYPE::is_multiple() and accepted_size.load() >= net_size  and connected_size >= net_size)
+  if (TYPE::is_multiple() and accepted_size.load() >= net_size  and connected_size.load() >= net_size)
     return true;
 
   if (not TYPE::is_multiple() and accepted_size.load() >= 1) return true;
@@ -169,8 +186,6 @@ int AsyncNetwork<TYPE>::id_of (tcp::socket* sock) {
 // start_reading {{{
 template<typename TYPE>
 void AsyncNetwork<TYPE>::start_reading () {
-  acceptor_mutex.lock(); 
-
   if (TYPE::is_multiple()) {
 
     for (auto& sp : sockets) {
@@ -187,7 +202,6 @@ void AsyncNetwork<TYPE>::start_reading () {
   if (not TYPE::is_multiple())
     channels[accepted_size.load() - 1]->do_read();
 
-  acceptor_mutex.unlock(); 
   node->on_connect();
 }
 // }}}

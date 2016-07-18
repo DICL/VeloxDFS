@@ -1,11 +1,19 @@
 #include "dfs.hh"
+#include "../common/context.hh"
 #include <fcntl.h>
 #include <ext/stdio_filebuf.h>
+#include <sstream>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
 
 using namespace std;
 using namespace eclipse;
+using namespace boost::archive;
 
 namespace eclipse{
+  DFS::DFS() : iosvc(context.io) { }
+
   void DFS::load_settings() {
     BLOCK_SIZE = context.settings.get<int>("filesystem.block");
     NUM_NODES = context.settings.get<vector<string>>("network.nodes").size();
@@ -26,10 +34,12 @@ namespace eclipse{
   }
 
   void DFS::send_message(tcp::socket* socket, eclipse::messages::Message* msg) {
-    string out = save_message(msg);
-    stringstream ss;
-    ss << setfill('0') << setw(16) << out.length() << out;
-    socket->send(boost::asio::buffer(ss.str()));
+    cout << "Start serialization" << std::flush;
+    string* to_send = save_message(msg);
+    cout << "...DONE" << endl;
+    cout << "Sending..." << std::flush;
+    socket->send(boost::asio::buffer(*to_send));
+    cout << "DONE" << std::endl;
   }
 
   template <typename T>
@@ -37,15 +47,16 @@ namespace eclipse{
       using namespace boost::asio;
       char header[17] = {0};
       header[16] = '\0';
+      boost::asio::streambuf buf;
 
       read(*socket, buffer(header, 16));
       size_t size_of_msg = atoi(header);
 
-      vector<char> body(size_of_msg);
-      read(*socket, buffer(body.data(), size_of_msg));
+      read(*socket, buf, transfer_exactly(size_of_msg));
 
-      string recv_msg(body.data());
-      T* m = dynamic_cast<T*>(load_message(recv_msg));
+      Message* msg = nullptr;
+      msg = load_message(buf);
+      T* m = dynamic_cast<T*>(msg);
       return unique_ptr<T>(m);
     }
 
@@ -82,8 +93,7 @@ namespace eclipse{
         int which_server = file_hash_key % NUM_NODES;
         int fd = open(file_name.c_str(), 0);
 
-         __gnu_cxx::stdio_filebuf<char> filebuf(fd, std::ios::in); // 1
-             //istream is(&filebuf); // 2
+         __gnu_cxx::stdio_filebuf<char> filebuf(fd, std::ios::in | std::ios::binary); // 1
         istream myfile(&filebuf);
         uint64_t start = 0;
         uint64_t end = start + BLOCK_SIZE - 1;
@@ -113,6 +123,7 @@ namespace eclipse{
           } else {
             end = file_info.size;
           }
+          cout << "Start reading block" << std::flush;
           block_size = (uint32_t) end - start;
           bzero(chunk.data(), BLOCK_SIZE);
           myfile.seekg(start, myfile.beg);
@@ -120,6 +131,7 @@ namespace eclipse{
           myfile.read(chunk.data(), block_size);
           block_info.content = chunk.data();
           posix_fadvise(fd, end, block_size, POSIX_FADV_WILLNEED);
+          cout << "...DONE" << endl;
 
 
           block_info.name = file_name + "_" + to_string(block_seq);
@@ -134,6 +146,7 @@ namespace eclipse{
           block_info.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
           block_info.is_committed = 1;
 
+          cout << "Prior to send_message" << endl;
           send_message(socket.get(), &block_info);
           auto reply = read_reply<Reply> (socket.get());
 
@@ -141,7 +154,7 @@ namespace eclipse{
           if (reply->message != "OK") {
             cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
             return EXIT_FAILURE;
-          } 
+          }
           if (end >= file_info.size) {
             break;
           }

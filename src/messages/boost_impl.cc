@@ -2,6 +2,8 @@
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
 
 //! 4) Also here
 BOOST_CLASS_EXPORT(eclipse::messages::Boundaries);

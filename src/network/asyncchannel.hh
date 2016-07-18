@@ -17,6 +17,7 @@ class AsyncChannel: public Channel {
     AsyncChannel(tcp::socket*, tcp::socket*, NetObserver*, int);
     ~AsyncChannel();
     void do_write (messages::Message*) override; 
+    void do_write (std::shared_ptr<std::string>&); 
     void do_write_impl (); 
     void do_read ();
 
@@ -28,7 +29,7 @@ class AsyncChannel: public Channel {
     NetObserver* node = nullptr;
     tcp::socket *sender, *receiver;
     int id;
-    std::queue<std::unique_ptr<std::string>> messages_queue;
+    std::queue<std::shared_ptr<std::string>> messages_queue;
     std::atomic<bool> is_writing;
 };
 
