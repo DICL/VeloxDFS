@@ -34,12 +34,8 @@ namespace eclipse{
   }
 
   void DFS::send_message(tcp::socket* socket, eclipse::messages::Message* msg) {
-    cout << "Start serialization" << std::flush;
     string* to_send = save_message(msg);
-    cout << "...DONE" << endl;
-    cout << "Sending..." << std::flush;
     socket->send(boost::asio::buffer(*to_send));
-    cout << "DONE" << std::endl;
   }
 
   template <typename T>
@@ -123,7 +119,6 @@ namespace eclipse{
           } else {
             end = file_info.size;
           }
-          cout << "Start reading block" << std::flush;
           block_size = (uint32_t) end - start;
           bzero(chunk.data(), BLOCK_SIZE);
           myfile.seekg(start, myfile.beg);
@@ -131,7 +126,6 @@ namespace eclipse{
           myfile.read(chunk.data(), block_size);
           block_info.content = chunk.data();
           posix_fadvise(fd, end, block_size, POSIX_FADV_WILLNEED);
-          cout << "...DONE" << endl;
 
 
           block_info.name = file_name + "_" + to_string(block_seq);
@@ -146,7 +140,6 @@ namespace eclipse{
           block_info.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
           block_info.is_committed = 1;
 
-          cout << "Prior to send_message" << endl;
           send_message(socket.get(), &block_info);
           auto reply = read_reply<Reply> (socket.get());
 
