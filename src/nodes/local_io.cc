@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <dirent.h>
 #include <fstream>
+#include <vector>
 
 using namespace eclipse;
 using namespace std;
@@ -23,7 +24,7 @@ void Local_io::write (std::string name, std::string& v) {
 // update {{{
 void Local_io::update (std::string name, std::string v, uint32_t pos, uint32_t len) {
   string file_path = disk_path + string("/") + name;
-  fstream file (file_path, ios::out|ios::in);
+  fstream file (file_path, ios::out | ios::binary);
   file.seekp(pos, ios::beg);
   file.write(v.c_str(), len);
   file.close();
@@ -31,12 +32,15 @@ void Local_io::update (std::string name, std::string v, uint32_t pos, uint32_t l
 // }}}
 // read {{{
 std::string Local_io::read (string name) {
-  ifstream in (disk_path + string("/") + name);
-  string value ((std::istreambuf_iterator<char>(in)),
-      std::istreambuf_iterator<char>());
+  ifstream in (disk_path + string("/") + name, ios::in | ios::binary | ios::ate);
+  ifstream::pos_type fileSize = in.tellg();
+  in.seekg(0, ios::beg);
+
+  vector<char> bytes(fileSize);
+  in.read(&bytes[0], fileSize);
 
   in.close();
-  return value;
+  return string(&bytes[0], fileSize);
 }
 // }}}
 // read_metadata {{{
