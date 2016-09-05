@@ -56,14 +56,20 @@ namespace eclipse{
       return unique_ptr<T>(m);
     }
 
+  bool DFS::fexists(const char* filename) {
+     ifstream ifile(filename);
+     return ifile;
+  }
   int DFS::put(int argc, char* argv[]) {
     if (argc < 3) {
       cout << "[INFO] dfs put file_1 file_2 ..." << endl;
       return EXIT_FAILURE;
+
     } else {
       vector<char> chunk(BLOCK_SIZE);
       Histogram boundaries(NUM_NODES, 0);
       boundaries.initialize();
+
       string op = argv[2];
       FILETYPE type = FILETYPE::Normal;
       int i=2;
@@ -73,7 +79,11 @@ namespace eclipse{
         i++;
       }
       for (; i<argc; i++) {
-        string file_name = argv[i];
+        string file_name = argv[i];	
+        if (!this->fexists(argv[i])) {
+          cerr << "[ERR] " << file_name << " does not exist." << endl;
+          continue;
+        }
         FileExist fe;
         fe.name = file_name;
         uint32_t file_hash_key = h(file_name);
