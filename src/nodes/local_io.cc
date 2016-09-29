@@ -10,19 +10,20 @@ using namespace std;
 
 // constructors {{{
 Local_io::Local_io() {
-  disk_path = context.settings.get<string>("path.scratch");
 }
 //  }}}
 // write {{{
-void Local_io::write (std::string name, std::string& v) {
-  string file_path = disk_path + string("/") + name;
+void Local_io::write(string name, string& v) {
+  string disk_path = context.settings.get<string>("path.scratch");
+  string file_path = disk_path + "/" + name;
   ofstream file (file_path);
   file << v;
   file.close();
 }
 // }}}
 // update {{{
-void Local_io::update (std::string name, std::string v, uint32_t pos, uint32_t len) {
+void Local_io::update(string name, string v, uint64_t pos, uint64_t len) {
+  string disk_path = context.settings.get<string>("path.scratch");
   string file_path = disk_path + string("/") + name;
   fstream file (file_path, ios::out | ios::binary);
   file.seekp(pos, ios::beg);
@@ -31,33 +32,31 @@ void Local_io::update (std::string name, std::string v, uint32_t pos, uint32_t l
 }
 // }}}
 // read {{{
-std::string Local_io::read (string name) {
+string Local_io::read(string name) {
+  string disk_path = context.settings.get<string>("path.scratch");
   ifstream in (disk_path + string("/") + name, ios::in | ios::binary | ios::ate);
   ifstream::pos_type fileSize = in.tellg();
   in.seekg(0, ios::beg);
-
   vector<char> bytes(fileSize);
   in.read(&bytes[0], fileSize);
-
   in.close();
   return string(&bytes[0], fileSize);
 }
 // }}}
 // read_metadata {{{
 // This functions loads into a string the metadata db
-std::string Local_io::read_metadata() {
-  string replica_path = context.settings.get<string>("path.metadata") + "/metadata.db";
-  ifstream in (replica_path);
-  string value ((std::istreambuf_iterator<char>(in)),
-      std::istreambuf_iterator<char>());
-
+string Local_io::read_metadata() {
+  string md_path = context.settings.get<string>("path.metadata") + "/metadata.db";
+  ifstream in(md_path);
+  string value((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
   in.close();
   return value;
 }
 // }}}
 // pread {{{
-std::string Local_io::pread (string name, uint32_t pos, uint32_t len) {
-  ifstream in (disk_path + string("/") + name);
+string Local_io::pread(string name, uint64_t pos, uint64_t len) {
+  string disk_path = context.settings.get<string>("path.scratch");
+  ifstream in(disk_path + string("/") + name);
   in.seekg(pos, in.beg);
   char *buffer = new char[len];
   in.read(buffer, len);
@@ -69,29 +68,30 @@ std::string Local_io::pread (string name, uint32_t pos, uint32_t len) {
 // }}}
 // format {{{
 bool Local_io::format () {
-  string fs_path = context.settings.get<string>("path.scratch");
-  string md_path = context.settings.get<string>("path.metadata");
-
-  DIR *theFolder = opendir(fs_path.c_str());
-  struct dirent *next_file;
-  char filepath[256] = {0};
-
-  while ( (next_file = readdir(theFolder)) != NULL ) {
-    sprintf(filepath, "%s/%s", fs_path.c_str(), next_file->d_name);
-    DEBUG("FORMAT: Removing %s", filepath);
-    if (0 != ::remove(filepath)) {
-      ERROR("FORMAT: Can't remove %s.", filepath);
+  string disk_path = context.settings.get<string>("path.scratch");
+  string md_path = context.settings.get<string>("path.scratch");
+  DIR *theDir = opendir(disk_path.c_str());
+  char buf[512] = {0};
+  sprintf(buf, "%s", md_path.c_str());
+  std::remove(buf);
+  if (theDir) {
+    struct dirent *next_file;
+    while ((next_file = readdir(theDir)) != NULL) {
+      if (!strcmp(next_file->d_name, ".") || !strcmp(next_file->d_name, "..")) {
+        continue;
+      }
+      sprintf(buf, "%s/%s", disk_path.c_str(), next_file->d_name);
+      std::remove(buf);
     }
   }
-  closedir(theFolder);
-
-  ::remove((md_path + "/metadata.db").c_str());
+  closedir(theDir);
   return true;
 }
 // }}}
 // remove {{{
-void Local_io::remove (std::string k) {
+void Local_io::remove (string k) {
+  string disk_path = context.settings.get<string>("path.scratch");
   string file_path = disk_path + string("/") + k;
-  ::remove(file_path.c_str());
+  std::remove(file_path.c_str());
 }
 // }}}

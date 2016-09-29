@@ -13,22 +13,38 @@ messages_files   = src/messages/boundaries.cc      \
                    src/messages/control.cc         \
                    src/messages/boost_impl.cc      \
                    src/messages/factory.cc         \
-                   src/messages/fileinfo.cc        \
-                   src/messages/fileupdate.cc      \
-                   src/messages/blockinfo.cc       \
-                   src/messages/blockupdate.cc     \
                    src/messages/task.cc            \
                    src/messages/reply.cc           \
-                   src/messages/filerequest.cc     \
-                   src/messages/blockrequest.cc    \
-                   src/messages/filelist.cc        \
-                   src/messages/filedescription.cc \
                    src/messages/cacheinfo.cc       \
-                   src/messages/blockdel.cc        \
-                   src/messages/filedel.cc         \
+                   src/messages/checkexist.cc      \
                    src/messages/formatrequest.cc   \
-                   src/messages/fileexist.cc       \
-                   src/messages/metadata.cc
+                   src/messages/metadata.cc        \
+                   src/messages/fileinfo.cc        \
+                   src/messages/filelist.cc        \
+                   src/messages/filerequest.cc     \
+                   src/messages/filedescription.cc \
+                   src/messages/filedel.cc         \
+                   src/messages/fileupdate.cc      \
+                   src/messages/blockinfo.cc       \
+                   src/messages/blocklist.cc       \
+                   src/messages/blockrequest.cc    \
+                   src/messages/blockdel.cc        \
+                   src/messages/blockupdate.cc     \
+                   src/messages/sliceinfo.cc       \
+                   src/messages/slicelist.cc       \
+                   src/messages/slicerequest.cc    \
+                   src/messages/slicedel.cc        \
+                   src/messages/mdlistinfo.cc      \
+                   src/messages/mdlistlist.cc      \
+                   src/messages/mdlistrequest.cc   \
+                   src/messages/mdlistdel.cc       \
+                   src/messages/mdlistupdate.cc    \
+                   src/messages/nodeinfo.cc        \
+                   src/messages/nodelist.cc        \
+                   src/messages/noderequest.cc     \
+                   src/messages/nodedel.cc         \
+                   src/messages/nodeupdate.cc      \
+                   src/messages/nodedescription.cc
 
 # libs -----
 lib_LTLIBRARIES     = libecfs.la

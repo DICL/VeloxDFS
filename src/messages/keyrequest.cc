@@ -1,11 +1,6 @@
 #include "keyrequest.hh"
 
-namespace eclipse {
-namespace messages {
+using namespace eclipse::messages;
 
-KeyRequest::KeyRequest (std::string k) : key(k) { }
-
+KeyRequest::KeyRequest (const std::string& k) : key(k) {}
 std::string KeyRequest::get_type() const { return "KeyRequest"; }
-
-}
-}

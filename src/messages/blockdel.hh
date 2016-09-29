@@ -1,18 +1,16 @@
 #pragma once
+#include <vector>
+#include <cstdint>
 #include "message.hh"
 
 namespace eclipse {
-namespace messages {
+  namespace messages {
+    struct BlockDel: public Message {
+      BlockDel();
+      BlockDel(std::string);
+      std::string get_type() const override;
 
-struct BlockDel: public Message {
-  std::string get_type() const override;
-  
-  std::string name;
-  std::string file_name;
-  unsigned int seq;
-  uint32_t hash_key;
-  int replica;
-};
-
-}
+      std::string name;
+    };
+  }
 }

@@ -1,18 +1,14 @@
 #pragma once
-
 #include "message.hh"
 
 namespace eclipse {
-namespace messages {
+  namespace messages {
+    struct FileDel: public Message {
+      FileDel();
+      FileDel(std::string);
+      std::string get_type() const override;
 
-struct FileDel: public Message {
-  FileDel() = default;
-  ~FileDel() = default;
-  
-  std::string get_type() const override;
-
-  std::string name;
-};
-
-}
+      std::string name;
+    };
+  }
 }

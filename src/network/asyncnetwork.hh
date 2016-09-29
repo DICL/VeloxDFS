@@ -8,6 +8,7 @@
 #include <boost/asio.hpp>
 #include <mutex>
 #include <map>
+#include <memory>
 
 namespace eclipse {
 namespace network {
@@ -25,7 +26,7 @@ class AsyncNetwork: public Network, public NetObserver {
     bool close () override;
     size_t size () override;
     bool send(int, messages::Message*) override;
-    bool send_and_replicate(std::vector<int>, messages::Message* m) override;
+    bool send_and_replicate(std::vector<int>, messages::Message*) override;
     void attach(AsyncNode*) override;
 
     void on_accept(tcp::socket*) override;
@@ -92,22 +93,24 @@ size_t AsyncNetwork<TYPE>::size () {
   return channels.size();
 }
 // }}}
-// send_and_replicate {{{
-template<typename TYPE>
-bool AsyncNetwork<TYPE>::send_and_replicate(std::vector<int> node_indices, messages::Message* m) {
-  std::lock_guard<std::mutex> lck (acceptor_mutex); 
-  shared_ptr<std::string> message_serialized (save_message(m));
-  for (auto i : node_indices) {
-    channels[i]->do_write(message_serialized);
-  }
-  return true;
-}
-// }}}
 // send {{{
 template<typename TYPE>
 bool AsyncNetwork<TYPE>::send (int i, messages::Message* m) {
   std::lock_guard<std::mutex> lck (acceptor_mutex); 
   channels[i]->do_write(m);
+  return true;
+}
+// }}}
+// send_and_replicate {{{
+template<typename TYPE>
+bool AsyncNetwork<TYPE>::send_and_replicate(std::vector<int> net_ids, messages::Message* m) {
+  std::lock_guard<std::mutex> lck (acceptor_mutex); 
+  auto m_ = dynamic_cast<BlockInfo*>(m); 
+  //std::shared_ptr<std::string> message_serialized = std::make_shared<std::string>(save_message(m));
+  std::shared_ptr<std::string> message_serialized (save_message(m));
+  for (auto i : net_ids) {
+    channels[i]->do_write(message_serialized);
+  }
   return true;
 }
 // }}}

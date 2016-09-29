@@ -35,14 +35,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * Along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __SETTINGS_HH_
-#define __SETTINGS_HH_
 
-#include <string>
+#pragma once
 #include <memory>
+#include <string>
 
-class Settings 
-{
+class Settings {
   private:
     class SettingsImpl;
     std::unique_ptr<SettingsImpl> impl;
@@ -50,11 +48,10 @@ class Settings
   public:
     Settings();
     Settings(std::string);
+    ~Settings();
 
     Settings(Settings&&);          //! Move operators
     void operator=(Settings&&);    //!
-
-    ~Settings();
 
     Settings& load () &;
     Settings&& load () &&;
@@ -62,5 +59,3 @@ class Settings
     template <typename T> T get (std::string) const;
     std::string getip () const;
 };
-
-#endif

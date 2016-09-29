@@ -32,7 +32,11 @@ int main(int argc, char* argv[]) {
     else if (op.compare("format") == 0) {
       dfs.format(argc, argv);
       return EXIT_SUCCESS;
+    } else if (op.compare("update") == 0) {
+      dfs.DFS::update(argc, argv);
+      return EXIT_SUCCESS;
     }
+    /*
     else if (op.compare("show") == 0) {
       dfs.show(argc, argv);
       return EXIT_SUCCESS;
@@ -41,16 +45,16 @@ int main(int argc, char* argv[]) {
       dfs.DFS::pget(argc, argv);
       return EXIT_SUCCESS;
     }
-    else if (op.compare("update") == 0) {
-      dfs.DFS::update(argc, argv);
-      return EXIT_SUCCESS;
-    }
     else if (op.compare("append") == 0) {
       dfs.DFS::append(argc, argv);
       return EXIT_SUCCESS;
     }
+    else if (op.compare("sput") == 0) {
+      dfs.DFS::sput(argc, argv);
+      return EXIT_SUCCESS;
+    }*/
   }
   cerr << "[ERR] Unknown operation" << endl;
-  cout << "[INFO] dfs put|get|cat|ls|rm|format|pget|update|append" << endl;
+  cout << "[INFO] dfs put|get|cat|ls|rm|format|pget|update|append|sput" << endl;
   return EXIT_FAILURE;
 }

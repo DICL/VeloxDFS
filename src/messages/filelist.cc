@@ -1,10 +1,11 @@
 #include "filelist.hh"
 
-namespace eclipse {
-namespace messages {
+using namespace eclipse::messages;
 
-FileList::FileList (std::vector<FileInfo> v) : data(v) { }
+FileList::FileList() {}
+
+FileList::FileList(std::vector<FileInfo> data) {
+  this->data.assign(data.begin(), data.end());
+}
+
 std::string FileList::get_type() const { return "FileList"; }
-
-}
-}

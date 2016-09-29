@@ -1,10 +1,6 @@
 #include "boundaries.hh"
 
-namespace eclipse {
-namespace messages {
+using namespace eclipse::messages;
 
-Boundaries::Boundaries (std::vector<uint64_t> v) : data(v) { }
+Boundaries::Boundaries (std::vector<uint32_t> v) : data(v) { }
 std::string Boundaries::get_type() const { return "Boundaries"; }
-
-}
-}

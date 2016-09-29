@@ -6,27 +6,20 @@
 //             - Non-arguments constructor
 //
 #pragma once
-
 #include <string>
-
 namespace eclipse {
-namespace messages {
+  namespace messages {
+    struct Message {
+      Message() = default;
+      Message(int, int);
+      virtual ~Message () {}
+      virtual std::string get_type() const = 0;
+      int get_origin() const;
+      int get_destination() const;
+      Message& set_origin(int);
+      Message& set_destination(int);
 
-struct Message {
-  Message() = default;
-  Message(int, int);
-  virtual ~Message () {}
-
-  virtual std::string get_type() const = 0;
-
-  int get_origin() const;
-  int get_destination() const;
-
-  Message& set_origin(int);
-  Message& set_destination(int);
-
-  int origin, destination;
-};
-
-}
+      int origin, destination;
+    };
+  }
 }

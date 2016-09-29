@@ -3,7 +3,6 @@
 // @brief      Settings impl using boost library.
 //
 // Includes {{{
-#define BOOST_SPIRIT_THREADSAFE
 #include "settings.hh"
 #include <iostream>
 #include <vector>
@@ -25,6 +24,7 @@
 #include <cstdlib>
 #include <algorithm>
 
+#define BOOST_SPIRIT_THREADSAFE
 #define FINAL_PATH "/eclipse.json"
 
 using std::cout;

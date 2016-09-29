@@ -1,20 +1,17 @@
 #pragma once
-
 #include "message.hh"
 #include <string>
 #include <vector>
 #include <iostream>
 
 namespace eclipse {
-namespace messages {
+  namespace messages {
+    struct Boundaries: public Message {
+      Boundaries() = default;
+      Boundaries(std::vector<uint32_t>);
+      std::string get_type() const override;
 
-struct Boundaries: public Message {
-  Boundaries() = default;
-  Boundaries(std::vector<uint64_t>);
-
-  std::vector<uint64_t> data;
-  std::string get_type() const override;
-};
-
-}
+      std::vector<uint32_t> data;
+    };
+  }
 }

@@ -13,7 +13,7 @@ struct FileUpdate: public Message {
 
   std::string name;
   uint64_t size;
-  unsigned int num_block;
+  uint64_t num_block;
 };
 
 }

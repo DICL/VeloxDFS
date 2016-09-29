@@ -12,12 +12,12 @@ int main (int argc, char ** argv) {
   int in_port = context.settings.get<int>("network.ports.internal");
   int ex_port = context.settings.get<int>("network.ports.client");
 
-  auto internal_net = make_unique<network::AsyncNetwork<P2P>> (in_port);
-  PeerDFS peer (internal_net.get());
+  auto internal_net = std::make_unique<network::AsyncNetwork<P2P>> (in_port);
+  PeerDFS peer(internal_net.get());
   internal_net->establish();
 
-  auto external_net = make_unique<network::AsyncNetwork<Server>> (ex_port);
-  RemoteDFS remote (&peer, external_net.get());
+  auto external_net = std::make_unique<network::AsyncNetwork<Server>> (ex_port);
+  RemoteDFS remote(&peer, external_net.get());
   external_net->establish();
 
   context.join();

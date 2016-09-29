@@ -7,6 +7,7 @@
 #include <boost/bind.hpp>
 #include <unistd.h>
 #include <stdexcept>
+#include <memory>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 
@@ -41,24 +42,23 @@ AsyncChannel::~AsyncChannel() {
   }
 }
 // }}}
-// do_write str {{{
-void AsyncChannel::do_write(std::shared_ptr<std::string>& str_p) {
-  messages_queue.push(str_p);
-  if (!is_writing.exchange(true)) {
-    do_write_impl ();
-  }
-}
-//}}}
 // do_write {{{
 void AsyncChannel::do_write(Message* m) {
   string* str = save_message(m);
-
   messages_queue.push(shared_ptr<string>(str));
   if (!is_writing.exchange(true)) {
     do_write_impl ();
   }
 }
 // }}}
+// do_write str {{{
+void AsyncChannel::do_write(shared_ptr<string>& str_p) {
+  messages_queue.push(str_p);
+  if (!is_writing.exchange(true)) {
+    do_write_impl ();
+  }
+}
+//}}}
 // do_write_impl {{{
 void AsyncChannel::do_write_impl() {
   auto to_write =  messages_queue.front();
@@ -67,16 +67,12 @@ void AsyncChannel::do_write_impl() {
 }
 // }}}
 // on_write {{{
-void AsyncChannel::on_write(const boost::system::error_code& ec, 
-    size_t s) {
+void AsyncChannel::on_write(const boost::system::error_code& ec, size_t s) {
   if (ec) {
-    INFO("Message could not reach err=%s", 
-        ec.message().c_str());
-
+    INFO("Message could not reach err=%s", ec.message().c_str());
     do_write_impl();
   } else {
     messages_queue.pop();
-
     if (!messages_queue.empty()) {
       do_write_impl ();
     } else {
@@ -87,7 +83,6 @@ void AsyncChannel::on_write(const boost::system::error_code& ec,
 // }}}
 // do_read {{{
 void AsyncChannel::do_read () {
-  DEBUG("Connection established, starting to read");
   spawn(iosvc, bind(&AsyncChannel::read_coroutine, this, _1));
 }
 // }}}
@@ -96,7 +91,7 @@ void AsyncChannel::read_coroutine (yield_context yield) {
   boost::asio::streambuf buf;
   boost::system::error_code ec;
   char header [header_size + 1] = {'\0'}; 
-  header[16] = '\0';
+  header[header_size] = '\0';
 
   try {
     while (true) {
@@ -105,9 +100,8 @@ void AsyncChannel::read_coroutine (yield_context yield) {
         throw std::runtime_error("header size");
       }
 
-      DEBUG("Package have arrived");
       size_t size = atoi(header);
-      l = read (*receiver, buf, transfer_exactly(size));
+      l = read(*receiver, buf, transfer_exactly(size));
       if (l != size)  {
         throw std::runtime_error("body size");
       }
@@ -115,7 +109,6 @@ void AsyncChannel::read_coroutine (yield_context yield) {
       Message* msg = nullptr;
       msg = load_message(buf);
 
-      DEBUG("Package has been deserialized");
       node->on_read(msg, id);
       delete msg;
       msg=nullptr;

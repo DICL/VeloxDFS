@@ -5,17 +5,16 @@
 namespace eclipse {
 namespace messages {
   struct BlockUpdate: public Message {
+    BlockUpdate ();
+    BlockUpdate (std::string, int, uint64_t, uint64_t, int, std::string);
     std::string get_type() const override;
 
     std::string name;
-    std::string file_name;
-    unsigned int seq;
-    uint32_t hash_key;
-    uint32_t size;
+    int net_id;
+    uint64_t pos;
+    uint64_t len;
     int replica;
     std::string content;
-    uint32_t pos;
-    uint32_t len;
   };
 }
 }
