@@ -16,6 +16,7 @@ namespace messages {
     std::string content;
     uint32_t pos;
     uint32_t len;
+    bool is_header;
   };
 }
 }

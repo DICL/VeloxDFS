@@ -31,21 +31,25 @@ messages_files   = src/messages/boundaries.cc      \
                    src/messages/metadata.cc
 
 # libs -----
-lib_LTLIBRARIES     = libecfs.la
-libecfs_la_SOURCES  = src/common/hash.cc src/common/settings.cc \
+lib_LTLIBRARIES     = libvdfs.la
+libvdfs_la_SOURCES  = $(messages_files) \
+                      src/client/dfs.cc \
+                      src/client/vdfs.cc \
+                      src/common/hash.cc src/common/settings.cc \
                       src/common/logger.cc src/common/histogram.cc \
                       src/common/context.cc src/common/dl_loader.cc \
                       src/common/context_singleton.cc
 
-libecfs_la_LDFLAGS  = $(BOOST_LDFLAGS) -version-info 0:0:0
+libvdfs_la_LDFLAGS  = $(BOOST_LDFLAGS) -version-info 0:0:0
+libvdfs_la_LIBADD   = -lboost_system -lboost_serialization -lboost_coroutine -lboost_thread -lboost_context -ldl
 
 # Binaries ----
 if BOOST_STATIC
 AM_LDFLAGS          = -static $(BOOST_LDFLAGS) -Wl,--start-group -Wl,-Bstatic,-lboost_system,-lboost_serialization,-lboost_coroutine,-lboost_thread,-lboost_context,-Bdynamic
-LDADD               = libecfs.la -lrt
+LDADD               = libvdfs.la -lrt
 else
-AM_LDFLAGS          = -static $(BOOST_LDFLAGS)
-LDADD               = libecfs.la -lboost_system -lboost_serialization -lboost_coroutine -lboost_thread -lboost_context
+AM_LDFLAGS          = $(BOOST_LDFLAGS)
+LDADD               = libvdfs.la -lboost_system -lboost_serialization -lboost_coroutine -lboost_thread -lboost_context
 endif
 
 eclipse_node_SOURCES = src/targets/node_main.cc \
@@ -60,18 +64,13 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
                        src/nodes/local_io.cc \
                        src/nodes/remotedfs.cc \
                        src/nodes/router.cc \
-                       src/fs/directory.cc \
-                       src/nodes/node.cc \
-                       $(messages_files)
+                       src/nodes/directory.cc \
+                       src/nodes/node.cc
 
-dfs_SOURCES         = src/fs/dfs.cc \
-                      src/fs/directory.cc \
-                      src/fs/main.cc \
-                      $(messages_files)
+dfs_SOURCES         = src/client/client.cc
 
-dfs_CXXFLAGS        = $(AM_CXXFLAGS)
-
-pkginclude_HEADERS  = src/common/ecfs.hh src/common/settings.hh
+pkginclude_HEADERS  = src/client/vdfs.hh \
+                      src/client/dfs.hh
 
 if COPY_SAMPLES
 sysconf_DATA        = doc/eclipse.json

@@ -43,11 +43,11 @@ nodes_SOURCES   = tests/nodes.cc \
                   src/nodes/remotedfs.cc \
                   src/nodes/router.cc \
                   src/nodes/local_io.cc \
-                  src/fs/directory.cc \
+                  src/nodes/directory.cc \
                   src/nodes/node.cc 
 
 metadata_LDADD     = $(LDADD_T)
 metadata_CPPFLAGS  = $(AM_CPPFLAGS_T)
 metadata_SOURCES   = tests/metadata_test.cc \
-                     src/fs/directory.cc \
+                     src/nodes/directory.cc \
                      $(messages_files)

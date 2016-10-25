@@ -3,6 +3,7 @@
 
 using namespace std;
 
+Context* Context::singleton = nullptr;
 
 // Constructors {{{
 Context* Context::connect (string title) {

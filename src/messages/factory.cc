@@ -50,5 +50,12 @@ std::string* save_message (Message* m) {
   return out;
 }
 
+void send_message(boost::asio::ip::tcp::socket* socket, 
+    eclipse::messages::Message* msg) {
+  string* to_send = save_message(msg);
+  socket->send(boost::asio::buffer(*to_send));
+}
+
+
 } /* messages */
 }
