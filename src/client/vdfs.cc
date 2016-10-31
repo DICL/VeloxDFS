@@ -35,6 +35,9 @@ vdfs::~vdfs() {
 // }}}
 // open {{{
 file vdfs::open(std::string name) {
+  if (!dfs->exists(name)) 
+    dfs->touch(name);
+
   return velox::file(this, name);
 }
 // }}}
@@ -44,7 +47,6 @@ file vdfs::upload(std::string name) {
   return velox::file(this, name);
 }
 // }}}
-//
 // append {{{
 void vdfs::append (std::string name, std::string content) {
   dfs->push_back({"", "", name, content});
@@ -66,7 +68,7 @@ bool vdfs::format () {
 }
 // }}}
 // exists {{{
-//bool vdfs::exists(std::string name) {
-  //return dfs->exists(name);
-//}
+bool vdfs::exists(std::string name) {
+  return dfs->exists(name);
+}
 // }}}

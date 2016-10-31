@@ -1,3 +1,4 @@
+// Headers {{{
 #include "dfs.hh"
 #include "../messages/boost_impl.hh"
 #include "../messages/fileinfo.hh"
@@ -24,7 +25,6 @@
 #include <ext/stdio_filebuf.h>
 #include <sstream>
 #include "../common/context_singleton.hh"
-//#define BOOST_SERIALIZATION_DYN_LINK 1
 
 using namespace std;
 using namespace eclipse;
@@ -37,8 +37,8 @@ enum class FILETYPE {
   App    = 0x1,
   Idata  = 0x2
 };
-
-
+// }}}
+// Constructors and misc {{{
 DFS::DFS() { }
 
 void DFS::load_settings() {
@@ -64,6 +64,8 @@ bool DFS::fexists(std::string filename) {
   ifstream ifile(filename);
   return ifile;
 }
+// }}}
+// put {{{
 int DFS::put(vec_str input) {
   if (input.size() < 3) {
     cout << "[INFO] dfs put file_1 file_2 ..." << endl;
@@ -185,7 +187,8 @@ int DFS::put(vec_str input) {
   }
   return EXIT_SUCCESS;
 }
-
+// }}}
+// load {{{
 std::string DFS::load(std::string file) {
   Histogram boundaries(NUM_NODES, 0);
   boundaries.initialize();
@@ -226,7 +229,8 @@ std::string DFS::load(std::string file) {
   socket->close();
   return output;
 }
-
+// }}} 
+// get {{{
 int DFS::get(vec_str argv) {
   if (argv.size() < 3) {
     cout << "[INFO] dfs get file_1 file_2 ..." << endl;
@@ -276,7 +280,8 @@ int DFS::get(vec_str argv) {
   }
   return EXIT_SUCCESS;
 }
-
+// }}}
+// cat {{{
 int DFS::cat(vec_str argv) {
   if (argv.size() < 3) {
     cout << "[INFO] dfs cat file_1 file_2 ..." << endl;
@@ -322,7 +327,8 @@ int DFS::cat(vec_str argv) {
   }
   return EXIT_SUCCESS;
 }
-
+// }}}
+// ls {{{
 int DFS::ls(vec_str argv) {
   const uint32_t KB = 1024;
   const uint32_t MB = 1024 * 1024;
@@ -403,7 +409,8 @@ int DFS::ls(vec_str argv) {
   }
   return EXIT_SUCCESS;
 }
-
+// }}}
+// rm {{{
 int DFS::rm(vec_str argv) {
   if (argv.size() < 3) {
     cout << "[INFO] dfs rm file_1 file_2 ..." << endl;
@@ -456,7 +463,8 @@ int DFS::rm(vec_str argv) {
     return EXIT_SUCCESS;
   }
 }
-
+// }}}
+// format {{{
 int DFS::format() {
   vector<FileInfo> total;
 
@@ -474,7 +482,8 @@ int DFS::format() {
   cout << "[INFO] dfs format is done." << endl;
   return EXIT_SUCCESS;
 }
-
+// }}}
+// show {{{
 int DFS::show(vec_str argv) {
   if (argv.size() < 3) {
     cout << "usage: dfs show file_name1 file_name2 ..." << endl;
@@ -513,7 +522,8 @@ int DFS::show(vec_str argv) {
   }
   return EXIT_SUCCESS;
 }
-
+// }}}
+// pget {{{
 int DFS::pget(vec_str argv) {
   string file_name = "";
   if (argv.size() < 5) {
@@ -594,7 +604,8 @@ int DFS::pget(vec_str argv) {
   cout << "[INFO] " << file_name << " is read." << endl;
   return EXIT_SUCCESS;
 }
-
+// }}}
+// update {{{
 int DFS::update(vec_str argv) {
   string ori_file_name = "";
   if (argv.size() < 5) {
@@ -704,7 +715,8 @@ int DFS::update(vec_str argv) {
   cout << "[INFO] " << ori_file_name << " is updated." << endl;
   return EXIT_SUCCESS;
 }
-
+// }}}
+// append {{{
 int DFS::append(vec_str argv) {
   string ori_file_name = "";
   if (argv.size() < 4) { // argument count check
@@ -889,7 +901,8 @@ int DFS::append(vec_str argv) {
   }
   return EXIT_SUCCESS;
 }
-
+// }}}
+// push_back {{{
 int DFS::push_back(vec_str argv) {
   string ori_file_name = "";
   if (argv.size() < 4) { // argument count check
@@ -1086,3 +1099,60 @@ int DFS::push_back(vec_str argv) {
   return EXIT_SUCCESS;
 }
 }
+/// }}} 
+// exists {{{
+bool DFS::exists(std::string name) {
+  FileExist fe;
+  fe.name = name;
+  uint32_t hash_key = h(name);
+  auto socket = connect(hash_key);
+  send_message(socket.get(), &fe);
+  auto rep = read_reply<Reply> (socket.get());
+  socket->close();
+
+  return (rep->message == "TRUE");
+}
+// }}}
+// touch {{{
+bool DFS::touch(std::string name) {
+  if (exists(name))
+    return false;
+
+  Histogram boundaries(NUM_NODES, 0);
+  boundaries.initialize();
+
+  int which_server = h(name) % NUM_NODES;
+
+  BlockInfo block_info;
+  block_info.name = name + "_0";
+  block_info.file_name = name;
+  block_info.hash_key = boundaries.random_within_boundaries(which_server);
+  block_info.seq = 0;
+  block_info.size = 0;
+  block_info.type = static_cast<unsigned int>(FILETYPE::Normal);
+  block_info.replica = replica;
+  block_info.node = nodes[which_server];
+  block_info.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
+  block_info.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
+  block_info.is_committed = 1;
+  block_info.content = "NOOP";
+
+  auto socket = connect(h(name));
+  send_message(socket.get(), &block_info);
+  auto reply = read_reply<Reply> (socket.get());
+
+  FileInfo file_info;
+  file_info.name = name;
+  file_info.hash_key = h(name);
+  file_info.type = static_cast<unsigned int>(FILETYPE::Normal);
+  file_info.replica = replica;
+  file_info.size = 0;
+  file_info.num_block = 1;
+
+  send_message(socket.get(), &file_info);
+  reply = read_reply<Reply> (socket.get());
+  socket->close();
+
+  return (reply->message == "OK");
+}
+// }}}

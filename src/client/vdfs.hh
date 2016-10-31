@@ -2,9 +2,7 @@
 #include "dfs.hh"
 
 namespace velox {
-
 class vdfs;
-
 class file {
   friend vdfs;
   public:
@@ -27,7 +25,7 @@ class vdfs {
     velox::file upload(std::string);
     bool rm(std::string);
     bool format();
-    //bool exists(std::string);
+    bool exists(std::string);
 
   protected:
     eclipse::DFS* dfs;

@@ -24,8 +24,9 @@ class DFS {
     int update(vec_str);
     int append(vec_str);
     bool fexists(std::string);
+    bool exists(std::string);
+    bool touch(std::string);
 
-    //int dump(vec_str);
     int push_back(vec_str);
     std::string load(std::string);
 
