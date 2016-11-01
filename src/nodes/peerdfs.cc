@@ -264,8 +264,8 @@ bool PeerDFS::update_block(messages::BlockUpdate* m) {
     } else {
       tmp_node = (which_node - i/2 + network_size) % network_size;
     }
-    //uint32_t tmp_hash_key = boundaries->random_within_boundaries(tmp_node);
-    update(m->hash_key, m->name, m->content, m->pos, m->len);
+    uint32_t tmp_hash_key = boundaries->random_within_boundaries(tmp_node);
+    update(tmp_hash_key, m->name, m->content, m->pos, m->len);
   }
   return true;
 }
