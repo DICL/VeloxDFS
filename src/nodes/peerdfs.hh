@@ -14,7 +14,7 @@
 #include "../messages/filedel.hh"
 #include "../messages/blockdel.hh"
 #include "../messages/fileexist.hh"
-#include "../fs/directory.hh"
+#include "directory.hh"
 #include "../common/histogram.hh"
 
 #include <string>

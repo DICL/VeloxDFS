@@ -30,11 +30,8 @@
 #include "metadata.hh"
 
 #include <boost/serialization/export.hpp>
-#include <boost/serialization/access.hpp>
 #include <boost/serialization/tracking.hpp>
-#include <boost/serialization/string.hpp>
 #include <boost/serialization/base_object.hpp>
-#include <boost/serialization/vector.hpp>
 
 #ifndef BASE_OBJECT
 #define BASE_OBJECT(X,Y)                          \
@@ -43,193 +40,60 @@
 #endif
 
 //! 2) Also here
-namespace eclipse {
-namespace messages {
+namespace boost{
+namespace serialization{
 
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::Message& m, unsigned int) {
-    ar & BOOST_SERIALIZATION_NVP(m.origin);
-    ar & BOOST_SERIALIZATION_NVP(m.destination);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::Boundaries& b, unsigned int) {
-    ar & BASE_OBJECT(Message, b);
-    ar & BOOST_SERIALIZATION_NVP(b.data);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::KeyValue& k, unsigned int) {
-    ar & BASE_OBJECT(Message, k);
-    ar & BOOST_SERIALIZATION_NVP(k.key);
-    ar & BOOST_SERIALIZATION_NVP(k.name);
-    ar & BOOST_SERIALIZATION_NVP(k.value);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::OffsetKeyValue& k, unsigned int) {
-    ar & BASE_OBJECT(Message, k);
-    ar & BOOST_SERIALIZATION_NVP(k.key);
-    ar & BOOST_SERIALIZATION_NVP(k.name);
-    ar & BOOST_SERIALIZATION_NVP(k.value);
-    ar & BOOST_SERIALIZATION_NVP(k.pos);
-    ar & BOOST_SERIALIZATION_NVP(k.len);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::Control& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.type);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::KeyRequest& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.key);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::FileInfo& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.name);
-    ar & BOOST_SERIALIZATION_NVP(c.hash_key);
-    ar & BOOST_SERIALIZATION_NVP(c.size);
-    ar & BOOST_SERIALIZATION_NVP(c.num_block);
-    ar & BOOST_SERIALIZATION_NVP(c.type);
-    ar & BOOST_SERIALIZATION_NVP(c.replica);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::FileUpdate& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.name);
-    ar & BOOST_SERIALIZATION_NVP(c.size);
-    ar & BOOST_SERIALIZATION_NVP(c.num_block);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::BlockInfo& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.name); 
-    ar & BOOST_SERIALIZATION_NVP(c.file_name);  
-    ar & BOOST_SERIALIZATION_NVP(c.seq);  
-    ar & BOOST_SERIALIZATION_NVP(c.hash_key); 
-    ar & BOOST_SERIALIZATION_NVP(c.size);     
-    ar & BOOST_SERIALIZATION_NVP(c.type);   
-    ar & BOOST_SERIALIZATION_NVP(c.replica);   
-    ar & BOOST_SERIALIZATION_NVP(c.node);        
-    ar & BOOST_SERIALIZATION_NVP(c.l_node);      
-    ar & BOOST_SERIALIZATION_NVP(c.r_node);      
-    ar & BOOST_SERIALIZATION_NVP(c.is_committed);  
-    ar & BOOST_SERIALIZATION_NVP(c.content);  
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::BlockUpdate& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.name);  
-    ar & BOOST_SERIALIZATION_NVP(c.file_name);  
-    ar & BOOST_SERIALIZATION_NVP(c.seq);  
-    ar & BOOST_SERIALIZATION_NVP(c.hash_key); 
-    ar & BOOST_SERIALIZATION_NVP(c.size);     
-    ar & BOOST_SERIALIZATION_NVP(c.replica);   
-    ar & BOOST_SERIALIZATION_NVP(c.content);  
-    ar & BOOST_SERIALIZATION_NVP(c.pos);     
-    ar & BOOST_SERIALIZATION_NVP(c.len);   
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::Task& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.id);
-    ar & BOOST_SERIALIZATION_NVP(c.type);
-    ar & BOOST_SERIALIZATION_NVP(c.library);
-    ar & BOOST_SERIALIZATION_NVP(c.input_path);
-    ar & BOOST_SERIALIZATION_NVP(c.func_name);
-  }
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::FileList& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.data);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::Reply& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.message);
-    ar & BOOST_SERIALIZATION_NVP(c.details);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::CacheInfo& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.keys);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::FileRequest& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.name);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::BlockRequest& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.name);
-    ar & BOOST_SERIALIZATION_NVP(c.hash_key);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::FileDescription& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.name);
-    ar & BOOST_SERIALIZATION_NVP(c.size);
-    ar & BOOST_SERIALIZATION_NVP(c.blocks);
-    ar & BOOST_SERIALIZATION_NVP(c.hash_keys);
-    ar & BOOST_SERIALIZATION_NVP(c.block_size);
-    ar & BOOST_SERIALIZATION_NVP(c.replica);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::FileDel& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.name);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::BlockDel& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.name);
-    ar & BOOST_SERIALIZATION_NVP(c.file_name);
-    ar & BOOST_SERIALIZATION_NVP(c.seq);
-    ar & BOOST_SERIALIZATION_NVP(c.hash_key);
-    ar & BOOST_SERIALIZATION_NVP(c.replica);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::FormatRequest& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::FileExist& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.name);
-  }
-
-template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::MetaData& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.name);
-    ar & BOOST_SERIALIZATION_NVP(c.node);
-    ar & BOOST_SERIALIZATION_NVP(c.content);
-  }
+template <typename Archive> void serialize (Archive&, eclipse::messages::Message&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::Boundaries&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::KeyValue&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::OffsetKeyValue&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::Control&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::KeyRequest&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::Task&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::FileInfo&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::FileUpdate&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::FileList&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::BlockInfo&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::BlockUpdate&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::Reply&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::CacheInfo&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::FileRequest&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::BlockRequest&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::FileDescription&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::FileDel&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::BlockDel&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::FormatRequest&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::FileExist&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::MetaData&, unsigned);
 }
 }
 
 BOOST_SERIALIZATION_ASSUME_ABSTRACT(eclipse::messages::Message);
 
 //! 3) Also here
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::Boundaries);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::KeyValue);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::OffsetKeyValue);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::Control);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::KeyRequest);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::Task);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileInfo);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileUpdate);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileList);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::BlockInfo);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::BlockUpdate);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::Reply);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::CacheInfo);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileRequest);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::BlockRequest);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileDescription);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileDel);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::BlockDel);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::FormatRequest);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileExist);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::MetaData);
+
+//! 4) and here
 BOOST_CLASS_TRACKING(eclipse::messages::Message, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::Boundaries, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::KeyValue, boost::serialization::track_never);

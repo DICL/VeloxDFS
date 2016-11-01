@@ -13,7 +13,7 @@
 
 using std::string;
 
-std::unordered_map<string, int> syslog_facilities {
+static std::unordered_map<string, int> syslog_facilities {
   {"LOG_LOCAL1" , LOG_LOCAL1},
   {"LOG_LOCAL2" , LOG_LOCAL2},
   {"LOG_LOCAL3" , LOG_LOCAL3},
@@ -47,6 +47,17 @@ void Logger::disconnect (Logger* in) {
 }
 
 Logger::Logger (char* title, const string& type) { 
+  std::unordered_map<string, int> syslog_facilities {
+    {"LOG_LOCAL1" , LOG_LOCAL1},
+      {"LOG_LOCAL2" , LOG_LOCAL2},
+      {"LOG_LOCAL3" , LOG_LOCAL3},
+      {"LOG_LOCAL4" , LOG_LOCAL4},
+      {"LOG_LOCAL5" , LOG_LOCAL5},
+      {"LOG_LOCAL6" , LOG_LOCAL6},
+      {"LOG_LOCAL7" , LOG_LOCAL7},
+      {"LOG_DAEMON" , LOG_DAEMON},
+      {"LOG_USER" , LOG_USER}
+  };
   int type_ = syslog_facilities[type];
   openlog (title, LOG_CONS, type_); 
 }
