@@ -2,7 +2,9 @@
 #include "dfs.hh"
 
 namespace velox {
+
 class vdfs;
+
 class file {
   friend vdfs;
   public:
@@ -11,7 +13,6 @@ class file {
 
   protected:
     file(vdfs*, std::string);
-    uint32_t id;
     std::string name;
     vdfs* vdfs_;
 };
@@ -28,10 +29,9 @@ class vdfs {
     bool exists(std::string);
 
   protected:
-    eclipse::DFS* dfs;
+    DFS* dfs;
     void append(std::string, std::string);
     std::string load(std::string);
-
 };
 
 

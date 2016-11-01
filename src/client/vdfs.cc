@@ -3,13 +3,11 @@
 #include "../common/hash.hh"
 
 using namespace velox;
-using eclipse::DFS;
 
 // Constructors {{{
 file::file(vdfs* vdfs_, std::string name_) {
   this->vdfs_ = vdfs_;
   name = name_;
-  id = h(name);
 }
 
 // }}}
@@ -25,7 +23,7 @@ std::string file::get() {
 // }}}
 // vdfs {{{
 vdfs::vdfs() {
-  dfs = new eclipse::DFS();
+  dfs = new DFS();
   dfs->load_settings();
 }
 

@@ -5,7 +5,8 @@
 #include <stdint.h>
 #include <memory>
 
-namespace eclipse {
+namespace velox {
+
 using boost::asio::ip::tcp;
 using vec_str = std::vector<std::string>;
 
@@ -31,7 +32,6 @@ class DFS {
     std::string load(std::string);
 
   private:
-
     uint32_t BLOCK_SIZE;
     uint32_t NUM_NODES;
     int replica;
@@ -40,4 +40,5 @@ class DFS {
 
     std::unique_ptr<tcp::socket> connect (uint32_t);
 };
+
 }

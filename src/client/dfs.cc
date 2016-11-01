@@ -30,14 +30,16 @@ using namespace std;
 using namespace eclipse;
 using namespace boost::archive;
 using namespace eclipse::messages;
+// }}}
 
-namespace eclipse {
+namespace velox {
+
 enum class FILETYPE {
   Normal = 0x0,
   App    = 0x1,
   Idata  = 0x2
 };
-// }}}
+
 // Constructors and misc {{{
 DFS::DFS() { }
 
@@ -1098,7 +1100,6 @@ int DFS::push_back(vec_str argv) {
   }
   return EXIT_SUCCESS;
 }
-}
 /// }}} 
 // exists {{{
 bool DFS::exists(std::string name) {
@@ -1156,3 +1157,4 @@ bool DFS::touch(std::string name) {
   return (reply->message == "OK");
 }
 // }}}
+}

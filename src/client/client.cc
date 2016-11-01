@@ -1,7 +1,7 @@
 #include "dfs.hh"
 #include <iostream>
 
-using namespace eclipse;
+using namespace velox;
 using namespace std;
 
 int main(int argc, char** argv) {
