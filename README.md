@@ -1,33 +1,39 @@
 [![Build Status](https://travis-ci.org/DICL/VeloxDFS.svg?branch=master)](https://travis-ci.org/DICL/VeloxDFS)
 [![Slack room](https://img.shields.io/badge/slack-join-pink.svg)](https://dicl.slack.com/messages/general/)
-<a href="https://zenhub.com"><img src="https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png"></a>
-BRIEFING
-========
+[![ZenHub](https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)](https://zenhub.com)
+[![Analytics](https://ga-beacon.appspot.com/UA-87474237-1/veloxdfs)](https://github.com/DICL/VeloxDFS)
 
-EclipseDFS is a decentralized distributed file system based on Chord DHT. 
+---
 
-Key features of current EclipseDFS include:
- - There's no central directory service such as HDFS NameNode. 
- - The decentralized file metadata are managed by SQLite in each data node. 
- - It is fault tolerant. (Each block is replicated in successor and decessor by default)
- 
-Current EclipseDFS does not support update operation as in HDFS, but we are working on it.
+_VeloxDFS_ is a decentralized distributed file system based on _ChordDHT_ and _HDFS_.
+
+This distributed file system serves as the foundation and essential component of the _Velox Big Data Framework (VBDF)_, 
+however, it can be used independently of the other components such as _VeloxMR_ (MapReduce Framework).
+
+Key features of current VeloxDFS implementation includes:
+ - No central directory service such as in _HDFS_ NameNode.
+ - Instead for each file there is a file leader node which holds its metadata.
+ - Highly secure and stable, total replication of the system's state.
+
+---
 
 USAGE
 =====
-EclipseDFS default launcher is not included in this repository, if you want to use it you can find it [here][eclipsed].
+VeloxDFS default launcher is not included in this repository, if you want to use it you can find it [here][eclipsed].
 
-The reason to not to include the launcher inside the package is to let the user to chose any launcher, options are:
+The reason not to include the launcher inside the package is to let the user to choose any launcher or service managers such as:
  - systemd/init.d
  - puppet/chef/salt
  
-Once the system is running, you can interact with EclipseDFS with the following commands:
+Once the system is up and running, you can interact with VeloxDFS with the following commands:
 ```
- $ dfs ls|put|get|rm|format|show
+ $ dfs put|get|cat|ls|rm|format|pget|update|append
 ```
 
 COMPILING & INSTALLING
-=====================
+======================
+
+_Detailed information can be found in the wiki of this repository_
 
 Compiling requirements
 ----------------------
@@ -76,13 +82,14 @@ FAQ
   In this example we assume that the boost headers are in `/usr/local/include` while the library files
   are inside `/usr/local/lib`.
 
-AUTHOR
-======
+AUTHORS
+=======
 
  - __AUTHOR:__ [Vicente Adolfo Bolea Sanchez] [vicente]
  - __AUTHOR:__ [MooHyeon Nam] [mh]
  - __AUTHOR:__ [WonBae Kim] [wb]
  - __AUTHOR:__ [KiBeom Jin] [kb]
+ - __AUTHOR:__ [Deukyeon Hwang] [dy]
  - __AUTHOR:__ [Prof. Nam Beomseok] [nb]
  - __INSTITUTION:__ [DICL laboratory] [dicl] at [UNIST]
 
@@ -93,5 +100,6 @@ AUTHOR
 [mh]:       https://github.com/nammh 
 [wb]:       https://github.com/zwigul
 [kb]:       https://github.com/kbjin
+[dy]:       https://github.com/deukyeon
 [eclipsed]: https://github.com/DICL/eclipsed
 [nb]:       http://dicl.unist.ac.kr
