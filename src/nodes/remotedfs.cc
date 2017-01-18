@@ -30,18 +30,20 @@ RemoteDFS::RemoteDFS (PeerDFS* p, network::Network* net) : Router(net) {
 // BlockInfo {{{
 void RemoteDFS::insert_block (messages::Message* m_, int n_channel) {
   auto m = dynamic_cast<messages::BlockInfo*> (m_);
-  logger->info ("BlockInfo received");
-  bool ret = peer_dfs->insert_block(m);
-  Reply reply;
+  INFO("BlockInfo received");
 
-  if (ret) {
-    reply.message = "OK";
+  peer_dfs->insert_block(m, std::bind([=] (bool success) {
+        Reply reply;
 
-  } else {
-    reply.message = "FAIL";
-    reply.details = "Block already exists";
-  }
-  network->send(n_channel, &reply);
+        if (success) {
+          reply.message = "OK";
+
+        } else {
+          reply.message = "FAIL";
+          reply.details = "Block already exists";
+        }
+        network->send(n_channel, &reply);
+  }, ph::_1));
 }
 // }}}
 // BlockUpdate {{{

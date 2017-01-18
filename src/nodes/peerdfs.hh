@@ -38,8 +38,7 @@ class PeerDFS: public Node, public AsyncNode {
     virtual void update (uint32_t, std::string, std::string, uint32_t, uint32_t);
     virtual void request (uint32_t, std::string, req_func);
 
-    void close ();
-    bool insert_block (messages::BlockInfo*);
+    bool insert_block (messages::BlockInfo*, std::function<void(bool)>);
     bool update_block (messages::BlockUpdate*);
     bool insert_file (messages::FileInfo*);
     bool update_file (messages::FileUpdate*);
@@ -52,11 +51,13 @@ class PeerDFS: public Node, public AsyncNode {
 
   protected:
     void replicate_metadata();
+    void send_replicas(messages::BlockInfo*);
 
     Directory directory;
     Local_io local_io;
     std::unique_ptr<Histogram> boundaries;
     std::map<std::string, req_func> requested_blocks;
+    std::map<std::string, std::function<void(bool)>> insert_callback;
     int network_size;
 
     template <typename T> void process (T);
