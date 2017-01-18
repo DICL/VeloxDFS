@@ -28,7 +28,9 @@ messages_files   = src/messages/boundaries.cc      \
                    src/messages/filedel.cc         \
                    src/messages/formatrequest.cc   \
                    src/messages/fileexist.cc       \
-                   src/messages/metadata.cc
+                   src/messages/metadata.cc        \
+                   src/messages/blockstatus.cc
+
 
 # libs -----
 lib_LTLIBRARIES     = libvdfs.la

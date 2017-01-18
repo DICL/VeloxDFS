@@ -32,6 +32,7 @@ PeerDFS::PeerDFS (Network* net) : Node () {
 PeerDFS::~PeerDFS() { }
 // }}}
 // insert {{{
+// @deprecated
 void PeerDFS::insert(uint32_t hash_key, std::string name, std::string& v) {
   int which_node = boundaries->get_index(hash_key);
 
@@ -77,8 +78,37 @@ void PeerDFS::request(uint32_t key, string name , req_func f) {
  }
 }
 // }}}
-// close {{{
-void PeerDFS::close() { exit(EXIT_SUCCESS); }
+// process (BlockStatus* m) {{{
+template<> void PeerDFS::process(BlockStatus* m) {
+  insert_callback[m->name](m->success);   //! call callback
+}
+// }}}
+// process (BlockInfo* m) {{{
+// This method is executed when a replica arrives or 
+// a Block is forwarded.
+// Note that we perform replication in the second case.
+template<> void PeerDFS::process(BlockInfo* m) {
+  int which_node = boundaries->get_index(m->hash_key);
+
+  //If it is replica
+  local_io.write(m->name, m->content);
+
+  // Notify file-leader
+  if (which_node == id) {
+    INFO("[DFS] Saved locally BLOCK: %s", m->name.c_str());
+    int leader_node = h(m->file_name) % network_size;
+    BlockStatus bs;
+    bs.name = m->name;
+    bs.hash_key = m->hash_key;
+    bs.success = true;
+    network->send(leader_node, &bs); //! We return before sending replicas
+
+    send_replicas(m);
+
+  } else {
+    INFO("[DFS] Saved replica of BLOCK: %s", m->name.c_str());
+  }
+}
 // }}}
 // process (KeyValue* m) {{{
 template<> void PeerDFS::process(KeyValue* m) {
@@ -120,29 +150,10 @@ template<> void PeerDFS::process (KeyRequest* m) {
   network->send(m->origin, &kv);
 }
 // }}}
-// process (Control* m) {{{
-template<> void PeerDFS::process(Control* m) {
-  switch (m->type) {
-    case messages::SHUTDOWN:
-      this->close();
-      break;
-
-    case messages::RESTART:
-      break;
-  }
-}
-// }}}
 // process (MetaData* m) {{{
 template<> void PeerDFS::process(MetaData* m) {
   std::string file_name = m->node + "_replica";
   local_io.write(file_name, m->content);
-}
-// }}}
-// process (BlockInfo* m) {{{
-template<> void PeerDFS::process(BlockInfo* m) {
-  local_io.write(m->name, m->content);
-  logger->info("ideal host = %s", m->node.c_str());
-  logger->info("real host = %d", id);
 }
 // }}}
 // process (BlockUpdate* m) {{{
@@ -165,9 +176,6 @@ void PeerDFS::on_read (Message* m, int) {
   } else if (type == "OffsetKeyValue") {
     auto m_ = dynamic_cast<OffsetKeyValue*>(m);
     process(m_);
-  } else if (type == "Control") {
-    auto m_ = dynamic_cast<Control*>(m);
-    process(m_);
   } else if (type == "KeyRequest") {
     auto m_ = dynamic_cast<KeyRequest*>(m);
     process(m_);
@@ -180,9 +188,11 @@ void PeerDFS::on_read (Message* m, int) {
   } else if (type == "BlockDel") {
     auto m_ = dynamic_cast<BlockDel*>(m);
     process(m_);
-
   } else if (type == "MetaData") {
     auto m_ = dynamic_cast<MetaData*>(m);
+    process(m_);
+  } else if (type == "BlockStatus") {
+    auto m_ = dynamic_cast<BlockStatus*>(m);
     process(m_);
   }
 }
@@ -227,29 +237,26 @@ bool PeerDFS::update_file(messages::FileUpdate* f) {
 }
 // }}}
 // insert_block {{{
-bool PeerDFS::insert_block(messages::BlockInfo* m) {
+// This method insert the block locally and replicated it,
+// or it forward it to the corresponding node.
+// It always save the info in its metadata sqlite table.
+bool PeerDFS::insert_block(BlockInfo* m, std::function<void(bool)> f) {
   directory.insert_block_metadata(m);
   int which_node = boundaries->get_index(m->hash_key);
-  vector<int> nodes;
 
   if (which_node == id) {
-    for (int i=1; i<m->replica; i++) {
-      if(i%2 == 1) {
-        nodes.push_back ((which_node + (i+1)/2 + network_size) % network_size);
-      } else {
-        nodes.push_back ((which_node - i/2 + network_size) % network_size);
-      }
-    }
-
-    INFO("[DFS] Saving locally KEY: %s", m->name.c_str());
+    INFO("[DFS] Saving locally BLOCK: %s", m->name.c_str());
     local_io.write(m->name, m->content);
-    network->send_and_replicate(nodes, m);
+    f(true);                         //! We return before sending replicas
+    send_replicas(m);
 
   } else {
-    insert(m->hash_key, m->name, m->content);
+    INFO("[DFS] Forwaring BLOCK: %s -> %d", m->name.c_str(), which_node);
+    insert_callback[m->name] = f;    //! Register call back to notify client
+    network->send(which_node, m);
   }
+
   replicate_metadata();
-  INFO("Block inserted");
   return true;
 }
 // }}}
@@ -366,6 +373,21 @@ void PeerDFS::replicate_metadata() {
 
   network->send(left_node, &md);
   network->send(right_node, &md);
+}
+// }}}
+// send_replicas {{{
+// Compute the right and left node of the current node
+// and send its replicas of the given block
+void PeerDFS::send_replicas(BlockInfo* m) {
+  vector<int> nodes;
+  for (int i=1; i<m->replica; i++) {
+    if(i%2 == 1) {
+      nodes.push_back ((id + (i+1)/2 + network_size) % network_size);
+    } else {
+      nodes.push_back ((id - i/2 + network_size) % network_size);
+    }
+  }
+  network->send_and_replicate(nodes, m);
 }
 // }}}
 }

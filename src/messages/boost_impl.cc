@@ -193,6 +193,14 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.content);
   }
 
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::BlockStatus& c, unsigned int) {
+    ar & BASE_OBJECT(Message, c);
+    ar & BOOST_SERIALIZATION_NVP(c.name);
+    ar & BOOST_SERIALIZATION_NVP(c.hash_key);
+    ar & BOOST_SERIALIZATION_NVP(c.success);
+  }
+
 using namespace eclipse::messages;
 using namespace boost::archive;
 
@@ -306,6 +314,11 @@ template void serialize (boost::archive::xml_iarchive&,  MetaData&, unsigned);
 template void serialize (boost::archive::binary_iarchive&,  MetaData&, unsigned);
 template void serialize (boost::archive::binary_oarchive&,  MetaData&, unsigned);
 
+template void serialize (boost::archive::xml_oarchive&, BlockStatus&, unsigned);
+template void serialize (boost::archive::xml_iarchive&,  BlockStatus&, unsigned);
+template void serialize (boost::archive::binary_iarchive&,  BlockStatus&, unsigned);
+template void serialize (boost::archive::binary_oarchive&,  BlockStatus&, unsigned);
+
 }
 }
 
@@ -332,3 +345,4 @@ BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::BlockDel);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FormatRequest);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FileExist);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::MetaData);
+BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::BlockStatus);
