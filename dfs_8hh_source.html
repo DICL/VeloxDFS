@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>EclipseDFS: /home/travis/build/DICL/EclipseDFS/src/fs/dfs.hh Source File</title>
+<title>EclipseDFS: /home/travis/build/DICL/VeloxDFS/src/client/dfs.hh Source File</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -76,73 +76,53 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="headertitle">
-<div class="title">/home/travis/build/DICL/EclipseDFS/src/fs/dfs.hh</div>  </div>
+<div class="title">/home/travis/build/DICL/VeloxDFS/src/client/dfs.hh</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#pragma once</span>
-<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#include &quot;../common/hash.hh&quot;</span>
-<a name="l00003"></a>00003 <span class="preprocessor">#include &quot;../common/context_singleton.hh&quot;</span>
-<a name="l00004"></a>00004 <span class="preprocessor">#include &quot;../messages/boost_impl.hh&quot;</span>
-<a name="l00005"></a>00005 <span class="preprocessor">#include &quot;../messages/fileinfo.hh&quot;</span>
-<a name="l00006"></a>00006 <span class="preprocessor">#include &quot;../messages/factory.hh&quot;</span>
-<a name="l00007"></a>00007 <span class="preprocessor">#include &quot;../messages/fileinfo.hh&quot;</span>
-<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;../messages/blockinfo.hh&quot;</span>
-<a name="l00009"></a>00009 <span class="preprocessor">#include &quot;../messages/blockupdate.hh&quot;</span>
-<a name="l00010"></a>00010 <span class="preprocessor">#include &quot;../messages/fileexist.hh&quot;</span>
-<a name="l00011"></a>00011 <span class="preprocessor">#include &quot;../messages/filerequest.hh&quot;</span>
-<a name="l00012"></a>00012 <span class="preprocessor">#include &quot;../messages/filelist.hh&quot;</span>
-<a name="l00013"></a>00013 <span class="preprocessor">#include &quot;../messages/blockdel.hh&quot;</span>
-<a name="l00014"></a>00014 <span class="preprocessor">#include &quot;../messages/filedescription.hh&quot;</span>
-<a name="l00015"></a>00015 <span class="preprocessor">#include &quot;../messages/reply.hh&quot;</span>
-<a name="l00016"></a>00016 <span class="preprocessor">#include &quot;../messages/blockrequest.hh&quot;</span>
-<a name="l00017"></a>00017 <span class="preprocessor">#include &quot;directory.hh&quot;</span>
-<a name="l00018"></a>00018 
-<a name="l00019"></a>00019 <span class="preprocessor">#include &lt;iostream&gt;</span>
-<a name="l00020"></a>00020 <span class="preprocessor">#include &lt;fstream&gt;</span>
-<a name="l00021"></a>00021 <span class="preprocessor">#include &lt;string&gt;</span>
-<a name="l00022"></a>00022 <span class="preprocessor">#include &lt;vector&gt;</span>
-<a name="l00023"></a>00023 <span class="preprocessor">#include &lt;sstream&gt;</span>
-<a name="l00024"></a>00024 <span class="preprocessor">#include &lt;iomanip&gt;</span>
-<a name="l00025"></a>00025 <span class="preprocessor">#include &lt;memory&gt;</span>
-<a name="l00026"></a>00026 <span class="preprocessor">#include &lt;boost/asio.hpp&gt;</span>
-<a name="l00027"></a>00027 <span class="preprocessor">#include &lt;stdint.h&gt;</span>
-<a name="l00028"></a>00028 
-<a name="l00029"></a>00029 <span class="keyword">namespace </span>eclipse {
-<a name="l00030"></a>00030   <span class="keyword">using namespace </span>messages;
-<a name="l00031"></a>00031   <span class="keyword">using</span> boost::asio::ip::tcp;
-<a name="l00032"></a>00032   <span class="keyword">enum class</span> FILETYPE {
-<a name="l00033"></a>00033     Normal,
-<a name="l00034"></a>00034     App,
-<a name="l00035"></a>00035     Idata
-<a name="l00036"></a>00036   };
-<a name="l00037"></a><a class="code" href="classeclipse_1_1DFS.html">00037</a>   <span class="keyword">class </span><a class="code" href="classeclipse_1_1DFS.html">DFS</a> {
-<a name="l00038"></a>00038     <span class="keyword">private</span>:
-<a name="l00039"></a>00039       uint32_t BLOCK_SIZE;
-<a name="l00040"></a>00040       uint32_t NUM_NODES;
-<a name="l00041"></a>00041       std::string path;
-<a name="l00042"></a>00042       boost::asio::io_service iosvc;
-<a name="l00043"></a>00043       <span class="keywordtype">int</span> replica;
-<a name="l00044"></a>00044       <span class="keywordtype">int</span> port;
-<a name="l00045"></a>00045       std::vector&lt;std::string&gt; nodes;
-<a name="l00046"></a>00046 
-<a name="l00047"></a>00047       unique_ptr&lt;tcp::socket&gt; connect (uint32_t);
-<a name="l00048"></a>00048       <span class="keywordtype">void</span> send_message(tcp::socket*, <a class="code" href="structeclipse_1_1messages_1_1Message.html">eclipse::messages::Message</a>*);
-<a name="l00049"></a>00049       <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
-<a name="l00050"></a>00050       <span class="keyword">auto</span> read_reply(tcp::socket*);
-<a name="l00051"></a>00051 
-<a name="l00052"></a>00052     <span class="keyword">public</span>:
-<a name="l00053"></a>00053       <span class="keywordtype">void</span> load_settings ();
-<a name="l00054"></a>00054       <span class="keywordtype">int</span> put(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
-<a name="l00055"></a>00055       <span class="keywordtype">int</span> <span class="keyword">get</span>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
-<a name="l00056"></a>00056       <span class="keywordtype">int</span> cat(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
-<a name="l00057"></a>00057       <span class="keywordtype">int</span> ls(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
-<a name="l00058"></a>00058       <span class="keywordtype">int</span> rm(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
-<a name="l00059"></a>00059       <span class="keywordtype">int</span> format(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
-<a name="l00060"></a>00060       <span class="keywordtype">int</span> show(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
-<a name="l00061"></a>00061       <span class="keywordtype">int</span> pget(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
-<a name="l00062"></a>00062       <span class="keywordtype">int</span> update(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
-<a name="l00063"></a>00063   };
-<a name="l00064"></a>00064 }
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#include &lt;string&gt;</span>
+<a name="l00003"></a>00003 <span class="preprocessor">#include &lt;vector&gt;</span>
+<a name="l00004"></a>00004 <span class="preprocessor">#include &lt;boost/asio.hpp&gt;</span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;stdint.h&gt;</span>
+<a name="l00006"></a>00006 <span class="preprocessor">#include &lt;memory&gt;</span>
+<a name="l00007"></a>00007 
+<a name="l00008"></a>00008 <span class="keyword">namespace </span>velox {
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="keyword">using</span> boost::asio::ip::tcp;
+<a name="l00011"></a>00011 <span class="keyword">using</span> vec_str = std::vector&lt;std::string&gt;;
+<a name="l00012"></a>00012 
+<a name="l00013"></a><a class="code" href="classvelox_1_1DFS.html">00013</a> <span class="keyword">class </span><a class="code" href="classvelox_1_1DFS.html">DFS</a> {
+<a name="l00014"></a>00014   <span class="keyword">public</span>:
+<a name="l00015"></a>00015     <a class="code" href="classvelox_1_1DFS.html">DFS</a>();
+<a name="l00016"></a>00016     <span class="keywordtype">void</span> load_settings();
+<a name="l00017"></a>00017     <span class="keywordtype">int</span> put(vec_str);
+<a name="l00018"></a>00018     <span class="keywordtype">int</span> <span class="keyword">get</span>(vec_str);
+<a name="l00019"></a>00019     <span class="keywordtype">int</span> cat(vec_str);
+<a name="l00020"></a>00020     <span class="keywordtype">int</span> ls(vec_str);
+<a name="l00021"></a>00021     <span class="keywordtype">int</span> rm(vec_str);
+<a name="l00022"></a>00022     <span class="keywordtype">int</span> format();
+<a name="l00023"></a>00023     <span class="keywordtype">int</span> show(vec_str);
+<a name="l00024"></a>00024     <span class="keywordtype">int</span> pget(vec_str);
+<a name="l00025"></a>00025     <span class="keywordtype">int</span> update(vec_str);
+<a name="l00026"></a>00026     <span class="keywordtype">int</span> append(vec_str);
+<a name="l00027"></a>00027     <span class="keywordtype">bool</span> fexists(std::string);
+<a name="l00028"></a>00028     <span class="keywordtype">bool</span> <a class="code" href="classvelox_1_1DFS.html#adad261d20f57ff427e4144af1da9b09c" title="}}}">exists</a>(std::string);
+<a name="l00029"></a>00029     <span class="keywordtype">bool</span> touch(std::string);
+<a name="l00030"></a>00030 
+<a name="l00031"></a>00031     <span class="keywordtype">int</span> push_back(vec_str);
+<a name="l00032"></a>00032     std::string load(std::string);
+<a name="l00033"></a>00033 
+<a name="l00034"></a>00034   <span class="keyword">private</span>:
+<a name="l00035"></a>00035     uint32_t BLOCK_SIZE;
+<a name="l00036"></a>00036     uint32_t NUM_NODES;
+<a name="l00037"></a>00037     <span class="keywordtype">int</span> replica;
+<a name="l00038"></a>00038     <span class="keywordtype">int</span> port;
+<a name="l00039"></a>00039     std::vector&lt;std::string&gt; nodes;
+<a name="l00040"></a>00040 
+<a name="l00041"></a>00041     std::unique_ptr&lt;tcp::socket&gt; connect (uint32_t);
+<a name="l00042"></a>00042 };
+<a name="l00043"></a>00043 
+<a name="l00044"></a>00044 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -161,7 +141,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jun 26 2016 21:01:28 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2017 09:06:34 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

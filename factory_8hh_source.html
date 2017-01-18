@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>EclipseDFS: /home/travis/build/DICL/EclipseDFS/src/messages/factory.hh Source File</title>
+<title>EclipseDFS: /home/travis/build/DICL/VeloxDFS/src/messages/factory.hh Source File</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -76,33 +76,46 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="headertitle">
-<div class="title">/home/travis/build/DICL/EclipseDFS/src/messages/factory.hh</div>  </div>
+<div class="title">/home/travis/build/DICL/VeloxDFS/src/messages/factory.hh</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#pragma once</span>
 <a name="l00002"></a>00002 <span class="preprocessor"></span>
-<a name="l00003"></a>00003 <span class="preprocessor">#include &quot;boost_impl.hh&quot;</span>
-<a name="l00004"></a>00004 <span class="preprocessor">#include &quot;../common/histogram.hh&quot;</span>
-<a name="l00005"></a>00005 
+<a name="l00003"></a>00003 <span class="preprocessor">#include &quot;message.hh&quot;</span>
+<a name="l00004"></a>00004 <span class="preprocessor">#include &lt;boost/asio/streambuf.hpp&gt;</span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;boost/asio.hpp&gt;</span>
 <a name="l00006"></a>00006 <span class="preprocessor">#include &lt;string&gt;</span>
-<a name="l00007"></a>00007 <span class="preprocessor">#include &lt;functional&gt;</span>
-<a name="l00008"></a>00008 <span class="preprocessor">#include &lt;boost/asio/streambuf.hpp&gt;</span>
-<a name="l00009"></a>00009 
-<a name="l00010"></a>00010 <span class="keyword">namespace </span>eclipse {
-<a name="l00011"></a>00011 <span class="keyword">namespace </span>messages {
-<a name="l00012"></a>00012 
-<a name="l00013"></a>00013 <span class="keywordtype">void</span> load_n (boost::asio::streambuf&amp;, std::function&lt;<span class="keywordtype">void</span>(Message*)&gt;);
+<a name="l00007"></a>00007 <span class="preprocessor">#include &lt;memory&gt;</span>
+<a name="l00008"></a>00008 
+<a name="l00009"></a>00009 <span class="keyword">namespace </span>eclipse {
+<a name="l00010"></a>00010 <span class="keyword">namespace </span>messages {
+<a name="l00011"></a>00011 
+<a name="l00012"></a>00012 Message* load_message (boost::asio::streambuf&amp;);
+<a name="l00013"></a>00013 std::string* save_message (Message*);
 <a name="l00014"></a>00014 
-<a name="l00015"></a>00015 <span class="keywordtype">void</span> operator&lt;&lt; (std::string, Message*);
-<a name="l00016"></a>00016 <span class="keywordtype">void</span> operator&lt;&lt; (Message*, std::string);
-<a name="l00017"></a>00017 <span class="keywordtype">void</span> operator&lt;&lt; (Message*, boost::asio::streambuf&amp;);
-<a name="l00018"></a>00018 <span class="keywordtype">void</span> operator&lt;&lt; (<a class="code" href="classHistogram.html">Histogram</a>&amp;, Message&amp;);
-<a name="l00019"></a>00019 
-<a name="l00020"></a>00020 Message* load_message (std::string);
-<a name="l00021"></a>00021 std::string save_message (Message*);
-<a name="l00022"></a>00022 
-<a name="l00023"></a>00023 } <span class="comment">/* messages */</span> 
-<a name="l00024"></a>00024 }
+<a name="l00015"></a>00015 <span class="keywordtype">void</span> send_message(boost::asio::ip::tcp::socket*, <a class="code" href="structeclipse_1_1messages_1_1Message.html">eclipse::messages::Message</a>*);
+<a name="l00016"></a>00016 <span class="comment">//template &lt;typename T&gt; auto read_reply(boost::asio::ip::tcp::socket*);</span>
+<a name="l00017"></a>00017 
+<a name="l00018"></a>00018 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
+<a name="l00019"></a>00019 <span class="keyword">auto</span> read_reply(boost::asio::ip::tcp::socket* socket) {
+<a name="l00020"></a>00020   <span class="keyword">using namespace </span>boost::asio;
+<a name="l00021"></a>00021   <span class="keywordtype">char</span> header[17] = {0};
+<a name="l00022"></a>00022   header[16] = <span class="charliteral">&#39;\0&#39;</span>;
+<a name="l00023"></a>00023   boost::asio::streambuf buf;
+<a name="l00024"></a>00024 
+<a name="l00025"></a>00025   read(*socket, buffer(header, 16));
+<a name="l00026"></a>00026   <span class="keywordtype">size_t</span> size_of_msg = atoi(header);
+<a name="l00027"></a>00027 
+<a name="l00028"></a>00028   read(*socket, buf, transfer_exactly(size_of_msg));
+<a name="l00029"></a>00029 
+<a name="l00030"></a>00030   Message* msg = <span class="keyword">nullptr</span>;
+<a name="l00031"></a>00031   msg = load_message(buf);
+<a name="l00032"></a>00032   T* m = <span class="keyword">dynamic_cast&lt;</span>T*<span class="keyword">&gt;</span>(msg);
+<a name="l00033"></a>00033   <span class="keywordflow">return</span> std::unique_ptr&lt;T&gt;(m);
+<a name="l00034"></a>00034 }
+<a name="l00035"></a>00035 
+<a name="l00036"></a>00036 } <span class="comment">/* messages */</span> 
+<a name="l00037"></a>00037 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -121,7 +134,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jun 26 2016 21:01:28 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2017 09:06:34 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -92,7 +92,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespaceeclipse.html">eclipse</a>      </li>
+      <li class="navelem"><b>eclipse</b>      </li>
       <li class="navelem"><a class="el" href="classeclipse_1_1Directory.html">Directory</a>      </li>
     </ul>
   </div>
@@ -113,10 +113,10 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>open_db</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5b414dfde570da97f63e1fecbf297897"></a><!-- doxytag: member="eclipse::Directory::init_db" ref="a5b414dfde570da97f63e1fecbf297897" args="()" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>init_db</b> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2c91633b2cb8a0b0d78518b7caa26a6"></a><!-- doxytag: member="eclipse::Directory::insert_file_metadata" ref="ae2c91633b2cb8a0b0d78518b7caa26a6" args="(FileInfo file_info)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>insert_file_metadata</b> (<a class="el" href="structeclipse_1_1messages_1_1FileInfo.html">FileInfo</a> file_info)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adc6ee45d67795d1426c41bc4761e96a5"></a><!-- doxytag: member="eclipse::Directory::insert_block_metadata" ref="adc6ee45d67795d1426c41bc4761e96a5" args="(BlockInfo block_info)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>insert_block_metadata</b> (<a class="el" href="structeclipse_1_1messages_1_1BlockInfo.html">BlockInfo</a> block_info)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aefc110c1b00032216a14c55d45ac69f1"></a><!-- doxytag: member="eclipse::Directory::insert_file_metadata" ref="aefc110c1b00032216a14c55d45ac69f1" args="(FileInfo &amp;file_info)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>insert_file_metadata</b> (<a class="el" href="structeclipse_1_1messages_1_1FileInfo.html">FileInfo</a> &amp;file_info)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a26ca65f03df18657f273c77e91b7d5c6"></a><!-- doxytag: member="eclipse::Directory::insert_block_metadata" ref="a26ca65f03df18657f273c77e91b7d5c6" args="(BlockInfo *block_info)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>insert_block_metadata</b> (<a class="el" href="structeclipse_1_1messages_1_1BlockInfo.html">BlockInfo</a> *block_info)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a486dc8cccc5f9aeae4a9f954d303ed8e"></a><!-- doxytag: member="eclipse::Directory::select_file_metadata" ref="a486dc8cccc5f9aeae4a9f954d303ed8e" args="(std::string file_name, FileInfo *file_info)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>select_file_metadata</b> (std::string file_name, <a class="el" href="structeclipse_1_1messages_1_1FileInfo.html">FileInfo</a> *file_info)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a652bd0674f40f125fdf4729a4582691e"></a><!-- doxytag: member="eclipse::Directory::select_block_metadata" ref="a652bd0674f40f125fdf4729a4582691e" args="(std::string file_name, unsigned int block_seq, BlockInfo *block_info)" -->
@@ -125,10 +125,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>select_block_metadata
 void&#160;</td><td class="memItemRight" valign="bottom"><b>select_all_file_metadata</b> (std::vector&lt; <a class="el" href="structeclipse_1_1messages_1_1FileInfo.html">FileInfo</a> &gt; &amp;file_list)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a44145cff1bb10c6c7906d663d9a72306"></a><!-- doxytag: member="eclipse::Directory::select_all_block_metadata" ref="a44145cff1bb10c6c7906d663d9a72306" args="(std::vector&lt; BlockInfo &gt; &amp;block_list)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>select_all_block_metadata</b> (std::vector&lt; <a class="el" href="structeclipse_1_1messages_1_1BlockInfo.html">BlockInfo</a> &gt; &amp;block_list)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8ebc4a69d5b6b09392ecc0bdfc30eeb5"></a><!-- doxytag: member="eclipse::Directory::update_file_metadata" ref="a8ebc4a69d5b6b09392ecc0bdfc30eeb5" args="(std::string file_name, FileInfo file_info)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>update_file_metadata</b> (std::string file_name, <a class="el" href="structeclipse_1_1messages_1_1FileInfo.html">FileInfo</a> file_info)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a25a5bf1d866d1dd9197830c0961acf"></a><!-- doxytag: member="eclipse::Directory::update_block_metadata" ref="a6a25a5bf1d866d1dd9197830c0961acf" args="(std::string file_name, unsigned int block_seq, BlockInfo block_info)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>update_block_metadata</b> (std::string file_name, unsigned int block_seq, <a class="el" href="structeclipse_1_1messages_1_1BlockInfo.html">BlockInfo</a> block_info)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a21c6fec40b7ec59998a9318dfe3e3ded"></a><!-- doxytag: member="eclipse::Directory::update_file_metadata" ref="a21c6fec40b7ec59998a9318dfe3e3ded" args="(FileUpdate &amp;file_update)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>update_file_metadata</b> (<a class="el" href="structeclipse_1_1messages_1_1FileUpdate.html">FileUpdate</a> &amp;file_update)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac929bd61864b2cb14b57826b169e0cc2"></a><!-- doxytag: member="eclipse::Directory::update_block_metadata" ref="ac929bd61864b2cb14b57826b169e0cc2" args="(BlockUpdate &amp;block_update)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>update_block_metadata</b> (<a class="el" href="structeclipse_1_1messages_1_1BlockUpdate.html">BlockUpdate</a> &amp;block_update)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f4c1bce4d3df53a82886329939bcaea"></a><!-- doxytag: member="eclipse::Directory::delete_file_metadata" ref="a9f4c1bce4d3df53a82886329939bcaea" args="(std::string file_name)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>delete_file_metadata</b> (std::string file_name)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1ac01d000032263971841f864fd3e60"></a><!-- doxytag: member="eclipse::Directory::delete_block_metadata" ref="ac1ac01d000032263971841f864fd3e60" args="(std::string file_name, unsigned int block_seq)" -->
@@ -141,8 +141,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>display_block_metadat
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>file_exist</b> (std::string file_name)</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/travis/build/DICL/EclipseDFS/src/fs/<a class="el" href="directory_8hh_source.html">directory.hh</a></li>
-<li>/home/travis/build/DICL/EclipseDFS/src/fs/directory.cc</li>
+<li>/home/travis/build/DICL/VeloxDFS/src/nodes/<a class="el" href="directory_8hh_source.html">directory.hh</a></li>
+<li>/home/travis/build/DICL/VeloxDFS/src/nodes/directory.cc</li>
 </ul>
 </div><!-- contents -->
 <!-- window showing the filter options -->
@@ -162,7 +162,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>file_exist</b> (std::
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jun 26 2016 21:01:28 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2017 09:06:34 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

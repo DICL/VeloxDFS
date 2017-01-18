@@ -78,7 +78,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="nav-path" class="navpath">
     <ul>
-      <li class="navelem"><a class="el" href="namespaceeclipse.html">eclipse</a>      </li>
+      <li class="navelem"><b>eclipse</b>      </li>
       <li class="navelem"><a class="el" href="classeclipse_1_1PeerDFS.html">PeerDFS</a>      </li>
     </ul>
   </div>
@@ -90,7 +90,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 This is the complete list of members for <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>, including all inherited members.<table>
   <tr bgcolor="#f0f0f0"><td><b>boundaries</b> (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td><code> [protected]</code></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>close</b>() (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>delete_block</b>(messages::BlockDel *) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>delete_file</b>(messages::FileDel *) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>directory</b> (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td><code> [protected]</code></td></tr>
@@ -99,8 +98,9 @@ This is the complete list of members for <a class="el" href="classeclipse_1_1Pee
   <tr bgcolor="#f0f0f0"><td><b>get_id</b>() const  (defined in <a class="el" href="classeclipse_1_1Machine.html">eclipse::Machine</a>)</td><td><a class="el" href="classeclipse_1_1Machine.html">eclipse::Machine</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>get_ip</b>() const override (defined in <a class="el" href="classeclipse_1_1Node.html">eclipse::Node</a>)</td><td><a class="el" href="classeclipse_1_1Node.html">eclipse::Node</a></td><td><code> [virtual]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>id</b> (defined in <a class="el" href="classeclipse_1_1Machine.html">eclipse::Machine</a>)</td><td><a class="el" href="classeclipse_1_1Machine.html">eclipse::Machine</a></td><td><code> [protected]</code></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>insert</b>(uint32_t, std::string, std::string) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td><code> [virtual]</code></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>insert_block</b>(messages::BlockInfo *) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>insert</b>(uint32_t, std::string, std::string &amp;) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td><code> [virtual]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classeclipse_1_1PeerDFS.html#a781cfe945bcb82a4b8e47da95cefa024">insert_block</a>(messages::BlockInfo *, std::function&lt; void(bool)&gt;)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>insert_callback</b> (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td><code> [protected]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>insert_file</b>(messages::FileInfo *) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>ip_of_this</b> (defined in <a class="el" href="classeclipse_1_1Node.html">eclipse::Node</a>)</td><td><a class="el" href="classeclipse_1_1Node.html">eclipse::Node</a></td><td><code> [protected]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>list</b>(messages::FileList *) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
@@ -117,18 +117,22 @@ This is the complete list of members for <a class="el" href="classeclipse_1_1Pee
   <tr bgcolor="#f0f0f0"><td><b>PeerDFS</b>(network::Network *) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>port</b> (defined in <a class="el" href="classeclipse_1_1Node.html">eclipse::Node</a>)</td><td><a class="el" href="classeclipse_1_1Node.html">eclipse::Node</a></td><td><code> [protected]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>process</b>(T) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td><code> [protected]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classeclipse_1_1PeerDFS.html#aadc9b5fb8c250ea2e8d1551eacbb37d0">process</a>(BlockStatus *m)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classeclipse_1_1PeerDFS.html#a14213037acddded887399cdbdcabba5f">process</a>(BlockInfo *m)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>process</b>(KeyValue *m) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>process</b>(OffsetKeyValue *m) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>process</b>(KeyRequest *m) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>process</b>(Control *m) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>process</b>(BlockInfo *m) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>process</b>(MetaData *m) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>process</b>(BlockUpdate *m) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>process</b>(BlockDel *m) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>replicate_metadata</b>() (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td><code> [protected]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>request</b>(uint32_t, std::string, req_func) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td><code> [virtual]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>request_file</b>(messages::FileRequest *) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>requested_blocks</b> (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td><code> [protected]</code></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>send_replicas</b>(messages::BlockInfo *) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td><code> [protected]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>update</b>(uint32_t, std::string, std::string, uint32_t, uint32_t) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td><code> [virtual]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>update_block</b>(messages::BlockUpdate *) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>update_file</b>(messages::FileUpdate *) (defined in <a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a>)</td><td><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>~AsyncNode</b>() (defined in <a class="el" href="classeclipse_1_1AsyncNode.html">eclipse::AsyncNode</a>)</td><td><a class="el" href="classeclipse_1_1AsyncNode.html">eclipse::AsyncNode</a></td><td><code> [inline, virtual]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>~Machine</b>() (defined in <a class="el" href="classeclipse_1_1Machine.html">eclipse::Machine</a>)</td><td><a class="el" href="classeclipse_1_1Machine.html">eclipse::Machine</a></td><td><code> [inline, virtual]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>~Node</b>() (defined in <a class="el" href="classeclipse_1_1Node.html">eclipse::Node</a>)</td><td><a class="el" href="classeclipse_1_1Node.html">eclipse::Node</a></td><td></td></tr>
@@ -151,7 +155,7 @@ This is the complete list of members for <a class="el" href="classeclipse_1_1Pee
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jun 26 2016 21:01:28 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2017 09:06:34 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
