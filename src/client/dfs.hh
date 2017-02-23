@@ -24,7 +24,7 @@ class DFS {
     int pget(vec_str);
     int update(vec_str);
     int append(vec_str);
-    bool fexists(std::string);
+    bool file_exists_local(std::string);
     bool exists(std::string);
     bool touch(std::string);
 

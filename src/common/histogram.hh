@@ -1,8 +1,8 @@
 #ifndef __HISTOGRAM__
 #define __HISTOGRAM__
 
+#include "definitions.hh"
 #include <iostream>
-#include <common/ecfs.hh>
 #include <ctime>
 
 #define MAX_UINT 4294967295

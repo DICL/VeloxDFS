@@ -254,7 +254,7 @@ uint32_t Histogram::random_within_boundaries (uint32_t index) {
   if (which_server != 0)
     lower_boundary = boundaries[which_server-1];
   else 
-    lower_boundary = boundaries[numserver-1];
+    lower_boundary = 0;
 
   uint32_t upper_boundary = boundaries[which_server];
   uint32_t range = upper_boundary - lower_boundary;

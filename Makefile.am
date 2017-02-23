@@ -29,7 +29,8 @@ messages_files   = src/messages/boundaries.cc      \
                    src/messages/formatrequest.cc   \
                    src/messages/fileexist.cc       \
                    src/messages/metadata.cc        \
-                   src/messages/blockstatus.cc
+                   src/messages/blockstatus.cc     \
+									 src/messages/IOoperation.cc
 
 
 # libs -----
@@ -55,19 +56,21 @@ LDADD               = libvdfs.la -lboost_system -lboost_serialization -lboost_co
 endif
 
 eclipse_node_SOURCES = src/targets/node_main.cc \
-                       src/network/channel.cc \
                        src/network/asyncchannel.cc \
-                       src/network/p2p.cc \
                        src/network/server.cc \
-                       src/network/acceptor.cc \
-                       src/network/connector.cc \
+                       src/network/client_handler.cc \
+                       src/network/server_handler.cc \
+                       src/network/simple_router.cc \
+                       src/network/router_decorator.cc \
                        src/nodes/machine.cc \
-                       src/nodes/peerdfs.cc \
-                       src/nodes/local_io.cc \
-                       src/nodes/remotedfs.cc \
-                       src/nodes/router.cc \
-                       src/nodes/directory.cc \
-                       src/nodes/node.cc
+                       src/nodes/node.cc \
+                       src/blocknode/local_io.cc \
+                       src/blocknode/block_node.cc \
+                       src/blocknode/block_node_router.cc \
+                       src/fileleader/directory.cc \
+                       src/fileleader/file_leader.cc \
+                       src/fileleader/file_leader_router.cc
+
 
 dfs_SOURCES         = src/client/client.cc
 

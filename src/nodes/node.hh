@@ -3,7 +3,7 @@
 #include "machine.hh"
 #include "../common/context_singleton.hh"
 #include "../messages/message.hh"
-#include "../network/network.hh"
+#include "../network/client_handler.hh"
 
 #include <map>
 #include <memory>
@@ -19,7 +19,7 @@ class Node: public Machine {
     std::string get_ip () const override;
 
   protected:
-    network::Network* network;
+    network::ClientHandler* network;
     Logger* logger;
     std::string ip_of_this;
     int port;

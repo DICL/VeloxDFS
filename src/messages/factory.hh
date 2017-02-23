@@ -13,7 +13,6 @@ Message* load_message (boost::asio::streambuf&);
 std::string* save_message (Message*);
 
 void send_message(boost::asio::ip::tcp::socket*, eclipse::messages::Message*);
-//template <typename T> auto read_reply(boost::asio::ip::tcp::socket*);
 
 template <typename T>
 auto read_reply(boost::asio::ip::tcp::socket* socket) {
@@ -25,10 +24,12 @@ auto read_reply(boost::asio::ip::tcp::socket* socket) {
   read(*socket, buffer(header, 16));
   size_t size_of_msg = atoi(header);
 
-  read(*socket, buf, transfer_exactly(size_of_msg));
+  size_t l = read(*socket, buf.prepare(size_of_msg));
 
   Message* msg = nullptr;
+  buf.commit(l);
   msg = load_message(buf);
+  buf.consume(l);
   T* m = dynamic_cast<T*>(msg);
   return std::unique_ptr<T>(m);
 }

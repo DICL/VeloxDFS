@@ -18,6 +18,7 @@ struct FileDescription: public Message {
   std::vector<uint32_t> hash_keys;
   std::vector<uint32_t> block_size;
   int replica;
+  int uploading;
 };
 
 }

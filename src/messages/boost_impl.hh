@@ -1,11 +1,11 @@
 //
-// This module implements the serialization using BOOST SERIALIZAITON
-// For every new message class that you want to add you must add its 
-// functions here and its cc file.
+//! @brief This module implements the serialization using BOOST SERIALIZAITON
+//! For every new message class that you want to add you must add its 
+//! functions here and its cc file.
 //
 #pragma once
 
-//! 1) Add your class here
+// 1) Add your class here
 #include "message.hh"
 #include "boundaries.hh"
 #include "keyvalue.hh"
@@ -29,6 +29,8 @@
 #include "fileupdate.hh"
 #include "metadata.hh"
 #include "blockstatus.hh"
+#include "IOoperation.hh"
+#include "../common/blockmetadata.hh"
 
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/tracking.hpp>
@@ -40,7 +42,7 @@
       boost::serialization::base_object<X>(Y));
 #endif
 
-//! 2) Also here
+// 2) Also here
 namespace boost{
 namespace serialization{
 
@@ -67,12 +69,14 @@ template <typename Archive> void serialize (Archive&, eclipse::messages::FormatR
 template <typename Archive> void serialize (Archive&, eclipse::messages::FileExist&, unsigned);
 template <typename Archive> void serialize (Archive&, eclipse::messages::MetaData&, unsigned);
 template <typename Archive> void serialize (Archive&, eclipse::messages::BlockStatus&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::BlockMetadata&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::IOoperation&, unsigned);
 }
 }
 
 BOOST_SERIALIZATION_ASSUME_ABSTRACT(eclipse::messages::Message);
 
-//! 3) Also here
+// 3) Also here
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::Boundaries);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::KeyValue);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::OffsetKeyValue);
@@ -95,8 +99,10 @@ BOOST_CLASS_EXPORT_KEY(eclipse::messages::FormatRequest);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileExist);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::MetaData);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::BlockStatus);
+BOOST_CLASS_EXPORT_KEY(eclipse::BlockMetadata);
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::IOoperation);
 
-//! 4) and here
+// 4) and here
 BOOST_CLASS_TRACKING(eclipse::messages::Message, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::Boundaries, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::KeyValue, boost::serialization::track_never);
@@ -119,3 +125,5 @@ BOOST_CLASS_TRACKING(eclipse::messages::BlockDel, boost::serialization::track_ne
 BOOST_CLASS_TRACKING(eclipse::messages::FormatRequest, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::FileExist, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::BlockStatus, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::BlockMetadata, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::IOoperation, boost::serialization::track_never);
