@@ -7,10 +7,10 @@
 #include "../messages/blockinfo.hh"
 #include "../messages/blockupdate.hh"
 #include "../messages/fileexist.hh"
+#include "../messages/filedescription.hh"
 #include "../messages/filerequest.hh"
 #include "../messages/filelist.hh"
 #include "../messages/blockdel.hh"
-#include "../messages/filedescription.hh"
 #include "../messages/reply.hh"
 #include "../messages/blockrequest.hh"
 #include "../common/context.hh"
@@ -26,7 +26,7 @@
 #include <iomanip>
 #include <fcntl.h>
 #include <ext/stdio_filebuf.h>
-#include <sstream>
+#include <algorithm>
 #include <stack>
 #include <future>
 #include "../common/context_singleton.hh"
@@ -44,6 +44,39 @@ enum class FILETYPE {
   App    = 0x1,
   Idata  = 0x2
 };
+
+unique_ptr<FileDescription> get_file_description
+  (std::function<unique_ptr<tcp::socket>(uint32_t)> connect, std::string& fname, bool only_metadata) {
+
+  uint32_t file_hash_key = h(fname);
+  auto socket = connect(file_hash_key);
+
+  FileExist fe;
+  fe.name = fname;
+  send_message(socket.get(), &fe);
+  auto rep = read_reply<Reply> (socket.get());
+
+  if (rep->message != "TRUE") {
+    cerr << "[ERR] " << fname << " doesn't exist." << endl;
+    return nullptr;
+  }
+
+  FileRequest fr;
+  fr.name = fname;
+  fr.only_metadata = only_metadata;
+
+  send_message(socket.get(), &fr);
+  unique_ptr<FileDescription> fd = (read_reply<FileDescription> (socket.get()));
+  socket->close();
+
+  return fd;
+}
+
+unique_ptr<FileDescription> get_file_description
+  (std::function<unique_ptr<tcp::socket>(uint32_t)> connect, std::string& fname) {
+
+  return get_file_description(connect, fname, false);
+}
 
 // Constructors and misc {{{
 DFS::DFS() { }
@@ -64,8 +97,7 @@ unique_ptr<tcp::socket> DFS::connect(uint32_t hash_value) {
   tcp::resolver::iterator it(resolver.resolve(query));
   auto ep = make_unique<tcp::endpoint>(*it);
   socket->connect(*ep);
-  socket->set_option(tcp::no_delay(true));
-  return move(socket);
+  return socket;
 }
 
 bool DFS::file_exists_local(std::string filename) {
@@ -217,7 +249,7 @@ int DFS::put(vec_str input) {
       future.get();
 
     file_info.num_block = block_seq;
-    file_info.blocks = blocks_metadata;
+    file_info.block_metadata = blocks_metadata;
     file_info.uploading = 0;
 
     socket = connect(file_hash_key);
@@ -242,9 +274,12 @@ std::string DFS::load(std::string file) {
   Histogram boundaries(NUM_NODES, 0);
   boundaries.initialize();
 
+  /*
   string file_name = file;
   uint32_t file_hash_key = h(file_name);
   auto socket = connect (file_hash_key);
+
+
   FileExist fe;
   fe.name = file_name;
   send_message(socket.get(), &fe);
@@ -261,8 +296,15 @@ std::string DFS::load(std::string file) {
   send_message(socket.get(), &fr);
   auto fd = read_reply<FileDescription> (socket.get());
 
-  std::string output;
   socket->close();
+  */
+
+  auto fd = get_file_description(
+    std::bind(&DFS::connect, *this, std::placeholders::_1), file
+  );
+  if(fd == nullptr) return "";
+
+  std::string output;
   int block_seq = 0;
   for (auto block_name : fd->blocks) {
     uint32_t hash_key = fd->hash_keys[block_seq++];
@@ -275,7 +317,7 @@ std::string DFS::load(std::string file) {
     output += msg->content;
     tmp_socket->close();
   }
-  socket->close();
+
   return output;
 }
 // }}} 
@@ -472,7 +514,7 @@ int DFS::rm(vec_str argv) {
 
       send_message(socket.get(), &fr);
       auto fd = read_reply<FileDescription>(socket.get());
-      socket->close();
+      //socket->close();
 
       unsigned int block_seq = 0;
       for (auto block_name : fd->blocks) {
@@ -488,12 +530,11 @@ int DFS::rm(vec_str argv) {
           cerr << "[ERR] " << block_name << "doesn't exist." << endl;
           return EXIT_FAILURE;
         }
-        socket->close();
       }
 
       FileDel file_del;
       file_del.name = file_name;
-      socket = connect(file_hash_key);
+      //socket = connect(file_hash_key);
       send_message(socket.get(), &file_del);
       auto reply = read_reply<Reply>(socket.get());
       if (reply->message != "OK") {
@@ -534,6 +575,7 @@ int DFS::show(vec_str argv) {
     boundaries.initialize();
     for (uint32_t i = 2; i < argv.size(); i++) {
       string file_name = argv[i];
+      /*
       uint32_t file_hash_key = h(file_name);
       auto socket = connect (file_hash_key);
       FileRequest fr;
@@ -541,13 +583,20 @@ int DFS::show(vec_str argv) {
 
       send_message (socket.get(), &fr);
       auto fd = read_reply<FileDescription>(socket.get());
+      */
+
+      auto fd = get_file_description(
+        std::bind(&DFS::connect, *this, std::placeholders::_1), file_name
+      );
+      if(fd == nullptr) continue;
+
       cout << file_name << endl;
       int block_seq = 0;
       for (auto block_name : fd->blocks) {
         uint32_t hash_key = fd->hash_keys[block_seq++]; 
         int which_node = boundaries.get_index(hash_key);
         int tmp_node;
-        for (int i=0; i<fd->replica; i++) {
+        for (int i=0; i<(int)fd->replica; i++) {
           if (i%2 == 1) {
             tmp_node = (which_node + (i+1)/2 + nodes.size()) % nodes.size();
           } else {
@@ -557,7 +606,6 @@ int DFS::show(vec_str argv) {
           cout << "\t- " << setw(15) << block_name << " : " << setw(15) << ip << endl;
         }
       }
-      socket->close(); 
     }
   }
   return EXIT_SUCCESS;
@@ -577,6 +625,8 @@ int DFS::pget(vec_str argv) {
     file_name = argv[2];
     uint64_t start_offset = stol(argv[3]);
     uint64_t read_byte = stol(argv[4]);
+
+    /*
     uint32_t file_hash_key = h(file_name);
     auto socket = connect (file_hash_key);
     FileExist fe;
@@ -594,6 +644,13 @@ int DFS::pget(vec_str argv) {
     send_message(socket.get(), &fr);
     auto fd = read_reply<FileDescription> (socket.get());
     socket->close();
+    */
+    
+    auto fd = get_file_description(
+      std::bind(&DFS::connect, *this, std::placeholders::_1), file_name
+    );
+    if(fd == nullptr) return EXIT_FAILURE;
+
     if (start_offset + read_byte > fd->size) {
       cerr << "[ERR] Wrong read byte." << endl;
       return EXIT_FAILURE;
@@ -658,103 +715,25 @@ int DFS::update(vec_str argv) {
 
     ori_file_name = argv[2];
     string new_file_name = argv[3];
-    uint64_t start_offset = stol(argv[4]);
-    uint32_t file_hash_key = h(ori_file_name);
-    auto socket = connect (file_hash_key);
-    FileExist fe;
-    fe.name = ori_file_name;
-    send_message(socket.get(), &fe);
-    auto rep = read_reply<Reply> (socket.get());
-
-    if (rep->message != "TRUE") {
-      cerr << "[ERR] " << ori_file_name << " doesn't exist." << endl;
-      return EXIT_FAILURE;
-    }
-    FileRequest fr;
-    fr.name = ori_file_name;
+    uint32_t start_offset = stol(argv[4]);
 
     ifstream myfile(new_file_name);
     myfile.seekg(0, myfile.end);
-    uint64_t new_file_size = myfile.tellg();
+    uint32_t new_file_size = myfile.tellg();
 
-    send_message(socket.get(), &fr);
-    auto fd = read_reply<FileDescription> (socket.get());
-    socket->close();
-    if (start_offset + new_file_size > fd->size) {
-      cerr << "[ERR] Wrong file size." << endl;
-      return EXIT_FAILURE;
-    }
-    myfile.seekg(0, myfile.beg);
     char *buffer = new char[new_file_size];
+
+    myfile.seekg(0, myfile.beg);
     myfile.read(buffer, new_file_size);
-    string sbuffer(buffer);
+
+    uint64_t written_bytes = write(ori_file_name, buffer, start_offset, new_file_size);
+    int ret = (written_bytes > 0 ? EXIT_SUCCESS : EXIT_FAILURE);
+    
     delete[] buffer;
     myfile.close();
 
-    int block_seq = 0;
-    uint64_t passed_byte = 0;
-    uint64_t write_byte_cnt = 0;
-    uint32_t ori_start_pos = 0;
-    uint32_t to_write_byte = new_file_size;
-    bool first_block = true;
-    bool final_block = false;
-    for (auto block_name : fd->blocks) {
-      // pass until find the block which has start_offset
-      if (passed_byte + fd->block_size[block_seq] < start_offset) {
-        passed_byte += fd->block_size[block_seq];
-        block_seq++;
-        continue;
-      } else {
-        // If this block is the first one of updating blocks,
-        // start position will be start_offset - passed_byte.
-        // Otherwise, start position will be 0.
-        uint32_t hash_key = fd->hash_keys[block_seq];
-        if (first_block) {
-          first_block = false;
-          ori_start_pos = start_offset - passed_byte;
-        } else {
-          ori_start_pos = 0;
-        }
-        // write length means the lenght which should be repliaced in THIS block.
-        // to_write_byte means remaining total bytes to write
-        // If this block is the last one, write_length should be same as to_write_byte
-        // Otherwise, write_length should be same as block_size - start position
-        uint32_t write_length = fd->block_size[block_seq] - ori_start_pos;
-        if (to_write_byte < write_length) {
-          final_block = true;
-          write_length = to_write_byte;
-        }
-        // send message
-        BlockUpdate bu;
-        bu.name = block_name; 
-        bu.file_name = ori_file_name;
-        bu.seq = block_seq;
-        bu.replica = fd->replica; 
-        bu.hash_key = hash_key; 
-        bu.pos = ori_start_pos;
-        bu.len = write_length;
-        bu.content = sbuffer.substr(write_byte_cnt, write_length);
-        bu.size = fd->block_size[block_seq];
-        auto tmp_socket = connect(boundaries.get_index(file_hash_key));
-        send_message(tmp_socket.get(), &bu);
-        auto reply = read_reply<Reply> (tmp_socket.get());
-        tmp_socket->close();
-        if (reply->message != "OK") {
-          cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
-          return EXIT_FAILURE;
-        } 
-        // calculate total write bytes and remaining write bytes
-        write_byte_cnt += write_length;
-        if (final_block) {
-          break;
-        }
-        to_write_byte -= write_length;
-        block_seq++;
-      }
-    }
+    return ret;
   }
-  cout << "[INFO] " << ori_file_name << " is updated." << endl;
-  return EXIT_SUCCESS;
 }
 // }}}
 // append {{{
@@ -1128,7 +1107,6 @@ int DFS::push_back(vec_str argv) {
       fu.size = fd->size + new_file_size;
       send_message(socket.get(), &fu);
       auto reply = read_reply<Reply> (socket.get());
-      //myfile.close();
       socket->close();
 
       if (reply->message != "OK") {
@@ -1175,7 +1153,7 @@ bool DFS::touch(std::string name) {
   block_info.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
   block_info.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
   block_info.is_committed = 1;
-  block_info.content = "NOOP";
+  block_info.content = "";
 
   auto socket = connect(h(name));
   send_message(socket.get(), &block_info);
@@ -1194,6 +1172,180 @@ bool DFS::touch(std::string name) {
   socket->close();
 
   return (reply->message == "OK");
+}
+// }}}
+// write {{{
+uint32_t DFS::write(std::string& file_name, const char* buf, uint32_t off, uint32_t len) {
+  Histogram boundaries(NUM_NODES, 0);
+  boundaries.initialize();
+
+  auto fd = get_file_description(
+    std::bind(&DFS::connect, *this, std::placeholders::_1), file_name
+  );
+  if(fd == nullptr) return 0;
+
+  off = std::max((unsigned int)0, std::min(off, std::max(fd->size, BLOCK_SIZE - 1)));
+
+  uint32_t to_write_bytes = len;
+  uint32_t written_bytes = 0;
+
+  int block_beg_seq = (int) off / BLOCK_SIZE;
+  int block_end_seq = (int) (len + off - 1) / BLOCK_SIZE;
+
+  for(int i=block_beg_seq; i<=block_end_seq; i++) {
+    if(i < (int)fd->num_block) { // updating exist block
+      uint32_t hash_key = fd->hash_keys[i];
+
+      // send message
+      BlockUpdate bu;
+      bu.name = fd->blocks[i]; 
+      bu.file_name = file_name;
+      bu.seq = i;
+      bu.replica = fd->replica; 
+      bu.hash_key = hash_key; 
+      bu.pos = (i == block_beg_seq && fd->block_size[i] > 0) ? (off % BLOCK_SIZE) : 0;
+      bu.len = (fd->block_size[i] == 0) ? std::min(to_write_bytes, BLOCK_SIZE) : std::min((BLOCK_SIZE - bu.pos), to_write_bytes);
+      string content_str(buf + written_bytes, bu.len);
+      bu.content = content_str;
+      bu.size = std::max(fd->block_size[i], bu.len);
+
+      auto block_socket = connect(boundaries.get_index(bu.hash_key));
+      send_message(block_socket.get(), &bu);
+      auto reply = read_reply<Reply> (block_socket.get());
+      block_socket->close();
+
+      if (reply->message != "OK") {
+        cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
+        return 0;
+      } 
+
+      written_bytes += bu.len;
+    }
+    else { // creating a new block
+      int which_server = ((fd->hash_key % NUM_NODES) + i) % NUM_NODES;
+
+      BlockInfo bi;
+      bi.name = file_name + "_" + to_string(i);
+      bi.file_name = file_name;
+      bi.hash_key = boundaries.random_within_boundaries(which_server);
+      bi.seq = i;
+      bi.size = std::min(BLOCK_SIZE, to_write_bytes);
+      bi.type = static_cast<unsigned int>(FILETYPE::Normal);
+      bi.replica = fd->replica;
+      bi.node = nodes[which_server];
+      bi.l_node = nodes[(which_server - 1 + NUM_NODES) % NUM_NODES];
+      bi.r_node = nodes[(which_server + 1 + NUM_NODES) % NUM_NODES];
+      bi.is_committed = 1;
+      string content_str(buf + written_bytes, bi.size);
+      bi.content = content_str;
+
+      auto block_socket = connect(fd->hash_key);
+      send_message(block_socket.get(), &bi);
+      auto reply = read_reply<Reply> (block_socket.get());
+      block_socket->close();
+
+      if (reply->message != "OK") {
+        cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
+        return 0;
+      } 
+
+      written_bytes += bi.size;
+    }
+
+    to_write_bytes -= written_bytes;
+  }
+
+  // Update Metadata
+  FileUpdate fu;
+  fu.name = fd->name;
+  fu.num_block = std::max(fd->num_block, (unsigned int)block_end_seq + 1);
+  fu.size = std::max(written_bytes + off, fd->size);
+  auto socket = connect(fd->hash_key);
+  send_message(socket.get(), &fu);
+  auto reply = read_reply<Reply> (socket.get());
+  socket->close();
+
+  return written_bytes;
+}
+// }}}
+// read {{{
+uint32_t DFS::read(std::string& file_name, char* buf, uint32_t off, uint32_t len) {
+  Histogram boundaries(NUM_NODES, 0);
+  boundaries.initialize();
+
+  auto fd = get_file_description(
+    std::bind(&DFS::connect, *this, std::placeholders::_1), file_name
+  );
+  if(fd == nullptr) return 0;
+
+  off = std::max((unsigned int)0, std::min(off, fd->size));
+  if(off >= fd->size) return 0;
+
+/*
+  uint32_t file_hash_key = h(file_name);
+  auto socket = connect(file_hash_key);
+
+  FileRequest fr;
+  fr.name = file_name;
+
+  send_message(socket.get(), &fr);
+  auto fd = read_reply<FileDescription> (socket.get());
+
+  socket->close();
+  */
+
+  int block_beg_seq = (int) off / BLOCK_SIZE;
+  int block_end_seq = (int) (len + off - 1) / BLOCK_SIZE;
+
+  std::string output = "";
+
+  uint32_t remain_len = len;
+
+  for(int i=block_beg_seq; i<=block_end_seq; i++) {
+    uint32_t hash_key = fd->hash_keys[i];
+    auto block_socket = connect(boundaries.get_index(hash_key));
+
+    BlockRequest br;
+    br.name = fd->blocks[i]; 
+    br.hash_key = hash_key; 
+    br.off = (i == block_beg_seq && fd->block_size[i] > 0) ? (off % fd->block_size[i]) : 0;
+    br.len = std::min((fd->block_size[i] - br.off), remain_len);
+    br.should_read_partially = true;
+
+    send_message(block_socket.get(), &br);
+    auto msg = read_reply<BlockInfo>(block_socket.get());
+    output += msg->content;
+    
+    block_socket->close();
+
+    remain_len -= br.len;
+
+    if(br.off + br.len > fd->block_size[i])
+      break;
+  }
+
+  strcpy(buf, output.c_str());
+
+  return (uint32_t)output.length();
+}
+// }}}
+// get_metadata {{{
+model::metadata DFS::get_metadata(std::string& fname) {
+  model::metadata md;
+
+  auto fd = get_file_description(
+    std::bind(&DFS::connect, *this, std::placeholders::_1), fname, true
+  );
+  if(fd != nullptr) {
+    md.name = fd->name;
+    md.hash_key = fd->hash_key;
+    md.size = fd->size;
+    md.num_block = fd->num_block;
+    md.type = fd->type;
+    md.replica = fd->replica;
+  }
+
+  return md;
 }
 // }}}
 }

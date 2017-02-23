@@ -15,13 +15,13 @@ struct FileInfo: public Message {
 
   std::string name;
   uint32_t hash_key;
-  uint64_t size;
+  uint32_t size;
   unsigned int num_block;
   unsigned int type;
   unsigned int replica;
   int uploading = 1;
 
-  std::vector<BlockMetadata> blocks;
+  std::vector<BlockMetadata> block_metadata;
 };
 
 }

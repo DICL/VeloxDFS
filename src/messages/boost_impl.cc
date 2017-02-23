@@ -66,7 +66,7 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.type);
     ar & BOOST_SERIALIZATION_NVP(c.replica);
     ar & BOOST_SERIALIZATION_NVP(c.uploading);
-    ar & BOOST_SERIALIZATION_NVP(c.blocks);
+    ar & BOOST_SERIALIZATION_NVP(c.block_metadata);
   }
 
 template <typename Archive>
@@ -141,25 +141,27 @@ template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::FileRequest& c, unsigned int) {
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.name);
+    ar & BOOST_SERIALIZATION_NVP(c.only_metadata);
   }
 
 template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::BlockRequest& c, unsigned int) {
     ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.name);
-    ar & BOOST_SERIALIZATION_NVP(c.hash_key);
+    ar & BOOST_SERIALIZATION_NVP(c.name); 
+    ar & BOOST_SERIALIZATION_NVP(c.hash_key); 
+    ar & BOOST_SERIALIZATION_NVP(c.off);  
+    ar & BOOST_SERIALIZATION_NVP(c.len);  
+    ar & BOOST_SERIALIZATION_NVP(c.should_read_partially);  
   }
 
 template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::FileDescription& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.name);
-    ar & BOOST_SERIALIZATION_NVP(c.size);
+    using eclipse::messages::FileInfo;
+    ar & BASE_OBJECT(FileInfo, c);
+
     ar & BOOST_SERIALIZATION_NVP(c.blocks);
     ar & BOOST_SERIALIZATION_NVP(c.hash_keys);
     ar & BOOST_SERIALIZATION_NVP(c.block_size);
-    ar & BOOST_SERIALIZATION_NVP(c.replica);
-    ar & BOOST_SERIALIZATION_NVP(c.uploading);
   }
 
 template <typename Archive>

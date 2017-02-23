@@ -7,11 +7,16 @@ namespace eclipse {
 namespace messages {
 
 struct BlockRequest: public Message {
-  BlockRequest () = default;
+  uint32_t off;
+  uint32_t len;
+  bool should_read_partially;
 
-  std::string get_type() const override;
   std::string name;
   uint32_t hash_key;
+
+  BlockRequest () : should_read_partially(false) {};
+
+  std::string get_type() const override;
 };
 
 }

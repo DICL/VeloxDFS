@@ -12,7 +12,7 @@ struct FileUpdate: public Message {
   std::string get_type() const override;
 
   std::string name;
-  uint64_t size;
+  uint32_t size;
   unsigned int num_block;
 };
 

@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 
 using namespace eclipse;
 using namespace std;
@@ -36,15 +37,28 @@ void Local_io::update (std::string name, std::string v, uint32_t pos, uint32_t l
 // }}}
 // read {{{
 std::string Local_io::read (string name) {
-  ifstream in (disk_path + string("/") + name, ios::in | ios::binary | ios::ate);
-  ifstream::pos_type fileSize = in.tellg();
-  in.seekg(0, ios::beg);
+  return read(name, 0, 0, true);
+}
 
-  vector<char> bytes(fileSize);
-  in.read(&bytes[0], fileSize);
+std::string Local_io::read (string name, uint32_t off, uint32_t len) {
+  return read(name, off, len, false);
+}
+
+std::string Local_io::read (string name, uint32_t off, uint32_t len, bool is_whole = false) {
+  ifstream in (disk_path + string("/") + name, ios::in | ios::binary | ios::ate);
+  uint32_t file_size = (uint32_t)in.tellg();
+  in.seekg(off, ios::beg);
+
+  if(is_whole) 
+    len = file_size;
+
+  uint32_t readable_len = std::min(len, (file_size - off));
+
+  vector<char> bytes(readable_len);
+  in.read(&bytes[0], readable_len);
 
   in.close();
-  return string(&bytes[0], fileSize);
+  return string(&bytes[0], readable_len);
 }
 // }}}
 // read_metadata {{{

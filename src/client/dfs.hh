@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <memory>
 
+#include "model/metadata.hh"
+
 namespace velox {
 
 using boost::asio::ip::tcp;
@@ -30,6 +32,11 @@ class DFS {
 
     int push_back(vec_str);
     std::string load(std::string);
+
+    uint32_t write(std::string&, const char*, uint32_t, uint32_t);
+    uint32_t read(std::string&, char*, uint32_t, uint32_t);
+
+    model::metadata get_metadata(std::string& fname);
 
   private:
     uint32_t BLOCK_SIZE;

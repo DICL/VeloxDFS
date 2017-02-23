@@ -57,7 +57,7 @@ unique_ptr<Message> FileLeader::file_insert(messages::FileInfo* f) {
 bool FileLeader::file_insert_confirm(messages::FileInfo* f) {
   directory.file_table_confirm_upload(f->name, f->num_block);
 
-  for (auto& metadata : f->blocks) {
+  for (auto& metadata : f->block_metadata) {
     directory.block_table_insert(metadata);
   }
 
