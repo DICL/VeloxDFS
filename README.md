@@ -1,11 +1,10 @@
+VeloxDFS  {#mainpage}
+========
+---
 [![Build Status](https://travis-ci.org/DICL/VeloxDFS.svg?branch=master)](https://travis-ci.org/DICL/VeloxDFS)
 [![Slack room](https://img.shields.io/badge/slack-join-pink.svg)](https://dicl.slack.com/messages/general/)
 [![ZenHub](https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)](https://zenhub.com)
 [![Analytics](https://ga-beacon.appspot.com/UA-87474237-1/veloxdfs)](https://github.com/DICL/VeloxDFS)
-
----
-VeloxDFS  #{mainpage}
-========
 ---
 
 _VeloxDFS_ is a decentralized distributed file system based on _ChordDHT_ and _HDFS_.
@@ -52,11 +51,11 @@ For single user installation for developers
 
     $ mkdir -p local_eclipse/{tmp,sandbox}                 # Create a sandbox directories
     $ cd local_eclipse                                     # enter in the directory
-    $ git clone git@github.com:DICL/EclipseDFS.git         # Clone the project from github
-    $ cd EclipseDFS
+    $ git clone git@github.com:DICL/VeloxDFS.git           # Clone the project from github
+    $ cd VeloxDFS
     $ sh autogen.sh                                        # Generate configure script 
     $ cd ../tmp                                            # Go to building folder
-    $ sh ../EclipseDFS/configure --prefix=`pwd`/../sandbox # Check requirements and generate the Makefile
+    $ sh ../VeloxDFS/configure --prefix=`pwd`/../sandbox # Check requirements and generate the Makefile
 
     # If you get a boost error go the FAQ section of the README
 
@@ -68,11 +67,6 @@ Now edit in your **~/.bashrc** or **~/.profile**:
     export PATH="/home/*..PATH/To/eclipse/..*/sandbox/bin":$PATH
     export LIBRARY_PATH="/home/*..PATH/To/eclipse/..*/sandbox/lib"
     export C_INCLUDE_PATH="/home/*..PATH/To/eclipse/..*/sandbox/include"
-    export MANPATH=`manpath`:/home*..PATH/To/eclipse/..*/sandbox/share/man
-
-For the configuration refer to the manpage:
-
-    $ man eclipsefs
 
 FAQ
 ---
@@ -81,7 +75,7 @@ FAQ
 - _Answer_ : It probably means that you do not have boost library installed in
   the default location, in such case you should specify the boost library location.
   ```
-  sh ../EclipseDFS/configure --prefix ~/sandbox --with-boost=/usr/local --with-boost-libdir=/usr/local/lib
+  sh ../VeloxDFS/configure --prefix ~/sandbox --with-boost=/usr/local --with-boost-libdir=/usr/local/lib
   ```
   In this example we assume that the boost headers are in `/usr/local/include` while the library files
   are inside `/usr/local/lib`.
