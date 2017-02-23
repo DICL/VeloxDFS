@@ -7,11 +7,8 @@ AM_INIT_AUTOMAKE([foreign subdir-objects])
 AM_SILENT_RULES([yes])
 LT_INIT([dlopen])
 
-#AC_CONFIG_MACRO_DIR([./m4/])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile ])
-AC_CONFIG_FILES([tests/nodes_executor],    [chmod +x tests/nodes_executor])
-AC_CONFIG_FILES([tests/eclipse_debug],    [chmod +x tests/eclipse_debug])
 
 AM_CONDITIONAL([DEFAULT_CXXFLAGS], [test -z "$CXXFLAGS"])
 AM_COND_IF([DEFAULT_CXXFLAGS], [CXXFLAGS='-g -O0 -march=native'])

@@ -2,6 +2,7 @@
 #include "../common/context_singleton.hh"
 
 #include <sstream>
+#include <iostream>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
@@ -52,8 +53,11 @@ std::string* save_message (Message* m) {
 
 void send_message(boost::asio::ip::tcp::socket* socket, 
     eclipse::messages::Message* msg) {
+  cout << "SERIALIZING" << endl;
   string* to_send = save_message(msg);
+  cout << "SENDING" << endl;
   socket->send(boost::asio::buffer(*to_send));
+  cout << "SENT" << endl;
 }
 
 

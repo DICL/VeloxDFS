@@ -14,10 +14,14 @@ Local_io::Local_io() {
 }
 //  }}}
 // write {{{
+//! @brief Unbuffered write to disk
 void Local_io::write (std::string name, std::string& v) {
   string file_path = disk_path + string("/") + name;
-  ofstream file (file_path);
-  file << v;
+  ofstream file;
+
+  file.rdbuf()->pubsetbuf(0, 0);      //! No buffer
+  file.open(file_path, ios::binary);  //! Binary write
+  file.write(v.c_str(), v.length());
   file.close();
 }
 // }}}
@@ -78,6 +82,11 @@ bool Local_io::format () {
 
   while ( (next_file = readdir(theFolder)) != NULL ) {
     sprintf(filepath, "%s/%s", fs_path.c_str(), next_file->d_name);
+    if (strncmp(basename(filepath), "..", 256) == 0 or
+        strncmp(basename(filepath), "...", 256) == 0 or
+        strncmp(basename(filepath), ".", 256) == 0)
+      continue;
+
     DEBUG("FORMAT: Removing %s", filepath);
     if (0 != ::remove(filepath)) {
       ERROR("FORMAT: Can't remove %s.", filepath);

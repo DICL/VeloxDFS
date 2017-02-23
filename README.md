@@ -4,6 +4,9 @@
 [![Analytics](https://ga-beacon.appspot.com/UA-87474237-1/veloxdfs)](https://github.com/DICL/VeloxDFS)
 
 ---
+VeloxDFS  #{mainpage}
+========
+---
 
 _VeloxDFS_ is a decentralized distributed file system based on _ChordDHT_ and _HDFS_.
 
@@ -12,6 +15,7 @@ however, it can be used independently of the other components such as _VeloxMR_ 
 
 Key features of current VeloxDFS implementation includes:
  - No central directory service such as in _HDFS_ NameNode.
+ - Zero Hop lookup file-system.
  - Instead for each file there is a file leader node which holds its metadata.
  - Highly secure and stable, total replication of the system's state.
 

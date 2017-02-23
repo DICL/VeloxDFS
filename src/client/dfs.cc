@@ -16,7 +16,10 @@
 #include "../common/context.hh"
 #include "../common/hash.hh"
 #include "../common/histogram.hh"
+#include "../common/block.hh"
+#include "../common/blockmetadata.hh"
 #include "../messages/factory.hh"
+#include "../messages/IOoperation.hh"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -24,6 +27,8 @@
 #include <fcntl.h>
 #include <ext/stdio_filebuf.h>
 #include <sstream>
+#include <stack>
+#include <future>
 #include "../common/context_singleton.hh"
 
 using namespace std;
@@ -59,133 +64,175 @@ unique_ptr<tcp::socket> DFS::connect(uint32_t hash_value) {
   tcp::resolver::iterator it(resolver.resolve(query));
   auto ep = make_unique<tcp::endpoint>(*it);
   socket->connect(*ep);
-  return socket;
+  socket->set_option(tcp::no_delay(true));
+  return move(socket);
 }
 
-bool DFS::fexists(std::string filename) {
+bool DFS::file_exists_local(std::string filename) {
   ifstream ifile(filename);
   return ifile;
 }
 // }}}
 // put {{{
 int DFS::put(vec_str input) {
-  if (input.size() < 3) {
+  stack<string> argv {{ input.rbegin(), prev(input.rend(), 2) }} ;
+
+  if (argv.empty()) {
     cout << "[INFO] dfs put file_1 file_2 ..." << endl;
     return EXIT_FAILURE;
+  }
 
-  } else {
-    vector<char> chunk(BLOCK_SIZE);
-    Histogram boundaries(NUM_NODES, 0);
-    boundaries.initialize();
+  vector<char> chunk(BLOCK_SIZE);
+  Histogram boundaries(NUM_NODES, 100);
+  boundaries.initialize();
 
-    string op = input[2];
-    FILETYPE type = FILETYPE::Normal;
-    uint32_t i = 2;
-    if (op.compare("-b") == 0) {
-      replica = NUM_NODES;
-      type = FILETYPE::App;
+  string op = argv.top();
+  FILETYPE type = FILETYPE::Normal;
+
+  //! If it is an app to be upload :TODO:
+  if (op.compare("-b") == 0) {
+    replica = NUM_NODES;
+    type = FILETYPE::App;
+    argv.pop();
+  }
+
+  //! For each file_name
+  for (; !argv.empty(); argv.pop()) {
+    string file_name = argv.top();
+    uint32_t file_hash_key = h(file_name);
+    if (not file_exists_local(file_name)) {
+      cerr << "[ERR] " << file_name << " cannot be found in your machine." << endl;
+      continue;
+    }
+
+    //! Does the file exists
+    if (this->exists(file_name)) {
+      cerr << "[ERR] " << file_name << " already exists in VeloxDFS." << endl;
+      continue;
+    }
+
+    //! Insert the file
+    int fd = open(file_name.c_str(), 0);
+
+    __gnu_cxx::stdio_filebuf<char> filebuf(fd, std::ios::in | std::ios::binary);
+    istream myfile(&filebuf);
+
+    FileInfo file_info;
+    file_info.name = file_name;
+    file_info.hash_key = file_hash_key;
+    file_info.type = static_cast<unsigned int>(type);
+    file_info.replica = replica;
+    myfile.seekg(0, ios_base::end);
+    file_info.size = myfile.tellg();
+
+    //! Send file to be submitted;
+    auto socket = connect(file_hash_key);
+    send_message(socket.get(), &file_info);
+
+    //! Get information of where to send the file
+    auto description = read_reply<FileDescription>(socket.get());
+    socket->close();
+
+    uint64_t start = 0;
+    uint64_t end = start + BLOCK_SIZE - 1;
+    uint32_t block_size = 0;
+    unsigned int block_seq = 0;
+
+    //! Insert the blocks
+    int i = 0;
+
+    vector<BlockMetadata> blocks_metadata;
+    vector<future<bool>> slave_sockets;
+
+    while (true) {
+      if (end < file_info.size) {
+        myfile.seekg(start+BLOCK_SIZE-1, ios_base::beg);
+        while (myfile.peek() != '\n') {
+          myfile.seekg(-1, ios_base::cur);
+          end--;
+        }
+      } else {
+        end = file_info.size;
+      }
+      BlockMetadata metadata;
+      Block block;
+
+      cout << "READING " << endl;
+      block_size = (uint32_t) end - start;
+      bzero(chunk.data(), BLOCK_SIZE);
+      myfile.seekg(start, myfile.beg);
+      block.second.reserve(block_size);
+      myfile.read(chunk.data(), block_size);
+      block.second = move(chunk.data());
+      posix_fadvise(fd, end, block_size, POSIX_FADV_WILLNEED);
+      cout << "FINISH READING " << endl;
+
+      //! Load block metadata info
+      int which_server = description->hash_keys[i] % NUM_NODES;
+      block.first = metadata.name = description->blocks[i];
+      metadata.file_name = file_name;
+      metadata.hash_key = description->hash_keys[i];
+      metadata.seq = block_seq++;
+      metadata.size = block_size;
+      metadata.type = static_cast<unsigned int>(FILETYPE::Normal);
+      metadata.replica = replica;
+      metadata.node = nodes[which_server];
+      metadata.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
+      metadata.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
+      metadata.is_committed = 1;
+
+      blocks_metadata.push_back(metadata);
+
+      IOoperation io_ops;
+      io_ops.operation = "BLOCK_INSERT";
+      io_ops.block = move(block);
+
+      cout << "SENDING" << endl;
+      auto socket = connect(boundaries.get_index(metadata.hash_key));
+      send_message(socket.get(), &io_ops);
+
+      auto future = async(launch::async, [](unique_ptr<tcp::socket> socket) -> bool {
+            auto reply = read_reply<Reply> (socket.get());
+            socket->close();
+
+            if (reply->message != "TRUE") {
+              cerr << "[ERR] Failed to upload block . Details: " << reply->details << endl;
+              return false;
+            }
+
+            return true;
+          }, move(socket));
+
+      slave_sockets.push_back(move(future));
+
+      if (end >= file_info.size) {
+        break;
+      }
+      start = end;
+      end = start + BLOCK_SIZE - 1;
       i++;
     }
-    for (; i < input.size(); i++) {
-      string file_name = input[i];	
-      if (!this->fexists(file_name)) {
-        cerr << "[ERR] " << file_name << " does not exist." << endl;
-        continue;
-      }
-      FileExist fe;
-      fe.name = file_name;
-      uint32_t file_hash_key = h(file_name);
-      auto socket = connect(file_hash_key);
-      send_message(socket.get(), &fe);
-      auto rep = read_reply<Reply> (socket.get());
 
-      if (rep->message == "TRUE") {
-        cerr << "[ERR] " << file_name << " already exists." << endl;
-        continue;
-      }
+    for (auto& future: slave_sockets)
+      future.get();
 
-      int which_server = file_hash_key % NUM_NODES;
-      int fd = open(file_name.c_str(), 0);
+    file_info.num_block = block_seq;
+    file_info.blocks = blocks_metadata;
+    file_info.uploading = 0;
 
-      __gnu_cxx::stdio_filebuf<char> filebuf(fd, std::ios::in | std::ios::binary); // 1
-      istream myfile(&filebuf);
-      uint64_t start = 0;
-      uint64_t end = start + BLOCK_SIZE - 1;
-      uint32_t block_size = 0;
-      unsigned int block_seq = 0;
+    socket = connect(file_hash_key);
+    send_message(socket.get(), &file_info);
+    auto reply = read_reply<Reply> (socket.get());
 
-      FileInfo file_info;
-      file_info.name = file_name;
-      file_info.hash_key = file_hash_key;
-      file_info.type = static_cast<unsigned int>(type);
-      file_info.replica = replica;
-      myfile.seekg(0, myfile.end);
-      file_info.size = myfile.tellg();
-      BlockInfo block_info;
-
-      while (1) {
-        if (end < file_info.size) {
-          myfile.seekg(start+BLOCK_SIZE-1, myfile.beg);
-          while (1) {
-            if (myfile.peek() =='\n') {
-              break;
-            } else {
-              myfile.seekg(-1, myfile.cur);
-              end--;
-            }
-          }
-        } else {
-          end = file_info.size;
-        }
-        block_size = (uint32_t) end - start;
-        bzero(chunk.data(), BLOCK_SIZE);
-        myfile.seekg(start, myfile.beg);
-        block_info.content.reserve(block_size);
-        myfile.read(chunk.data(), block_size);
-        block_info.content = chunk.data();
-        posix_fadvise(fd, end, block_size, POSIX_FADV_WILLNEED);
-
-
-        block_info.name = file_name + "_" + to_string(block_seq);
-        block_info.file_name = file_name;
-        block_info.hash_key = boundaries.random_within_boundaries(which_server);
-        block_info.seq = block_seq++;
-        block_info.size = block_size;
-        block_info.type = static_cast<unsigned int>(FILETYPE::Normal);
-        block_info.replica = replica;
-        block_info.node = nodes[which_server];
-        block_info.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
-        block_info.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
-        block_info.is_committed = 1;
-
-        send_message(socket.get(), &block_info);
-        auto reply = read_reply<Reply> (socket.get());
-
-
-        if (reply->message != "OK") {
-          cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
-          return EXIT_FAILURE;
-        }
-        if (end >= file_info.size) {
-          break;
-        }
-        start = end;
-        end = start + BLOCK_SIZE - 1;
-        which_server = (which_server + 1) % NUM_NODES;
-      }
-
-      file_info.num_block = block_seq;
-      send_message(socket.get(), &file_info);
-      auto reply = read_reply<Reply> (socket.get());
-      close(fd);
-      socket->close();
-
-      if (reply->message != "OK") {
-        cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
-        return EXIT_FAILURE;
-      } 
-      cout << "[INFO] " << file_name << " is uploaded." << endl;
+    if (reply->message != "TRUE") {
+      cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
+      return EXIT_FAILURE;
     }
+
+    socket->close();
+    close(fd);
+
+    cout << "[INFO] " << file_name << " is uploaded." << endl;
   }
   return EXIT_SUCCESS;
 }
@@ -237,48 +284,47 @@ int DFS::get(vec_str argv) {
   if (argv.size() < 3) {
     cout << "[INFO] dfs get file_1 file_2 ..." << endl;
     return EXIT_FAILURE;
-  } else {
-    Histogram boundaries(NUM_NODES, 0);
-    boundaries.initialize();
+  } 
 
-    for (uint32_t i = 2; i < argv.size(); i++) {
-      string file_name = argv[i];
-      uint32_t file_hash_key = h(file_name);
-      auto socket = connect (file_hash_key);
-      FileExist fe;
-      fe.name = file_name;
-      send_message(socket.get(), &fe);
-      auto rep = read_reply<Reply> (socket.get());
-
-      if (rep->message != "TRUE") {
-        cerr << "[ERR] " << file_name << " doesn't exist." << endl;
-        continue;
-      }
-      FileRequest fr;
-      fr.name = file_name;
-
-      send_message(socket.get(), &fr);
-      auto fd = read_reply<FileDescription> (socket.get());
-
-      ofstream f(file_name);
-      socket->close();
-      int block_seq = 0;
-      for (auto block_name : fd->blocks) {
-        uint32_t hash_key = fd->hash_keys[block_seq++];
-        auto tmp_socket = connect(boundaries.get_index(hash_key));
-        BlockRequest br;
-        br.name = block_name; 
-        br.hash_key = hash_key; 
-        send_message(tmp_socket.get(), &br);
-        auto msg = read_reply<BlockInfo>(tmp_socket.get());
-        f << msg->content;
-        tmp_socket->close();
-      }
-
-      cout << "[INFO] " << file_name << " is downloaded." << endl;
-      f.close();
-      socket->close();
+  Histogram boundaries(NUM_NODES, 100);
+  boundaries.initialize();
+  for (uint32_t i = 2; i < argv.size(); i++) {
+    string file_name = argv[i];
+    //! Does the file exists
+    if (not this->exists(file_name)) {
+      cerr << "[ERR] " << file_name << " already doesn't exists in VeloxDFS." << endl;
+      continue;
     }
+
+    uint32_t file_hash_key = h(file_name);
+    auto socket = connect (file_hash_key);
+
+    FileRequest fr;
+    fr.name = file_name;
+
+    send_message(socket.get(), &fr);
+    auto fd = read_reply<FileDescription> (socket.get());
+    socket->close();
+
+    ofstream file;
+    file.rdbuf()->pubsetbuf(0, 0);      //! No buffer
+    file.open(file_name, ios::binary);
+
+    for (uint32_t i = 0; i < fd->blocks.size(); i++) {
+      IOoperation io_ops;
+      io_ops.operation = "BLOCK_REQUEST";
+      io_ops.block.first = fd->blocks[i];
+
+      auto slave_socket = connect(boundaries.get_index(fd->hash_keys[i]));
+      send_message(slave_socket.get(), &io_ops);
+      auto msg = read_reply<IOoperation>(slave_socket.get());
+
+      file.write(msg->block.second.c_str(), msg->block.second.length());
+      slave_socket->close();
+    }
+
+    cout << "[INFO] " << file_name << " is downloaded." << endl;
+    file.close();
   }
   return EXIT_SUCCESS;
 }
@@ -288,43 +334,39 @@ int DFS::cat(vec_str argv) {
   if (argv.size() < 3) {
     cout << "[INFO] dfs cat file_1 file_2 ..." << endl;
     return EXIT_FAILURE;
-  } else {
-    Histogram boundaries(NUM_NODES, 0);
-    boundaries.initialize();
+  } 
 
-    for (uint32_t i = 2; i < argv.size(); i++) {
-      string file_name = argv[i];
-      uint32_t file_hash_key = h(file_name);
-      auto socket = connect (file_hash_key % NUM_NODES);
-      FileExist fe;
-      fe.name = file_name;
-      send_message(socket.get(), &fe);
-      auto rep = read_reply<Reply> (socket.get());
+  Histogram boundaries(NUM_NODES, 100);
+  boundaries.initialize();
 
-      if (rep->message != "TRUE") {
-        cerr << "[ERR] " << file_name << " doesn't exist." << endl;
-        continue;
-      }
-      FileRequest fr;
-      fr.name = file_name;
+  for (uint32_t i = 2; i < argv.size(); i++) {
+    string file_name = argv[i];
+    uint32_t file_hash_key = h(file_name);
 
-      send_message (socket.get(), &fr);
-      auto fd = read_reply<FileDescription> (socket.get());
+    if (not this->exists(file_name)) {
+      cerr << "[ERR] " << file_name << " doesn't exists in VeloxDFS." << endl;
+      continue;
+    }
 
-      socket->close();
-      int block_seq = 0;
-      for (auto block_name : fd->blocks) {
-        uint32_t hash_key = fd->hash_keys[block_seq++];
-        auto tmp_socket = connect(boundaries.get_index(hash_key));
-        BlockRequest br;
-        br.name = block_name; 
-        br.hash_key = hash_key; 
-        send_message(tmp_socket.get(), &br);
-        auto msg = read_reply<BlockInfo>(tmp_socket.get());
-        cout << msg->content;
-        tmp_socket->close();
-      }
-      socket->close();
+    FileRequest fr;
+    fr.name = file_name;
+
+    auto socket = connect(file_hash_key);
+    send_message (socket.get(), &fr);
+    auto fd = read_reply<FileDescription> (socket.get());
+    socket->close();
+
+    int index = 0;
+    for (auto block_name : fd->blocks) {
+      IOoperation io_ops;
+      io_ops.operation = "BLOCK_REQUEST";
+      io_ops.block.first = fd->blocks[index++];
+
+      auto slave_socket = connect(boundaries.get_index(fd->hash_keys[index]));
+      send_message(slave_socket.get(), &io_ops);
+      auto msg = read_reply<IOoperation>(slave_socket.get());
+      cout << msg->block.second;
+      slave_socket->close();
     }
   }
   return EXIT_SUCCESS;
@@ -434,17 +476,15 @@ int DFS::rm(vec_str argv) {
 
       unsigned int block_seq = 0;
       for (auto block_name : fd->blocks) {
-        uint32_t block_hash_key = fd->hash_keys[block_seq];
+        uint32_t block_hash_key = fd->hash_keys[block_seq++];
         auto tmp_socket = connect(boundaries.get_index(block_hash_key));
-        BlockDel bd;
-        bd.name = block_name;
-        bd.file_name = file_name;
-        bd.hash_key = block_hash_key;
-        bd.seq = block_seq++;
-        bd.replica = fd->replica;
-        send_message(tmp_socket.get(), &bd);
+        IOoperation io_ops;
+        io_ops.operation = "BLOCK_DELETE";
+        io_ops.block.first = block_name;
+
+        send_message(tmp_socket.get(), &io_ops);
         auto msg = read_reply<Reply>(tmp_socket.get());
-        if (msg->message != "OK") {
+        if (msg->message != "TRUE") {
           cerr << "[ERR] " << block_name << "doesn't exist." << endl;
           return EXIT_FAILURE;
         }
@@ -468,8 +508,6 @@ int DFS::rm(vec_str argv) {
 // }}}
 // format {{{
 int DFS::format() {
-  vector<FileInfo> total;
-
   for (unsigned int net_id = 0; net_id < NUM_NODES; net_id++) {
     FormatRequest fr;
     auto socket = connect(net_id);
@@ -526,6 +564,7 @@ int DFS::show(vec_str argv) {
 }
 // }}}
 // pget {{{
+//! @deprecated
 int DFS::pget(vec_str argv) {
   string file_name = "";
   if (argv.size() < 5) {

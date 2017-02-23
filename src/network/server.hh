@@ -6,7 +6,7 @@ namespace network {
 
 class Server: public AsyncChannel {
   public:
-    Server(tcp::socket*,tcp::socket*, NetObserver*, int);
+    Server(NetObserver*);
     static bool is_multiple();
 };
 

@@ -1,23 +1,28 @@
-#include <nodes/remotedfs.hh>
 #include <common/context_singleton.hh>
-#include <network/p2p.hh>
-#include <network/server.hh>
-#include <network/asyncnetwork.hh>
+#include <network/server_handler.hh>
+#include <network/client_handler.hh>
+#include <network/simple_router.hh>
+#include <fileleader/file_leader_router.hh>
+#include <blocknode/block_node_router.hh>
 #include <memory>
-#include <string>
 
 using namespace eclipse;
+using namespace std;
 
 int main (int argc, char ** argv) {
-  int in_port = context.settings.get<int>("network.ports.internal");
-  int ex_port = context.settings.get<int>("network.ports.client");
+  uint32_t ex_port = GET_INT("network.ports.client");
 
-  auto internal_net = make_unique<network::AsyncNetwork<P2P>> (in_port);
-  PeerDFS peer (internal_net.get());
-  internal_net->establish();
+  auto internal_net = make_unique<network::ClientHandler> (ex_port);
+  auto external_net = make_unique<network::ServerHandler> (ex_port);
 
-  auto external_net = make_unique<network::AsyncNetwork<Server>> (ex_port);
-  RemoteDFS remote (&peer, external_net.get());
+  FileLeader file_leader(internal_net.get());
+  BlockNode block_node(internal_net.get());
+
+  // Decorator pattern: I want FileLeader and Block node on the same network
+  auto router = make_unique<FileLeaderRouter>(&file_leader, new BlockNodeRouter(&block_node, new SimpleRouter()));
+
+  external_net->attach(router.get());
+
   external_net->establish();
 
   context.join();

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "messages/fileinfo.hh"
 #include "messages/blockinfo.hh"
-#include "nodes/directory.hh"
+#include "fileleader/directory.hh"
 #include "common/context_singleton.hh"
 
 using namespace eclipse;
@@ -12,7 +12,7 @@ int main() {
   context.logger->info("==========Start dir test==========");
 
   // Basic metadata io example
-  dir.init_db();
+  dir.create_tables();
   FileInfo file_info;
   BlockInfo block_info;
 
@@ -35,14 +35,13 @@ int main() {
   block_info.r_node = "1.1.1.2";
   block_info.is_committed = 3;
 
-  dir.insert_file_metadata(file_info);
-  dir.insert_block_metadata(&block_info);
+  dir.file_table_insert(file_info);
 
   file_info.name = "test2.txt";
-  dir.insert_file_metadata(file_info);
+  dir.file_table_insert(file_info);
 
   file_info.name = "test3.txt";
-  dir.insert_file_metadata(file_info);
+  dir.file_table_insert(file_info);
 
   //dir.display_file_metadata();
   //dir.display_block_metadata();
