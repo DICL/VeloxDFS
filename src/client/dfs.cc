@@ -45,8 +45,9 @@ enum class FILETYPE {
   Idata  = 0x2
 };
 
+// Static functions {{{
 unique_ptr<FileDescription> get_file_description
-  (std::function<unique_ptr<tcp::socket>(uint32_t)> connect, std::string& fname, bool only_metadata) {
+(std::function<unique_ptr<tcp::socket>(uint32_t)> connect, std::string& fname, bool only_metadata) {
 
   uint32_t file_hash_key = h(fname);
   auto socket = connect(file_hash_key);
@@ -77,7 +78,7 @@ unique_ptr<FileDescription> get_file_description
 
   return get_file_description(connect, fname, false);
 }
-
+// }}}
 // Constructors and misc {{{
 DFS::DFS() { }
 
@@ -249,7 +250,7 @@ int DFS::put(vec_str input) {
       future.get();
 
     file_info.num_block = block_seq;
-    file_info.block_metadata = blocks_metadata;
+    file_info.blocks_metadata = blocks_metadata;
     file_info.uploading = 0;
 
     socket = connect(file_hash_key);
@@ -1175,7 +1176,7 @@ bool DFS::touch(std::string name) {
 }
 // }}}
 // write {{{
-uint32_t DFS::write(std::string& file_name, const char* buf, uint32_t off, uint32_t len) {
+uint32_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint64_t len) {
   Histogram boundaries(NUM_NODES, 0);
   boundaries.initialize();
 
@@ -1184,10 +1185,10 @@ uint32_t DFS::write(std::string& file_name, const char* buf, uint32_t off, uint3
   );
   if(fd == nullptr) return 0;
 
-  off = std::max((unsigned int)0, std::min(off, std::max(fd->size, BLOCK_SIZE - 1)));
+  off = std::max(0ul, std::min(off, std::max(fd->size, BLOCK_SIZE - 1)));
 
-  uint32_t to_write_bytes = len;
-  uint32_t written_bytes = 0;
+  uint64_t to_write_bytes = len;
+  uint64_t written_bytes = 0;
 
   int block_beg_seq = (int) off / BLOCK_SIZE;
   int block_end_seq = (int) (len + off - 1) / BLOCK_SIZE;
@@ -1269,7 +1270,7 @@ uint32_t DFS::write(std::string& file_name, const char* buf, uint32_t off, uint3
 }
 // }}}
 // read {{{
-uint32_t DFS::read(std::string& file_name, char* buf, uint32_t off, uint32_t len) {
+uint32_t DFS::read(std::string& file_name, char* buf, uint64_t off, uint64_t len) {
   Histogram boundaries(NUM_NODES, 0);
   boundaries.initialize();
 
@@ -1278,7 +1279,7 @@ uint32_t DFS::read(std::string& file_name, char* buf, uint32_t off, uint32_t len
   );
   if(fd == nullptr) return 0;
 
-  off = std::max((unsigned int)0, std::min(off, fd->size));
+  off = std::max(0ul, std::min(off, fd->size));
   if(off >= fd->size) return 0;
 
 /*

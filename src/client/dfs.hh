@@ -33,13 +33,13 @@ class DFS {
     int push_back(vec_str);
     std::string load(std::string);
 
-    uint32_t write(std::string&, const char*, uint32_t, uint32_t);
-    uint32_t read(std::string&, char*, uint32_t, uint32_t);
+    uint32_t write(std::string&, const char*, uint64_t, uint64_t);
+    uint32_t read(std::string&, char*, uint64_t, uint64_t);
 
     model::metadata get_metadata(std::string& fname);
 
   private:
-    uint32_t BLOCK_SIZE;
+    uint64_t BLOCK_SIZE;
     uint32_t NUM_NODES;
     int replica;
     int port;

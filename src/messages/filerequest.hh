@@ -7,12 +7,12 @@ namespace eclipse {
 namespace messages {
 
 struct FileRequest: public Message {
-  FileRequest () : only_metadata(false) {};
+  FileRequest () = default;
 
   std::string get_type() const override;
   std::string name;
 
-  bool only_metadata;
+  bool only_metadata = false;
 };
 
 }

@@ -5,8 +5,6 @@
 namespace eclipse {
 namespace messages {
   struct BlockUpdate: public Message {
-    BlockUpdate() : seq(0), hash_key(0), size(0), replica(0), pos(0), len(0), is_header(false) {};
-
     std::string get_type() const override;
 
     std::string name;
