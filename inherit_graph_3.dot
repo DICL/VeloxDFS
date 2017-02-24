@@ -3,5 +3,5 @@ digraph G
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="eclipse::Local_io",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1Local__io.html"];
+  Node1 [label="eclipse::Directory",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1Directory.html"];
 }

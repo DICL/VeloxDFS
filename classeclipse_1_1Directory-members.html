@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>EclipseDFS: Member List</title>
+<title>VeloxDFS: Member List</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -27,10 +27,10 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">EclipseDFS
+   <div id="projectname">VeloxDFS
    
    </div>
-   <div id="projectbrief">Distributed FS</div>
+   <div id="projectbrief">Distributed file system for Big Data processing</div>
   </td>
   
   
@@ -47,6 +47,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -89,23 +91,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 This is the complete list of members for <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>, including all inherited members.<table>
-  <tr bgcolor="#f0f0f0"><td><b>delete_block_metadata</b>(std::string file_name, unsigned int block_seq) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>delete_file_metadata</b>(std::string file_name) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>block_table_delete</b>(std::string, uint32_t) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>block_table_delete_all</b>(std::string) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>block_table_insert</b>(BlockMetadata &amp;) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>block_table_select</b>(std::string, uint32_t, BlockInfo *) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>block_table_select_all</b>(std::vector&lt; BlockInfo &gt; &amp;) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>block_table_update</b>(std::string, uint32_t, uint32_t) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>create_tables</b>() (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>Directory</b>() (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>display_block_metadata</b>() (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>display_file_metadata</b>() (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>file_exist</b>(std::string file_name) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>init_db</b>() (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>insert_block_metadata</b>(BlockInfo *block_info) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>insert_file_metadata</b>(FileInfo &amp;file_info) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>open_db</b>() (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>select_all_block_metadata</b>(std::vector&lt; BlockInfo &gt; &amp;block_list) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>select_all_file_metadata</b>(std::vector&lt; FileInfo &gt; &amp;file_list) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>select_block_metadata</b>(std::string file_name, unsigned int block_seq, BlockInfo *block_info) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>select_file_metadata</b>(std::string file_name, FileInfo *file_info) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>update_block_metadata</b>(BlockUpdate &amp;block_update) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>update_file_metadata</b>(FileUpdate &amp;file_update) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
-  <tr bgcolor="#f0f0f0"><td><b>~Directory</b>() (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>file_table_confirm_upload</b>(std::string, uint32_t) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>file_table_delete</b>(std::string) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>file_table_exists</b>(std::string) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>file_table_insert</b>(FileInfo &amp;) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>file_table_select</b>(std::string, FileInfo *) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>file_table_select_all</b>(std::vector&lt; FileInfo &gt; &amp;) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>file_table_update</b>(std::string, uint64_t, uint32_t) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>query_exec_simple</b>(char *, int(*)(void *, int, char **, char **), void *) (defined in <a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a>)</td><td><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></td><td><code> [protected]</code></td></tr>
 </table></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -124,7 +125,7 @@ This is the complete list of members for <a class="el" href="classeclipse_1_1Dir
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 19 2017 08:08:02 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 24 2017 06:50:56 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

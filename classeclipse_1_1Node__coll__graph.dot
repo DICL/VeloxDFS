@@ -5,10 +5,10 @@ digraph G
   Node1 [label="eclipse::Node",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
   Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node2 [label="eclipse::Machine",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1Machine.html"];
-  Node3 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" ip_of_this" ,fontname="Helvetica"];
-  Node3 [label="string",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
-  Node4 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" logger" ,fontname="Helvetica"];
-  Node4 [label="Logger",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classLogger.html"];
-  Node5 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" network" ,fontname="Helvetica"];
-  Node5 [label="eclipse::network::Network",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1network_1_1Network.html"];
+  Node3 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" network" ,fontname="Helvetica"];
+  Node3 [label="eclipse::network::ClientHandler",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1network_1_1ClientHandler.html"];
+  Node4 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" ip_of_this" ,fontname="Helvetica"];
+  Node4 [label="string",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node5 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" logger" ,fontname="Helvetica"];
+  Node5 [label="Logger",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classLogger.html"];
 }

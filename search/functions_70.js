@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['process',['process',['../classeclipse_1_1PeerDFS.html#aadc9b5fb8c250ea2e8d1551eacbb37d0',1,'eclipse::PeerDFS::process(BlockStatus *m)'],['../classeclipse_1_1PeerDFS.html#a14213037acddded887399cdbdcabba5f',1,'eclipse::PeerDFS::process(BlockInfo *m)']]]
+  ['pget',['pget',['../classvelox_1_1DFS.html#a63324577c9a8f29fb2623ea9479cf074',1,'velox::DFS']]],
+  ['put',['put',['../classvelox_1_1DFS.html#a087260b6c6bb661aa85a5cb0fc8e4621',1,'velox::DFS']]]
 ];

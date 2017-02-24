@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>EclipseDFS: Class Hierarchy</title>
+<title>VeloxDFS: Class Hierarchy</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -27,10 +27,10 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">EclipseDFS
+   <div id="projectname">VeloxDFS
    
    </div>
-   <div id="projectbrief">Distributed FS</div>
+   <div id="projectbrief">Distributed file system for Big Data processing</div>
   </td>
   
   
@@ -47,6 +47,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -85,24 +87,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock">
 <p><a href="inherits.html">Go to the graphical class hierarchy</a></p>
 This inheritance list is sorted roughly, but not completely, alphabetically:</div><ul>
-<li><a class="el" href="classeclipse_1_1network_1_1Acceptor.html">eclipse::network::Acceptor</a></li>
-<li><a class="el" href="classeclipse_1_1AsyncNode.html">eclipse::AsyncNode</a><ul>
-<li><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></li>
-<li><a class="el" href="classeclipse_1_1Router.html">eclipse::Router</a><ul>
-<li><a class="el" href="classeclipse_1_1RemoteDFS.html">eclipse::RemoteDFS</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a class="el" href="structeclipse_1_1BlockMetadata.html">eclipse::BlockMetadata</a></li>
 <li><a class="el" href="classeclipse_1_1network_1_1Channel.html">eclipse::network::Channel</a><ul>
 <li><a class="el" href="classeclipse_1_1network_1_1AsyncChannel.html">eclipse::network::AsyncChannel</a><ul>
-<li><a class="el" href="classeclipse_1_1network_1_1P2P.html">eclipse::network::P2P</a></li>
 <li><a class="el" href="classeclipse_1_1network_1_1Server.html">eclipse::network::Server</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="el" href="classeclipse_1_1network_1_1Connector.html">eclipse::network::Connector</a></li>
+<li><a class="el" href="classeclipse_1_1network_1_1ClientHandler.html">eclipse::network::ClientHandler</a></li>
 <li><a class="el" href="classContext.html">Context</a></li>
 <li><a class="el" href="classvelox_1_1DFS.html">velox::DFS</a></li>
 <li><a class="el" href="classeclipse_1_1Directory.html">eclipse::Directory</a></li>
@@ -113,8 +106,8 @@ This inheritance list is sorted roughly, but not completely, alphabetically:</di
 <li><a class="el" href="classLogger.html">Logger</a></li>
 <li><a class="el" href="classeclipse_1_1Machine.html">eclipse::Machine</a><ul>
 <li><a class="el" href="classeclipse_1_1Node.html">eclipse::Node</a><ul>
-<li><a class="el" href="classeclipse_1_1PeerDFS.html">eclipse::PeerDFS</a></li>
-<li><a class="el" href="classeclipse_1_1Router.html">eclipse::Router</a></li>
+<li><a class="el" href="classeclipse_1_1BlockNode.html">eclipse::BlockNode</a></li>
+<li><a class="el" href="classeclipse_1_1FileLeader.html">eclipse::FileLeader</a></li>
 </ul>
 </li>
 </ul>
@@ -136,6 +129,7 @@ This inheritance list is sorted roughly, but not completely, alphabetically:</di
 <li><a class="el" href="structeclipse_1_1messages_1_1FileRequest.html">eclipse::messages::FileRequest</a></li>
 <li><a class="el" href="structeclipse_1_1messages_1_1FileUpdate.html">eclipse::messages::FileUpdate</a></li>
 <li><a class="el" href="structeclipse_1_1messages_1_1FormatRequest.html">eclipse::messages::FormatRequest</a></li>
+<li><a class="el" href="structeclipse_1_1messages_1_1IOoperation.html">eclipse::messages::IOoperation</a></li>
 <li><a class="el" href="structeclipse_1_1messages_1_1KeyRequest.html">eclipse::messages::KeyRequest</a></li>
 <li><a class="el" href="structeclipse_1_1messages_1_1KeyValue.html">eclipse::messages::KeyValue</a></li>
 <li><a class="el" href="structeclipse_1_1messages_1_1MetaData.html">eclipse::messages::MetaData</a></li>
@@ -145,13 +139,19 @@ This inheritance list is sorted roughly, but not completely, alphabetically:</di
 </ul>
 </li>
 <li><a class="el" href="structeclipse_1_1network_1_1NetObserver.html">eclipse::network::NetObserver</a><ul>
-<li><a class="el" href="classeclipse_1_1network_1_1AsyncNetwork.html">eclipse::network::AsyncNetwork&lt; TYPE &gt;</a></li>
+<li><a class="el" href="classeclipse_1_1Router.html">eclipse::Router</a><ul>
+<li><a class="el" href="classeclipse_1_1RouterDecorator.html">eclipse::RouterDecorator</a><ul>
+<li><a class="el" href="classeclipse_1_1BlockNodeRouter.html">eclipse::BlockNodeRouter</a></li>
+<li><a class="el" href="classeclipse_1_1FileLeaderRouter.html">eclipse::FileLeaderRouter</a></li>
 </ul>
 </li>
-<li><a class="el" href="classeclipse_1_1network_1_1Network.html">eclipse::network::Network</a><ul>
-<li><a class="el" href="classeclipse_1_1network_1_1AsyncNetwork.html">eclipse::network::AsyncNetwork&lt; TYPE &gt;</a></li>
+<li><a class="el" href="classeclipse_1_1SimpleRouter.html">eclipse::SimpleRouter</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a class="el" href="classeclipse_1_1network_1_1Network.html">eclipse::network::Network</a></li>
+<li><a class="el" href="classeclipse_1_1network_1_1ServerHandler.html">eclipse::network::ServerHandler</a></li>
 <li><a class="el" href="classSettings.html">Settings</a></li>
 <li><a class="el" href="classSettings_1_1SettingsImpl.html">Settings::SettingsImpl</a></li>
 <li><a class="el" href="classvelox_1_1vdfs.html">velox::vdfs</a></li>
@@ -174,7 +174,7 @@ This inheritance list is sorted roughly, but not completely, alphabetically:</di
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 19 2017 08:08:02 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 24 2017 06:50:56 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

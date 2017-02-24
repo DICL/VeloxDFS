@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>EclipseDFS: eclipse::network::AsyncChannel Class Reference</title>
+<title>VeloxDFS: eclipse::network::AsyncChannel Class Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -27,10 +27,10 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">EclipseDFS
+   <div id="projectname">VeloxDFS
    
    </div>
-   <div id="projectbrief">Distributed FS</div>
+   <div id="projectbrief">Distributed file system for Big Data processing</div>
   </td>
   
   
@@ -47,6 +47,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -100,14 +102,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a>  </div>
+<a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">eclipse::network::AsyncChannel Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<!-- doxytag: class="eclipse::network::AsyncChannel" --><!-- doxytag: inherits="eclipse::network::Channel" --><div class="dynheader">
+<!-- doxytag: class="eclipse::network::AsyncChannel" --><!-- doxytag: inherits="eclipse::network::Channel" -->
+<p>Represent an opened channel between two endpoints.  
+ <a href="classeclipse_1_1network_1_1AsyncChannel.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="asyncchannel_8hh_source.html">asyncchannel.hh</a>&gt;</code></p>
+<div class="dynheader">
 Inheritance diagram for eclipse::network::AsyncChannel:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeclipse_1_1network_1_1AsyncChannel__inherit__graph.png" border="0" usemap="#eclipse_1_1network_1_1AsyncChannel_inherit__map" alt="Inheritance graph"/></div>
@@ -126,38 +131,55 @@ Collaboration diagram for eclipse::network::AsyncChannel:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7698494c80600737d41be7bff0a6dc53"></a><!-- doxytag: member="eclipse::network::AsyncChannel::AsyncChannel" ref="a7698494c80600737d41be7bff0a6dc53" args="(tcp::socket *, tcp::socket *, NetObserver *, int)" -->
-&#160;</td><td class="memItemRight" valign="bottom"><b>AsyncChannel</b> (tcp::socket *, tcp::socket *, <a class="el" href="structeclipse_1_1network_1_1NetObserver.html">NetObserver</a> *, int)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeclipse_1_1network_1_1AsyncChannel.html#a6714b0081ecc4b92b6e8391e063adb28">AsyncChannel</a> (<a class="el" href="structeclipse_1_1network_1_1NetObserver.html">NetObserver</a> *node_)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf4946e410c29712136fb10b3f17a460"></a><!-- doxytag: member="eclipse::network::AsyncChannel::do_write" ref="adf4946e410c29712136fb10b3f17a460" args="(messages::Message *) override" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>do_write</b> (<a class="el" href="structeclipse_1_1messages_1_1Message.html">messages::Message</a> *) override</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeclipse_1_1network_1_1AsyncChannel.html#adf4946e410c29712136fb10b3f17a460">do_write</a> (<a class="el" href="structeclipse_1_1messages_1_1Message.html">messages::Message</a> *) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Write asynchronously the message. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a86de0a11123893f1d5e7dcdcd60cbe63"></a><!-- doxytag: member="eclipse::network::AsyncChannel::do_write" ref="a86de0a11123893f1d5e7dcdcd60cbe63" args="(std::shared_ptr&lt; std::string &gt; &amp;)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>do_write</b> (std::shared_ptr&lt; std::string &gt; &amp;)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7864381f566d7711521489b84cdb6389"></a><!-- doxytag: member="eclipse::network::AsyncChannel::do_write_impl" ref="a7864381f566d7711521489b84cdb6389" args="()" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>do_write_impl</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeclipse_1_1network_1_1AsyncChannel.html#a86de0a11123893f1d5e7dcdcd60cbe63">do_write</a> (std::shared_ptr&lt; std::string &gt; &amp;)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Write asynchronously the message sharing the payload. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3a81491738529c90e1c5293c8e424edf"></a><!-- doxytag: member="eclipse::network::AsyncChannel::do_write_buffer" ref="a3a81491738529c90e1c5293c8e424edf" args="()" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeclipse_1_1network_1_1AsyncChannel.html#a3a81491738529c90e1c5293c8e424edf">do_write_buffer</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Write asynchronously the message sharing the payload. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a572eb1296b3ab8e27765524a40b4061f"></a><!-- doxytag: member="eclipse::network::AsyncChannel::do_read" ref="a572eb1296b3ab8e27765524a40b4061f" args="()" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>do_read</b> ()</td></tr>
-<tr><td colspan="2"><h2><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae1e0ec002e80e7aeeb11f0fd03141191"></a><!-- doxytag: member="eclipse::network::AsyncChannel::on_write" ref="ae1e0ec002e80e7aeeb11f0fd03141191" args="(const boost::system::error_code &amp;, size_t)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>on_write</b> (const boost::system::error_code &amp;, size_t)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a79be24567de910a118bc224abe8750ad"></a><!-- doxytag: member="eclipse::network::AsyncChannel::read_coroutine" ref="a79be24567de910a118bc224abe8750ad" args="(boost::asio::yield_context)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>read_coroutine</b> (boost::asio::yield_context)</td></tr>
-<tr><td colspan="2"><h2><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e1941505d5075d1bfd1444c84663504"></a><!-- doxytag: member="eclipse::network::AsyncChannel::node" ref="a6e1941505d5075d1bfd1444c84663504" args="" -->
-<a class="el" href="structeclipse_1_1network_1_1NetObserver.html">NetObserver</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>node</b> = nullptr</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8fd879138c62f84e807c5723a7870892"></a><!-- doxytag: member="eclipse::network::AsyncChannel::sender" ref="a8fd879138c62f84e807c5723a7870892" args="" -->
-tcp::socket *&#160;</td><td class="memItemRight" valign="bottom"><b>sender</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a196bb4deeaf5f24a6bdd69f63b5c4fe7"></a><!-- doxytag: member="eclipse::network::AsyncChannel::receiver" ref="a196bb4deeaf5f24a6bdd69f63b5c4fe7" args="" -->
-tcp::socket *&#160;</td><td class="memItemRight" valign="bottom"><b>receiver</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0f1bac403e50ca383996dd8d29056b8"></a><!-- doxytag: member="eclipse::network::AsyncChannel::id" ref="ab0f1bac403e50ca383996dd8d29056b8" args="" -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>id</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad63358ed5a161f5184d7afa7e018a509"></a><!-- doxytag: member="eclipse::network::AsyncChannel::messages_queue" ref="ad63358ed5a161f5184d7afa7e018a509" args="" -->
-std::queue&lt; std::shared_ptr<br class="typebreak"/>
-&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>messages_queue</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e72d8d2d4e19e33b9576298414a9d96"></a><!-- doxytag: member="eclipse::network::AsyncChannel::is_writing" ref="a0e72d8d2d4e19e33b9576298414a9d96" args="" -->
-std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>is_writing</b></td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeclipse_1_1network_1_1AsyncChannel.html#a572eb1296b3ab8e27765524a40b4061f">do_read</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">This method implements the reading loop. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afaa01dfd09b2798ff3d03833e018e92e"></a><!-- doxytag: member="eclipse::network::AsyncChannel::get_socket" ref="afaa01dfd09b2798ff3d03833e018e92e" args="()" -->
+tcp::socket &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeclipse_1_1network_1_1AsyncChannel.html#afaa01dfd09b2798ff3d03833e018e92e">get_socket</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get internal socket. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d3982b9fe859d9d14b71e70098bb9c4"></a><!-- doxytag: member="eclipse::network::AsyncChannel::commit" ref="a7d3982b9fe859d9d14b71e70098bb9c4" args="(std::shared_ptr&lt; std::string &gt; &amp;)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeclipse_1_1network_1_1AsyncChannel.html#a7d3982b9fe859d9d14b71e70098bb9c4">commit</a> (std::shared_ptr&lt; std::string &gt; &amp;)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a message to the sending queue. <br/></td></tr>
 </table>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Represent an opened channel between two endpoints. </p>
+<dl class="attention"><dt><b>Attention:</b></dt><dd>It's intended to be used as a base class. </dd>
+<dd>
+Calling the constructor is not enought, you should also call init function. </dd></dl>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a6714b0081ecc4b92b6e8391e063adb28"></a><!-- doxytag: member="eclipse::network::AsyncChannel::AsyncChannel" ref="a6714b0081ecc4b92b6e8391e063adb28" args="(NetObserver *node_)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classeclipse_1_1network_1_1AsyncChannel.html#a6714b0081ecc4b92b6e8391e063adb28">AsyncChannel::AsyncChannel</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structeclipse_1_1network_1_1NetObserver.html">NetObserver</a> *&#160;</td>
+          <td class="paramname"><em>node_</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node_</td><td>Observer object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/DICL/VeloxDFS/src/network/<a class="el" href="asyncchannel_8hh_source.html">asyncchannel.hh</a></li>
 <li>/home/travis/build/DICL/VeloxDFS/src/network/asyncchannel.cc</li>
@@ -180,7 +202,7 @@ std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 19 2017 08:08:02 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 24 2017 06:50:56 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

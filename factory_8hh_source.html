@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>EclipseDFS: /home/travis/build/DICL/VeloxDFS/src/messages/factory.hh Source File</title>
+<title>VeloxDFS: /home/travis/build/DICL/VeloxDFS/src/messages/factory.hh Source File</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -27,10 +27,10 @@
   
   
   <td style="padding-left: 0.5em;">
-   <div id="projectname">EclipseDFS
+   <div id="projectname">VeloxDFS
    
    </div>
-   <div id="projectbrief">Distributed FS</div>
+   <div id="projectbrief">Distributed file system for Big Data processing</div>
   </td>
   
   
@@ -47,6 +47,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
@@ -94,28 +96,29 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00013"></a>00013 std::string* save_message (Message*);
 <a name="l00014"></a>00014 
 <a name="l00015"></a>00015 <span class="keywordtype">void</span> send_message(boost::asio::ip::tcp::socket*, <a class="code" href="structeclipse_1_1messages_1_1Message.html">eclipse::messages::Message</a>*);
-<a name="l00016"></a>00016 <span class="comment">//template &lt;typename T&gt; auto read_reply(boost::asio::ip::tcp::socket*);</span>
-<a name="l00017"></a>00017 
-<a name="l00018"></a>00018 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
-<a name="l00019"></a>00019 <span class="keyword">auto</span> read_reply(boost::asio::ip::tcp::socket* socket) {
-<a name="l00020"></a>00020   <span class="keyword">using namespace </span>boost::asio;
-<a name="l00021"></a>00021   <span class="keywordtype">char</span> header[17] = {0};
-<a name="l00022"></a>00022   header[16] = <span class="charliteral">&#39;\0&#39;</span>;
-<a name="l00023"></a>00023   boost::asio::streambuf buf;
-<a name="l00024"></a>00024 
-<a name="l00025"></a>00025   read(*socket, buffer(header, 16));
-<a name="l00026"></a>00026   <span class="keywordtype">size_t</span> size_of_msg = atoi(header);
-<a name="l00027"></a>00027 
-<a name="l00028"></a>00028   read(*socket, buf, transfer_exactly(size_of_msg));
-<a name="l00029"></a>00029 
-<a name="l00030"></a>00030   Message* msg = <span class="keyword">nullptr</span>;
+<a name="l00016"></a>00016 
+<a name="l00017"></a>00017 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
+<a name="l00018"></a>00018 <span class="keyword">auto</span> read_reply(boost::asio::ip::tcp::socket* socket) {
+<a name="l00019"></a>00019   <span class="keyword">using namespace </span>boost::asio;
+<a name="l00020"></a>00020   <span class="keywordtype">char</span> header[17] = {0};
+<a name="l00021"></a>00021   header[16] = <span class="charliteral">&#39;\0&#39;</span>;
+<a name="l00022"></a>00022   boost::asio::streambuf buf;
+<a name="l00023"></a>00023 
+<a name="l00024"></a>00024   read(*socket, buffer(header, 16));
+<a name="l00025"></a>00025   <span class="keywordtype">size_t</span> size_of_msg = atoi(header);
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027   <span class="keywordtype">size_t</span> l = read(*socket, buf.prepare(size_of_msg));
+<a name="l00028"></a>00028 
+<a name="l00029"></a>00029   Message* msg = <span class="keyword">nullptr</span>;
+<a name="l00030"></a>00030   buf.commit(l);
 <a name="l00031"></a>00031   msg = load_message(buf);
-<a name="l00032"></a>00032   T* m = <span class="keyword">dynamic_cast&lt;</span>T*<span class="keyword">&gt;</span>(msg);
-<a name="l00033"></a>00033   <span class="keywordflow">return</span> std::unique_ptr&lt;T&gt;(m);
-<a name="l00034"></a>00034 }
-<a name="l00035"></a>00035 
-<a name="l00036"></a>00036 } <span class="comment">/* messages */</span> 
-<a name="l00037"></a>00037 }
+<a name="l00032"></a>00032   buf.consume(l);
+<a name="l00033"></a>00033   T* m = <span class="keyword">dynamic_cast&lt;</span>T*<span class="keyword">&gt;</span>(msg);
+<a name="l00034"></a>00034   <span class="keywordflow">return</span> std::unique_ptr&lt;T&gt;(m);
+<a name="l00035"></a>00035 }
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037 } <span class="comment">/* messages */</span> 
+<a name="l00038"></a>00038 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -134,7 +137,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 19 2017 08:08:01 for EclipseDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 24 2017 06:50:56 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

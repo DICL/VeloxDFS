@@ -1,12 +1,19 @@
 var searchData=
 [
   ['file',['file',['../classvelox_1_1file.html',1,'velox']]],
+  ['file_5finsert',['file_insert',['../classeclipse_1_1FileLeader.html#a256d661a3770a18c379cba63c97c9f7b',1,'eclipse::FileLeader']]],
+  ['file_5finsert_5fconfirm',['file_insert_confirm',['../classeclipse_1_1FileLeader.html#abcaedea847e152f4f6b5c53fc6311853',1,'eclipse::FileLeader']]],
+  ['file_5frequest',['file_request',['../classeclipse_1_1FileLeader.html#a93d411d59d2532acedd7c092d555f102',1,'eclipse::FileLeader']]],
+  ['file_5fupdate',['file_update',['../classeclipse_1_1FileLeader.html#a6ece78dc513a5c32e4357526e8cb95b3',1,'eclipse::FileLeader']]],
   ['filedel',['FileDel',['../structeclipse_1_1messages_1_1FileDel.html',1,'eclipse::messages']]],
   ['filedescription',['FileDescription',['../structeclipse_1_1messages_1_1FileDescription.html',1,'eclipse::messages']]],
   ['fileexist',['FileExist',['../structeclipse_1_1messages_1_1FileExist.html',1,'eclipse::messages']]],
   ['fileinfo',['FileInfo',['../structeclipse_1_1messages_1_1FileInfo.html',1,'eclipse::messages']]],
+  ['fileleader',['FileLeader',['../classeclipse_1_1FileLeader.html',1,'eclipse']]],
+  ['fileleaderrouter',['FileLeaderRouter',['../classeclipse_1_1FileLeaderRouter.html',1,'eclipse']]],
   ['filelist',['FileList',['../structeclipse_1_1messages_1_1FileList.html',1,'eclipse::messages']]],
   ['filerequest',['FileRequest',['../structeclipse_1_1messages_1_1FileRequest.html',1,'eclipse::messages']]],
   ['fileupdate',['FileUpdate',['../structeclipse_1_1messages_1_1FileUpdate.html',1,'eclipse::messages']]],
+  ['format',['format',['../classeclipse_1_1FileLeader.html#a798b32bb7efbc627bb6a51e1bac5e92b',1,'eclipse::FileLeader']]],
   ['formatrequest',['FormatRequest',['../structeclipse_1_1messages_1_1FormatRequest.html',1,'eclipse::messages']]]
 ];
