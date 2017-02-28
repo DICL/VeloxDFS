@@ -66,7 +66,7 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.type);
     ar & BOOST_SERIALIZATION_NVP(c.replica);
     ar & BOOST_SERIALIZATION_NVP(c.uploading);
-    ar & BOOST_SERIALIZATION_NVP(c.block_metadata);
+    ar & BOOST_SERIALIZATION_NVP(c.blocks_metadata);
   }
 
 template <typename Archive>
