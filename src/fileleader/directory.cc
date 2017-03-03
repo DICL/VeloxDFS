@@ -160,7 +160,7 @@ void Directory::file_table_insert (FileInfo &file_info) {
   
   sprintf(sql, "INSERT INTO file_table (\
     name, hash_key, size, num_block, type, replica, uploading)\
-    VALUES('%s', %" PRIu64 ", %" PRIu64 ", %u, %u, %u, %u);",
+    VALUES('%s', %" PRIu32 ", %" PRIu64 ", %u, %u, %u, %u);",
       file_info.name.c_str(),
       file_info.hash_key,
       file_info.size,

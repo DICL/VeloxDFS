@@ -94,14 +94,14 @@ long file::get_size() {
 // vdfs {{{
 vdfs::vdfs() {
   dfs = new DFS();
-  dfs->load_settings();
+//  dfs->load_settings();
 
   opened_files = nullptr;
 }
 
 vdfs::vdfs(vdfs& that) {
   dfs = new DFS();
-  dfs->load_settings();
+  //dfs->load_settings();
 
   if(that.opened_files != nullptr) 
     opened_files = new std::vector<velox::file>(*that.opened_files);
@@ -125,7 +125,7 @@ vdfs& vdfs::operator=(vdfs& rhs) {
   if(dfs != nullptr) delete dfs;
 
   dfs = new DFS();
-  dfs->load_settings();
+  //dfs->load_settings();
 
   if(opened_files != nullptr) delete opened_files;
 
@@ -180,23 +180,23 @@ bool vdfs::is_open(long fid) {
 // }}}
 // upload {{{
 file vdfs::upload(std::string name) {
-  dfs->put({"","", name});
+  dfs->upload(name, false);
   return velox::file(this, name);
 }
 // }}}
 // append {{{
 void vdfs::append (std::string name, std::string content) {
-  dfs->push_back({"", "", name, content});
+  dfs->append(name, content);
 }
 // }}}
 // load {{{
 std::string vdfs::load(std::string name) { 
-  return dfs->load({name});
+  return dfs->read_all(name);
 }
 // }}}
 // rm {{{
 bool vdfs::rm (std::string name) {
-  return dfs->rm({"", "", name});
+  return dfs->remove(name);
 }
 // }}}
 // format {{{
