@@ -2,9 +2,10 @@ AM_CPPFLAGS_T    = $(AM_CPPFLAGS) -include unittest++/UnitTest++.h
 LDADD_T          = $(LDADD) -l:libUnitTest++.a -ldl -lsqlite3
 
 # Input your tests files here
-check_PROGRAMS   = units metadata
+check_PROGRAMS   = units metadata 
+check_SCRIPTS    = integration
 
-TESTS            = units
+TESTS            = units 
 
 check_DATA       = $(top_srcdir)/doc/eclipse.json
 CLEANFILES       = eclipse.json
@@ -28,3 +29,10 @@ metadata_CPPFLAGS  = $(AM_CPPFLAGS_T)
 metadata_SOURCES   = tests/metadata_test.cc \
                      src/fileleader/directory.cc \
                      $(messages_files)
+
+check-integration: integration
+	bash integration.sh
+
+integration:
+	cp $(top_srcdir)/tests/integration_test.sh integration.sh
+	chmod +x integration.sh

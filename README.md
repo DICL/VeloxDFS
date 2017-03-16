@@ -68,6 +68,28 @@ Now edit in your **~/.bashrc** or **~/.profile**:
     export LIBRARY_PATH="/home/*..PATH/To/eclipse/..*/sandbox/lib"
     export C_INCLUDE_PATH="/home/*..PATH/To/eclipse/..*/sandbox/include"
 
+
+Default settings for VELOXDFS 
+-----------------------------
+
+    "log" : {
+      "type" : "LOG_LOCAL6"
+      "name" : "ECLIPSE"
+      "mask" : "DEBUG"
+    },
+
+    "cache" : {
+      "numbin"      : 100,
+      "size"        : 200000,
+      "concurrency" : 1
+    },
+
+    "filesystem" : {
+      "block"    : 137438953,
+      "buffer"   : 512,
+      "replica"  : 1
+    }
+
 FAQ
 ---
 
@@ -92,7 +114,7 @@ AUTHORS
  - __INSTITUTION:__ [DICL laboratory] [dicl] at [UNIST]
 
 <!-- Links -->
-[vicente]:  https://github.com/vicentebolea
+[vicente]:  http://vicentebolea.me
 [ym]:       https://github.com/youngmoon01
 [dicl]:     http://dicl.unist.ac.kr
 [mh]:       https://github.com/nammh 

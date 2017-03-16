@@ -7,6 +7,8 @@
 #include "settings.hh"
 #include <iostream>
 #include <vector>
+#include <sstream>
+#include <map>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/exceptions.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -27,11 +29,37 @@
 
 #define FINAL_PATH "/eclipse.json"
 
+static std::map<std::string, std::string> default_ops {
+  {"log.type", "LOG_LOCAL6"},
+  {"log.name", "ECLIPSE"},
+  {"log.mask", "DEBUG"},
+  {"cache.numbin", "100"},
+  {"cache.size",   "200000"},
+  {"cache.concurrency", "1"},
+  {"network.serialization", "binary"},
+  {"fileystem.block", "137438953"},
+  {"fileystem.buffer", "512"},
+  {"fileystem.replica", "1"} 
+};
+
 using std::cout;
 using std::endl;
 using std::vector;
 using std::string;
+using std::stringstream;
 using namespace boost::property_tree;
+
+static vector<string> tokenize(std::string str_separated_by_colons) {
+  stringstream ss(str_separated_by_colons);
+
+  vector<string> output;
+  string token; 
+  while (std::getline(ss, token, ':')) {
+    output.push_back(token);
+  }
+  return move(output);
+}
+
 //}}}
 // class SettingsImpl {{{
 class Settings::SettingsImpl {
@@ -84,6 +112,10 @@ bool Settings::SettingsImpl::load ()
   } else {
     std::stringstream ss; ss << input;
     json_parser::read_json (ss, pt);
+  }
+
+  for (auto& kv : default_ops) {
+    pt.put(kv.first, kv.second);
   }
 
   return true;
@@ -142,6 +174,11 @@ template<> int    Settings::SettingsImpl::get (string& str) {
 
 template<> vector<string> Settings::SettingsImpl::get (string& str) {
   vector<string> output;
+
+  auto property = get_env(str);
+  if (property != nullptr)
+    return tokenize(property);
+
   auto& subtree = pt.get_child (str.c_str());
 
   for (auto& v : subtree)
