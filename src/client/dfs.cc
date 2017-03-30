@@ -157,7 +157,6 @@ int DFS::put(vec_str input) {
       BlockMetadata metadata;
       Block block;
 
-      cout << "READING " << endl;
       block_size = (uint32_t) end - start;
       bzero(chunk.data(), BLOCK_SIZE);
       myfile.seekg(start, myfile.beg);
@@ -165,7 +164,6 @@ int DFS::put(vec_str input) {
       myfile.read(chunk.data(), block_size);
       block.second = move(chunk.data());
       posix_fadvise(fd, end, block_size, POSIX_FADV_WILLNEED);
-      cout << "FINISH READING " << endl;
 
       //! Load block metadata info
       int which_server = description->hash_keys[i] % NUM_NODES;
@@ -187,7 +185,6 @@ int DFS::put(vec_str input) {
       io_ops.operation = "BLOCK_INSERT";
       io_ops.block = move(block);
 
-      cout << "SENDING" << endl;
       auto socket = connect(boundaries.get_index(metadata.hash_key));
       send_message(socket.get(), &io_ops);
 
