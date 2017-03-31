@@ -11,7 +11,7 @@ namespace messages {
     std::string file_name;
     unsigned int seq;
     uint32_t hash_key;
-    uint32_t size;
+    uint64_t size;
     unsigned int type;
     int replica;
     std::string node;

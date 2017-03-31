@@ -9,14 +9,14 @@ namespace messages {
 
     std::string name;
     std::string file_name;
-    unsigned int seq;
-    uint32_t hash_key;
-    uint32_t size;
-    int replica;
+    unsigned int seq = 0;
+    uint32_t hash_key = 0;
+    uint32_t size = 0;
+    int replica = 0;
     std::string content;
-    uint32_t pos;
-    uint32_t len;
-    bool is_header;
+    uint32_t pos = 0;
+    uint32_t len = 0;
+    bool is_header = false;
   };
 }
 }

@@ -72,10 +72,15 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
                        src/fileleader/file_leader_router.cc
 
 
-dfs_SOURCES         = src/client/client.cc
+dfs_SOURCES         = src/targets/client.cc \
+											src/client/cli_driver.cc
 
 pkginclude_HEADERS  = src/client/vdfs.hh \
                       src/client/dfs.hh
+
+modelincludedir     = $(pkgincludedir)/model
+modelinclude_HEADERS = src/client/model/metadata.hh
+
 
 if COPY_SAMPLES
 sysconf_DATA        = doc/eclipse.json
