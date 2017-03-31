@@ -30,7 +30,7 @@ messages_files   = src/messages/boundaries.cc      \
                    src/messages/fileexist.cc       \
                    src/messages/metadata.cc        \
                    src/messages/blockstatus.cc     \
-									 src/messages/IOoperation.cc
+                   src/messages/IOoperation.cc
 
 
 # libs -----
@@ -73,7 +73,7 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
 
 
 dfs_SOURCES         = src/targets/client.cc \
-											src/client/cli_driver.cc
+                      src/client/cli_driver.cc
 
 pkginclude_HEADERS  = src/client/vdfs.hh \
                       src/client/dfs.hh
