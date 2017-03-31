@@ -157,90 +157,6 @@ int DFS::upload(std::string file_name, bool is_binary) {
   auto description = read_reply<FileDescription>(socket.get());
   socket->close();
 
-/*
-  uint64_t start = 0;
-  uint64_t end = start + BLOCK_SIZE - 1;
-  uint32_t block_size = 0;
-  unsigned int block_seq = 0;
-
-  //! Insert the blocks
-  int i = 0;
-
-  vector<BlockMetadata> blocks_metadata;
-  vector<future<bool>> slave_sockets;
-
-  while (true) {
-    if (end < file_info.size) {
-      myfile.seekg(start+BLOCK_SIZE-1, ios_base::beg);
-      while (myfile.peek() != '\n') {
-        myfile.seekg(-1, ios_base::cur);
-        end--;
-      }
-    } else {
-      end = file_info.size;
-    }
-    BlockMetadata metadata;
-    Block block;
-
-    block_size = (uint32_t) end - start;
-    bzero(chunk.data(), BLOCK_SIZE);
-    myfile.seekg(start, myfile.beg);
-    block.second.reserve(block_size);
-    myfile.read(chunk.data(), block_size);
-    block.second = move(chunk.data());
-    posix_fadvise(fd, end, block_size, POSIX_FADV_WILLNEED);
-
-    //! Load block metadata info
-    int which_server = description->hash_keys[i] % NUM_NODES;
-    block.first = metadata.name = description->blocks[i];
-    metadata.file_name = file_name;
-    metadata.hash_key = description->hash_keys[i];
-    metadata.seq = block_seq++;
-    metadata.size = block_size;
-    metadata.type = static_cast<unsigned int>(FILETYPE::Normal);
-    metadata.replica = replica;
-    metadata.node = nodes[which_server];
-    metadata.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
-    metadata.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
-    metadata.is_committed = 1;
-
-    blocks_metadata.push_back(metadata);
-
-    IOoperation io_ops;
-    io_ops.operation = eclipse::messages::IOoperation::OpType::BLOCK_INSERT;
-    io_ops.block = move(block);
-
-    auto socket = connect(boundaries.get_index(metadata.hash_key));
-    send_message(socket.get(), &io_ops);
-
-    auto future = async(launch::async, [](unique_ptr<tcp::socket> socket) -> bool {
-        auto reply = read_reply<Reply> (socket.get());
-        socket->close();
-
-        if (reply->message != "TRUE") {
-        cerr << "[ERR] Failed to upload block . Details: " << reply->details << endl;
-        return false;
-        }
-
-        return true;
-        }, move(socket));
-
-    slave_sockets.push_back(move(future));
-
-    cout << " end: " << end << ", size: " << file_info.size << endl;
-    if (end >= file_info.size) {
-      break;
-    }
-    start = end;
-    end = start + BLOCK_SIZE - 1;
-    i++;
-  }
-
-  cout << " 1" << endl;
-
-  for (auto& future: slave_sockets)
-    future.get();
-    */
   uint64_t off = 0;
   uint64_t len = description->size;
   off = std::max(0ul, std::min(off, std::max(description->size, BLOCK_SIZE - 1)));
@@ -262,50 +178,25 @@ int DFS::upload(std::string file_name, bool is_binary) {
 
     uint64_t pos_to_update, len_to_write;
 
-/*
-    if(i < (int)fd->num_block) { // updating exist block
-      io_ops.operation = eclipse::messages::IOoperation::OpType::BLOCK_UPDATE;
+    io_ops.operation = eclipse::messages::IOoperation::OpType::BLOCK_INSERT;
 
-      //! Load block metadata info
-      int which_server = fd->hash_keys[i] % NUM_NODES;
+    int which_server = ((description->hash_key % NUM_NODES) + i) % NUM_NODES;
 
-      pos_to_update = (i == block_beg_seq && fd->block_size[i] > 0) ? (off % BLOCK_SIZE) : 0;
-      len_to_write = (fd->block_size[i] == 0) ? std::min(to_write_bytes, BLOCK_SIZE) : std::min((BLOCK_SIZE - pos_to_update), to_write_bytes);
+    pos_to_update = 0;
+    len_to_write = std::min(BLOCK_SIZE, to_write_bytes);
+    //(description->block_size[i] == 0) ? std::min(to_write_bytes, BLOCK_SIZE) : std::min((BLOCK_SIZE - pos_to_update), to_write_bytes);
 
-      metadata.name = fd->blocks[i];
-      metadata.file_name = file_name;
-      metadata.hash_key = fd->hash_keys[i];
-      metadata.seq = i;
-      metadata.size = std::max(fd->block_size[i], len_to_write);
-      metadata.type = static_cast<unsigned int>(FILETYPE::Normal);
-      metadata.replica = fd->replica;
-      metadata.node = nodes[which_server];
-      metadata.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
-      metadata.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
-      metadata.is_committed = 1;
-    }
-    else { // creating a new block
-    */
-      io_ops.operation = eclipse::messages::IOoperation::OpType::BLOCK_INSERT;
-
-      int which_server = ((description->hash_key % NUM_NODES) + i) % NUM_NODES;
-
-      pos_to_update = 0;
-      len_to_write = std::min(BLOCK_SIZE, to_write_bytes);
-      //(description->block_size[i] == 0) ? std::min(to_write_bytes, BLOCK_SIZE) : std::min((BLOCK_SIZE - pos_to_update), to_write_bytes);
-
-      metadata.name = file_name + "_" + to_string(i);
-      metadata.file_name = file_name;
-      metadata.hash_key = boundaries.random_within_boundaries(which_server);
-      metadata.seq = i;
-      metadata.size = len_to_write;
-      metadata.type = static_cast<unsigned int>(FILETYPE::Normal);
-      metadata.replica = replica;
-      metadata.node = nodes[which_server];
-      metadata.l_node = nodes[(which_server - 1 + NUM_NODES) % NUM_NODES];
-      metadata.r_node = nodes[(which_server + 1 + NUM_NODES) % NUM_NODES];
-      metadata.is_committed = 1;
-    //}
+    metadata.name = file_name + "_" + to_string(i);
+    metadata.file_name = file_name;
+    metadata.hash_key = boundaries.random_within_boundaries(which_server);
+    metadata.seq = i;
+    metadata.size = len_to_write;
+    metadata.type = static_cast<unsigned int>(FILETYPE::Normal);
+    metadata.replica = replica;
+    metadata.node = nodes[which_server];
+    metadata.l_node = nodes[(which_server - 1 + NUM_NODES) % NUM_NODES];
+    metadata.r_node = nodes[(which_server + 1 + NUM_NODES) % NUM_NODES];
+    metadata.is_committed = 1;
 
     blocks_metadata.push_back(metadata);
 
