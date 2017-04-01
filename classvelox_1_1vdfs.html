@@ -120,8 +120,18 @@ Collaboration diagram for velox::vdfs:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad67089b5489ffb9aca51bcb2934a3ce4"></a><!-- doxytag: member="velox::vdfs::vdfs" ref="ad67089b5489ffb9aca51bcb2934a3ce4" args="(vdfs &amp;)" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>vdfs</b> (<a class="el" href="classvelox_1_1vdfs.html">vdfs</a> &amp;)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a69327860de9b4896ed4c323cf7a9bf2c"></a><!-- doxytag: member="velox::vdfs::operator=" ref="a69327860de9b4896ed4c323cf7a9bf2c" args="(vdfs &amp;)" -->
+<a class="el" href="classvelox_1_1vdfs.html">vdfs</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classvelox_1_1vdfs.html">vdfs</a> &amp;)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a42b9701b98f00fe1c0ceba056c3c4334"></a><!-- doxytag: member="velox::vdfs::open" ref="a42b9701b98f00fe1c0ceba056c3c4334" args="(std::string)" -->
 <a class="el" href="classvelox_1_1file.html">velox::file</a>&#160;</td><td class="memItemRight" valign="bottom"><b>open</b> (std::string)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e5204d8965ce519e0e24dcdeea53014"></a><!-- doxytag: member="velox::vdfs::open_file" ref="a5e5204d8965ce519e0e24dcdeea53014" args="(std::string)" -->
+long&#160;</td><td class="memItemRight" valign="bottom"><b>open_file</b> (std::string)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d43ce60843e13ee3bda8f2aaca6b5d2"></a><!-- doxytag: member="velox::vdfs::close" ref="a7d43ce60843e13ee3bda8f2aaca6b5d2" args="(long)" -->
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>close</b> (long)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad64dfba643f2d630e882dd19857196b3"></a><!-- doxytag: member="velox::vdfs::is_open" ref="ad64dfba643f2d630e882dd19857196b3" args="(long)" -->
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_open</b> (long)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4112d2c732a6020a4708d48fbea3b7be"></a><!-- doxytag: member="velox::vdfs::upload" ref="a4112d2c732a6020a4708d48fbea3b7be" args="(std::string)" -->
 <a class="el" href="classvelox_1_1file.html">velox::file</a>&#160;</td><td class="memItemRight" valign="bottom"><b>upload</b> (std::string)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5eded61aae70f9cc9d60faf95e8df010"></a><!-- doxytag: member="velox::vdfs::rm" ref="a5eded61aae70f9cc9d60faf95e8df010" args="(std::string)" -->
@@ -130,10 +140,16 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>rm</b> (std::string)<
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>format</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e0e02da5f2266c0acd533982ced11b6"></a><!-- doxytag: member="velox::vdfs::exists" ref="a0e0e02da5f2266c0acd533982ced11b6" args="(std::string)" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>exists</b> (std::string)</td></tr>
-<tr><td colspan="2"><h2><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae43f909bda9ce42a9ac1ee231c6c41b7"></a><!-- doxytag: member="velox::vdfs::write" ref="ae43f909bda9ce42a9ac1ee231c6c41b7" args="(long, const char *, uint32_t, uint32_t)" -->
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (long, const char *, uint32_t, uint32_t)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac46148ff684d06a74900dfbc8ffcb43b"></a><!-- doxytag: member="velox::vdfs::read" ref="ac46148ff684d06a74900dfbc8ffcb43b" args="(long, char *, uint32_t, uint32_t)" -->
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>read</b> (long, char *, uint32_t, uint32_t)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a506080896c74e4b4425304b46cea6d79"></a><!-- doxytag: member="velox::vdfs::get_metadata" ref="a506080896c74e4b4425304b46cea6d79" args="(long fid)" -->
+<a class="el" href="structvelox_1_1model_1_1metadata.html">model::metadata</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_metadata</b> (long fid)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaabc295f555017ae1ee3dfec60b6cc52"></a><!-- doxytag: member="velox::vdfs::append" ref="aaabc295f555017ae1ee3dfec60b6cc52" args="(std::string, std::string)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>append</b> (std::string, std::string)</td></tr>
+<tr><td colspan="2"><h2><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9cb3167f466032f53f1533d73993f309"></a><!-- doxytag: member="velox::vdfs::load" ref="a9cb3167f466032f53f1533d73993f309" args="(std::string)" -->
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>load</b> (std::string)</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
@@ -163,7 +179,7 @@ Protected Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 30 2017 14:29:35 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Apr 1 2017 16:20:11 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

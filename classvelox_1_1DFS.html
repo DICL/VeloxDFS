@@ -111,52 +111,94 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a45b5b856808ea7fa774156024b6b725b"></a><!-- doxytag: member="velox::DFS::load_settings" ref="a45b5b856808ea7fa774156024b6b725b" args="()" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>load_settings</b> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a087260b6c6bb661aa85a5cb0fc8e4621">put</a> (vec_str)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#ae18f13e5395a1216f8d6d9452f5b365d">get</a> (vec_str)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2bf1d0e20bd96118395e81859967b30e"></a><!-- doxytag: member="velox::DFS::cat" ref="a2bf1d0e20bd96118395e81859967b30e" args="(vec_str)" -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cat</b> (vec_str)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a880fe6297808bcb758afd44b07c85a4c"></a><!-- doxytag: member="velox::DFS::ls" ref="a880fe6297808bcb758afd44b07c85a4c" args="(vec_str)" -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>ls</b> (vec_str)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a46f822a23f8d90cd0f11772d966a8ddb"></a><!-- doxytag: member="velox::DFS::rm" ref="a46f822a23f8d90cd0f11772d966a8ddb" args="(vec_str)" -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>rm</b> (vec_str)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adbcccd7f974897f900e4b3cae83e414a"></a><!-- doxytag: member="velox::DFS::format" ref="adbcccd7f974897f900e4b3cae83e414a" args="()" -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>format</b> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3932dc767b579b5d30ddb1bf50f05be5"></a><!-- doxytag: member="velox::DFS::show" ref="a3932dc767b579b5d30ddb1bf50f05be5" args="(vec_str)" -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>show</b> (vec_str)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a63324577c9a8f29fb2623ea9479cf074">pget</a> (vec_str)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f03c93f13ff9dc535b30b4eabf2092e"></a><!-- doxytag: member="velox::DFS::update" ref="a9f03c93f13ff9dc535b30b4eabf2092e" args="(vec_str)" -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (vec_str)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac540fa3e72ec2344866e1832117ca09c"></a><!-- doxytag: member="velox::DFS::append" ref="ac540fa3e72ec2344866e1832117ca09c" args="(vec_str)" -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>append</b> (vec_str)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae275fc4dcd3138a88974d63d8e83678f"></a><!-- doxytag: member="velox::DFS::file_exists_local" ref="ae275fc4dcd3138a88974d63d8e83678f" args="(std::string)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>file_exists_local</b> (std::string)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a4d7ccf5ee543ce055353b540408ddd80">write</a> (std::string &amp;file_name, const char *buf, uint64_t off, uint64_t len)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the contents into a remote file.  <a href="#a4d7ccf5ee543ce055353b540408ddd80"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a1005ef927db6079c70f0690c474a3d46">read</a> (std::string &amp;file_name, char *buf, uint64_t off, uint64_t len)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Download a remote file's section into a buffer.  <a href="#a1005ef927db6079c70f0690c474a3d46"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a87d9efc760ac5b7e3a9c12fcb5f24586">read_all</a> (std::string file_name)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Load all the file into a string.  <a href="#a87d9efc760ac5b7e3a9c12fcb5f24586"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a7a2f893a17864b8d9a9bdd54f1ba9aca">append</a> (std::string file_name, std::string buf)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Append a string to the end of a remote file.  <a href="#a7a2f893a17864b8d9a9bdd54f1ba9aca"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#ab73d4aee78b1da4481fcc6c3b0e7f99b">upload</a> (std::string file_name, bool is_binary)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Upload a local file to a the veloxdfs intance.  <a href="#ab73d4aee78b1da4481fcc6c3b0e7f99b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a7b928a468f39cbcf49ba11c0b9a4c84f">download</a> (std::string file_name)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Download a remote file to your current local directory.  <a href="#a7b928a468f39cbcf49ba11c0b9a4c84f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adad261d20f57ff427e4144af1da9b09c"></a><!-- doxytag: member="velox::DFS::exists" ref="adad261d20f57ff427e4144af1da9b09c" args="(std::string)" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#adad261d20f57ff427e4144af1da9b09c">exists</a> (std::string)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">}}} <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a91d02b56024d317f8c797e11d24415ef"></a><!-- doxytag: member="velox::DFS::touch" ref="a91d02b56024d317f8c797e11d24415ef" args="(std::string)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>touch</b> (std::string)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a277668ca7e2f3933d3abccab8e1771fe"></a><!-- doxytag: member="velox::DFS::push_back" ref="a277668ca7e2f3933d3abccab8e1771fe" args="(vec_str)" -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>push_back</b> (vec_str)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9590cabe8d55514731b152951d6479bb"></a><!-- doxytag: member="velox::DFS::load" ref="a9590cabe8d55514731b152951d6479bb" args="(std::string)" -->
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>load</b> (std::string)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a91d02b56024d317f8c797e11d24415ef">touch</a> (std::string)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4c9ad2f6debe8841accd6873be6c8973"></a><!-- doxytag: member="velox::DFS::remove" ref="a4c9ad2f6debe8841accd6873be6c8973" args="(std::string)" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>remove</b> (std::string)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adbcccd7f974897f900e4b3cae83e414a"></a><!-- doxytag: member="velox::DFS::format" ref="adbcccd7f974897f900e4b3cae83e414a" args="()" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>format</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a828183d5b1248040beb7f883e22628ad"></a><!-- doxytag: member="velox::DFS::get_metadata" ref="a828183d5b1248040beb7f883e22628ad" args="(std::string &amp;fname)" -->
+<a class="el" href="structvelox_1_1model_1_1metadata.html">model::metadata</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_metadata</b> (std::string &amp;fname)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a85d26657b82f29e5336878402ad3ca34"></a><!-- doxytag: member="velox::DFS::get_metadata_all" ref="a85d26657b82f29e5336878402ad3ca34" args="()" -->
+std::vector&lt; <a class="el" href="structvelox_1_1model_1_1metadata.html">model::metadata</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get_metadata_all</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a63324577c9a8f29fb2623ea9479cf074">pget</a> (vec_str)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a9f03c93f13ff9dc535b30b4eabf2092e">update</a> (vec_str)</td></tr>
 </table>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="ae18f13e5395a1216f8d6d9452f5b365d"></a><!-- doxytag: member="velox::DFS::get" ref="ae18f13e5395a1216f8d6d9452f5b365d" args="(vec_str)" -->
+<a class="anchor" id="a7a2f893a17864b8d9a9bdd54f1ba9aca"></a><!-- doxytag: member="velox::DFS::append" ref="a7a2f893a17864b8d9a9bdd54f1ba9aca" args="(std::string file_name, std::string buf)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int <a class="el" href="classvelox_1_1DFS.html#ae18f13e5395a1216f8d6d9452f5b365d">velox::DFS::get</a> </td>
+          <td class="memname">int <a class="el" href="classvelox_1_1DFS.html#a7a2f893a17864b8d9a9bdd54f1ba9aca">velox::DFS::append</a> </td>
           <td>(</td>
-          <td class="paramtype">vec_str&#160;</td>
-          <td class="paramname"><em>argv</em></td><td>)</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>file_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>buf</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Append a string to the end of a remote file. </p>
+<dl class="attention"><dt><b>Attention:</b></dt><dd>It is currently not working due to changes in the internal API.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>fix implementation </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7b928a468f39cbcf49ba11c0b9a4c84f"></a><!-- doxytag: member="velox::DFS::download" ref="a7b928a468f39cbcf49ba11c0b9a4c84f" args="(std::string file_name)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classvelox_1_1DFS.html#a7b928a468f39cbcf49ba11c0b9a4c84f">velox::DFS::download</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>file_name</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Download a remote file to your current local directory. </p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file_name</td><td>File to peform the operation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt><b>Return values:</b></dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>SUCCESS </td></tr>
+    <tr><td class="paramname">1</td><td>FAILURE </td></tr>
+  </table>
+  </dd>
+</dl>
 <p>Does the file exists</p>
 <p>No buffer </p>
 
@@ -176,30 +218,242 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>load</b> (std:
       </table>
 </div>
 <div class="memdoc">
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000002">Deprecated:</a></b></dt><dd></dd></dl>
 <dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd></dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a087260b6c6bb661aa85a5cb0fc8e4621"></a><!-- doxytag: member="velox::DFS::put" ref="a087260b6c6bb661aa85a5cb0fc8e4621" args="(vec_str)" -->
+<a class="anchor" id="a1005ef927db6079c70f0690c474a3d46"></a><!-- doxytag: member="velox::DFS::read" ref="a1005ef927db6079c70f0690c474a3d46" args="(std::string &amp;file_name, char *buf, uint64_t off, uint64_t len)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int <a class="el" href="classvelox_1_1DFS.html#a087260b6c6bb661aa85a5cb0fc8e4621">velox::DFS::put</a> </td>
+          <td class="memname">uint64_t <a class="el" href="classvelox_1_1DFS.html#a1005ef927db6079c70f0690c474a3d46">velox::DFS::read</a> </td>
           <td>(</td>
-          <td class="paramtype">vec_str&#160;</td>
-          <td class="paramname"><em>input</em></td><td>)</td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>file_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>off</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Download a remote file's section into a buffer. </p>
+<dl class="pre"><dt><b>Precondition:</b></dt><dd>The file must exist. </dd></dl>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">file_name</td><td>File to peform the operation. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">buffer</td><td>Destination buffer. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">off</td><td>offset from where to read. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">len</td><td>size of segment to read. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt><b>Return values:</b></dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">&gt;0</td><td>bytes successfully uploaded. </td></tr>
+    <tr><td class="paramname">0</td><td>The operation failed. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a87d9efc760ac5b7e3a9c12fcb5f24586"></a><!-- doxytag: member="velox::DFS::read_all" ref="a87d9efc760ac5b7e3a9c12fcb5f24586" args="(std::string file_name)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="classvelox_1_1DFS.html#a87d9efc760ac5b7e3a9c12fcb5f24586">velox::DFS::read_all</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>file_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Load all the file into a string. </p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file_name</td><td>File to peform the operation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt><b>Return values:</b></dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">""</td><td>The file did not exists. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a91d02b56024d317f8c797e11d24415ef"></a><!-- doxytag: member="velox::DFS::touch" ref="a91d02b56024d317f8c797e11d24415ef" args="(std::string)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classvelox_1_1DFS.html#a91d02b56024d317f8c797e11d24415ef">velox::DFS::touch</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>file_name</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <p>If it is an app to be upload :TODO:</p>
-<p>For each file_name</p>
+<p>Insert the file</p>
+<p>Send file to be submitted;</p>
+<p>Get information of where to send the file </p>
+
+</div>
+</div>
+<a class="anchor" id="a9f03c93f13ff9dc535b30b4eabf2092e"></a><!-- doxytag: member="velox::DFS::update" ref="a9f03c93f13ff9dc535b30b4eabf2092e" args="(vec_str)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classvelox_1_1DFS.html#a9f03c93f13ff9dc535b30b4eabf2092e">velox::DFS::update</a> </td>
+          <td>(</td>
+          <td class="paramtype">vec_str&#160;</td>
+          <td class="paramname"><em>argv</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000003">Deprecated:</a></b></dt><dd></dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab73d4aee78b1da4481fcc6c3b0e7f99b"></a><!-- doxytag: member="velox::DFS::upload" ref="ab73d4aee78b1da4481fcc6c3b0e7f99b" args="(std::string file_name, bool is_binary)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classvelox_1_1DFS.html#ab73d4aee78b1da4481fcc6c3b0e7f99b">velox::DFS::upload</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>file_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>is_binary</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Upload a local file to a the veloxdfs intance. </p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file_name</td><td>File to peform the operation. </td></tr>
+    <tr><td class="paramname">is_binary</td><td>Whether to broadcast the file to all the nodes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt><b>Return values:</b></dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>SUCCESS </td></tr>
+    <tr><td class="paramname">1</td><td>FAILURE </td></tr>
+  </table>
+  </dd>
+</dl>
 <p>Does the file exists</p>
 <p>Insert the file</p>
 <p>Send file to be submitted;</p>
 <p>Get information of where to send the file</p>
+<p>Insert the blocks</p>
+<p>Load block metadata info </p>
+
+</div>
+</div>
+<a class="anchor" id="a4d7ccf5ee543ce055353b540408ddd80"></a><!-- doxytag: member="velox::DFS::write" ref="a4d7ccf5ee543ce055353b540408ddd80" args="(std::string &amp;file_name, const char *buf, uint64_t off, uint64_t len)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t <a class="el" href="classvelox_1_1DFS.html#a4d7ccf5ee543ce055353b540408ddd80">velox::DFS::write</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>file_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>off</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Write the contents into a remote file. </p>
+<dl class="params"><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file_name</td><td>File to peform the operation if the file does not exists it will create it. </td></tr>
+    <tr><td class="paramname">buf</td><td>contents to be copied. </td></tr>
+    <tr><td class="paramname">off</td><td>offset to append the buffer. </td></tr>
+    <tr><td class="paramname">len</td><td>size of the content. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt><b>Return values:</b></dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">&gt;0</td><td>bytes successfully uploaded. </td></tr>
+    <tr><td class="paramname">0</td><td>The operation failed. </td></tr>
+  </table>
+  </dd>
+</dl>
 <p>Insert the blocks</p>
 <p>Load block metadata info </p>
 
@@ -227,7 +481,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>load</b> (std:
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 30 2017 14:29:35 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Apr 1 2017 16:20:11 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

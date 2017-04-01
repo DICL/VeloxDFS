@@ -82,49 +82,57 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#pragma once</span>
-<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#include &lt;string&gt;</span>
-<a name="l00003"></a>00003 <span class="preprocessor">#include &lt;vector&gt;</span>
-<a name="l00004"></a>00004 <span class="preprocessor">#include &lt;boost/asio.hpp&gt;</span>
-<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;stdint.h&gt;</span>
-<a name="l00006"></a>00006 <span class="preprocessor">#include &lt;memory&gt;</span>
-<a name="l00007"></a>00007 
-<a name="l00008"></a>00008 <span class="keyword">namespace </span>velox {
-<a name="l00009"></a>00009 
-<a name="l00010"></a>00010 <span class="keyword">using</span> boost::asio::ip::tcp;
+<a name="l00002"></a>00002 <span class="preprocessor"></span>
+<a name="l00003"></a>00003 <span class="preprocessor">#include &quot;model/metadata.hh&quot;</span>
+<a name="l00004"></a>00004 
+<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;string&gt;</span>
+<a name="l00006"></a>00006 <span class="preprocessor">#include &lt;vector&gt;</span>
+<a name="l00007"></a>00007 <span class="preprocessor">#include &lt;stdint.h&gt;</span>
+<a name="l00008"></a>00008 
+<a name="l00009"></a>00009 <span class="keyword">namespace </span>velox {
+<a name="l00010"></a>00010 
 <a name="l00011"></a>00011 <span class="keyword">using</span> vec_str = std::vector&lt;std::string&gt;;
 <a name="l00012"></a>00012 
 <a name="l00013"></a><a class="code" href="classvelox_1_1DFS.html">00013</a> <span class="keyword">class </span><a class="code" href="classvelox_1_1DFS.html">DFS</a> {
 <a name="l00014"></a>00014   <span class="keyword">public</span>:
 <a name="l00015"></a>00015     <a class="code" href="classvelox_1_1DFS.html">DFS</a>();
-<a name="l00016"></a>00016     <span class="keywordtype">void</span> load_settings();
-<a name="l00017"></a>00017     <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a087260b6c6bb661aa85a5cb0fc8e4621">put</a>(vec_str);
-<a name="l00018"></a>00018     <span class="keywordtype">int</span> <span class="keyword">get</span>(vec_str);
-<a name="l00019"></a>00019     <span class="keywordtype">int</span> cat(vec_str);
-<a name="l00020"></a>00020     <span class="keywordtype">int</span> ls(vec_str);
-<a name="l00021"></a>00021     <span class="keywordtype">int</span> rm(vec_str);
-<a name="l00022"></a>00022     <span class="keywordtype">int</span> format();
-<a name="l00023"></a>00023     <span class="keywordtype">int</span> show(vec_str);
-<a name="l00024"></a>00024     <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a63324577c9a8f29fb2623ea9479cf074">pget</a>(vec_str);
-<a name="l00025"></a>00025     <span class="keywordtype">int</span> update(vec_str);
-<a name="l00026"></a>00026     <span class="keywordtype">int</span> append(vec_str);
-<a name="l00027"></a>00027     <span class="keywordtype">bool</span> file_exists_local(std::string);
-<a name="l00028"></a>00028     <span class="keywordtype">bool</span> <a class="code" href="classvelox_1_1DFS.html#adad261d20f57ff427e4144af1da9b09c" title="}}}">exists</a>(std::string);
-<a name="l00029"></a>00029     <span class="keywordtype">bool</span> touch(std::string);
-<a name="l00030"></a>00030 
-<a name="l00031"></a>00031     <span class="keywordtype">int</span> push_back(vec_str);
-<a name="l00032"></a>00032     std::string load(std::string);
-<a name="l00033"></a>00033 
-<a name="l00034"></a>00034   <span class="keyword">private</span>:
-<a name="l00035"></a>00035     uint32_t BLOCK_SIZE;
-<a name="l00036"></a>00036     uint32_t NUM_NODES;
-<a name="l00037"></a>00037     <span class="keywordtype">int</span> replica;
-<a name="l00038"></a>00038     <span class="keywordtype">int</span> port;
-<a name="l00039"></a>00039     std::vector&lt;std::string&gt; nodes;
-<a name="l00040"></a>00040 
-<a name="l00041"></a>00041     std::unique_ptr&lt;tcp::socket&gt; connect (uint32_t);
-<a name="l00042"></a>00042 };
-<a name="l00043"></a>00043 
-<a name="l00044"></a>00044 }
+<a name="l00016"></a>00016 
+<a name="l00026"></a>00026     uint64_t <a class="code" href="classvelox_1_1DFS.html#a4d7ccf5ee543ce055353b540408ddd80" title="Write the contents into a remote file.">write</a>(std::string&amp; file_name, <span class="keyword">const</span> <span class="keywordtype">char</span>* buf, uint64_t off, uint64_t len);
+<a name="l00027"></a>00027 
+<a name="l00037"></a>00037     uint64_t <a class="code" href="classvelox_1_1DFS.html#a1005ef927db6079c70f0690c474a3d46" title="Download a remote file&#39;s section into a buffer.">read</a>(std::string&amp; file_name, <span class="keywordtype">char</span>* buf, uint64_t off, uint64_t len);
+<a name="l00038"></a>00038 
+<a name="l00043"></a>00043     std::string <a class="code" href="classvelox_1_1DFS.html#a87d9efc760ac5b7e3a9c12fcb5f24586" title="Load all the file into a string.">read_all</a>(std::string file_name);
+<a name="l00044"></a>00044 
+<a name="l00048"></a>00048     <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a7a2f893a17864b8d9a9bdd54f1ba9aca" title="Append a string to the end of a remote file.">append</a>(std::string file_name, std::string buf);
+<a name="l00049"></a>00049 
+<a name="l00056"></a>00056     <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#ab73d4aee78b1da4481fcc6c3b0e7f99b" title="Upload a local file to a the veloxdfs intance.">upload</a>(std::string file_name, <span class="keywordtype">bool</span> is_binary);
+<a name="l00057"></a>00057 
+<a name="l00063"></a>00063     <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a7b928a468f39cbcf49ba11c0b9a4c84f" title="Download a remote file to your current local directory.">download</a>(std::string file_name);
+<a name="l00064"></a>00064 
+<a name="l00065"></a>00065     <span class="keywordtype">bool</span> <a class="code" href="classvelox_1_1DFS.html#adad261d20f57ff427e4144af1da9b09c" title="}}}">exists</a>(std::string);
+<a name="l00066"></a>00066 
+<a name="l00067"></a>00067     <span class="keywordtype">bool</span> <a class="code" href="classvelox_1_1DFS.html#a91d02b56024d317f8c797e11d24415ef">touch</a>(std::string);
+<a name="l00068"></a>00068 
+<a name="l00069"></a>00069     <span class="keywordtype">int</span> <span class="keyword">remove</span>(std::string);
+<a name="l00070"></a>00070 
+<a name="l00071"></a>00071     <span class="keywordtype">int</span> format();
+<a name="l00072"></a>00072 
+<a name="l00073"></a>00073     <a class="code" href="structvelox_1_1model_1_1metadata.html">model::metadata</a> get_metadata(std::string&amp; fname);
+<a name="l00074"></a>00074 
+<a name="l00075"></a>00075     std::vector&lt;model::metadata&gt; get_metadata_all();
+<a name="l00076"></a>00076 
+<a name="l00078"></a>00078     <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a63324577c9a8f29fb2623ea9479cf074">pget</a>(vec_str);
+<a name="l00079"></a>00079 
+<a name="l00081"></a>00081     <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a9f03c93f13ff9dc535b30b4eabf2092e">update</a>(vec_str);
+<a name="l00082"></a>00082 
+<a name="l00083"></a>00083   <span class="keyword">private</span>:
+<a name="l00084"></a>00084     uint64_t BLOCK_SIZE;
+<a name="l00085"></a>00085     uint32_t NUM_NODES;
+<a name="l00086"></a>00086     <span class="keywordtype">int</span> replica;
+<a name="l00087"></a>00087     std::vector&lt;std::string&gt; nodes;
+<a name="l00088"></a>00088 };
+<a name="l00089"></a>00089 
+<a name="l00090"></a>00090 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -143,7 +151,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 30 2017 14:29:35 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Apr 1 2017 16:20:11 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

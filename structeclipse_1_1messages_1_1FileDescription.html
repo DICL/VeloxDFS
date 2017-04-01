@@ -108,7 +108,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">eclipse::messages::FileDescription Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<!-- doxytag: class="eclipse::messages::FileDescription" --><!-- doxytag: inherits="eclipse::messages::Message" --><div class="dynheader">
+<!-- doxytag: class="eclipse::messages::FileDescription" --><!-- doxytag: inherits="eclipse::messages::FileInfo" --><div class="dynheader">
 Inheritance diagram for eclipse::messages::FileDescription:</div>
 <div class="dyncontent">
 <div class="center"><img src="structeclipse_1_1messages_1_1FileDescription__inherit__graph.png" border="0" usemap="#eclipse_1_1messages_1_1FileDescription_inherit__map" alt="Inheritance graph"/></div>
@@ -127,24 +127,18 @@ Collaboration diagram for eclipse::messages::FileDescription:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab4cf4d6a53fc07162542d5cefe8e632f"></a><!-- doxytag: member="eclipse::messages::FileDescription::operator=" ref="ab4cf4d6a53fc07162542d5cefe8e632f" args="(FileDescription &amp;)" -->
+<a class="el" href="structeclipse_1_1messages_1_1FileDescription.html">FileDescription</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="structeclipse_1_1messages_1_1FileDescription.html">FileDescription</a> &amp;)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe456b8ed351390bf4443efdbb090558"></a><!-- doxytag: member="eclipse::messages::FileDescription::get_type" ref="afe456b8ed351390bf4443efdbb090558" args="() const override" -->
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>get_type</b> () const override</td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a941a1e2217655edaefb7acbd265dec4e"></a><!-- doxytag: member="eclipse::messages::FileDescription::name" ref="a941a1e2217655edaefb7acbd265dec4e" args="" -->
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a097efa183576bce0cfdff04216cbff09"></a><!-- doxytag: member="eclipse::messages::FileDescription::size" ref="a097efa183576bce0cfdff04216cbff09" args="" -->
-uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa61392088727a3bf0b1dc5381e949b5e"></a><!-- doxytag: member="eclipse::messages::FileDescription::blocks" ref="aa61392088727a3bf0b1dc5381e949b5e" args="" -->
 std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>blocks</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a9e2453150174039a70a5193652d3fa"></a><!-- doxytag: member="eclipse::messages::FileDescription::hash_keys" ref="a7a9e2453150174039a70a5193652d3fa" args="" -->
 std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>hash_keys</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2c8902b2be0c4bcbc14ddcbb2b4853a8"></a><!-- doxytag: member="eclipse::messages::FileDescription::block_size" ref="a2c8902b2be0c4bcbc14ddcbb2b4853a8" args="" -->
-std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>block_size</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3efec2fe9f979f75169468d8d40bafe"></a><!-- doxytag: member="eclipse::messages::FileDescription::replica" ref="aa3efec2fe9f979f75169468d8d40bafe" args="" -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>replica</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac7f295ff40d21943cbb8c2f8dcea7c3e"></a><!-- doxytag: member="eclipse::messages::FileDescription::uploading" ref="ac7f295ff40d21943cbb8c2f8dcea7c3e" args="" -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>uploading</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a151af8e3e0f526a0b9d26b36a05f6cbe"></a><!-- doxytag: member="eclipse::messages::FileDescription::block_size" ref="a151af8e3e0f526a0b9d26b36a05f6cbe" args="" -->
+std::vector&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>block_size</b></td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following files:<ul>
 <li>/home/travis/build/DICL/VeloxDFS/src/messages/<a class="el" href="filedescription_8hh_source.html">filedescription.hh</a></li>
@@ -168,7 +162,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>uploading</b></td></tr
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 30 2017 14:29:35 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Apr 1 2017 16:20:11 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

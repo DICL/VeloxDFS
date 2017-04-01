@@ -102,6 +102,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a>  </div>
   <div class="headertitle">
@@ -125,20 +126,34 @@ Collaboration diagram for eclipse::messages::IOoperation:</div>
 
 <p><a href="structeclipse_1_1messages_1_1IOoperation-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>OpType</b> { <br/>
+&#160;&#160;<b>BLOCK_INSERT</b>, 
+<b>BLOCK_INSERT_REPLICA</b>, 
+<b>BLOCK_DELETE</b>, 
+<b>BLOCK_DELETE_REPLICA</b>, 
+<br/>
+&#160;&#160;<b>BLOCK_REQUEST</b>, 
+<b>BLOCK_TRANSFER</b>, 
+<b>BLOCK_UPDATE</b>, 
+<b>BLOCK_UPDATE_REPLICA</b>
+<br/>
+ }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0abeee118c4269b2f76eef8c9b0ab649"></a><!-- doxytag: member="eclipse::messages::IOoperation::get_type" ref="a0abeee118c4269b2f76eef8c9b0ab649" args="() const override" -->
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>get_type</b> () const override</td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b16e39bd98f7d3d75acb25fae8e7849"></a><!-- doxytag: member="eclipse::messages::IOoperation::operation" ref="a3b16e39bd98f7d3d75acb25fae8e7849" args="" -->
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>operation</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaf68a281e42c97750c4c3f2296e2129f"></a><!-- doxytag: member="eclipse::messages::IOoperation::operation" ref="aaf68a281e42c97750c4c3f2296e2129f" args="" -->
+OpType&#160;</td><td class="memItemRight" valign="bottom"><b>operation</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af1262d30c3bb1dd54d11be2b749fc3b1"></a><!-- doxytag: member="eclipse::messages::IOoperation::option" ref="af1262d30c3bb1dd54d11be2b749fc3b1" args="" -->
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>option</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adde7394bf800445db06d18bb9f55d3b4"></a><!-- doxytag: member="eclipse::messages::IOoperation::pos" ref="adde7394bf800445db06d18bb9f55d3b4" args="" -->
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>pos</b> = 0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4c75534dc6b1cf0d000148decba1d07c"></a><!-- doxytag: member="eclipse::messages::IOoperation::length" ref="a4c75534dc6b1cf0d000148decba1d07c" args="" -->
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>length</b> = 0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f90aba7c34558501e27233f876f7439"></a><!-- doxytag: member="eclipse::messages::IOoperation::pos" ref="a9f90aba7c34558501e27233f876f7439" args="" -->
+uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>pos</b> = 0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3ebf1d1e2ab2c7914e9143c4997a61d"></a><!-- doxytag: member="eclipse::messages::IOoperation::length" ref="aa3ebf1d1e2ab2c7914e9143c4997a61d" args="" -->
+uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>length</b> = 0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e035568fc5312e6e29f16730c44bfeb"></a><!-- doxytag: member="eclipse::messages::IOoperation::block_metadata" ref="a4e035568fc5312e6e29f16730c44bfeb" args="" -->
 <a class="el" href="structeclipse_1_1BlockMetadata.html">BlockMetadata</a>&#160;</td><td class="memItemRight" valign="bottom"><b>block_metadata</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2bf9acb7e1616578d0fc019098155fbe"></a><!-- doxytag: member="eclipse::messages::IOoperation::block" ref="a2bf9acb7e1616578d0fc019098155fbe" args="" -->
@@ -166,7 +181,7 @@ Block&#160;</td><td class="memItemRight" valign="bottom"><b>block</b></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 30 2017 14:29:35 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Apr 1 2017 16:20:11 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

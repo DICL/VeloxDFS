@@ -136,8 +136,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6043a1f46a2049ae3744deabf8e8694e"></a><!-- doxytag: member="eclipse::BlockNode::block_update_local" ref="a6043a1f46a2049ae3744deabf8e8694e" args="(Block &amp;block, uint32_t pos, uint32_t len, bool replicate=true)" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeclipse_1_1BlockNode.html#a6043a1f46a2049ae3744deabf8e8694e">block_update_local</a> (Block &amp;block, uint32_t pos, uint32_t len, bool replicate=true)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the content of the block. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeclipse_1_1BlockNode.html#a1280d07408907b826a582e5e7b1f170e">block_read_local</a> (Block &amp;)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Read block from the local node.  <a href="#a1280d07408907b826a582e5e7b1f170e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeclipse_1_1BlockNode.html#a1378a075cf8895d681606713f52d3fc1">block_read_local</a> (Block &amp;block, uint64_t off=0, uint64_t len=0, bool ignore_params=true)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Read block from the local node.  <a href="#a1378a075cf8895d681606713f52d3fc1"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8224e81d91399f352130f74cc2345a3b"></a><!-- doxytag: member="eclipse::BlockNode::replicate_message" ref="a8224e81d91399f352130f74cc2345a3b" args="(messages::IOoperation *)" -->
@@ -211,16 +211,38 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>network_size</b></td><
 
 </div>
 </div>
-<a class="anchor" id="a1280d07408907b826a582e5e7b1f170e"></a><!-- doxytag: member="eclipse::BlockNode::block_read_local" ref="a1280d07408907b826a582e5e7b1f170e" args="(Block &amp;)" -->
+<a class="anchor" id="a1378a075cf8895d681606713f52d3fc1"></a><!-- doxytag: member="eclipse::BlockNode::block_read_local" ref="a1378a075cf8895d681606713f52d3fc1" args="(Block &amp;block, uint64_t off=0, uint64_t len=0, bool ignore_params=true)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classeclipse_1_1BlockNode.html#a1280d07408907b826a582e5e7b1f170e">eclipse::BlockNode::block_read_local</a> </td>
+          <td class="memname">bool <a class="el" href="classeclipse_1_1BlockNode.html#a1378a075cf8895d681606713f52d3fc1">eclipse::BlockNode::block_read_local</a> </td>
           <td>(</td>
           <td class="paramtype">Block &amp;&#160;</td>
-          <td class="paramname"><em>block</em></td><td>)</td>
+          <td class="paramname"><em>block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>off</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>len</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignore_params</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div>
@@ -253,7 +275,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>network_size</b></td><
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 30 2017 14:29:35 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Apr 1 2017 16:20:11 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
