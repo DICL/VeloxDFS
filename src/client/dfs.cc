@@ -4,8 +4,6 @@
 #include "../messages/fileinfo.hh"
 #include "../messages/factory.hh"
 #include "../messages/fileinfo.hh"
-#include "../messages/blockinfo.hh"
-#include "../messages/blockupdate.hh"
 #include "../messages/fileexist.hh"
 #include "../messages/filedescription.hh"
 #include "../messages/filerequest.hh"
@@ -111,13 +109,9 @@ DFS::DFS() {
 // }}}
 // upload {{{
 int DFS::upload(std::string file_name, bool is_binary) {
-  vector<char> chunk(BLOCK_SIZE);
-  Histogram boundaries(NUM_NODES, 100);
-  boundaries.initialize();
-
   FILETYPE type = FILETYPE::Normal;
+  int replica = GET_INT("filesystem.replica");
 
-  //! If it is an app to be upload :TODO:
   if (is_binary) {
     replica = NUM_NODES;
     type = FILETYPE::App;
@@ -157,85 +151,90 @@ int DFS::upload(std::string file_name, bool is_binary) {
   auto description = read_reply<FileDescription>(socket.get());
   socket->close();
 
-  uint64_t off = 0;
-  uint64_t len = description->size;
-  off = std::max(0ul, std::min(off, std::max(description->size, BLOCK_SIZE - 1)));
+  uint64_t start = 0;
+  uint64_t end = start + BLOCK_SIZE - 1;
+  uint32_t block_size = 0;
+  unsigned int block_seq = 0;
 
   //! Insert the blocks
+  uint32_t i = 0;
+
   vector<BlockMetadata> blocks_metadata;
   vector<future<bool>> slave_sockets;
+  vector<char> chunk(BLOCK_SIZE);
+  Histogram boundaries(NUM_NODES, 100);
+  boundaries.initialize();
 
-  uint64_t to_write_bytes = len;
-  uint64_t written_bytes = 0;
-
-  int block_beg_seq = (int) off / BLOCK_SIZE;
-  int block_end_seq = (int) (len + off - 1) / BLOCK_SIZE;
-
-  for(int i=block_beg_seq; i<=block_end_seq; i++) {
+  while (true) {
+    if (end < file_info.size) {
+      myfile.seekg(start+BLOCK_SIZE-1, ios_base::beg);
+      while (myfile.peek() != '\n') {
+        myfile.seekg(-1, ios_base::cur);
+        end--;
+      }
+    } else {
+      end = file_info.size;
+    }
     BlockMetadata metadata;
     Block block;
-    IOoperation io_ops;
 
-    uint64_t pos_to_update, len_to_write;
+    block_size = (uint32_t) end - start;
+    bzero(chunk.data(), BLOCK_SIZE);
+    myfile.seekg(start, myfile.beg);
+    block.second.reserve(block_size);
+    myfile.read(chunk.data(), block_size);
+    block.second = move(chunk.data());
+    posix_fadvise(fd, end, block_size, POSIX_FADV_WILLNEED);
 
-    io_ops.operation = eclipse::messages::IOoperation::OpType::BLOCK_INSERT;
-
-    int which_server = ((description->hash_key % NUM_NODES) + i) % NUM_NODES;
-
-    pos_to_update = 0;
-    len_to_write = std::min(BLOCK_SIZE, to_write_bytes);
-    //(description->block_size[i] == 0) ? std::min(to_write_bytes, BLOCK_SIZE) : std::min((BLOCK_SIZE - pos_to_update), to_write_bytes);
-
-    metadata.name = file_name + "_" + to_string(i);
+    //! Load block metadata info
+    int which_server = ((file_hash_key % NUM_NODES) + i) % NUM_NODES;
+    block.first = metadata.name = file_name + string("_") + to_string(i);
     metadata.file_name = file_name;
     metadata.hash_key = boundaries.random_within_boundaries(which_server);
-    metadata.seq = i;
-    metadata.size = len_to_write;
+    metadata.seq = block_seq++;
+    metadata.size = block_size;
     metadata.type = static_cast<unsigned int>(FILETYPE::Normal);
     metadata.replica = replica;
     metadata.node = nodes[which_server];
-    metadata.l_node = nodes[(which_server - 1 + NUM_NODES) % NUM_NODES];
-    metadata.r_node = nodes[(which_server + 1 + NUM_NODES) % NUM_NODES];
+    metadata.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
+    metadata.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
     metadata.is_committed = 1;
 
     blocks_metadata.push_back(metadata);
 
-    bzero(chunk.data(), BLOCK_SIZE);
-    myfile.seekg(written_bytes, myfile.beg);
-    myfile.read(chunk.data(), len_to_write);
-
-    block.first = metadata.name;
-    block.second = move(chunk.data());
-
+    IOoperation io_ops;
+    io_ops.operation = eclipse::messages::IOoperation::OpType::BLOCK_INSERT;
     io_ops.block = move(block);
-    io_ops.pos = pos_to_update;
-    io_ops.length = len_to_write;
 
-    socket = connect(boundaries.get_index(metadata.hash_key));
+    auto socket = connect(boundaries.get_index(metadata.hash_key));
     send_message(socket.get(), &io_ops);
 
     auto future = async(launch::async, [](unique_ptr<tcp::socket> socket) -> bool {
-      auto reply = read_reply<Reply> (socket.get());
-      socket->close();
+        auto reply = read_reply<Reply> (socket.get());
+        socket->close();
 
-      if (reply->message != "TRUE") {
+        if (reply->message != "TRUE") {
         cerr << "[ERR] Failed to upload block . Details: " << reply->details << endl;
         return false;
-      }
+        }
 
-      return true;
-    }, move(socket));
+        return true;
+        }, move(socket));
 
     slave_sockets.push_back(move(future));
 
-    written_bytes += len_to_write;
-    to_write_bytes -= written_bytes;
+    if (end >= file_info.size) {
+      break;
+    }
+    start = end;
+    end = start + BLOCK_SIZE - 1;
+    i++;
   }
 
   for (auto& future: slave_sockets)
     future.get();
 
-  file_info.num_block = block_end_seq + 1;
+  file_info.num_block = block_seq;
   file_info.blocks_metadata = blocks_metadata;
   file_info.uploading = 0;
 
@@ -536,8 +535,13 @@ int DFS::append(string file_name, string buf) {
   uint64_t start = 0;
   uint64_t end = 0;
   uint32_t block_size = 0;
+  vector<BlockMetadata> blocks_metadata;
 
   while (to_write_byte > 0) { // repeat until to_write_byte == 0
+    BlockMetadata metadata;
+    Block block;
+    IOoperation io_ops;
+
     if (update_block == true) { 
       ori_start_pos = fd->block_size[block_seq];
       if (BLOCK_SIZE - ori_start_pos > to_write_byte) { // can append within original block
@@ -566,35 +570,36 @@ int DFS::append(string file_name, string buf) {
       myfile.read(buffer, write_length);
       string sbuffer(buffer);
       delete[] buffer;
-      BlockUpdate bu;
-      bu.name = fd->blocks[block_seq];
-      bu.file_name = ori_file_name;
-      bu.seq = block_seq;
-      bu.replica = fd->replica;
-      bu.hash_key = hash_key;
-      bu.pos = ori_start_pos;
-      bu.len = write_length;
-      bu.size = ori_start_pos + write_length;
-      bu.content = sbuffer;
-      bu.is_header = true;
 
-      send_message(socket.get(), &bu);
-      auto reply = read_reply<Reply> (socket.get());
-      if (reply->message != "OK") {
+      metadata.name = fd->blocks[block_seq];
+      metadata.file_name = ori_file_name;
+      metadata.seq = block_seq;
+      metadata.replica = fd->replica;
+      metadata.hash_key = hash_key;
+      metadata.size = ori_start_pos + write_length;
+      metadata.l_node = "0";
+      metadata.r_node = "0";
+      metadata.is_committed = 1;
+
+      blocks_metadata.push_back(metadata);
+
+      block.first = metadata.name;
+      block.second = move(sbuffer);
+
+      io_ops.operation = eclipse::messages::IOoperation::OpType::BLOCK_UPDATE;
+      io_ops.block = move(block);
+      io_ops.pos = ori_start_pos;
+      io_ops.length = write_length;
+
+      auto block_server = connect(boundaries.get_index(metadata.hash_key));
+      send_message(block_server.get(), &io_ops);
+      auto reply = read_reply<Reply> (block_server.get());
+      block_server->close();
+      if (reply->message != "TRUE") {
         cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
         return EXIT_FAILURE;
       } 
 
-      //bu.is_header = false;
-
-      //auto tmp_socket = connect(boundaries.get_index(hash_key));
-      //send_message(tmp_socket.get(), &bu);
-      //reply = read_reply<Reply> (tmp_socket.get());
-      //tmp_socket->close();
-      //if (reply->message != "OK") {
-      //  cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
-      //  return EXIT_FAILURE;
-      //} 
       // calculate total write bytes and remaining write bytes
       to_write_byte -= write_length;
       write_byte_cnt += write_length;
@@ -608,7 +613,6 @@ int DFS::append(string file_name, string buf) {
       int which_server = ((file_hash_key % NUM_NODES) + block_seq) % NUM_NODES;
       start = write_byte_cnt;
       end = start + BLOCK_SIZE -1;
-      BlockInfo block_info;
 
       if (end < to_write_byte) {
         // not final block
@@ -633,22 +637,30 @@ int DFS::append(string file_name, string buf) {
       string sbuffer(buffer);
       delete[] buffer;
       myfile.seekg(start, myfile.beg);
-      block_info.content = sbuffer;
 
-      block_info.name = ori_file_name + "_" + to_string(block_seq);
-      block_info.file_name = ori_file_name;
-      block_info.hash_key = boundaries.random_within_boundaries(which_server);
-      block_info.seq = block_seq;
-      block_info.size = block_size;
-      block_info.type = static_cast<unsigned int>(FILETYPE::Normal);
-      block_info.replica = replica;
-      block_info.node = nodes[which_server];
-      block_info.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
-      block_info.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
-      block_info.is_committed = 1;
+      metadata.name = ori_file_name + "_" + to_string(block_seq);
+      metadata.file_name = ori_file_name;
+      metadata.hash_key = boundaries.random_within_boundaries(which_server);
+      metadata.seq = block_seq;
+      metadata.size = block_size;
 
-      send_message(socket.get(), &block_info);
-      auto reply = read_reply<Reply> (socket.get());
+      metadata.replica = replica;
+      metadata.node = nodes[which_server];
+      metadata.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
+      metadata.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
+      metadata.is_committed = 1;
+      
+      blocks_metadata.push_back(metadata);
+
+      IOoperation io_ops;
+      io_ops.operation = eclipse::messages::IOoperation::OpType::BLOCK_INSERT;
+      io_ops.block.first = metadata.name;
+      io_ops.block.second = move(sbuffer);
+
+      auto block_server = connect(boundaries.get_index(metadata.hash_key));
+      send_message(block_server.get(), &io_ops);
+      auto reply = read_reply<Reply> (block_server.get());
+      block_server->close();
 
       if (reply->message != "OK") {
         cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
@@ -668,6 +680,8 @@ int DFS::append(string file_name, string buf) {
   fu.name = ori_file_name;
   fu.num_block = block_seq+1;
   fu.size = fd->size + new_file_size;
+  fu.blocks_metadata = blocks_metadata;
+
   send_message(socket.get(), &fu);
   auto reply = read_reply<Reply> (socket.get());
   socket->close();

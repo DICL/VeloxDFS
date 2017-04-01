@@ -22,12 +22,18 @@ int main () {
   char input[write_length];
   char abc[3] = { 'a', 'b', 'c' };
 
-  for(int i=0; i<3; i++) {
-    model::metadata md = cloud.get_metadata(fd);
+  //for(int i=0; i<3; i++) {
+  //  model::metadata md = cloud.get_metadata(fd);
 
-    memset(input, abc[i], write_length);
-    cloud.write(fd, input, md.size, write_length);
-  }
+  //  memset(input, abc[i], 3);
+  //  cloud.write(fd, input, md.size, write_length);
+  //}
+
+  model::metadata md = cloud.get_metadata(fd);
+
+  strncpy(input, abc, 3);
+  cloud.write(fd, input, md.size, 3);
+  cloud.append("test.txt", " THIS LINE GOES AT LAST");
 
   cout << "write" << endl;
 
@@ -37,7 +43,10 @@ int main () {
 
   cout << "read: " << str << endl;
 
-  model::metadata md = cloud.get_metadata(fd);
+  DFS dfs;
+  cout << "read all: " << dfs.read_all("test.txt") << endl;
+
+  md = cloud.get_metadata(fd);
 
   cout << md << endl;
 
@@ -46,6 +55,8 @@ int main () {
   cout << "close" << endl;
 
   cloud.rm("test.txt");
+
+
 
   return 0;
 }

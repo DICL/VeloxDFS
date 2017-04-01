@@ -64,9 +64,10 @@ class vdfs {
 
     model::metadata get_metadata(long fid);
 
+    void append(std::string, std::string);
+
   protected:
     DFS* dfs;
-    void append(std::string, std::string);
     std::string load(std::string);
 
   private:
