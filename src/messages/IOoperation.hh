@@ -9,11 +9,22 @@ namespace messages {
 struct IOoperation: public Message {
   std::string get_type() const override;
 
-  std::string operation;
+  enum class OpType {
+    BLOCK_INSERT,
+    BLOCK_INSERT_REPLICA,
+    BLOCK_DELETE,
+    BLOCK_DELETE_REPLICA,
+    BLOCK_REQUEST,
+    BLOCK_TRANSFER,
+    BLOCK_UPDATE,
+    BLOCK_UPDATE_REPLICA
+  };
+
+  OpType operation;
   std::string option;
 
-  uint32_t pos = 0;
-  uint32_t length = 0;
+  uint64_t pos = 0;
+  uint64_t length = 0;
 
   BlockMetadata block_metadata;
   Block block;

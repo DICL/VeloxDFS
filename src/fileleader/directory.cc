@@ -237,7 +237,7 @@ void Directory::file_table_confirm_upload (std::string file_name, uint32_t num_b
 void Directory::block_table_insert(BlockMetadata& metadata) {
   char sql[DEFAULT_QUERY_SIZE];
 
-  sprintf(sql, "INSERT INTO block_table (\
+  sprintf(sql, "INSERT OR REPLACE INTO block_table (\
     name, file_name, seq, hash_key, size, type, replica, node, l_node, r_node, is_committed)\
     VALUES ('%s', '%s', %u, %" PRIu32 ", %" PRIu32 ", %u, %u, '%s', '%s', '%s', %u);",
       metadata.name.c_str(),

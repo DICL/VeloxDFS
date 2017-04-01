@@ -21,7 +21,7 @@ struct FileInfo: public Message {
   unsigned int replica;
   int uploading = 1;
 
-  std::vector<BlockMetadata> blocks;
+  std::vector<BlockMetadata> blocks_metadata;
 };
 
 }

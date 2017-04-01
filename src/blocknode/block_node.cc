@@ -40,7 +40,7 @@ bool BlockNode::block_insert_local(Block& block, bool replicate) {
   if (replicate) {
     INFO("[DFS] Saving locally BLOCK: %s", block.first.c_str());
     IOoperation io;
-    io.operation = "BLOCK_INSERT_REPLICA";
+    io.operation = messages::IOoperation::OpType::BLOCK_INSERT_REPLICA;
     io.block = move(block);
     replicate_message(&io);
   } else {
@@ -52,9 +52,9 @@ bool BlockNode::block_insert_local(Block& block, bool replicate) {
 // }}}
 // block_read_local {{{
 //! @brief This method read the block locally.
-bool BlockNode::block_read_local(Block& block) {
+bool BlockNode::block_read_local(Block& block, uint64_t off, uint64_t len, bool ignore_params) {
   INFO("BLOCK REQUEST: %s", block.first.c_str());
-  block.second = local_io.read(block.first);
+  block.second = local_io.read(block.first, off, len, ignore_params);
   return true;
 }
 // }}}
@@ -67,7 +67,7 @@ bool BlockNode::block_delete_local(Block& block, bool replicate) {
 
   if (replicate) {
     IOoperation io;
-    io.operation = "BLOCK_DELETE_REPLICA";
+    io.operation = messages::IOoperation::OpType::BLOCK_DELETE_REPLICA;
     io.block = move(block);
     replicate_message(&io);
   }
@@ -82,7 +82,7 @@ bool BlockNode::block_update_local(Block& block, uint32_t pos, uint32_t len, boo
   if (replicate) {
     INFO("Block %s updated real host", block.first.c_str());
     IOoperation io;
-    io.operation = "BLOCK_UPDATE_REPLICA";
+    io.operation = messages::IOoperation::OpType::BLOCK_UPDATE_REPLICA;
     io.pos = pos;
     io.length = len;
     io.block = move(block);

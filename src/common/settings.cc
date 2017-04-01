@@ -105,6 +105,10 @@ bool Settings::SettingsImpl::get_project_path ()
 //
 bool Settings::SettingsImpl::load ()
 {
+  for (auto& kv : default_ops) {
+    pt.put(kv.first, kv.second);
+  }
+
   if (not nofile) {
     get_project_path();
     json_parser::read_json (config_path, pt);
@@ -112,10 +116,6 @@ bool Settings::SettingsImpl::load ()
   } else {
     std::stringstream ss; ss << input;
     json_parser::read_json (ss, pt);
-  }
-
-  for (auto& kv : default_ops) {
-    pt.put(kv.first, kv.second);
   }
 
   return true;

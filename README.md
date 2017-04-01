@@ -22,7 +22,7 @@ Key features of current VeloxDFS implementation includes:
 
 USAGE
 =====
-VeloxDFS default launcher is not included in this repository, if you want to use it you can find it [here][eclipsed].
+VeloxDFS default launcher is not included in this repository, if you want to use it you can find it [here](https://github.com/DICL/eclipsed).
 
 The reason not to include the launcher inside the package is to let the user to choose any launcher or service managers such as:
  - systemd/init.d
@@ -105,21 +105,10 @@ FAQ
 AUTHORS
 =======
 
- - __AUTHOR:__ [Vicente Adolfo Bolea Sanchez] [vicente]
- - __AUTHOR:__ [MooHyeon Nam] [mh]
- - __AUTHOR:__ [WonBae Kim] [wb]
- - __AUTHOR:__ [KiBeom Jin] [kb]
- - __AUTHOR:__ [Deukyeon Hwang] [dy]
- - __AUTHOR:__ [Prof. Nam Beomseok] [nb]
- - __INSTITUTION:__ [DICL laboratory] [dicl] at [UNIST]
-
-<!-- Links -->
-[vicente]:  http://vicentebolea.me
-[ym]:       https://github.com/youngmoon01
-[dicl]:     http://dicl.unist.ac.kr
-[mh]:       https://github.com/nammh 
-[wb]:       https://github.com/zwigul
-[kb]:       https://github.com/kbjin
-[dy]:       https://github.com/deukyeon
-[eclipsed]: https://github.com/DICL/eclipsed
-[nb]:       http://dicl.unist.ac.kr
+ - __AUTHOR:__ [Vicente Adolfo Bolea Sanchez](http://vicentebolea.me)
+ - __AUTHOR:__ [MooHyeon Nam](https://github.com/nammh)
+ - __AUTHOR:__ [WonBae Kim](https://github.com/zwigul)
+ - __AUTHOR:__ [KiBeom Jin](https://github.com/kbjin)
+ - __AUTHOR:__ [Deukyeon Hwang](https://github.com/deukyeon)
+ - __AUTHOR:__ [Prof. Nam Beomseok](http://dicl.unist.ac.kr)
+ - __INSTITUTION:__ [DICL laboratory](http://dicl.unist.ac.kr) at _UNIST_ 

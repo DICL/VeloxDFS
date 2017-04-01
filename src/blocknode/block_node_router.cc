@@ -24,7 +24,7 @@ BlockNodeRouter::BlockNodeRouter (BlockNode* b_node, Router* router) : RouterDec
 void BlockNodeRouter::io_operation (messages::Message* m_, Channel* tcp_connection) {
   auto m = dynamic_cast<messages::IOoperation*> (m_);
 
-  if (m->operation == "BLOCK_INSERT") {
+  if (m->operation == messages::IOoperation::OpType::BLOCK_INSERT) {
     auto ret = block_node->block_insert_local(m->block);
     Reply reply;
 
@@ -36,10 +36,10 @@ void BlockNodeRouter::io_operation (messages::Message* m_, Channel* tcp_connecti
     }
     tcp_connection->do_write(&reply);
 
-  } else if (m->operation == "BLOCK_INSERT_REPLICA") {
+  } else if (m->operation == messages::IOoperation::OpType::BLOCK_INSERT_REPLICA) {
     block_node->block_insert_local(m->block, false);
 
-  } else if (m->operation == "BLOCK_DELETE") {
+  } else if (m->operation == messages::IOoperation::OpType::BLOCK_DELETE) {
     auto ret = block_node->block_delete_local(m->block);
     Reply reply;
 
@@ -51,17 +51,17 @@ void BlockNodeRouter::io_operation (messages::Message* m_, Channel* tcp_connecti
     }
     tcp_connection->do_write(&reply);
   
-  } else if (m->operation == "BLOCK_DELETE_REPLICA") {
+  } else if (m->operation == messages::IOoperation::OpType::BLOCK_DELETE_REPLICA) {
     block_node->block_delete_local(m->block, false);
 
-  } else if (m->operation == "BLOCK_REQUEST") {
-    block_node->block_read_local(m->block);
+  } else if (m->operation == messages::IOoperation::OpType::BLOCK_REQUEST) {
+    block_node->block_read_local(m->block, m->pos, m->length, (m->pos == 0 && m->length == 0));
     IOoperation io_ops;
-    io_ops.operation = "BLOCK_TRANSFER"; 
+    io_ops.operation = messages::IOoperation::OpType::BLOCK_TRANSFER; 
     io_ops.block = move(m->block);
     tcp_connection->do_write(&io_ops);
 
-  } else if (m->operation == "BLOCK_UPDATE") {
+  } else if (m->operation == messages::IOoperation::OpType::BLOCK_UPDATE) {
     auto ret = block_node->block_update_local(m->block, m->pos, m->length);
     Reply reply;
 
@@ -73,7 +73,7 @@ void BlockNodeRouter::io_operation (messages::Message* m_, Channel* tcp_connecti
     }
     tcp_connection->do_write(&reply);
   
-  } else if (m->operation == "BLOCK_UPDATE_REPLICA") {
+  } else if (m->operation == messages::IOoperation::OpType::BLOCK_UPDATE_REPLICA) {
     block_node->block_update_local(m->block, m->pos, m->length, false);
   }
 }

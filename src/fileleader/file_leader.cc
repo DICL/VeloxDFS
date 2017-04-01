@@ -38,8 +38,12 @@ unique_ptr<Message> FileLeader::file_insert(messages::FileInfo* f) {
   uint32_t size_per_block = GET_INT("filesystem.block");
   uint32_t n_blocks = static_cast<uint32_t> (ceil((double)f->size /(double) size_per_block));
   INFO("%u block to be save for file %s", n_blocks, f->name.c_str());
+  fd->name = f->name;
+  fd->size = f->size;
+  fd->hash_key = f->hash_key;
 
   //Compute blocks information
+  /*
   int index = 0;
   for (uint32_t i = 0; i < n_blocks; i++) {
     auto block_name = f->name + "_" + to_string(i);
@@ -49,6 +53,7 @@ unique_ptr<Message> FileLeader::file_insert(messages::FileInfo* f) {
     fd->block_size.push_back(size_per_block);
     index = (index + 1) % network_size; 
   }
+  */
 
   return unique_ptr<Message>(fd);
 }
@@ -57,7 +62,7 @@ unique_ptr<Message> FileLeader::file_insert(messages::FileInfo* f) {
 bool FileLeader::file_insert_confirm(messages::FileInfo* f) {
   directory.file_table_confirm_upload(f->name, f->num_block);
 
-  for (auto& metadata : f->blocks) {
+  for (auto& metadata : f->blocks_metadata) {
     directory.block_table_insert(metadata);
   }
 
@@ -68,12 +73,19 @@ bool FileLeader::file_insert_confirm(messages::FileInfo* f) {
 // }}}
 // file_update {{{
 bool FileLeader::file_update(messages::FileUpdate* f) {
- if (file_exist(f->name)) {
-   directory.file_table_update(f->name, f->size, f->num_block);
-   INFO("Updating to SQLite db");
-   return true;
- }
- return false;
+  if (file_exist(f->name)) {
+    DEBUG("[file_update] name: %s, size: %lu, num_block: %d", f->name.c_str(), f->size, f->num_block);
+    directory.file_table_update(f->name, f->size, f->num_block);
+
+    for (auto& metadata : f->blocks_metadata) {
+      directory.block_table_insert(metadata);
+    }
+
+    INFO("Updating to SQLite db");
+    return true;
+  }
+
+  return false;
 }
 // }}}
 // file_delete {{{
@@ -103,8 +115,10 @@ unique_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
   if (fi.uploading == 1) //! Cancel if file is being uploading
     return unique_ptr<Message>(fd);
 
+  fd->hash_key = fi.hash_key;
   fd->replica = fi.replica;
   fd->size = fi.size;
+  fd->num_block = fi.num_block;
 
   int num_blocks = fi.num_block;
   for (int i = 0; i< num_blocks; i++) {
@@ -127,7 +141,7 @@ bool FileLeader::list (messages::FileList* m) {
 // }}}
 // file_exist {{{
 bool FileLeader::file_exist (std::string file_name) {
-  return directory.file_table_exists(file_name.c_str());
+  return directory.file_table_exists(file_name);
 }
 // }}}
 // replicate_metadata {{{
