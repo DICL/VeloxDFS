@@ -95,7 +95,7 @@ unique_ptr<FileDescription> get_file_description
 
 static bool file_exists_local(std::string filename) {
   ifstream ifile(filename);
-  return ifile;
+  return ifile.good();
 }
 // }}}
 // Constructors and misc {{{
