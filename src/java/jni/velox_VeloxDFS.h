@@ -9,67 +9,67 @@ extern "C" {
 #endif
 /*
  * Class:     velox_VeloxDFS
- * Method:    constructDFS
+ * Method:    constructVeloxDFS
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_velox_VeloxDFS_constructDFS
+JNIEXPORT jlong JNICALL Java_velox_VeloxDFS_constructVeloxDFS
   (JNIEnv *, jobject);
 
 /*
  * Class:     velox_VeloxDFS
- * Method:    destructDFS
+ * Method:    destructVeloxDFS
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_velox_VeloxDFS_destructDFS
+JNIEXPORT void JNICALL Java_velox_VeloxDFS_destructVeloxDFS
   (JNIEnv *, jobject);
 
 /*
  * Class:     velox_VeloxDFS
- * Method:    format
- * Signature: ()I
+ * Method:    open
+ * Signature: (Ljava/lang/String;)J
  */
-JNIEXPORT jint JNICALL Java_velox_VeloxDFS_format
-  (JNIEnv *, jobject);
-
-/*
- * Class:     velox_VeloxDFS
- * Method:    exists
- * Signature: (Ljava/lang/String;)Z
- */
-JNIEXPORT jboolean JNICALL Java_velox_VeloxDFS_exists
+JNIEXPORT jlong JNICALL Java_velox_VeloxDFS_open
   (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     velox_VeloxDFS
- * Method:    touch
- * Signature: (Ljava/lang/String;)Z
+ * Method:    close
+ * Signature: (J)Z
  */
-JNIEXPORT jboolean JNICALL Java_velox_VeloxDFS_touch
-  (JNIEnv *, jobject, jstring);
+JNIEXPORT jboolean JNICALL Java_velox_VeloxDFS_close
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     velox_VeloxDFS
+ * Method:    isOpen
+ * Signature: (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_velox_VeloxDFS_isOpen
+  (JNIEnv *, jobject, jlong);
 
 /*
  * Class:     velox_VeloxDFS
  * Method:    write
- * Signature: (Ljava/lang/String;[CJJ)J
+ * Signature: (JJ[BJJ)J
  */
 JNIEXPORT jlong JNICALL Java_velox_VeloxDFS_write
-  (JNIEnv *, jobject, jstring, jcharArray, jlong, jlong);
+  (JNIEnv *, jobject, jlong, jlong, jbyteArray, jlong, jlong);
 
 /*
  * Class:     velox_VeloxDFS
  * Method:    read
- * Signature: (Ljava/lang/String;[CJJ)J
+ * Signature: (JJ[BJJ)J
  */
 JNIEXPORT jlong JNICALL Java_velox_VeloxDFS_read
-  (JNIEnv *, jobject, jstring, jcharArray, jlong, jlong);
+  (JNIEnv *, jobject, jlong, jlong, jbyteArray, jlong, jlong);
 
 /*
  * Class:     velox_VeloxDFS
  * Method:    getMetadata
- * Signature: (Ljava/lang/String;)Lvelox/model/Metadata;
+ * Signature: (J)Lvelox/model/Metadata;
  */
 JNIEXPORT jobject JNICALL Java_velox_VeloxDFS_getMetadata
-  (JNIEnv *, jobject, jstring);
+  (JNIEnv *, jobject, jlong);
 
 #ifdef __cplusplus
 }

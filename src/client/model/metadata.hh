@@ -5,6 +5,8 @@
 #include <vector>
 #include <stdint.h>
 
+#include "block_metadata.hh"
+
 namespace velox {
   namespace model {
     struct metadata {
@@ -17,8 +19,8 @@ namespace velox {
       std::vector<std::string> blocks;
       std::vector<uint32_t> hash_keys;
       std::vector<uint64_t> block_size;
+      std::vector<block_metadata> block_data;
     };
-
   }
 }
 

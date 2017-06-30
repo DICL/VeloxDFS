@@ -128,6 +128,7 @@ unique_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
     fd->blocks.push_back(block_name);
     fd->hash_keys.push_back(bi.hash_key);
     fd->block_size.push_back(bi.size);
+    fd->block_hosts.push_back(bi.node);
   }
 
   return unique_ptr<Message>(fd);

@@ -17,6 +17,7 @@ struct FileDescription: public FileInfo {
   std::vector<std::string> blocks;
   std::vector<uint32_t> hash_keys;
   std::vector<uint64_t> block_size;
+  std::vector<std::string> block_hosts;
 };
 
 }
