@@ -114,20 +114,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a951173da7d8673ba58ddcebf61f5736b"></a><!-- doxytag: member="velox::VeloxDFS::destroy" ref="a951173da7d8673ba58ddcebf61f5736b" args="()" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>destroy</b> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9d1397d2cd8bd1b85a4d7387dbbf85ed"></a><!-- doxytag: member="velox::VeloxDFS::getDFS" ref="a9d1397d2cd8bd1b85a4d7387dbbf85ed" args="()" -->
-long&#160;</td><td class="memItemRight" valign="bottom"><b>getDFS</b> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee7fc800eaa4d8f8fb40ef49c7c74555"></a><!-- doxytag: member="velox::VeloxDFS::format" ref="aee7fc800eaa4d8f8fb40ef49c7c74555" args="()" -->
-native int&#160;</td><td class="memItemRight" valign="bottom"><b>format</b> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a682993dd9aa03e267a637c47fd489431"></a><!-- doxytag: member="velox::VeloxDFS::exists" ref="a682993dd9aa03e267a637c47fd489431" args="(String fileName)" -->
-native boolean&#160;</td><td class="memItemRight" valign="bottom"><b>exists</b> (String fileName)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9e8272581b32439f7ba88e5ca13ff83f"></a><!-- doxytag: member="velox::VeloxDFS::touch" ref="a9e8272581b32439f7ba88e5ca13ff83f" args="(String fileName)" -->
-native boolean&#160;</td><td class="memItemRight" valign="bottom"><b>touch</b> (String fileName)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a902eeebc769fd676387a3ae50e87c50d"></a><!-- doxytag: member="velox::VeloxDFS::write" ref="a902eeebc769fd676387a3ae50e87c50d" args="(String fileName, char[] buf, long off, long len)" -->
-native long&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (String fileName, char[] buf, long off, long len)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d84fc9d49f0c57e840ded494ecc290f"></a><!-- doxytag: member="velox::VeloxDFS::read" ref="a1d84fc9d49f0c57e840ded494ecc290f" args="(String fileName, char[] buf, long off, long len)" -->
-native long&#160;</td><td class="memItemRight" valign="bottom"><b>read</b> (String fileName, char[] buf, long off, long len)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e438debf56fec07e68e0f0d9e2e1a6f"></a><!-- doxytag: member="velox::VeloxDFS::getMetadata" ref="a7e438debf56fec07e68e0f0d9e2e1a6f" args="(String fileName)" -->
-native <a class="el" href="classvelox_1_1model_1_1Metadata.html">Metadata</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getMetadata</b> (String fileName)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af227668ac5bee4487747cd408c28c284"></a><!-- doxytag: member="velox::VeloxDFS::getVeloxDFS" ref="af227668ac5bee4487747cd408c28c284" args="()" -->
+long&#160;</td><td class="memItemRight" valign="bottom"><b>getVeloxDFS</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a528d66fd5a0ae7fb693202dba906fe34"></a><!-- doxytag: member="velox::VeloxDFS::open" ref="a528d66fd5a0ae7fb693202dba906fe34" args="(String name)" -->
+native long&#160;</td><td class="memItemRight" valign="bottom"><b>open</b> (String name)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9a948db10d56e588a059dad953aac979"></a><!-- doxytag: member="velox::VeloxDFS::close" ref="a9a948db10d56e588a059dad953aac979" args="(long fid)" -->
+native boolean&#160;</td><td class="memItemRight" valign="bottom"><b>close</b> (long fid)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adc45054d6ec400e5f8667f0b940f0636"></a><!-- doxytag: member="velox::VeloxDFS::isOpen" ref="adc45054d6ec400e5f8667f0b940f0636" args="(long fid)" -->
+native boolean&#160;</td><td class="memItemRight" valign="bottom"><b>isOpen</b> (long fid)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab54737783f4f9bf3a6e41ca1c3b13999"></a><!-- doxytag: member="velox::VeloxDFS::write" ref="ab54737783f4f9bf3a6e41ca1c3b13999" args="(long fid, long pos, byte[] buf, long off, long len)" -->
+native long&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (long fid, long pos, byte[] buf, long off, long len)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a893fa50e4845249919299946bea84524"></a><!-- doxytag: member="velox::VeloxDFS::read" ref="a893fa50e4845249919299946bea84524" args="(long fid, long pos, byte[] buf, long off, long len)" -->
+native long&#160;</td><td class="memItemRight" valign="bottom"><b>read</b> (long fid, long pos, byte[] buf, long off, long len)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6305acae48af9fcaa7a457cad2a4a502"></a><!-- doxytag: member="velox::VeloxDFS::getMetadata" ref="a6305acae48af9fcaa7a457cad2a4a502" args="(long fid)" -->
+native <a class="el" href="classvelox_1_1model_1_1Metadata.html">Metadata</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getMetadata</b> (long fid)</td></tr>
 <tr><td colspan="2"><h2><a name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae7883f3193db80d696297e7a02752096"></a><!-- doxytag: member="velox::VeloxDFS::[static initializer]" ref="ae7883f3193db80d696297e7a02752096" args="" -->
@@ -154,7 +154,7 @@ Static Package Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Apr 1 2017 16:20:11 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 4 2017 03:36:10 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
