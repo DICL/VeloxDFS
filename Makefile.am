@@ -3,7 +3,7 @@ include tests/Makefile.am
 AM_CPPFLAGS      = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h $(BOOST_CPPFLAGS)
 AM_CXXFLAGS      = $(CXXFLAGS) -Wall
 
-bin_PROGRAMS     = eclipse_node dfs
+bin_PROGRAMS     = eclipse_node veloxdfs
 
 messages_files   = src/messages/boundaries.cc      \
                    src/messages/message.cc         \
@@ -72,14 +72,15 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
                        src/fileleader/file_leader_router.cc
 
 
-dfs_SOURCES         = src/targets/client.cc \
-                      src/client/cli_driver.cc
+veloxdfs_SOURCES         = src/targets/client.cc \
+    		                   src/client/cli_driver.cc
 
 pkginclude_HEADERS  = src/client/vdfs.hh \
                       src/client/dfs.hh
 
 modelincludedir     = $(pkgincludedir)/model
-modelinclude_HEADERS = src/client/model/metadata.hh
+modelinclude_HEADERS = src/client/model/metadata.hh \
+												src/client/model/block_metadata.hh
 
 
 if COPY_SAMPLES

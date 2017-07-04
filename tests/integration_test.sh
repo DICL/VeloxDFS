@@ -55,11 +55,11 @@ node_pid=$!
 # Let it setup
 sleep 1
 
-./dfs put sample.txt || die "Put file problem"
+./veloxdfs put sample.txt || die "Put file problem"
 
 file scratch/sample.txt_0 &>/dev/null || die "DFS did not recieved the file"
 
 cd tmp
-../dfs get sample.txt || die "Get file problem"
+../veloxdfs get sample.txt || die "Get file problem"
 
 diff -s sample.txt ../sample.txt || die "Files are not identical"

@@ -1,35 +1,35 @@
 package velox;
 
-import java.lang.String;
-
 import velox.model.Metadata;
 
 public class VeloxDFS {
   static {
-    System.loadLibrary("dfs_jni");
+    System.loadLibrary("veloxdfs-jni");
   }
 
-  /* DFS Object Management */
-  private long mDFS = 0;
+  /* VDFS Object Management */
+  private long mVeloxDFS = 0;
 
-  private native long constructDFS();
-  private native void destructDFS();
+  private native long constructVeloxDFS();
+  private native void destructVeloxDFS();
 
   public VeloxDFS() {
-    mDFS = this.constructDFS();
+    mVeloxDFS = this.constructVeloxDFS();
   }
 
   public void destroy() {
-    this.destructDFS();
+    this.destructVeloxDFS();
   }
 
-  public long getDFS() { return mDFS; }
+  public long getVeloxDFS() { return mVeloxDFS; }
 
   /* Native Functions for Operations */
-  public native int format();
-  public native boolean exists(String fileName);
-  public native boolean touch(String fileName);
-  public native long write(String fileName, char[] buf, long off, long len); 
-  public native long read(String fileName, char[] buf, long off, long len); 
-  public native Metadata getMetadata(String fileName);
+  public native long open(String name);
+  public native boolean close(long fid);
+  public native boolean isOpen(long fid);
+
+  public native long write(long fid, long pos, byte[] buf, long off, long len);
+  public native long read(long fid, long pos, byte[] buf, long off, long len);
+
+  public native Metadata getMetadata(long fid);
 }

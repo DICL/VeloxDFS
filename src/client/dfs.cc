@@ -95,7 +95,7 @@ unique_ptr<FileDescription> get_file_description
 
 static bool file_exists_local(std::string filename) {
   ifstream ifile(filename);
-  return ifile;
+  return ifile.good();
 }
 // }}}
 // Constructors and misc {{{
@@ -827,7 +827,7 @@ uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint6
   vector<future<bool>> slave_sockets;
 
   uint64_t to_write_bytes = len;
-  uint64_t written_bytes = 0;
+  uint64_t written_bytes = 0ul;
 
   int block_beg_seq = (int) off / BLOCK_SIZE;
   int block_end_seq = (int) (len + off - 1) / BLOCK_SIZE;
@@ -852,7 +852,7 @@ uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint6
       metadata.file_name = file_name;
       metadata.hash_key = fd->hash_keys[i];
       metadata.seq = i;
-      metadata.size = std::max(fd->block_size[i], len_to_write);
+      metadata.size = std::max(fd->block_size[i], pos_to_update + len_to_write);
       metadata.type = static_cast<unsigned int>(FILETYPE::Normal);
       metadata.replica = fd->replica;
       metadata.node = nodes[which_server];
@@ -938,6 +938,7 @@ uint64_t DFS::read(std::string& file_name, char* buf, uint64_t off, uint64_t len
   uint32_t file_hash_key = h(file_name);
   auto socket = connect(file_hash_key);
 
+  // Get a file from dfs
   FileRequest fr;
   fr.name = file_name;
 
@@ -958,6 +959,7 @@ uint64_t DFS::read(std::string& file_name, char* buf, uint64_t off, uint64_t len
 
   uint64_t remain_len = len;
 
+  // Request blocks
   for(int i=block_beg_seq; i<=block_end_seq; i++) {
     uint32_t hash_key = fd->hash_keys[i];
     auto block_socket = connect(boundaries.get_index(hash_key));
@@ -976,6 +978,7 @@ uint64_t DFS::read(std::string& file_name, char* buf, uint64_t off, uint64_t len
 
     remain_len -= io_ops.length;
 
+    // What is it??
     if(io_ops.pos + io_ops.length > fd->block_size[i])
       break;
   }
@@ -1004,9 +1007,23 @@ model::metadata DFS::get_metadata(std::string& fname) {
     md.num_block = fd->num_block;
     md.type = fd->type;
     md.replica = fd->replica;
+    
+    // TODO: They must be removed
     md.blocks = fd->blocks;
     md.hash_keys = fd->hash_keys;
     md.block_size = fd->block_size;
+    
+    // set block metadata
+    for(int i=0; i<(int)fd->num_block; i++) {
+      model::block_metadata bdata;
+      bdata.name = fd->blocks[i];
+      bdata.size = fd->block_size[i];
+      bdata.host = fd->block_hosts[i];
+      bdata.index = i;
+      bdata.file_name = fd->name;
+
+      md.block_data.push_back(bdata);
+    }
   }
 
   return md;

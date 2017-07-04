@@ -3,6 +3,7 @@
 #include "../common/hash.hh"
 
 #include <chrono>
+#include <cstring>
 
 using namespace velox;
 
@@ -139,6 +140,15 @@ vdfs& vdfs::operator=(vdfs& rhs) {
 // }}}
 // open {{{
 file vdfs::open(std::string name) {
+  // Examine if file is already opened
+  if(opened_files != nullptr) {
+    for(auto f : *opened_files) {
+      if(f.name.compare(name) == 0)
+        return f;
+    }
+  }
+
+  // When a file doesn't exist
   dfs->touch(name);
 
   velox::file new_file(this, name, true);
