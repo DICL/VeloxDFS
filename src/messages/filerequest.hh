@@ -11,6 +11,7 @@ struct FileRequest: public Message {
 
   std::string get_type() const override;
   std::string name;
+  std::string type;
 };
 
 }

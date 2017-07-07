@@ -39,7 +39,8 @@ static std::map<std::string, std::string> default_ops {
   {"network.serialization", "binary"},
   {"fileystem.block", "137438953"},
   {"fileystem.buffer", "512"},
-  {"fileystem.replica", "1"} 
+  {"fileystem.replica", "1"},
+  {"addons.zk.enabled", "false"} 
 };
 
 using std::cout;

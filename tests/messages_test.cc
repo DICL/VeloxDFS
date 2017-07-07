@@ -17,7 +17,7 @@ SUITE(MESSAGES) {
     b->set_destination (2);
     
     string* a_out = save_message(a);
-    string* b_out = save_message(b);
+    //string* b_out = save_message(b);
     boost::asio::streambuf a_buf, b_buf;
     ostream os (&a_buf);
     os << std::noskipws << *a_out;

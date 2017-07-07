@@ -19,7 +19,7 @@ AX_CXX_COMPILE_STDCXX([14], [noext], [mandatory])
 
 # Arguments {{{
 AC_ARG_ENABLE([samples],
-    AS_HELP_STRING([--disable-samples], [copy sample of eclipse.json]))
+    [AS_HELP_STRING([--disable-samples], [copy sample of eclipse.json])])
 
 # Configure options: --enable-debug[=no].
 AC_ARG_ENABLE([debug],
@@ -28,6 +28,7 @@ AC_ARG_ENABLE([debug],
 
 AM_CONDITIONAL(COPY_SAMPLES, [test "$enable_samples" != no ])
 AX_BOOST_STATIC_LINKAGE
+
 
 #}}}
 # Dependencies checkings {{{
@@ -59,6 +60,9 @@ AC_SUBST(libdirfull)
 
 AH_TEMPLATE([ECLIPSE_CONF_PATH],[Configuration files (ETC) for Eclipse])
 AC_DEFINE_UNQUOTED([ECLIPSE_CONF_PATH], ["$sysconfdirfull"])
+
+AH_TEMPLATE([IO_STAT_SCRIPT],[IOSTATS path])
+AC_DEFINE_UNQUOTED([IO_STAT_SCRIPT], ["${bindirfull}/read_io_stats.sh"])
 #}}}
 #OUTPUT{{{
 AC_OUTPUT

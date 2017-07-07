@@ -4,6 +4,7 @@
 #include <network/simple_router.hh>
 #include <fileleader/file_leader_router.hh>
 #include <blocknode/block_node_router.hh>
+#include <src/stats/io_monitor_invoker.hh>
 #include <memory>
 
 using namespace eclipse;
@@ -25,6 +26,7 @@ int main (int argc, char ** argv) {
 
   external_net->establish();
 
+  invoke_io_reporter();
   context.join();
 
   return EXIT_SUCCESS;
