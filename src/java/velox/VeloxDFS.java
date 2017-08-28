@@ -1,6 +1,6 @@
-package velox;
+package com.dicl.velox;
 
-import velox.model.Metadata;
+import com.dicl.velox.model.Metadata;
 
 public class VeloxDFS {
   static {
@@ -32,4 +32,10 @@ public class VeloxDFS {
   public native long read(long fid, long pos, byte[] buf, long off, long len);
 
   public native Metadata getMetadata(long fid);
+
+  public native boolean remove(String name);
+
+  public native boolean exists(String name);
+
+  public native Metadata[] list(boolean all, String name);
 }

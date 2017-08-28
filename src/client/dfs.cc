@@ -955,9 +955,8 @@ uint64_t DFS::read(std::string& file_name, char* buf, uint64_t off, uint64_t len
   int block_beg_seq = (int) off / BLOCK_SIZE;
   int block_end_seq = (int) (len + off - 1) / BLOCK_SIZE;
 
-  std::string output = "";
-
   uint64_t remain_len = len;
+  uint64_t read_bytes = 0;
 
   // Request blocks
   for(int i=block_beg_seq; i<=block_end_seq; i++) {
@@ -973,60 +972,79 @@ uint64_t DFS::read(std::string& file_name, char* buf, uint64_t off, uint64_t len
     auto slave_socket = connect(boundaries.get_index(fd->hash_keys[i]));
     send_message(slave_socket.get(), &io_ops);
     auto msg = read_reply<IOoperation>(slave_socket.get());
-    output += msg->block.second;
+    memcpy(buf + read_bytes, msg->block.second.c_str(), (size_t)msg->block.second.length());
     slave_socket->close();
 
     remain_len -= io_ops.length;
+    read_bytes += io_ops.length;
 
-    // What is it??
+    if(remain_len <= 0) break;
+
     if(io_ops.pos + io_ops.length > fd->block_size[i])
       break;
   }
 
-  strcpy(buf, output.c_str());
-
-  return (uint64_t)output.length();
+  return read_bytes;
 }
 // }}}
-// get_metadata {{{
-model::metadata DFS::get_metadata(std::string& fname) {
+model::metadata make_metadata(FileInfo* fi) {
   model::metadata md;
-
-  FileRequest fr;
-  fr.name = fname;
-
-  auto socket = connect(h(fname));
-  send_message(socket.get(), &fr);
-  auto fd = (read_reply<FileDescription> (socket.get()));
-  socket->close();
-
-  if(fd != nullptr) {
+  if(FileDescription* fd = dynamic_cast<FileDescription*>(fi)) {
     md.name = fd->name;
     md.hash_key = fd->hash_key;
     md.size = fd->size;
     md.num_block = fd->num_block;
     md.type = fd->type;
     md.replica = fd->replica;
-    
+
     // TODO: They must be removed
     md.blocks = fd->blocks;
     md.hash_keys = fd->hash_keys;
     md.block_size = fd->block_size;
-    
+
+    //auto port = GET_INT("network.ports.internal");
+
     // set block metadata
     for(int i=0; i<(int)fd->num_block; i++) {
       model::block_metadata bdata;
-      bdata.name = fd->blocks[i];
+      bdata.name = fd->blocks[i];//fd->block_hosts[i] + ":" + to_string(port);
       bdata.size = fd->block_size[i];
       bdata.host = fd->block_hosts[i];
       bdata.index = i;
       bdata.file_name = fd->name;
 
-      md.block_data.push_back(bdata);
+      md.block_data.push_back(std::move(bdata));
     }
   }
+  else {
+    md.name = fi->name;
+    md.hash_key = fi->hash_key;
+    md.size = fi->size;
+    md.num_block = fi->num_block;
+    md.type = fi->type;
+    md.replica = fi->replica;
+    md.has_block_data = false;
+  }
 
-  return md;
+  return std::move(md);
+}
+// get_metadata {{{
+model::metadata DFS::get_metadata(std::string& fname) {
+  FileRequest fr;
+  fr.name = fname;
+
+  auto socket = connect(h(fname));
+  send_message(socket.get(), &fr);
+  //auto fd = (read_reply<FileDescription> (socket.get()));
+  auto fd = (read_reply<FileDescription> (socket.get()));
+  socket->close();
+
+  if(fd != nullptr) {
+    FileInfo& fi = *fd;
+    return make_metadata(&fi);
+  }
+  else
+    return model::metadata();
 }
 // }}}
 // get_metadata_all {{{
@@ -1044,6 +1062,7 @@ vector<model::metadata> DFS::get_metadata_all() {
   vector<model::metadata> metadata_vector;
 
   for (auto fd : total) {
+  /*
     model::metadata md;
     md.name = fd.name;
     md.hash_key = fd.hash_key;
@@ -1052,6 +1071,8 @@ vector<model::metadata> DFS::get_metadata_all() {
     md.type = fd.type;
     md.replica = fd.replica;
     metadata_vector.push_back(md);
+    */
+    metadata_vector.push_back(make_metadata(&fd));
   }
   
   return move(metadata_vector);
