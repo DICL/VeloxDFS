@@ -19,7 +19,7 @@ ClientHandler::ClientHandler (uint32_t p):
 // }}}
 // connect {{{
 void ClientHandler::connect(uint32_t i, shared_ptr<Server> server) {
-  spawn(context.io, [&, node=nodes[i], p=this->port](boost::asio::yield_context yield) {
+  spawn(context.io, [&, node=nodes[i], p=this->port, i, server](boost::asio::yield_context yield) {
       shared_ptr<Server> s = server;
       boost::system::error_code ec;
       tcp::resolver resolver (context.io);
