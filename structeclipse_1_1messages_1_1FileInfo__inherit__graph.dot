@@ -1,10 +1,10 @@
-digraph G
+digraph "eclipse::messages::FileInfo"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="eclipse::messages::FileInfo",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 [label="eclipse::messages::\lFileInfo",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
   Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="eclipse::messages::Message",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1Message.html"];
+  Node2 [label="eclipse::messages::\lMessage",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1Message.html"];
   Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node3 [label="eclipse::messages::FileDescription",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1FileDescription.html"];
+  Node3 [label="eclipse::messages::\lFileDescription",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1FileDescription.html"];
 }

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['logger',['Logger',['../classLogger.html',1,'']]]
+  ['iooperation',['IOoperation',['../structeclipse_1_1messages_1_1IOoperation.html',1,'eclipse::messages']]]
 ];

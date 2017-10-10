@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['file_5fexist',['file_exist',['../classeclipse_1_1PeerDFS.html#a135f881e1df18800d9746247fa9a7c7b',1,'eclipse::PeerDFS']]]
+  ['append',['append',['../classvelox_1_1DFS.html#a7a2f893a17864b8d9a9bdd54f1ba9aca',1,'velox::DFS']]],
+  ['asyncchannel',['AsyncChannel',['../classeclipse_1_1network_1_1AsyncChannel.html#a6714b0081ecc4b92b6e8391e063adb28',1,'eclipse::network::AsyncChannel']]]
 ];
