@@ -16,6 +16,7 @@ static int file_callback(void *file_info, int argc, char **argv, char **azColNam
   file->hash_key      = atoi(argv[i++]);
   file->size          = atoll(argv[i++]);
   file->num_block     = atoi(argv[i++]);
+  file->n_lblock     = atoi(argv[i++]);
   file->type          = atoi(argv[i++]);
   file->replica       = atoi(argv[i++]);
   file->uploading     = atoi(argv[i]);
@@ -49,6 +50,7 @@ static int file_list_callback(void *list, int argc, char **argv, char **azColNam
     tmp_file.hash_key  = atoi(argv[i++]);
     tmp_file.size      = atoll(argv[i++]);
     tmp_file.num_block = atoi(argv[i++]);
+    tmp_file.n_lblock  = atoi(argv[i++]);
     tmp_file.type      = atoi(argv[i++]);
     tmp_file.replica   = atoi(argv[i++]);
     file_list->push_back(tmp_file);
@@ -127,6 +129,7 @@ void Directory::create_tables() {
       hash_key   INT   NOT NULL, \
       size       INT   NOT NULL, \
       num_block  INT   NOT NULL, \
+      n_lblock   INT   NOT NULL, \
       type       INT   NOT NULL, \
       replica    INT   NOT NULL, \
       uploading  INT   NOT NULL, \
@@ -159,12 +162,13 @@ void Directory::file_table_insert (FileInfo &file_info) {
   char sql[DEFAULT_QUERY_SIZE];
   
   sprintf(sql, "INSERT INTO file_table (\
-    name, hash_key, size, num_block, type, replica, uploading)\
-    VALUES('%s', %" PRIu32 ", %" PRIu64 ", %u, %u, %u, %u);",
+    name, hash_key, size, num_block, n_lblock, type, replica, uploading)\
+    VALUES('%s', %" PRIu32 ", %" PRIu64 ", %u, %u, %u, %u, %u);",
       file_info.name.c_str(),
       file_info.hash_key,
       file_info.size,
       file_info.num_block,
+      file_info.n_lblock,
       file_info.type,
       file_info.replica,
       file_info.uploading);

@@ -31,6 +31,7 @@
 #include "blockstatus.hh"
 #include "IOoperation.hh"
 #include "../common/blockmetadata.hh"
+#include "../common/logical_block_metadata.hh"
 
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/tracking.hpp>
@@ -71,6 +72,7 @@ template <typename Archive> void serialize (Archive&, eclipse::messages::MetaDat
 template <typename Archive> void serialize (Archive&, eclipse::messages::BlockStatus&, unsigned);
 template <typename Archive> void serialize (Archive&, eclipse::BlockMetadata&, unsigned);
 template <typename Archive> void serialize (Archive&, eclipse::messages::IOoperation&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::logical_block_metadata&, unsigned);
 }
 }
 
@@ -101,6 +103,7 @@ BOOST_CLASS_EXPORT_KEY(eclipse::messages::MetaData);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::BlockStatus);
 BOOST_CLASS_EXPORT_KEY(eclipse::BlockMetadata);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::IOoperation);
+BOOST_CLASS_EXPORT_KEY(eclipse::logical_block_metadata);
 
 // 4) and here
 BOOST_CLASS_TRACKING(eclipse::messages::Message, boost::serialization::track_never);
@@ -127,3 +130,4 @@ BOOST_CLASS_TRACKING(eclipse::messages::FileExist, boost::serialization::track_n
 BOOST_CLASS_TRACKING(eclipse::messages::BlockStatus, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::BlockMetadata, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::IOoperation, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::logical_block_metadata, boost::serialization::track_never);

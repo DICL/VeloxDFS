@@ -2,6 +2,9 @@
 #include "file_leader.hh"
 #include "../messages/boost_impl.hh"
 #include "../messages/filedescription.hh"
+#include "../common/logical_block_metadata.hh"
+#include "../stats/logical_blocks_scheduler.hh"
+#include <set>
 
 using namespace eclipse;
 using namespace eclipse::messages;
@@ -41,19 +44,6 @@ unique_ptr<Message> FileLeader::file_insert(messages::FileInfo* f) {
   fd->name = f->name;
   fd->size = f->size;
   fd->hash_key = f->hash_key;
-
-  //Compute blocks information
-  /*
-  int index = 0;
-  for (uint32_t i = 0; i < n_blocks; i++) {
-    auto block_name = f->name + "_" + to_string(i);
-    uint64_t hash_key = boundaries->random_within_boundaries(index);
-    fd->blocks.push_back(block_name);
-    fd->hash_keys.push_back(hash_key);
-    fd->block_size.push_back(size_per_block);
-    index = (index + 1) % network_size; 
-  }
-  */
 
   return unique_ptr<Message>(fd);
 }
@@ -121,7 +111,7 @@ unique_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
   fd->num_block = fi.num_block;
 
   int num_blocks = fi.num_block;
-  for (int i = 0; i< num_blocks; i++) {
+  for (int i = 0; i < num_blocks; i++) {
     BlockInfo bi;
     directory.block_table_select(file_name, i, &bi);
     string block_name = bi.name;
@@ -130,6 +120,9 @@ unique_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
     fd->block_size.push_back(bi.size);
     fd->block_hosts.push_back(bi.node);
   }
+
+  if (m->type == "LOGICAL_BLOCKS")
+    find_best_arrangement(fd);
 
   return unique_ptr<Message>(fd);
 }
@@ -173,5 +166,15 @@ bool FileLeader::format () {
   local_io.format();
   directory.create_tables();
   return true;
+}
+// }}}
+// find_best_arrangement {{{
+void FileLeader::find_best_arrangement(messages::FileDescription* file_desc) {
+  using namespace eclipse::logical_blocks_schedulers;
+  auto nodes = context.settings.get<vec_str>("network.nodes");
+
+  auto scheduler = scheduler_factory(GET_STR("addons.block_scheduler"), boundaries.get());
+
+  scheduler->generate(*file_desc, nodes);
 }
 // }}}

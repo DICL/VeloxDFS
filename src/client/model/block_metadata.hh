@@ -3,6 +3,7 @@
 
 #include <string>
 #include <stdint.h>
+#include <vector>
 
 namespace velox {
   namespace model {
@@ -12,6 +13,7 @@ namespace velox {
       std::string host;
       int index;
       std::string file_name;
+      std::vector<std::string> chunks_path;
     };
   }
 }
