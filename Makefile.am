@@ -18,7 +18,6 @@ messages_files   = src/messages/boundaries.cc      \
                    src/messages/fileupdate.cc      \
                    src/messages/blockinfo.cc       \
                    src/messages/blockupdate.cc     \
-                   src/messages/task.cc            \
                    src/messages/reply.cc           \
                    src/messages/filerequest.cc     \
                    src/messages/blockrequest.cc    \
@@ -79,9 +78,8 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
 
 eclipse_node_LDADD   = $(LDADD) -lzookeeper_mt
 
-
 veloxdfs_SOURCES     = src/targets/client.cc \
-    		               src/client/cli_driver.cc
+                       src/client/cli_driver.cc
 
 velox_get_config_SOURCES = src/targets/velox_get_config.cc
 
@@ -90,7 +88,7 @@ pkginclude_HEADERS  = src/client/vdfs.hh \
 
 modelincludedir     = $(pkgincludedir)/model
 modelinclude_HEADERS = src/client/model/metadata.hh \
-												src/client/model/block_metadata.hh
+                       src/client/model/block_metadata.hh
 
 
 if COPY_SAMPLES

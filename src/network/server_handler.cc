@@ -5,6 +5,7 @@
 #include <boost/bind.hpp>
 #include <boost/asio/error.hpp>
 #include <boost/asio/spawn.hpp>
+#include <boost/exception/exception.hpp>
 #include <memory>
 #include <vector>
 
@@ -23,15 +24,28 @@ bool ServerHandler::establish () {
   auto& iosvc = context.io;
 
   spawn(iosvc,[&, p=this->port](boost::asio::yield_context yield) {
-      DEBUG("Listening at port %u", p);
+      INFO("Listening at port %u", p);
       tcp::acceptor acceptor (iosvc, tcp::endpoint(tcp::v4(), p) );
-        boost::system::error_code ec;
-        for (;;) {
+      acceptor.listen(1);
+      boost::system::error_code ec;
+
+      for (;;) {
+        try {
           auto server = make_shared<Server>(node);
           acceptor.async_accept(server->get_socket(), yield[ec]);
+
           DEBUG("Client accepted");
-          if (!ec) 
+          if (!ec)  {
             server->do_read();
+          } else {
+            ERROR("ERROR in acceptor reason: %s", ec.message().c_str());
+          }
+
+          } catch (exception& e) {
+            INFO("Server exception %s", e.what());
+          } catch (boost::exception& e) {
+            INFO("Acceptor exception %s", diagnostic_information(e).c_str());
+          }
         }
       });
   return true;

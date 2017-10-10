@@ -28,6 +28,7 @@ class Directory {
     void block_table_update(std::string, uint32_t, uint32_t);
     void block_table_delete(std::string, uint32_t);
     void block_table_delete_all(std::string);
+    void select_last_block_metadata(std::string, BlockInfo*);
 
   protected:
     bool query_exec_simple(char*, int (*)(void*,int,char**,char**), void*);

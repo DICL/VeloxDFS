@@ -11,7 +11,6 @@
 #include "keyvalue.hh"
 #include "control.hh"
 #include "keyrequest.hh"
-#include "task.hh"
 #include "fileinfo.hh"
 #include "filelist.hh"
 #include "blockinfo.hh"
@@ -53,7 +52,6 @@ template <typename Archive> void serialize (Archive&, eclipse::messages::KeyValu
 template <typename Archive> void serialize (Archive&, eclipse::messages::OffsetKeyValue&, unsigned);
 template <typename Archive> void serialize (Archive&, eclipse::messages::Control&, unsigned);
 template <typename Archive> void serialize (Archive&, eclipse::messages::KeyRequest&, unsigned);
-template <typename Archive> void serialize (Archive&, eclipse::messages::Task&, unsigned);
 template <typename Archive> void serialize (Archive&, eclipse::messages::FileInfo&, unsigned);
 template <typename Archive> void serialize (Archive&, eclipse::messages::FileUpdate&, unsigned);
 template <typename Archive> void serialize (Archive&, eclipse::messages::FileList&, unsigned);
@@ -84,7 +82,6 @@ BOOST_CLASS_EXPORT_KEY(eclipse::messages::KeyValue);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::OffsetKeyValue);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::Control);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::KeyRequest);
-BOOST_CLASS_EXPORT_KEY(eclipse::messages::Task);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileInfo);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileUpdate);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileList);
@@ -116,7 +113,6 @@ BOOST_CLASS_TRACKING(eclipse::messages::FileInfo, boost::serialization::track_ne
 BOOST_CLASS_TRACKING(eclipse::messages::FileUpdate, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::BlockInfo, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::BlockUpdate, boost::serialization::track_never);
-BOOST_CLASS_TRACKING(eclipse::messages::Task, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::FileList, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::Reply, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::CacheInfo, boost::serialization::track_never);

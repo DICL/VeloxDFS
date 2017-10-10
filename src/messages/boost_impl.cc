@@ -112,15 +112,6 @@ template <typename Archive>
   }
 
 template <typename Archive>
-  void serialize (Archive& ar, eclipse::messages::Task& c, unsigned int) {
-    ar & BASE_OBJECT(Message, c);
-    ar & BOOST_SERIALIZATION_NVP(c.id);
-    ar & BOOST_SERIALIZATION_NVP(c.type);
-    ar & BOOST_SERIALIZATION_NVP(c.library);
-    ar & BOOST_SERIALIZATION_NVP(c.input_path);
-    ar & BOOST_SERIALIZATION_NVP(c.func_name);
-  }
-template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::FileList& c, unsigned int) {
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.data);
@@ -279,10 +270,6 @@ template void serialize (boost::archive::xml_iarchive&,  KeyRequest&, unsigned);
 template void serialize (boost::archive::binary_iarchive&,  KeyRequest&, unsigned);
 template void serialize (boost::archive::binary_oarchive&,  KeyRequest&, unsigned);
 
-template void serialize (boost::archive::xml_oarchive&, Task&, unsigned);
-template void serialize (boost::archive::xml_iarchive&,  Task&, unsigned);
-template void serialize (boost::archive::binary_iarchive&,  Task&, unsigned);
-template void serialize (boost::archive::binary_oarchive&,  Task&, unsigned);
 
 template void serialize (boost::archive::xml_oarchive&, FileInfo&, unsigned);
 template void serialize (boost::archive::xml_iarchive&,  FileInfo&, unsigned);
@@ -388,7 +375,6 @@ BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::KeyValue);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::OffsetKeyValue);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::Control);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::KeyRequest);
-BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::Task);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FileInfo);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FileUpdate);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FileList);

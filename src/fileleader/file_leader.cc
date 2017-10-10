@@ -65,10 +65,26 @@ bool FileLeader::file_insert_confirm(messages::FileInfo* f) {
 bool FileLeader::file_update(messages::FileUpdate* f) {
   if (file_exist(f->name)) {
     DEBUG("[file_update] name: %s, size: %lu, num_block: %d", f->name.c_str(), f->size, f->num_block);
-    directory.file_table_update(f->name, f->size, f->num_block);
 
-    for (auto& metadata : f->blocks_metadata) {
-      directory.block_table_insert(metadata);
+    if (f->is_append) {
+      BlockInfo bi;
+      directory.select_last_block_metadata(f->name, &bi);
+      int last_seq = bi.seq;
+
+      for (auto& metadata : f->blocks_metadata) {
+        metadata.seq = ++last_seq;
+        directory.block_table_insert(metadata);
+      }
+
+      FileInfo fi;
+      directory.file_table_select(f->name, &fi);
+      directory.file_table_update(f->name, f->size + fi.size, last_seq + 1);
+
+    } else {
+      directory.file_table_update(f->name, f->size, f->num_block);
+      for (auto& metadata : f->blocks_metadata) {
+        directory.block_table_insert(metadata);
+      }
     }
 
     INFO("Updating to SQLite db");

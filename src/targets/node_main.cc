@@ -27,6 +27,7 @@ int main (int argc, char ** argv) {
   external_net->establish();
 
   invoke_io_reporter();
+  context.run();
   context.join();
 
   return EXIT_SUCCESS;

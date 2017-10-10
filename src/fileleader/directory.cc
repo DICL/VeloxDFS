@@ -94,7 +94,7 @@ static sqlite3* open(string path) {
           SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL)) != SQLITE_OK) {
     ERROR("Can't open database: %i", rc);
   } else {
-    INFO("Opened database successfully");
+    DEBUG("Opened database successfully");
   }
   return db;
 }
@@ -108,13 +108,25 @@ Directory::Directory() {
 // query_exec_simple {{{
 bool Directory::query_exec_simple(char* query, int (*fn)(void*,int,char**,char**) = NULL, void* argv = NULL) {
   char *zErrMsg = nullptr;
+  sqlite3* db = nullptr;
 
-  sqlite3* db = open(path);
-  int rc = sqlite3_exec(db, query, fn, argv, &zErrMsg);
-  if (rc != SQLITE_OK) {
-    ERROR("SQL error: %s", zErrMsg);
-    sqlite3_free(zErrMsg);
-  }
+  int rc = SQLITE_OK;
+  do {
+    db = open(path);
+    rc = sqlite3_exec(db, query, fn, argv, &zErrMsg);
+    if (rc != SQLITE_OK) {
+      ERROR("SQL error: %s error_code=%d", zErrMsg, rc);
+      sqlite3_free(zErrMsg);
+      zErrMsg = nullptr;
+      if (rc == SQLITE_LOCKED or rc == SQLITE_BUSY) {
+        INFO("SQLITE locked, retrying...");
+        sleep(1); // Try again
+      }
+      else 
+        break;
+    }
+  } while (SQLITE_OK != rc);
+
   sqlite3_close(db);
 
   return rc;
@@ -136,7 +148,7 @@ void Directory::create_tables() {
       PRIMARY KEY (name));"); 
 
   if (query_exec_simple(sql))
-    INFO("file_table created successfully");
+    DEBUG("file_table created successfully");
 
   sprintf(sql, "CREATE TABLE IF NOT EXISTS block_table( \
       name          TEXT      NOT NULL, \
@@ -153,7 +165,7 @@ void Directory::create_tables() {
       PRIMARY KEY (name));"); 
 
   if (query_exec_simple(sql))
-    INFO("block_table created successfully");
+    DEBUG("block_table created successfully");
 }
 // }}}
 
@@ -307,4 +319,16 @@ void Directory::block_table_delete_all(string file_name) {
   if (query_exec_simple(sql))
     DEBUG("block_metadata deleted successfully");
 }
+// }}}
+// select_last_block_metadata {{{
+void Directory::select_last_block_metadata(string file_name, 
+    BlockInfo *block_info) {
+  char sql[DEFAULT_QUERY_SIZE];
+
+  sprintf(sql, "SELECT * FROM block_table WHERE (file_name='%s') \
+      ORDER BY seq DESC LIMIT 1;", file_name.c_str());
+
+  if (query_exec_simple(sql, block_callback, (void*)block_info))
+    DEBUG("The last block_metadata selected successfully");
+} 
 // }}}
