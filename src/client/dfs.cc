@@ -1067,7 +1067,7 @@ model::metadata DFS::get_metadata_optimized(std::string& fname) {
 
   FileRequest fr;
   fr.name = fname;
-  fr.type = "MAPREDUCE";
+  fr.type = "LOGICAL_BLOCKS";
 
   auto socket = connect(h(fname));
   send_message(socket.get(), &fr);

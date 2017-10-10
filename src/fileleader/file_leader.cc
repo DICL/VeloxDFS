@@ -121,7 +121,7 @@ unique_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
     fd->block_hosts.push_back(bi.node);
   }
 
-  if (m->type == "MAPREDUCE")
+  if (m->type == "LOGICAL_BLOCKS")
     find_best_arrangement(fd);
 
   return unique_ptr<Message>(fd);
