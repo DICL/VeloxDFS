@@ -16,6 +16,7 @@ Local_io::Local_io() {
 //  }}}
 // write {{{
 //! @brief Unbuffered write to disk
+/*
 void Local_io::write (std::string name, std::string& v) {
   string file_path = disk_path + string("/") + name;
   ofstream file;
@@ -24,6 +25,46 @@ void Local_io::write (std::string name, std::string& v) {
   file.open(file_path, ios::binary);  //! Binary write
   file.write(v.c_str(), v.length());
   file.close();
+}
+*/
+
+void Local_io::write (std::string name, std::string& v) {
+	//split path  
+  std::size_t curpos = name.find_first_not_of("/", 0);
+  std::size_t delimpos = name.find_first_of("/", curpos);
+
+	std::vector<std::string> path_tokens;
+
+  while(true){
+    if(curpos == std::string::npos) break;
+    path_tokens.push_back(name.substr(curpos, delimpos-curpos));
+    curpos = name.find_first_not_of("/", delimpos);
+    delimpos = name.find_first_of("/", curpos);
+  }
+	//
+
+  ofstream file;
+  string curPath = disk_path;
+
+	//make dir if not exist
+  for(string& token : path_tokens){
+    curPath += "/" + token;
+    
+    if(token == path_tokens.back()){
+      file.rdbuf()->pubsetbuf(0, 0);      //! No buffer
+      file.open(curPath, ios::binary);  //! Binary write
+  		file.write(v.c_str(), v.length());
+      file.close();
+    }
+    else {
+      struct stat st = {0};
+      //create directory
+      if(stat(curPath.c_str(), &st) == -1){
+        mkdir(curPath.c_str(), 0777);
+      }
+    }
+  }
+//
 }
 // }}}
 // update {{{

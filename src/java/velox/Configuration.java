@@ -1,4 +1,4 @@
-package velox;
+package com.dicl.velox;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -30,5 +30,13 @@ public class Configuration {
 
     public long blockSize() {
       return (Long)((JSONObject)conf.get("filesystem")).get("block");
+    }
+
+    public long numOfReplications() {
+      return (Long)((JSONObject)conf.get("filesystem")).get("replica");
+    }
+
+    public String storagePath() {
+      return (String)((JSONObject)conf.get("path")).get("scratch");
     }
 }

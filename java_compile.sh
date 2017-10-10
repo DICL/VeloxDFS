@@ -6,14 +6,16 @@ GENERAL_CLASSES=( Configuration )
 JAVA_SOURCE_PATH=./src/java/velox
 JAVA_BUILD_PATH=./build/java
 
+JAVA_PACKAGE=com.dicl.velox
+
 if [ ! -d "$JAVA_BUILD_PATH" ]; then
-  mkdir $JAVA_BUILD_PATH
+  mkdir -p $JAVA_BUILD_PATH
 fi
 
 LIB_PATH=./build/lib
 
 JNI_PATH=$JAVA_SOURCE_PATH/../jni
-JNI_SOURCE_NAMES=( velox_VeloxDFS.cc )
+JNI_SOURCE_NAMES=( VeloxDFS.cc )
 JNI_OUTPUT_NAMES=( libveloxdfs-jni.so )
 
 echo "COMPILING JAVA sources in \`$JAVA_BUILD_PATH\`..";
@@ -25,9 +27,13 @@ echo "javac -cp ${CLASSPATH} -d $JAVA_BUILD_PATH ${SOURCES[@]/#/$JAVA_SOURCE_PAT
 javac -d $JAVA_BUILD_PATH ${SOURCES[@]/#/$JAVA_SOURCE_PATH/};
 
 echo "CREATING jni header files in \`$JNI_PATH\`..";
-javah -jni -d $JNI_PATH ${JNI_CLASSES[@]/#/velox.};
+javah -jni -d $JNI_PATH ${JNI_CLASSES[@]/#/${JAVA_PACKAGE}.};
 
-JNI_HEADER_PATH=/usr/lib/jvm/java-1.7.0-openjdk/include
+if [[ ! "$JAVA_HOME" ]]; then
+  JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.131-3.b12.el7_3.x86_64
+fi
+
+JNI_HEADER_PATH=$JAVA_HOME/include
 
 echo "CREATING jni libraries in \`$LIB_PATH\`..";
 i=0
@@ -40,3 +46,9 @@ for source_file in ${JNI_SOURCE_NAMES[*]}; do
   $JNI_PATH/$source_file;
   let i=i+1
 done
+
+cd $JAVA_BUILD_PATH;
+
+jar cf veloxdfs.jar com;
+
+cd -;

@@ -1,4 +1,4 @@
-package velox.model;
+package com.dicl.velox.model;
 
 import java.lang.String;
 
@@ -8,6 +8,8 @@ public class BlockMetadata {
   public int index;
   public String fileName;
   public long size;
+
+  public BlockMetadata() { }
 
   public BlockMetadata(BlockMetadata that) {
     this.name = that.name;

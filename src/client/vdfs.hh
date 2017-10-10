@@ -55,6 +55,7 @@ class vdfs {
     velox::file upload(std::string);
 
     bool rm(std::string);
+    bool rm(long);
     bool format();
 
     bool exists(std::string);
@@ -65,6 +66,8 @@ class vdfs {
     model::metadata get_metadata(long fid);
 
     void append(std::string, std::string);
+
+    std::vector<model::metadata> list(bool all, std::string name = "");
 
   protected:
     DFS* dfs;

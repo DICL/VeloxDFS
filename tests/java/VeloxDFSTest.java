@@ -3,9 +3,9 @@ import java.lang.Thread;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-import velox.VeloxDFS;
-import velox.model.Metadata;
-import velox.model.BlockMetadata;
+import com.dicl.velox.VeloxDFS;
+import com.dicl.velox.model.Metadata;
+import com.dicl.velox.model.BlockMetadata;
 
 class VeloxDFSTest {
   public static void main(String[] args) throws InterruptedException {
@@ -22,8 +22,16 @@ class VeloxDFSTest {
       System.out.println("isOpen..     \tOK!");
     }  
 
-    Metadata metaData = vdfs.getMetadata(fd);
+    if(vdfs.exists(targetName))
+      System.out.println("File exists");
+
+    Metadata[] list = vdfs.list(false, "/");
+    for(int i=0; i<list.length; i++)
+      System.out.println(list[i].name);
+
     System.out.println("Try getMetadata");
+    Metadata metaData = vdfs.getMetadata(fd);
+
     if(targetName.equals(metaData.name)) {
       System.out.println("getMetadata..\tOK!");
       System.out.println("Printing BlockHosts");
@@ -80,6 +88,8 @@ class VeloxDFSTest {
     if(!vdfs.isOpen(fd)) {
       System.out.println("close..       \tOK!");
     }  
+
+    vdfs.remove(targetName);
 
     vdfs.destroy();
   }

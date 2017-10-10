@@ -170,12 +170,23 @@ long vdfs::open_file(std::string fname) {
 bool vdfs::close(long fid) {
   if(opened_files == nullptr) return false;
 
-  velox::file* f = this->get_file(fid);
+  int i = 0;
+  bool found = false;
+  for(auto& f : *(this->opened_files)) {
+    if(f.get_id() == fid) {
+      f.close();
+      found = true;
+      break;
+    }
+    i++;
+  }
 
-  if(f == nullptr) return false;
-
-  f->close();
-  return true;
+  if(found) {
+    opened_files->erase(opened_files->begin() + i);
+    return true;
+  }
+  else
+    return false;
 }
 // }}}
 // is_open() {{{
@@ -207,6 +218,12 @@ std::string vdfs::load(std::string name) {
 // rm {{{
 bool vdfs::rm (std::string name) {
   return dfs->remove(name);
+}
+bool vdfs::rm (long fid) {
+  velox::file* f = this->get_file(fid);
+  if(f != nullptr) 
+    close(f->get_id());
+  return rm(f->name);
 }
 // }}}
 // format {{{
@@ -253,4 +270,23 @@ model::metadata vdfs::get_metadata(long fid) {
   return dfs->get_metadata(f->name);
 }
 // }}}
+// list {{{
+std::vector<model::metadata> vdfs::list(bool all, std::string name) {
+  std::vector<model::metadata> metadatas = dfs->get_metadata_all();
+  if(all) return metadatas;
 
+  std::vector<model::metadata> results;
+  std::size_t found = name.find("/", name.length()-1, 1);
+  if(found == std::string::npos)
+    name += "/";
+  
+  for(auto m : metadatas) {
+    //found = m.name.find(name.c_str(), 0, name.length());
+    //if(found != std::string::npos)
+    if(m.name.compare(0, name.length(), name.c_str()) == 0)
+      results.push_back(m);
+  }
+
+  return results;
+}
+// }}}
