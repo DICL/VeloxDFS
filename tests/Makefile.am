@@ -17,8 +17,6 @@ units_CPPFLAGS     = $(AM_CPPFLAGS_T)
 units_SOURCES      = $(messages_files) \
                      tests/main.cc \
                      tests/messages_test.cc \
-                     tests/dl_test.cc \
-                     src/common/dl_loader.cc \
                      src/network/asyncchannel.cc \
                      src/network/server.cc \
                      src/nodes/machine.cc \

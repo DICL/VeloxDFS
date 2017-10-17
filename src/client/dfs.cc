@@ -8,7 +8,6 @@
 #include "../messages/filedescription.hh"
 #include "../messages/filerequest.hh"
 #include "../messages/filelist.hh"
-#include "../messages/blockdel.hh"
 #include "../messages/reply.hh"
 #include "../messages/blockrequest.hh"
 #include "../common/context.hh"
