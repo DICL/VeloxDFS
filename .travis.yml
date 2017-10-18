@@ -64,4 +64,6 @@ after_success: |
         git add .
         git commit -m "API: $TRAVIS_TAG"
         git push origin gh-pages
+        bash .github/make_release.sh
+        git push --tags
   fi

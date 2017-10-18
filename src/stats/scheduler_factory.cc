@@ -3,12 +3,14 @@
 #include "../common/context_singleton.hh"
 #include "zk_listener.hh"
 #include <memory>
+#include <map>
+
+using namespace std;
 
 namespace eclipse {
 namespace logical_blocks_schedulers {
 
-using namespace std;
-std::shared_ptr<scheduler> scheduler_factory(string type, Histogram* boundaries) {
+shared_ptr<scheduler> scheduler_factory(string type, Histogram* boundaries, SCHEDULER_OPTS options) {
   shared_ptr<scheduler> sch;
 
   if (type == "scheduler_simple") {
@@ -23,6 +25,7 @@ std::shared_ptr<scheduler> scheduler_factory(string type, Histogram* boundaries)
 
   sch->boundaries = boundaries;
   sch->listener = make_shared<zk_listener>();
+  sch->options = options;
 
   return sch;
 }

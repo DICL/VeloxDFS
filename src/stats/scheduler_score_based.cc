@@ -1,7 +1,7 @@
 #include "logical_blocks_scheduler.hh"
 #include "../messages/blockinfo.hh"
-#include "../common/context_singleton.hh"
 
+#include <algorithm>
 #include <set>
 
 using namespace std;
@@ -10,8 +10,8 @@ using namespace eclipse::messages;
 using namespace eclipse::logical_blocks_schedulers;
 
 void scheduler_score_based::generate(FileDescription& file_desc, std::vector<std::string> nodes) {
-  double alpha = atof(GET_STR("addons.alpha").c_str());
-  double beta  = atof(GET_STR("addons.beta").c_str());
+  double alpha = atof(options["alpha"].c_str());
+  double beta  = atof(options["beta"].c_str());
 
   auto io_vec = listener->get_io_stats();
 
