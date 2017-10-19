@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['offsetkeyvalue',['OffsetKeyValue',['../structeclipse_1_1messages_1_1OffsetKeyValue.html',1,'eclipse::messages']]],
-  ['operator_3d',['operator=',['../classSettings.html#a6f7ebd270d9257b41358bc2897bdc2a6',1,'Settings']]]
+  ['pget',['pget',['../classvelox_1_1DFS.html#a63324577c9a8f29fb2623ea9479cf074',1,'velox::DFS']]]
 ];

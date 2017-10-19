@@ -1,12 +1,12 @@
 var searchData=
 [
-  ['read',['read',['../classvelox_1_1DFS.html#a1005ef927db6079c70f0690c474a3d46',1,'velox::DFS']]],
-  ['read_5fall',['read_all',['../classvelox_1_1DFS.html#a87d9efc760ac5b7e3a9c12fcb5f24586',1,'velox::DFS']]],
-  ['read_5fblock',['read_block',['../classvelox_1_1DFS.html#a63a7dbfaa0ea78bc5612c89373700e3e',1,'velox::DFS']]],
-  ['replicate_5fmessage',['replicate_message',['../classeclipse_1_1BlockNode.html#a8224e81d91399f352130f74cc2345a3b',1,'eclipse::BlockNode']]],
-  ['replicate_5fmetadata',['replicate_metadata',['../classeclipse_1_1FileLeader.html#aeaeb834acdfc70121d8e0a48bb68b1bc',1,'eclipse::FileLeader']]],
-  ['reply',['Reply',['../structeclipse_1_1messages_1_1Reply.html',1,'eclipse::messages']]],
-  ['router',['Router',['../classeclipse_1_1Router.html',1,'eclipse']]],
-  ['routerdecorator',['RouterDecorator',['../group__RouterDecorator.html',1,'']]],
-  ['routerdecorator',['RouterDecorator',['../classeclipse_1_1RouterDecorator.html',1,'eclipse']]]
+  ['scheduler',['scheduler',['../classeclipse_1_1logical__blocks__schedulers_1_1scheduler.html',1,'eclipse::logical_blocks_schedulers']]],
+  ['scheduler_5fscore_5fbased',['scheduler_score_based',['../classeclipse_1_1logical__blocks__schedulers_1_1scheduler__score__based.html',1,'eclipse::logical_blocks_schedulers']]],
+  ['scheduler_5fsimple',['scheduler_simple',['../classeclipse_1_1logical__blocks__schedulers_1_1scheduler__simple.html',1,'eclipse::logical_blocks_schedulers']]],
+  ['server',['Server',['../classeclipse_1_1network_1_1Server.html',1,'eclipse::network']]],
+  ['serverhandler',['ServerHandler',['../classeclipse_1_1network_1_1ServerHandler.html',1,'eclipse::network']]],
+  ['settings',['Settings',['../classSettings.html',1,'']]],
+  ['settingsimpl',['SettingsImpl',['../classSettings_1_1SettingsImpl.html',1,'Settings']]],
+  ['simplerouter',['SimpleRouter',['../classeclipse_1_1SimpleRouter.html',1,'eclipse']]],
+  ['stats_5flistener',['stats_listener',['../classeclipse_1_1stats__listener.html',1,'eclipse']]]
 ];

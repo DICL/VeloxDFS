@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['reply',['Reply',['../structeclipse_1_1messages_1_1Reply.html',1,'eclipse::messages']]],
-  ['router',['Router',['../classeclipse_1_1Router.html',1,'eclipse']]],
-  ['routerdecorator',['RouterDecorator',['../classeclipse_1_1RouterDecorator.html',1,'eclipse']]]
+  ['vdfs',['vdfs',['../classvelox_1_1vdfs.html',1,'velox']]],
+  ['veloxdfs',['VeloxDFS',['../classvelox_1_1VeloxDFS.html',1,'velox']]]
 ];

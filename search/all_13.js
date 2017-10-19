@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['veloxdfs',['VeloxDFS',['../index.html',1,'']]],
-  ['vdfs',['vdfs',['../classvelox_1_1vdfs.html',1,'velox']]],
-  ['veloxdfs',['VeloxDFS',['../classvelox_1_1VeloxDFS.html',1,'velox']]]
+  ['write',['write',['../classeclipse_1_1Local__io.html#ac7d1b1d1233ec1172f896744e6cffe81',1,'eclipse::Local_io::write()'],['../classvelox_1_1DFS.html#a4d7ccf5ee543ce055353b540408ddd80',1,'velox::DFS::write()']]]
 ];

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['keyrequest',['KeyRequest',['../structeclipse_1_1messages_1_1KeyRequest.html',1,'eclipse::messages']]],
-  ['keyvalue',['KeyValue',['../structeclipse_1_1messages_1_1KeyValue.html',1,'eclipse::messages']]]
+  ['local_5fio',['Local_io',['../classeclipse_1_1Local__io.html',1,'eclipse']]],
+  ['logger',['Logger',['../classLogger.html',1,'']]],
+  ['logical_5fblock_5fmetadata',['logical_block_metadata',['../structeclipse_1_1logical__block__metadata.html',1,'eclipse']]]
 ];

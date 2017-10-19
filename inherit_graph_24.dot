@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="velox::file",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classvelox_1_1file.html"];
+  Node1 [label="velox::model::block\l_metadata",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structvelox_1_1model_1_1block__metadata.html"];
 }

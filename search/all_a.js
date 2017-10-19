@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['list',['list',['../classeclipse_1_1FileLeader.html#a9edaf3919207032d926f0e6e48fa71fa',1,'eclipse::FileLeader']]],
-  ['local_5fio',['Local_io',['../classeclipse_1_1Local__io.html',1,'eclipse']]],
-  ['logger',['Logger',['../classLogger.html',1,'']]],
-  ['logical_5fblock_5fmetadata',['logical_block_metadata',['../structeclipse_1_1logical__block__metadata.html',1,'eclipse']]]
+  ['machine',['Machine',['../classeclipse_1_1Machine.html',1,'eclipse']]],
+  ['message',['Message',['../structeclipse_1_1messages_1_1Message.html',1,'eclipse::messages']]],
+  ['metadata',['MetaData',['../structeclipse_1_1messages_1_1MetaData.html',1,'eclipse::messages']]],
+  ['metadata',['Metadata',['../classvelox_1_1model_1_1Metadata.html',1,'velox.model.Metadata'],['../structvelox_1_1model_1_1metadata.html',1,'velox::model::metadata']]]
 ];

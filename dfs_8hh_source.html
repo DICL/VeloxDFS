@@ -115,54 +115,55 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#ab73d4aee78b1da4481fcc6c3b0e7f99b">upload</a>(std::string file_name, <span class="keywordtype">bool</span> is_binary);</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a7b928a468f39cbcf49ba11c0b9a4c84f">download</a>(std::string file_name);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classvelox_1_1DFS.html#adad261d20f57ff427e4144af1da9b09c">exists</a>(std::string);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classvelox_1_1DFS.html#a91d02b56024d317f8c797e11d24415ef">touch</a>(std::string);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">int</span> <span class="keyword">remove</span>(std::string);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">int</span> format();</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <a class="code" href="structvelox_1_1model_1_1metadata.html">model::metadata</a> get_metadata(std::string&amp; fname);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <a class="code" href="structvelox_1_1model_1_1metadata.html">model::metadata</a> get_metadata_optimized(std::string&amp; fname);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    std::vector&lt;model::metadata&gt; get_metadata_all();</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a63a7dbfaa0ea78bc5612c89373700e3e">read_block</a>(<a class="code" href="structvelox_1_1model_1_1metadata.html">model::metadata</a>&amp; md, std::string block_name, <span class="keywordtype">char</span>* out);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a63324577c9a8f29fb2623ea9479cf074">pget</a>(vec_str);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a9f03c93f13ff9dc535b30b4eabf2092e">update</a>(vec_str);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    uint64_t BLOCK_SIZE;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    uint32_t NUM_NODES;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordtype">int</span> replica;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    std::vector&lt;std::string&gt; nodes;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;};</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;}</div>
-<div class="ttc" id="classvelox_1_1DFS_html_a4d7ccf5ee543ce055353b540408ddd80"><div class="ttname"><a href="classvelox_1_1DFS.html#a4d7ccf5ee543ce055353b540408ddd80">velox::DFS::write</a></div><div class="ttdeci">uint64_t write(std::string &amp;file_name, const char *buf, uint64_t off, uint64_t len)</div><div class="ttdoc">Write the contents into a remote file. </div><div class="ttdef"><b>Definition:</b> dfs.cc:837</div></div>
-<div class="ttc" id="classvelox_1_1DFS_html_adad261d20f57ff427e4144af1da9b09c"><div class="ttname"><a href="classvelox_1_1DFS.html#adad261d20f57ff427e4144af1da9b09c">velox::DFS::exists</a></div><div class="ttdeci">bool exists(std::string)</div><div class="ttdoc">}}} </div><div class="ttdef"><b>Definition:</b> dfs.cc:729</div></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a7b928a468f39cbcf49ba11c0b9a4c84f">download</a>(std::string file_name);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classvelox_1_1DFS.html#adad261d20f57ff427e4144af1da9b09c">exists</a>(std::string);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classvelox_1_1DFS.html#a91d02b56024d317f8c797e11d24415ef">touch</a>(std::string);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">int</span> <span class="keyword">remove</span>(std::string);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">int</span> format();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <a class="code" href="structvelox_1_1model_1_1metadata.html">model::metadata</a> get_metadata(std::string&amp; fname);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="structvelox_1_1model_1_1metadata.html">model::metadata</a> get_metadata_optimized(std::string&amp; fname);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    std::vector&lt;model::metadata&gt; get_metadata_all();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a63a7dbfaa0ea78bc5612c89373700e3e">read_block</a>(<a class="code" href="structvelox_1_1model_1_1metadata.html">model::metadata</a>&amp; md, std::string block_name, <span class="keywordtype">char</span>* out);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">void</span> file_metadata_append(std::string, <span class="keywordtype">size_t</span>, <a class="code" href="structvelox_1_1model_1_1metadata.html">model::metadata</a>&amp;);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a63324577c9a8f29fb2623ea9479cf074">pget</a>(vec_str);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classvelox_1_1DFS.html#a9f03c93f13ff9dc535b30b4eabf2092e">update</a>(vec_str);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    uint64_t BLOCK_SIZE;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    uint32_t NUM_NODES;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordtype">int</span> replica;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    std::vector&lt;std::string&gt; nodes;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;};</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;}</div>
+<div class="ttc" id="classvelox_1_1DFS_html_a4d7ccf5ee543ce055353b540408ddd80"><div class="ttname"><a href="classvelox_1_1DFS.html#a4d7ccf5ee543ce055353b540408ddd80">velox::DFS::write</a></div><div class="ttdeci">uint64_t write(std::string &amp;file_name, const char *buf, uint64_t off, uint64_t len)</div><div class="ttdoc">Write the contents into a remote file. </div><div class="ttdef"><b>Definition:</b> dfs.cc:836</div></div>
+<div class="ttc" id="classvelox_1_1DFS_html_adad261d20f57ff427e4144af1da9b09c"><div class="ttname"><a href="classvelox_1_1DFS.html#adad261d20f57ff427e4144af1da9b09c">velox::DFS::exists</a></div><div class="ttdeci">bool exists(std::string)</div><div class="ttdoc">}}} </div><div class="ttdef"><b>Definition:</b> dfs.cc:728</div></div>
 <div class="ttc" id="classvelox_1_1DFS_html"><div class="ttname"><a href="classvelox_1_1DFS.html">velox::DFS</a></div><div class="ttdef"><b>Definition:</b> dfs.hh:13</div></div>
-<div class="ttc" id="classvelox_1_1DFS_html_a63324577c9a8f29fb2623ea9479cf074"><div class="ttname"><a href="classvelox_1_1DFS.html#a63324577c9a8f29fb2623ea9479cf074">velox::DFS::pget</a></div><div class="ttdeci">int pget(vec_str)</div><div class="ttdef"><b>Definition:</b> dfs.cc:422</div></div>
+<div class="ttc" id="classvelox_1_1DFS_html_a63324577c9a8f29fb2623ea9479cf074"><div class="ttname"><a href="classvelox_1_1DFS.html#a63324577c9a8f29fb2623ea9479cf074">velox::DFS::pget</a></div><div class="ttdeci">int pget(vec_str)</div><div class="ttdef"><b>Definition:</b> dfs.cc:421</div></div>
 <div class="ttc" id="classvelox_1_1DFS_html_a63a7dbfaa0ea78bc5612c89373700e3e"><div class="ttname"><a href="classvelox_1_1DFS.html#a63a7dbfaa0ea78bc5612c89373700e3e">velox::DFS::read_block</a></div><div class="ttdeci">int read_block(model::metadata &amp;md, std::string block_name, char *out)</div></div>
-<div class="ttc" id="classvelox_1_1DFS_html_a91d02b56024d317f8c797e11d24415ef"><div class="ttname"><a href="classvelox_1_1DFS.html#a91d02b56024d317f8c797e11d24415ef">velox::DFS::touch</a></div><div class="ttdeci">bool touch(std::string)</div><div class="ttdef"><b>Definition:</b> dfs.cc:742</div></div>
-<div class="ttc" id="classvelox_1_1DFS_html_a7a2f893a17864b8d9a9bdd54f1ba9aca"><div class="ttname"><a href="classvelox_1_1DFS.html#a7a2f893a17864b8d9a9bdd54f1ba9aca">velox::DFS::append</a></div><div class="ttdeci">int append(std::string file_name, std::string buf)</div><div class="ttdoc">Append a string to the end of a remote file. </div><div class="ttdef"><b>Definition:</b> dfs.cc:527</div></div>
-<div class="ttc" id="classvelox_1_1DFS_html_a1005ef927db6079c70f0690c474a3d46"><div class="ttname"><a href="classvelox_1_1DFS.html#a1005ef927db6079c70f0690c474a3d46">velox::DFS::read</a></div><div class="ttdeci">uint64_t read(std::string &amp;file_name, char *buf, uint64_t off, uint64_t len)</div><div class="ttdoc">Download a remote file&#39;s section into a buffer. </div><div class="ttdef"><b>Definition:</b> dfs.cc:966</div></div>
-<div class="ttc" id="classvelox_1_1DFS_html_a87d9efc760ac5b7e3a9c12fcb5f24586"><div class="ttname"><a href="classvelox_1_1DFS.html#a87d9efc760ac5b7e3a9c12fcb5f24586">velox::DFS::read_all</a></div><div class="ttdeci">std::string read_all(std::string file_name)</div><div class="ttdoc">Load all the file into a string. </div><div class="ttdef"><b>Definition:</b> dfs.cc:333</div></div>
+<div class="ttc" id="classvelox_1_1DFS_html_a91d02b56024d317f8c797e11d24415ef"><div class="ttname"><a href="classvelox_1_1DFS.html#a91d02b56024d317f8c797e11d24415ef">velox::DFS::touch</a></div><div class="ttdeci">bool touch(std::string)</div><div class="ttdef"><b>Definition:</b> dfs.cc:741</div></div>
+<div class="ttc" id="classvelox_1_1DFS_html_a7a2f893a17864b8d9a9bdd54f1ba9aca"><div class="ttname"><a href="classvelox_1_1DFS.html#a7a2f893a17864b8d9a9bdd54f1ba9aca">velox::DFS::append</a></div><div class="ttdeci">int append(std::string file_name, std::string buf)</div><div class="ttdoc">Append a string to the end of a remote file. </div><div class="ttdef"><b>Definition:</b> dfs.cc:526</div></div>
+<div class="ttc" id="classvelox_1_1DFS_html_a1005ef927db6079c70f0690c474a3d46"><div class="ttname"><a href="classvelox_1_1DFS.html#a1005ef927db6079c70f0690c474a3d46">velox::DFS::read</a></div><div class="ttdeci">uint64_t read(std::string &amp;file_name, char *buf, uint64_t off, uint64_t len)</div><div class="ttdoc">Download a remote file&#39;s section into a buffer. </div><div class="ttdef"><b>Definition:</b> dfs.cc:965</div></div>
+<div class="ttc" id="classvelox_1_1DFS_html_a87d9efc760ac5b7e3a9c12fcb5f24586"><div class="ttname"><a href="classvelox_1_1DFS.html#a87d9efc760ac5b7e3a9c12fcb5f24586">velox::DFS::read_all</a></div><div class="ttdeci">std::string read_all(std::string file_name)</div><div class="ttdoc">Load all the file into a string. </div><div class="ttdef"><b>Definition:</b> dfs.cc:332</div></div>
 <div class="ttc" id="structvelox_1_1model_1_1metadata_html"><div class="ttname"><a href="structvelox_1_1model_1_1metadata.html">velox::model::metadata</a></div><div class="ttdef"><b>Definition:</b> metadata.hh:12</div></div>
-<div class="ttc" id="classvelox_1_1DFS_html_ab73d4aee78b1da4481fcc6c3b0e7f99b"><div class="ttname"><a href="classvelox_1_1DFS.html#ab73d4aee78b1da4481fcc6c3b0e7f99b">velox::DFS::upload</a></div><div class="ttdeci">int upload(std::string file_name, bool is_binary)</div><div class="ttdoc">Upload a local file to a the veloxdfs intance. </div><div class="ttdef"><b>Definition:</b> dfs.cc:111</div></div>
-<div class="ttc" id="classvelox_1_1DFS_html_a7b928a468f39cbcf49ba11c0b9a4c84f"><div class="ttname"><a href="classvelox_1_1DFS.html#a7b928a468f39cbcf49ba11c0b9a4c84f">velox::DFS::download</a></div><div class="ttdeci">int download(std::string file_name)</div><div class="ttdoc">Download a remote file to your current local directory. </div><div class="ttdef"><b>Definition:</b> dfs.cc:290</div></div>
-<div class="ttc" id="classvelox_1_1DFS_html_a9f03c93f13ff9dc535b30b4eabf2092e"><div class="ttname"><a href="classvelox_1_1DFS.html#a9f03c93f13ff9dc535b30b4eabf2092e">velox::DFS::update</a></div><div class="ttdeci">int update(vec_str)</div><div class="ttdef"><b>Definition:</b> dfs.cc:493</div></div>
+<div class="ttc" id="classvelox_1_1DFS_html_ab73d4aee78b1da4481fcc6c3b0e7f99b"><div class="ttname"><a href="classvelox_1_1DFS.html#ab73d4aee78b1da4481fcc6c3b0e7f99b">velox::DFS::upload</a></div><div class="ttdeci">int upload(std::string file_name, bool is_binary)</div><div class="ttdoc">Upload a local file to a the veloxdfs intance. </div><div class="ttdef"><b>Definition:</b> dfs.cc:110</div></div>
+<div class="ttc" id="classvelox_1_1DFS_html_a7b928a468f39cbcf49ba11c0b9a4c84f"><div class="ttname"><a href="classvelox_1_1DFS.html#a7b928a468f39cbcf49ba11c0b9a4c84f">velox::DFS::download</a></div><div class="ttdeci">int download(std::string file_name)</div><div class="ttdoc">Download a remote file to your current local directory. </div><div class="ttdef"><b>Definition:</b> dfs.cc:289</div></div>
+<div class="ttc" id="classvelox_1_1DFS_html_a9f03c93f13ff9dc535b30b4eabf2092e"><div class="ttname"><a href="classvelox_1_1DFS.html#a9f03c93f13ff9dc535b30b4eabf2092e">velox::DFS::update</a></div><div class="ttdeci">int update(vec_str)</div><div class="ttdef"><b>Definition:</b> dfs.cc:492</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Oct 10 2017 09:04:37 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Oct 19 2017 08:18:20 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

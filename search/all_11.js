@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['task',['Task',['../structeclipse_1_1messages_1_1Task.html',1,'eclipse::messages']]],
-  ['todo_20list',['Todo List',['../todo.html',1,'']]],
-  ['touch',['touch',['../classvelox_1_1DFS.html#a91d02b56024d317f8c797e11d24415ef',1,'velox::DFS']]]
+  ['update',['update',['../classvelox_1_1DFS.html#a9f03c93f13ff9dc535b30b4eabf2092e',1,'velox::DFS']]],
+  ['upload',['upload',['../classvelox_1_1DFS.html#ab73d4aee78b1da4481fcc6c3b0e7f99b',1,'velox::DFS']]]
 ];

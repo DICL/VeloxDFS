@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['netobserver',['NetObserver',['../structeclipse_1_1network_1_1NetObserver.html',1,'eclipse::network']]],
-  ['node',['Node',['../classeclipse_1_1Node.html',1,'eclipse']]]
+  ['operator_3d',['operator=',['../classSettings.html#a6f7ebd270d9257b41358bc2897bdc2a6',1,'Settings']]]
 ];

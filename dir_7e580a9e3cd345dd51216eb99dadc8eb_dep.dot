@@ -1,9 +1,0 @@
-digraph "/home/travis/build/DICL/VeloxDFS/src/messages" {
-  compound=true
-  node [ fontsize="10", fontname="Helvetica"];
-  edge [ labelfontsize="10", labelfontname="Helvetica"];
-  subgraph clusterdir_68267d1309a1af8e8297ef4c3efbcdba {
-    graph [ bgcolor="#ddddee", pencolor="black", label="src" fontname="Helvetica", fontsize="10", URL="dir_68267d1309a1af8e8297ef4c3efbcdba.html"]
-  dir_7e580a9e3cd345dd51216eb99dadc8eb [shape=box, label="messages", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_7e580a9e3cd345dd51216eb99dadc8eb.html"];
-  }
-}
