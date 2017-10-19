@@ -6,31 +6,21 @@ AM_CXXFLAGS      = $(CXXFLAGS) -Wall -Werror
 bin_PROGRAMS     = eclipse_node veloxdfs velox_get_config
 dist_bin_SCRIPTS = src/stats/read_io_stats.sh
 
-messages_files   = src/messages/boundaries.cc      \
-                   src/messages/message.cc         \
-                   src/messages/keyvalue.cc        \
-                   src/messages/offsetkv.cc        \
-                   src/messages/keyrequest.cc      \
-                   src/messages/control.cc         \
+messages_files =   src/messages/message.cc         \
                    src/messages/boost_impl.cc      \
                    src/messages/factory.cc         \
                    src/messages/fileinfo.cc        \
                    src/messages/fileupdate.cc      \
                    src/messages/blockinfo.cc       \
-                   src/messages/blockupdate.cc     \
-                   src/messages/task.cc            \
                    src/messages/reply.cc           \
                    src/messages/filerequest.cc     \
                    src/messages/blockrequest.cc    \
                    src/messages/filelist.cc        \
                    src/messages/filedescription.cc \
-                   src/messages/cacheinfo.cc       \
-                   src/messages/blockdel.cc        \
                    src/messages/filedel.cc         \
                    src/messages/formatrequest.cc   \
                    src/messages/fileexist.cc       \
                    src/messages/metadata.cc        \
-                   src/messages/blockstatus.cc     \
                    src/messages/IOoperation.cc
 
 
@@ -41,7 +31,7 @@ libvdfs_la_SOURCES  = $(messages_files) \
                       src/client/vdfs.cc \
                       src/common/hash.cc src/common/settings.cc \
                       src/common/logger.cc src/common/histogram.cc \
-                      src/common/context.cc src/common/dl_loader.cc \
+                      src/common/context.cc \
                       src/common/context_singleton.cc
 
 libvdfs_la_LDFLAGS  = $(BOOST_LDFLAGS) -version-info 0:0:0
@@ -79,9 +69,8 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
 
 eclipse_node_LDADD   = $(LDADD) -lzookeeper_mt
 
-
 veloxdfs_SOURCES     = src/targets/client.cc \
-    		               src/client/cli_driver.cc
+                       src/client/cli_driver.cc
 
 velox_get_config_SOURCES = src/targets/velox_get_config.cc
 
@@ -90,7 +79,7 @@ pkginclude_HEADERS  = src/client/vdfs.hh \
 
 modelincludedir     = $(pkgincludedir)/model
 modelinclude_HEADERS = src/client/model/metadata.hh \
-												src/client/model/block_metadata.hh
+                       src/client/model/block_metadata.hh
 
 
 if COPY_SAMPLES

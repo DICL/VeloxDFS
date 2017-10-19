@@ -55,7 +55,6 @@ class DFS {
     //! @retval 1          FAILURE 
     int upload(std::string file_name, bool is_binary);
 
-
     //! Download a remote file to your current local directory.
     //!
     //! @param file_name   File to peform the operation.
@@ -80,6 +79,8 @@ class DFS {
     //! @attention char out is dynamically allocated, needs to be freed after 
     //! being used.
     int read_block(model::metadata& md, std::string block_name, char* out);
+
+    void file_metadata_append(std::string, size_t, model::metadata&);
 
     //! @deprecated
     int pget(vec_str);

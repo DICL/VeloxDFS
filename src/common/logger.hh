@@ -23,11 +23,14 @@ class Logger {
 
     // Singleton things
     static Logger* singleton;
-    Logger(char*, const std::string&);
+    Logger(char*, const std::string&, std::string mask_);
     ~Logger();
+   
+    std::string title;
+    int type;
 
   public:
-    static Logger* connect(std::string, std::string);
+    static Logger* connect(std::string, std::string, std::string);
     static void disconnect(Logger*);
 
     void debug (const char* fmt, ...);

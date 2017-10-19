@@ -8,7 +8,6 @@
 #include "../messages/filedescription.hh"
 #include "../messages/filerequest.hh"
 #include "../messages/filelist.hh"
-#include "../messages/blockdel.hh"
 #include "../messages/reply.hh"
 #include "../messages/blockrequest.hh"
 #include "../common/context.hh"
@@ -1131,6 +1130,39 @@ vector<model::metadata> DFS::get_metadata_all() {
   }
   
   return move(metadata_vector);
+}
+// }}}
+// file_metadata_append {{{
+void DFS::file_metadata_append(std::string name, size_t size, model::metadata& blocks) {
+  FileUpdate fu;
+  fu.name = name;
+  fu.num_block = blocks.blocks.size();
+  fu.size = size;
+  fu.is_append = true;
+
+  for (size_t i = 0; i < blocks.blocks.size(); i++) {
+    BlockMetadata metadata;
+    metadata.file_name = name;
+    metadata.name = blocks.blocks[i];
+    metadata.seq = 0;
+    metadata.hash_key = blocks.hash_keys[i];
+    metadata.size = blocks.block_size[i];
+    metadata.replica = 1;
+    metadata.type = 0;
+    metadata.node = "";
+    metadata.l_node = "";
+    metadata.r_node = "";
+    metadata.is_committed = 1;
+
+    fu.blocks_metadata.push_back(metadata);
+  }
+
+
+  uint32_t file_hash_key = h(name);
+  auto socket = connect(file_hash_key);
+  send_message(socket.get(), &fu);
+  read_reply<Reply>(socket.get());
+  socket->close();
 }
 // }}}
 }

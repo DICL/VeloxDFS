@@ -10,6 +10,7 @@ namespace eclipse {
 namespace messages {
 
 Message* load_message (boost::asio::streambuf&);
+Message* load_message (std::string&);
 std::string* save_message (Message*);
 
 void send_message(boost::asio::ip::tcp::socket*, eclipse::messages::Message*);
