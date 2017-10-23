@@ -3,7 +3,11 @@
 #include "../messages/boost_impl.hh"
 #include "../messages/filedescription.hh"
 #include "../common/logical_block_metadata.hh"
+
+#ifdef LOGICAL_BLOCKS_FEATURE
 #include "../stats/logical_blocks_scheduler.hh"
+#endif
+
 #include <set>
 
 using namespace eclipse;
@@ -186,11 +190,17 @@ bool FileLeader::format () {
 // }}}
 // find_best_arrangement {{{
 void FileLeader::find_best_arrangement(messages::FileDescription* file_desc) {
+#ifdef LOGICAL_BLOCKS_FEATURE
   using namespace eclipse::logical_blocks_schedulers;
   auto nodes = context.settings.get<vec_str>("network.nodes");
 
-  auto scheduler = scheduler_factory(GET_STR("addons.block_scheduler"), boundaries.get());
+  map<string, string> opts;
+  opts["alpha"] = GET_STR("addons.alpha");
+  opts["beta"]  = GET_STR("addons.beta");
+
+  auto scheduler = scheduler_factory(GET_STR("addons.block_scheduler"), boundaries.get(), opts);
 
   scheduler->generate(*file_desc, nodes);
+#endif
 }
 // }}}

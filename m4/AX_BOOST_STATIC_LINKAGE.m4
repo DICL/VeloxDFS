@@ -7,5 +7,5 @@ AC_DEFUN([AX_BOOST_STATIC_LINKAGE],
 AC_ARG_ENABLE([boost_static],
   [AS_HELP_STRING([--enable-boost-static], [statically link boost])])
 
-AM_CONDITIONAL(BOOST_STATIC, [test x$enable_boost_static = xyes])
+AM_CONDITIONAL(BOOST_STATIC, [test "x$enable_boost_static" = xyes])
 ])

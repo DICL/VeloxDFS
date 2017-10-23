@@ -60,14 +60,21 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
                        src/blocknode/block_node_router.cc \
                        src/fileleader/directory.cc \
                        src/fileleader/file_leader.cc \
-                       src/fileleader/file_leader_router.cc \
-                       src/stats/io_monitor_invoker.cc \
+                       src/fileleader/file_leader_router.cc
+
+eclipse_node_LDADD   = $(LDADD) 
+
+if LOGICAL_BLOCKS_FEATURE 
+
+eclipse_node_SOURCES+= src/stats/io_monitor_invoker.cc \
                        src/stats/zk_listener.cc \
                        src/stats/scheduler_factory.cc \
                        src/stats/scheduler_score_based.cc \
                        src/stats/scheduler_simple.cc
 
-eclipse_node_LDADD   = $(LDADD) -lzookeeper_mt
+eclipse_node_LDADD  +=  -lzookeeper_mt
+
+endif
 
 veloxdfs_SOURCES     = src/targets/client.cc \
                        src/client/cli_driver.cc

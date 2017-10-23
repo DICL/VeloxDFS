@@ -21,14 +21,16 @@ AX_CXX_COMPILE_STDCXX([14], [noext], [mandatory])
 AC_ARG_ENABLE([samples],
     [AS_HELP_STRING([--disable-samples], [copy sample of eclipse.json])])
 
-# Configure options: --enable-debug[=no].
 AC_ARG_ENABLE([debug],
   [AS_HELP_STRING([--enable-debug], [enable debug code (default is no)])],
     [debug="$withval"], [debug=no])
 
-AM_CONDITIONAL(COPY_SAMPLES, [test "$enable_samples" != no ])
-AX_BOOST_STATIC_LINKAGE
+AC_ARG_ENABLE([lblocks],
+    [AS_HELP_STRING([--enable-lblocks], [enable logical blocks experimental feature (Needs zookeeper)])])
 
+AM_CONDITIONAL(COPY_SAMPLES, [test "$enable_samples" != no ])
+AM_CONDITIONAL(LOGICAL_BLOCKS_FEATURE, [test "x$enable_lblocks" = xyes])
+AX_BOOST_STATIC_LINKAGE
 
 #}}}
 # Dependencies checkings {{{
@@ -63,6 +65,11 @@ AC_DEFINE_UNQUOTED([ECLIPSE_CONF_PATH], ["$sysconfdirfull"])
 
 AH_TEMPLATE([IO_STAT_SCRIPT],[IOSTATS path])
 AC_DEFINE_UNQUOTED([IO_STAT_SCRIPT], ["${bindirfull}/read_io_stats.sh"])
+
+AS_IF([test "x$enable_lblocks" = xyes], [
+      AH_TEMPLATE([LOGICAL_BLOCKS_FEATURE],["Enables logical blocks feature" ]) 
+      AC_DEFINE_UNQUOTED([LOGICAL_BLOCKS_FEATURE], [1])
+     ])
 #}}}
 #OUTPUT{{{
 AC_OUTPUT

@@ -1,6 +1,6 @@
 #include "logical_blocks_scheduler.hh"
 #include "../messages/blockinfo.hh"
-#include "../common/context_singleton.hh"
+#include <algorithm>
 
 #include <set>
 
