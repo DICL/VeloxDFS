@@ -46,7 +46,8 @@ AM_LDFLAGS          = $(BOOST_LDFLAGS)
 LDADD               = libvdfs.la -lboost_system -lboost_serialization -lboost_coroutine -lboost_thread -lboost_context
 endif
 
-eclipse_node_SOURCES = src/targets/node_main.cc \
+eclipse_node_main    = src/targets/node_main.cc
+eclipse_node_SOURCES = $(eclipse_node_main) \
                        src/network/asyncchannel.cc \
                        src/network/server.cc \
                        src/network/client_handler.cc \
@@ -62,7 +63,7 @@ eclipse_node_SOURCES = src/targets/node_main.cc \
                        src/fileleader/file_leader.cc \
                        src/fileleader/file_leader_router.cc
 
-eclipse_node_LDADD   = $(LDADD) 
+eclipse_node_LDADD   =  $(LDADD)
 
 if LOGICAL_BLOCKS_FEATURE 
 
