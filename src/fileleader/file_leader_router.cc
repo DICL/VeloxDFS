@@ -91,7 +91,10 @@ void FileLeaderRouter::request_file (messages::Message* m_, Channel* tcp_connect
   auto m = dynamic_cast<messages::FileRequest*> (m_);
   INFO ("File Info received %s", m->name.c_str());
 
-  auto fd = file_leader->file_request(m);
+  unique_ptr<Message> fd;
+
+  fd = file_leader->file_request(m);
+
   tcp_connection->do_write(fd.get());
 }
 // }}}

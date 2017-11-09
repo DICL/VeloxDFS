@@ -8,7 +8,6 @@
 #include "../messages/filedescription.hh"
 #include "../messages/filerequest.hh"
 #include "../messages/filelist.hh"
-#include "../messages/blockdel.hh"
 #include "../messages/reply.hh"
 #include "../messages/blockrequest.hh"
 #include "../common/context.hh"
@@ -254,6 +253,38 @@ int DFS::upload(std::string file_name, bool is_binary) {
   return EXIT_SUCCESS;
 }
 // }}}
+// read_block {{{
+int read_block(model::metadata& md, std::string block_name, char* out) {
+  string disk_path = GET_STR("path.scratch");
+  uint64_t cursor = 0;
+
+  auto it = std::find_if(md.block_data.begin(), md.block_data.end(), [block_name] (auto& block) {
+      return block_name == block.name;
+      });
+
+  if (it != md.block_data.end()) {
+    model::block_metadata bm = *it;
+    size_t total_size = bm.size;
+    out = new char[total_size];
+
+    for (auto& path_of_chunk : bm.chunks_path) {
+      string file_path = disk_path + string("/") + path_of_chunk;
+      ifstream ifs;
+      ifs.open(file_path, ios::binary | ios::in);
+
+      uint32_t file_size = (uint32_t)ifs.tellg();
+      ifs.seekg(0L, ios::beg);
+
+      ifs.read(&out[cursor], file_size);
+      ifs.close();
+
+      cursor += file_size;
+    }
+  }
+
+  return cursor;
+}
+//}}}
 // download {{{
 int DFS::download(std::string file_name) {
   Histogram boundaries(NUM_NODES, 100);
@@ -993,7 +1024,7 @@ model::metadata make_metadata(FileInfo* fi) {
     md.name = fd->name;
     md.hash_key = fd->hash_key;
     md.size = fd->size;
-    md.num_block = fd->num_block;
+    md.num_block = fd->n_lblock;
     md.type = fd->type;
     md.replica = fd->replica;
 
@@ -1047,6 +1078,50 @@ model::metadata DFS::get_metadata(std::string& fname) {
     return model::metadata();
 }
 // }}}
+// get_metadata_optimized {{{
+model::metadata DFS::get_metadata_optimized(std::string& fname) {
+  model::metadata md;
+
+  FileRequest fr;
+  fr.name = fname;
+  fr.type = "LOGICAL_BLOCKS";
+
+  auto socket = connect(h(fname));
+  send_message(socket.get(), &fr);
+  auto fd = (read_reply<FileDescription> (socket.get()));
+  socket->close();
+
+  if(fd != nullptr) {
+    md.name = fd->name;
+    md.hash_key = fd->hash_key;
+    md.size = fd->size;
+    md.num_block = fd->n_lblock;
+    md.type = fd->type;
+    md.replica = fd->replica;
+    
+    // TODO: They must be removed
+    md.blocks = fd->blocks;
+    md.hash_keys = fd->hash_keys;
+    md.block_size = fd->block_size;
+    
+    // set block metadata
+    for (auto& lblock : fd->logical_blocks) {
+      model::block_metadata bdata;
+      bdata.name      = lblock.name;
+      bdata.size      = lblock.size;
+      bdata.host      = lblock.host_name;
+      bdata.index     = lblock.seq;
+      bdata.file_name = lblock.file_name;
+      for (auto& py_block : lblock.physical_blocks)
+        bdata.chunks_path.push_back(py_block.name);
+
+      md.block_data.push_back(bdata);
+    }
+  }
+
+  return md;
+}
+// }}}
 // get_metadata_all {{{
 vector<model::metadata> DFS::get_metadata_all() {
   vector<FileInfo> total; 
@@ -1076,6 +1151,39 @@ vector<model::metadata> DFS::get_metadata_all() {
   }
   
   return move(metadata_vector);
+}
+// }}}
+// file_metadata_append {{{
+void DFS::file_metadata_append(std::string name, size_t size, model::metadata& blocks) {
+  FileUpdate fu;
+  fu.name = name;
+  fu.num_block = blocks.blocks.size();
+  fu.size = size;
+  fu.is_append = true;
+
+  for (size_t i = 0; i < blocks.blocks.size(); i++) {
+    BlockMetadata metadata;
+    metadata.file_name = name;
+    metadata.name = blocks.blocks[i];
+    metadata.seq = 0;
+    metadata.hash_key = blocks.hash_keys[i];
+    metadata.size = blocks.block_size[i];
+    metadata.replica = 1;
+    metadata.type = 0;
+    metadata.node = "";
+    metadata.l_node = "";
+    metadata.r_node = "";
+    metadata.is_committed = 1;
+
+    fu.blocks_metadata.push_back(metadata);
+  }
+
+
+  uint32_t file_hash_key = h(name);
+  auto socket = connect(file_hash_key);
+  send_message(socket.get(), &fu);
+  read_reply<Reply>(socket.get());
+  socket->close();
 }
 // }}}
 }

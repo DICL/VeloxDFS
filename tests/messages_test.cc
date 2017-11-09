@@ -9,18 +9,18 @@ using namespace eclipse::messages;
 
 SUITE(MESSAGES) {
   TEST(basic) {
-    Message* a = new Boundaries ({1,2,3,4,5});
-    Message* b = new KeyValue (1, "K","V");
-    a->set_origin (1);
-    a->set_destination (2);
-    b->set_origin (1);
-    b->set_destination (2);
-    
-    string* a_out = save_message(a);
-    string* b_out = save_message(b);
-    boost::asio::streambuf a_buf, b_buf;
-    ostream os (&a_buf);
-    os << std::noskipws << *a_out;
+    //Message* a = new Message();
+    //Message* b = new Message();
+    //a->set_origin (1);
+    //a->set_destination (2);
+    //b->set_origin (1);
+    //b->set_destination (2);
+    //
+    //string* a_out = save_message(a);
+    ////string* b_out = save_message(b);
+    //boost::asio::streambuf a_buf, b_buf;
+    //ostream os (&a_buf);
+    //os << std::noskipws << *a_out;
     //os.seekp(0, ios::beg);
     //a_buf.commit(a_out.size());
     //cout << a_out.size() << endl;

@@ -2,6 +2,13 @@
 #include "file_leader.hh"
 #include "../messages/boost_impl.hh"
 #include "../messages/filedescription.hh"
+#include "../common/logical_block_metadata.hh"
+
+#ifdef LOGICAL_BLOCKS_FEATURE
+#include "../stats/logical_blocks_scheduler.hh"
+#endif
+
+#include <set>
 
 using namespace eclipse;
 using namespace eclipse::messages;
@@ -42,19 +49,6 @@ unique_ptr<Message> FileLeader::file_insert(messages::FileInfo* f) {
   fd->size = f->size;
   fd->hash_key = f->hash_key;
 
-  //Compute blocks information
-  /*
-  int index = 0;
-  for (uint32_t i = 0; i < n_blocks; i++) {
-    auto block_name = f->name + "_" + to_string(i);
-    uint64_t hash_key = boundaries->random_within_boundaries(index);
-    fd->blocks.push_back(block_name);
-    fd->hash_keys.push_back(hash_key);
-    fd->block_size.push_back(size_per_block);
-    index = (index + 1) % network_size; 
-  }
-  */
-
   return unique_ptr<Message>(fd);
 }
 // }}}
@@ -75,10 +69,26 @@ bool FileLeader::file_insert_confirm(messages::FileInfo* f) {
 bool FileLeader::file_update(messages::FileUpdate* f) {
   if (file_exist(f->name)) {
     DEBUG("[file_update] name: %s, size: %lu, num_block: %d", f->name.c_str(), f->size, f->num_block);
-    directory.file_table_update(f->name, f->size, f->num_block);
 
-    for (auto& metadata : f->blocks_metadata) {
-      directory.block_table_insert(metadata);
+    if (f->is_append) {
+      BlockInfo bi;
+      directory.select_last_block_metadata(f->name, &bi);
+      int last_seq = bi.seq;
+
+      for (auto& metadata : f->blocks_metadata) {
+        metadata.seq = ++last_seq;
+        directory.block_table_insert(metadata);
+      }
+
+      FileInfo fi;
+      directory.file_table_select(f->name, &fi);
+      directory.file_table_update(f->name, f->size + fi.size, last_seq + 1);
+
+    } else {
+      directory.file_table_update(f->name, f->size, f->num_block);
+      for (auto& metadata : f->blocks_metadata) {
+        directory.block_table_insert(metadata);
+      }
     }
 
     INFO("Updating to SQLite db");
@@ -121,7 +131,7 @@ unique_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
   fd->num_block = fi.num_block;
 
   int num_blocks = fi.num_block;
-  for (int i = 0; i< num_blocks; i++) {
+  for (int i = 0; i < num_blocks; i++) {
     BlockInfo bi;
     directory.block_table_select(file_name, i, &bi);
     string block_name = bi.name;
@@ -130,6 +140,9 @@ unique_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
     fd->block_size.push_back(bi.size);
     fd->block_hosts.push_back(bi.node);
   }
+
+  if (m->type == "LOGICAL_BLOCKS")
+    find_best_arrangement(fd);
 
   return unique_ptr<Message>(fd);
 }
@@ -173,5 +186,21 @@ bool FileLeader::format () {
   local_io.format();
   directory.create_tables();
   return true;
+}
+// }}}
+// find_best_arrangement {{{
+void FileLeader::find_best_arrangement(messages::FileDescription* file_desc) {
+#ifdef LOGICAL_BLOCKS_FEATURE
+  using namespace eclipse::logical_blocks_schedulers;
+  auto nodes = context.settings.get<vec_str>("network.nodes");
+
+  map<string, string> opts;
+  opts["alpha"] = GET_STR("addons.alpha");
+  opts["beta"]  = GET_STR("addons.beta");
+
+  auto scheduler = scheduler_factory(GET_STR("addons.block_scheduler"), boundaries.get(), opts);
+
+  scheduler->generate(*file_desc, nodes);
+#endif
 }
 // }}}

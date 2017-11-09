@@ -4,6 +4,11 @@
 #include <network/simple_router.hh>
 #include <fileleader/file_leader_router.hh>
 #include <blocknode/block_node_router.hh>
+
+#ifdef LOGICAL_BLOCKS_FEATURE
+#include <src/stats/io_monitor_invoker.hh>
+#endif
+
 #include <memory>
 
 using namespace eclipse;
@@ -25,6 +30,11 @@ int main (int argc, char ** argv) {
 
   external_net->establish();
 
+#ifdef LOGICAL_BLOCKS_FEATURE
+  invoke_io_reporter();
+#endif
+
+  context.run();
   context.join();
 
   return EXIT_SUCCESS;

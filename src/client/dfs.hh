@@ -72,7 +72,15 @@ class DFS {
 
     model::metadata get_metadata(std::string& fname);
 
+    model::metadata get_metadata_optimized(std::string& fname);
+
     std::vector<model::metadata> get_metadata_all();
+
+    //! @attention char out is dynamically allocated, needs to be freed after 
+    //! being used.
+    int read_block(model::metadata& md, std::string block_name, char* out);
+
+    void file_metadata_append(std::string, size_t, model::metadata&);
 
     //! @deprecated
     int pget(vec_str);

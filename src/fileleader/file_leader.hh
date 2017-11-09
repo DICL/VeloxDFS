@@ -9,6 +9,7 @@
 #include "../messages/filelist.hh"
 #include "../messages/filedel.hh"
 #include "../messages/fileexist.hh"
+#include "../messages/filedescription.hh"
 #include "../messages/metadata.hh"
 #include "../common/histogram.hh"
 
@@ -53,6 +54,8 @@ class FileLeader: public Node {
     Local_io local_io;
     std::unique_ptr<Histogram> boundaries;
     int network_size;
+
+    void find_best_arrangement(messages::FileDescription* file_desc);
 };
 
 }

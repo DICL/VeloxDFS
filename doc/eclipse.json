@@ -1,16 +1,18 @@
 {
- "name"    : "Raven cluster eclipseMR file",
+ "name"    : "Dumbo cluster eclipseMR file",
  "max_job" : 1024,
 
  "log" : {
    "type" : "LOG_LOCAL6",
-   "name" : "ECLIPSE"
+   "name" : "ECLIPSE",
+   "mask" : "info"
  },
 
  "path" : {
-   "scratch"    : "/scratch/vicente/storage",
-   "idata"      : "/scratch/vicente/idata",
-   "metadata"   : "/scratch/vicente/"
+   "scratch"      : "/scratch/vicente/storage",
+   "idata"        : "/scratch/vicente/idata",
+   "metadata"     : "/scratch/vicente/",
+   "applications" : "/scratch/vicente/apps"
  },
 
  "cache" : {
@@ -21,23 +23,56 @@
 
  "network" : {
    "ports" : {
-     "internal" : 8008,
-     "client"   : 8009
+     "internal" : 8318,
+     "client"   : 8319,
+     "mapreduce"   : 8321
    },
 
-   "iface"          : "em1",
+   "iface"          : "eth0",
    "nodes"          : [
-     "10.20.13.123",
-     "10.20.13.124",
-     "10.20.13.125"
+     "172.20.1.40",
+     "172.20.1.41",
+     "172.20.1.42",
+     "172.20.1.43",
+     "172.20.1.44",
+     "172.20.1.45",
+     "172.20.1.46",
+     "172.20.1.47",
+     "172.20.1.48",
+     "172.20.1.49"
    ],
-   "serialization" : "xml"
+   "serialization"   : "binary"
  },
 
  "filesystem" : {
-   "block"  : 134217728,
+   "block"  : 2000,
    "buffer" : 512,
    "replica" : 3
- }
+ },
 
+ "mapreduce" : {
+   "reduce_slot" : 4,
+   "iblock_size" : 134217000,
+   "write_buf_size" : 5120000,
+   "mappers" : 4 
+ },
+
+ "addons" : {
+   "zk" : {
+     "enabled" : "true",
+     "addr" : "dumbomaster",
+     "port" : "2181",
+     "client_path" : "/home/vicente/opt/zookeeper-3.4.10/bin/zkCli.sh"
+   },
+
+   "disk_id" : "sdb",
+   "disk_monitor_tick" : 5,
+   "block_scheduler" : "scheduler_score_based",
+   "alpha" : "0.5",
+   "beta" : "0.5"
+  },
+ "launcher" : {
+   "DFS" : "eclipse_node",
+   "MR" : "eclipse_node_mr"
+ }
 }

@@ -10,6 +10,7 @@
 #include <boost/asio/spawn.hpp>
 #include <boost/asio/error.hpp>
 #include <memory>
+#include <mutex>
 
 namespace eclipse {
 namespace network {
@@ -24,7 +25,7 @@ class AsyncChannel: public Channel, public std::enable_shared_from_this<AsyncCha
   public:
     //! @param node_ Observer object
     AsyncChannel(NetObserver* node_);
-    virtual ~AsyncChannel() = default;
+    virtual ~AsyncChannel() ;
 
     //! @brief Write asynchronously the message.
     void do_write(messages::Message*) override; 
@@ -55,6 +56,11 @@ class AsyncChannel: public Channel, public std::enable_shared_from_this<AsyncCha
     std::queue<std::shared_ptr<std::string>> messages_queue;
     std::atomic<bool> is_writing;
     boost::asio::io_service& iosvc;
+
+    std::mutex queue_mutex;
+
+    std::string host;
+    uint32_t port;
 };
 
 }

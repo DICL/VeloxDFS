@@ -5,6 +5,8 @@
 #include <iostream>
 #include <iterator>
 #include <iomanip>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 
 using vec_str = std::vector<std::string>;
 using namespace std;
@@ -15,7 +17,7 @@ const string help = "veloxdfs [options] <command> <FILES...>\n\n"
 "========\n"
 "\tput\t\t\tUpload a file\n"
 "\tget\t\t\tDownload a file\n"
-"\trm\t\t\tRemove a file\n"
+"\tremove\t\t\tRemove a file\n"
 "\tcat\t\t\tDisplay a file's content\n"
 "\tshow\t\t\tShow block location of a file\n"
 "\tls\t\t\tList all the files\n"
@@ -48,8 +50,13 @@ bool cli_driver::parse_args (int argc, char** argv) {
     if (command == "ls") { 
 
       bool is_human_readable = false;
-      if (argc > 2 && argv[2] == string("-h"))
+      if (argc > 2 && argv[2] == string("-h")) {
         is_human_readable = true;
+
+      } else if (argc > 2 && argv[2] == string("-o")) {
+        file_show_optimized(argv[3]);
+        return true;
+      }
 
       list(is_human_readable);
     } else format();
@@ -129,6 +136,43 @@ void cli_driver::file_show (std::string file) {
     }
   }
 
+}
+// }}}
+// file_show_optimized {{{
+void cli_driver::file_show_optimized(std::string file) {
+
+#ifndef LOGICAL_BLOCKS_FEATURE
+  cout << "ERROR! LOGICAL BLOCKS FEATURE IS DISABLED IN THIS BUILD" << endl;
+  exit(EXIT_FAILURE);
+#endif
+
+  vec_str nodes = GET_VEC_STR("network.nodes");
+  Histogram boundaries(nodes.size(), 100);
+  boundaries.initialize();
+
+  cout 
+    << setw(25) << "FileName" 
+    << setw(14) << "FileID"
+    << setw(14) << "FileSize"
+    << setw(25) << "BlockName"
+    << setw(14) << "BlockSize"
+    << setw(14) << "PyBlocks"
+    << setw(14) << "Host"
+    << endl << string(123,'-') << endl;
+
+  model::metadata md = dfs.get_metadata_optimized(file);
+
+  for (unsigned i = 0; i < md.num_block; i++) {
+    cout 
+      << setw(25) << md.name
+      << setw(14) << md.hash_key
+      << setw(14) << md.size
+      << setw(25) << md.block_data[i].name
+      << setw(14) << md.block_data[i].size
+      << setw(14) << md.block_data[i].chunks_path.size()
+      << setw(14) << md.block_data[i].host
+      << endl;
+  } 
 }
 // }}}
 // list {{{

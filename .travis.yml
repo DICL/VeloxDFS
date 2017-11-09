@@ -1,10 +1,10 @@
 sudo: false
-dist: precise
+dist: trusty 
 language: cpp
 
 cache:
- - apt
- - ccache
+  - apt: true
+  - ccache
 
 git:
   submodules: false
@@ -29,6 +29,7 @@ addons:
     - libunittest++-dev
     - doxygen
     - gdb 
+    - libzookeeper-mt-dev
 
 before_script:
   - export CXX=g++-4.9
@@ -63,4 +64,6 @@ after_success: |
         git add .
         git commit -m "API: $TRAVIS_TAG"
         git push origin gh-pages
+        bash .github/make_release.sh
+        git push --tags
   fi

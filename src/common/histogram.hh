@@ -1,11 +1,19 @@
 #ifndef __HISTOGRAM__
 #define __HISTOGRAM__
 
-#include "definitions.hh"
 #include <iostream>
 #include <ctime>
 
 #define MAX_UINT 4294967295
+
+// EM-KDE
+#ifndef ALPHA
+#define ALPHA 0.001
+#endif
+
+#ifndef KERNELWIDTH
+#define KERNELWIDTH 2 // number of bins affected by count_query() function: 1 + 2*KERNELWIDTH (except the boundary bins)
+#endif
 
 using namespace std;
 
