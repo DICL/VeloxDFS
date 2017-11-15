@@ -1,11 +1,13 @@
-VeloxDFS  {#mainpage}
-========
----
+VeloxDFS  {#mainpage} 
+======== 
+<!-- @cond Remove those links for Doxygen-->
+--- 
 [![Build Status](https://travis-ci.org/DICL/VeloxDFS.svg?branch=master)](https://travis-ci.org/DICL/VeloxDFS)
 [![Slack room](https://img.shields.io/badge/slack-join-pink.svg)](https://dicl.slack.com/messages/general/)
 [![ZenHub](https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)](https://zenhub.com)
 [![Analytics](https://ga-beacon.appspot.com/UA-87474237-1/veloxdfs)](https://github.com/DICL/VeloxDFS)
 ---
+<!-- @endcond -->
 
 _VeloxDFS_ is a decentralized distributed file system based on _ChordDHT_ and _HDFS_.
 
@@ -18,8 +20,6 @@ Key features of current VeloxDFS implementation includes:
  - Instead for each file there is a file leader node which holds its metadata.
  - Highly secure and stable, total replication of the system's state.
 
----
-
 USAGE
 =====
 VeloxDFS default launcher is not included in this repository, if you want to use it you can find it [here](https://github.com/DICL/eclipsed).
@@ -29,9 +29,9 @@ The reason not to include the launcher inside the package is to let the user to 
  - puppet/chef/salt
  
 Once the system is up and running, you can interact with VeloxDFS with the following commands:
-```
- $ dfs put|get|cat|ls|rm|format|pget|update|append
-```
+
+    $ dfs put|get|cat|ls|rm|format|pget|update|append
+
 
 COMPILING & INSTALLING
 ======================
@@ -62,7 +62,7 @@ For single user installation for developers
     ### This last command will be needed whenever you want to recompile the source
     $ make [-j#] install                                   # Compile & install add -j flag to speed up
 
-Now edit in your **~/.bashrc** or **~/.profile**:
+Now edit in your `~/.bashrc` or `~/.profile`:
 
     export PATH="/home/*..PATH/To/eclipse/..*/sandbox/bin":$PATH
     export LIBRARY_PATH="/home/*..PATH/To/eclipse/..*/sandbox/lib"
@@ -96,9 +96,9 @@ FAQ
 - _Question_ : `configure` stops with errors related to boost library.
 - _Answer_ : It probably means that you do not have boost library installed in
   the default location, in such case you should specify the boost library location.
-  ```
-  sh ../VeloxDFS/configure --prefix ~/sandbox --with-boost=/usr/local --with-boost-libdir=/usr/local/lib
-  ```
+
+    sh ../VeloxDFS/configure --prefix ~/sandbox --with-boost=/usr/local --with-boost-libdir=/usr/local/lib
+
   In this example we assume that the boost headers are in `/usr/local/include` while the library files
   are inside `/usr/local/lib`.
 

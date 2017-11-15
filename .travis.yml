@@ -54,10 +54,13 @@ after_success: |
         cd ..
         git config --global user.email "Travis"
         git config --global user.name  "Travis"
+        git submodule init
+        git submodule update
         git submodule add -b gh-pages -f git@github.com:DICL/VeloxDFS ./doc/html
         git submodule update --init -- ./doc/html
         cd doc/html
         git checkout gh-pages
+        rm -rf *
         cd ../
         doxygen
         cd html
