@@ -1,5 +1,4 @@
 <map id="eclipse::network::Channel" name="eclipse::network::Channel">
-<area shape="rect" id="node2" href="$classeclipse_1_1network_1_1AsyncChannel.html" title="eclipse::network::AsyncChannel" alt="" coords="66,80,277,107"/>
-<area shape="rect" id="node3" href="$classeclipse_1_1network_1_1P2P.html" title="eclipse::network::P2P" alt="" coords="5,155,156,181"/>
-<area shape="rect" id="node4" href="$classeclipse_1_1network_1_1Server.html" title="eclipse::network::Server" alt="" coords="181,155,343,181"/>
+<area shape="rect" id="node2" href="$classeclipse_1_1network_1_1AsyncChannel.html" title="Represent an opened channel between two endpoints. " alt="" coords="5,161,216,341"/>
+<area shape="rect" id="node3" href="$classeclipse_1_1network_1_1Server.html" title="{eclipse::network::Server\n||+ Server()\l+ is_multiple()\l}" alt="" coords="29,390,192,482"/>
 </map>

@@ -1,3 +1,4 @@
 <map id="eclipse::messages::FileInfo" name="eclipse::messages::FileInfo">
-<area shape="rect" id="node2" href="$structeclipse_1_1messages_1_1Message.html" title="eclipse::messages::\lMessage" alt="" coords="5,5,144,47"/>
+<area shape="rect" id="node3" href="$structeclipse_1_1messages_1_1FileDescription.html" title="{eclipse::messages::\lFileDescription\n|+ blocks\l+ hash_keys\l+ block_size\l+ block_hosts\l+ logical_blocks\l|+ FileDescription()\l+ ~FileDescription()\l+ operator=()\l+ get_type()\l}" alt="" coords="5,581,144,776"/>
+<area shape="rect" id="node2" href="$structeclipse_1_1messages_1_1Message.html" title="{eclipse::messages::\lMessage\n|+ origin\l+ destination\l|+ Message()\l+ Message()\l+ ~Message()\l+ get_type()\l+ get_origin()\l+ get_destination()\l+ set_origin()\l+ set_destination()\l}" alt="" coords="5,6,144,215"/>
 </map>

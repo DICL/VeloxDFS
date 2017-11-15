@@ -1,8 +1,29 @@
 var searchData=
 [
+  ['file',['file',['../classvelox_1_1file.html#a120bb2dc07a5eb55e6d0c78677521ae8',1,'velox::file::file(vdfs *, std::string)'],['../classvelox_1_1file.html#af9c5ab6fa402d626bb1738353e546ad8',1,'velox::file::file(vdfs *, std::string, bool)'],['../classvelox_1_1file.html#a0f2b8bf33123c07552a02333a96db0de',1,'velox::file::file(const file &amp;)']]],
+  ['file_5fdelete',['file_delete',['../classeclipse_1_1FileLeader.html#aa9cce0e81b1fdf8b239f68824376c530',1,'eclipse::FileLeader']]],
+  ['file_5fexist',['file_exist',['../classeclipse_1_1FileLeader.html#a880911f1b34332d342ae6ee26f516ecb',1,'eclipse::FileLeader::file_exist()'],['../classeclipse_1_1FileLeaderRouter.html#a9d53fffcc6ef4d8bee7d1e51015909ff',1,'eclipse::FileLeaderRouter::file_exist()']]],
   ['file_5finsert',['file_insert',['../classeclipse_1_1FileLeader.html#a256d661a3770a18c379cba63c97c9f7b',1,'eclipse::FileLeader']]],
   ['file_5finsert_5fconfirm',['file_insert_confirm',['../classeclipse_1_1FileLeader.html#abcaedea847e152f4f6b5c53fc6311853',1,'eclipse::FileLeader']]],
+  ['file_5fmetadata_5fappend',['file_metadata_append',['../classvelox_1_1DFS.html#a7164a95c540e1be3fc94ea641fc33785',1,'velox::DFS']]],
   ['file_5frequest',['file_request',['../classeclipse_1_1FileLeader.html#a93d411d59d2532acedd7c092d555f102',1,'eclipse::FileLeader']]],
+  ['file_5ftable_5fconfirm_5fupload',['file_table_confirm_upload',['../classeclipse_1_1Directory.html#a255a82a8b5901b79a2800a5826c0b693',1,'eclipse::Directory']]],
+  ['file_5ftable_5fdelete',['file_table_delete',['../classeclipse_1_1Directory.html#a380e9f1684d5e67caca8ffd7fbb2ea70',1,'eclipse::Directory']]],
+  ['file_5ftable_5fexists',['file_table_exists',['../classeclipse_1_1Directory.html#a8a4df0dec2efad6f3e093d2ec749eed7',1,'eclipse::Directory']]],
+  ['file_5ftable_5finsert',['file_table_insert',['../classeclipse_1_1Directory.html#ae5a65a615dbc38d5be96c49cdcece7b6',1,'eclipse::Directory']]],
+  ['file_5ftable_5fselect',['file_table_select',['../classeclipse_1_1Directory.html#a5913426f6019ee7ae689ad0de140cd73',1,'eclipse::Directory']]],
+  ['file_5ftable_5fselect_5fall',['file_table_select_all',['../classeclipse_1_1Directory.html#a44b0315fafc84e627d01ffc3a135b23c',1,'eclipse::Directory']]],
+  ['file_5ftable_5fupdate',['file_table_update',['../classeclipse_1_1Directory.html#a9ea53871ba2b71bfab8204891949f009',1,'eclipse::Directory']]],
   ['file_5fupdate',['file_update',['../classeclipse_1_1FileLeader.html#a6ece78dc513a5c32e4357526e8cb95b3',1,'eclipse::FileLeader']]],
-  ['format',['format',['../classeclipse_1_1FileLeader.html#a798b32bb7efbc627bb6a51e1bac5e92b',1,'eclipse::FileLeader']]]
+  ['filedel',['FileDel',['../structeclipse_1_1messages_1_1FileDel.html#a1b2266798c01bee04d5b62dcddf49d3f',1,'eclipse::messages::FileDel']]],
+  ['filedescription',['FileDescription',['../structeclipse_1_1messages_1_1FileDescription.html#ace778144bf21461f111dc10c4677a57d',1,'eclipse::messages::FileDescription']]],
+  ['fileinfo',['FileInfo',['../structeclipse_1_1messages_1_1FileInfo.html#ac9ccab682a3af6563daff3428b3cc05a',1,'eclipse::messages::FileInfo']]],
+  ['fileleader',['FileLeader',['../classeclipse_1_1FileLeader.html#a24bdab0335c78f9bd2307eec7ca56c08',1,'eclipse::FileLeader']]],
+  ['fileleaderrouter',['FileLeaderRouter',['../classeclipse_1_1FileLeaderRouter.html#abd87eaae5b1ad3334a8e12a7cd06b6ac',1,'eclipse::FileLeaderRouter']]],
+  ['filelist',['FileList',['../structeclipse_1_1messages_1_1FileList.html#ac1b65435296087c1b5bf266f11aa6316',1,'eclipse::messages::FileList::FileList()=default'],['../structeclipse_1_1messages_1_1FileList.html#ad4a6741f5ff26b4302d30600818b7728',1,'eclipse::messages::FileList::FileList(std::vector&lt; FileInfo &gt;)']]],
+  ['filerequest',['FileRequest',['../structeclipse_1_1messages_1_1FileRequest.html#a3daf2f569c302475e921f347390a7a76',1,'eclipse::messages::FileRequest']]],
+  ['fileupdate',['FileUpdate',['../structeclipse_1_1messages_1_1FileUpdate.html#a8685b5234b17803285ce79ae6d5e72f5',1,'eclipse::messages::FileUpdate']]],
+  ['find_5fbest_5farrangement',['find_best_arrangement',['../classeclipse_1_1FileLeader.html#a0268f8901d8c7fa385e605ec342081db',1,'eclipse::FileLeader']]],
+  ['format',['format',['../classeclipse_1_1Local__io.html#a0651ae9ed06f8ef3616c33e04d90bd49',1,'eclipse::Local_io::format()'],['../classvelox_1_1DFS.html#adbcccd7f974897f900e4b3cae83e414a',1,'velox::DFS::format()'],['../classvelox_1_1vdfs.html#a91539d84a7304e13a6388e31f559c4fd',1,'velox::vdfs::format()'],['../classeclipse_1_1FileLeader.html#a798b32bb7efbc627bb6a51e1bac5e92b',1,'eclipse::FileLeader::format()']]],
+  ['formatrequest',['FormatRequest',['../structeclipse_1_1messages_1_1FormatRequest.html#ac9ecc2419aee373e19ef2bbe30e5101f',1,'eclipse::messages::FormatRequest']]]
 ];

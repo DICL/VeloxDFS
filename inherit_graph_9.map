@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structeclipse_1_1network_1_1NetObserver.html" title="eclipse::network::NetObserver" alt="" coords="5,5,204,32"/>
-<area shape="rect" id="node2" href="$classeclipse_1_1network_1_1AsyncNetwork.html" title="eclipse::network::AsyncNetwork\l\&lt; TYPE \&gt;" alt="" coords="252,23,463,65"/>
-<area shape="rect" id="node3" href="$classeclipse_1_1network_1_1Network.html" title="eclipse::network::Network" alt="" coords="17,56,192,83"/>
+<area shape="rect" id="node1" href="$classeclipse_1_1network_1_1Channel.html" title="eclipse::network::Channel" alt="" coords="5,5,179,32"/>
+<area shape="rect" id="node2" href="$classeclipse_1_1network_1_1AsyncChannel.html" title="Represent an opened channel between two endpoints. " alt="" coords="227,31,437,57"/>
+<area shape="rect" id="node3" href="$classeclipse_1_1network_1_1Server.html" title="eclipse::network::Server" alt="" coords="485,31,648,57"/>
 </map>

@@ -1,6 +1,7 @@
 <map id="eclipse::Router" name="eclipse::Router">
-<area shape="rect" id="node5" href="$classeclipse_1_1RemoteDFS.html" title="eclipse::RemoteDFS" alt="" coords="65,229,209,256"/>
-<area shape="rect" id="node2" href="$classeclipse_1_1Node.html" title="eclipse::Node" alt="" coords="14,80,117,107"/>
-<area shape="rect" id="node3" href="$classeclipse_1_1Machine.html" title="eclipse::Machine" alt="" coords="5,5,125,32"/>
-<area shape="rect" id="node4" href="$classeclipse_1_1AsyncNode.html" title="eclipse::AsyncNode" alt="" coords="141,80,280,107"/>
+<area shape="rect" id="node3" href="$classeclipse_1_1RouterDecorator.html" title="{eclipse::RouterDecorator\n|# router\l|+ RouterDecorator()\l+ ~RouterDecorator()\l+ on_read()\l}" alt="" coords="107,301,273,408"/>
+<area shape="rect" id="node6" href="$classeclipse_1_1SimpleRouter.html" title="{eclipse::SimpleRouter\n||+ on_read()\l}" alt="" coords="298,316,448,393"/>
+<area shape="rect" id="node2" href="$structeclipse_1_1network_1_1NetObserver.html" title="{eclipse::network::NetObserver\n||+ ~NetObserver()\l+ on_read()\l}" alt="" coords="182,6,380,98"/>
+<area shape="rect" id="node4" href="$classeclipse_1_1BlockNodeRouter.html" title="{eclipse::BlockNodeRouter\n||+ BlockNodeRouter()\l+ ~BlockNodeRouter()\l+ io_operation()\l}" alt="" coords="5,508,179,615"/>
+<area shape="rect" id="node5" href="$classeclipse_1_1FileLeaderRouter.html" title="{eclipse::FileLeaderRouter\n|# file_leader\l|+ FileLeaderRouter()\l+ ~FileLeaderRouter()\l# insert_file()\l# update_file()\l# request_file()\l# request_ls()\l# delete_file()\l# file_exist()\l# replicate_metadata()\l# request_format()\l}" alt="" coords="204,457,375,666"/>
 </map>

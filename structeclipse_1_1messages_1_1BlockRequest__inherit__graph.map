@@ -1,3 +1,3 @@
 <map id="eclipse::messages::BlockRequest" name="eclipse::messages::BlockRequest">
-<area shape="rect" id="node2" href="$structeclipse_1_1messages_1_1Message.html" title="eclipse::messages::\lMessage" alt="" coords="5,5,144,47"/>
+<area shape="rect" id="node2" href="$structeclipse_1_1messages_1_1Message.html" title="{eclipse::messages::\lMessage\n|+ origin\l+ destination\l|+ Message()\l+ Message()\l+ ~Message()\l+ get_type()\l+ get_origin()\l+ get_destination()\l+ set_origin()\l+ set_destination()\l}" alt="" coords="13,6,152,215"/>
 </map>

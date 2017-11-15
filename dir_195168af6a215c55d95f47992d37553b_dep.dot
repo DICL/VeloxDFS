@@ -1,9 +1,0 @@
-digraph "/home/travis/build/DICL/VeloxDFS/src/java/jni" {
-  compound=true
-  node [ fontsize="10", fontname="Helvetica"];
-  edge [ labelfontsize="10", labelfontname="Helvetica"];
-  subgraph clusterdir_a3016bf19aa28451207b266e9b24d523 {
-    graph [ bgcolor="#ddddee", pencolor="black", label="java" fontname="Helvetica", fontsize="10", URL="dir_a3016bf19aa28451207b266e9b24d523.html"]
-  dir_195168af6a215c55d95f47992d37553b [shape=box, label="jni", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_195168af6a215c55d95f47992d37553b.html"];
-  }
-}

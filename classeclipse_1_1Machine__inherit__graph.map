@@ -1,6 +1,5 @@
 <map id="eclipse::Machine" name="eclipse::Machine">
-<area shape="rect" id="node2" href="$classeclipse_1_1Node.html" title="eclipse::Node" alt="" coords="87,80,190,107"/>
-<area shape="rect" id="node3" href="$classeclipse_1_1PeerDFS.html" title="eclipse::PeerDFS" alt="" coords="5,155,131,181"/>
-<area shape="rect" id="node4" href="$classeclipse_1_1Router.html" title="eclipse::Router" alt="" coords="155,155,266,181"/>
-<area shape="rect" id="node5" href="$classeclipse_1_1RemoteDFS.html" title="eclipse::RemoteDFS" alt="" coords="139,229,283,256"/>
+<area shape="rect" id="node2" href="$classeclipse_1_1Node.html" title="{eclipse::Node\n|# network\l# logger\l# ip_of_this\l# port\l|+ Node()\l+ ~Node()\l+ get_ip()\l}" alt="" coords="123,190,225,341"/>
+<area shape="rect" id="node3" href="$classeclipse_1_1BlockNode.html" title="{eclipse::BlockNode\n|# local_io\l# network_size\l|+ BlockNode()\l+ ~BlockNode()\l+ block_insert_local()\l+ block_delete_local()\l+ block_update_local()\l+ block_read_local()\l# replicate_message()\l}" alt="" coords="5,449,157,629"/>
+<area shape="rect" id="node4" href="$classeclipse_1_1FileLeader.html" title="{eclipse::FileLeader\n|# directory\l# local_io\l# boundaries\l# network_size\l|+ FileLeader()\l+ ~FileLeader()\l+ file_insert()\l+ file_insert_confirm()\l+ file_request()\l+ file_delete()\l+ list()\l+ file_exist()\l+ file_update()\l+ metadata_save()\l+ format()\l# replicate_metadata()\l# find_best_arrangement()\l}" alt="" coords="183,390,356,687"/>
 </map>
