@@ -1,10 +1,9 @@
-VeloxDFS  {#mainpage} 
+VeloxDFS {#mainpage}
 ======== 
 <!-- @cond Remove those links for Doxygen-->
 --- 
 [![Build Status](https://travis-ci.org/DICL/VeloxDFS.svg?branch=master)](https://travis-ci.org/DICL/VeloxDFS)
 [![Slack room](https://img.shields.io/badge/slack-join-pink.svg)](https://dicl.slack.com/messages/general/)
-[![ZenHub](https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)](https://zenhub.com)
 [![Analytics](https://ga-beacon.appspot.com/UA-87474237-1/veloxdfs)](https://github.com/DICL/VeloxDFS)
 ---
 <!-- @endcond -->
@@ -22,21 +21,21 @@ Key features of current VeloxDFS implementation includes:
 
 USAGE
 =====
-VeloxDFS default launcher is not included in this repository, if you want to use it you can find it [here](https://github.com/DICL/eclipsed).
-
-The reason not to include the launcher inside the package is to let the user to choose any launcher or service managers such as:
+VeloxDFS default [launcher] [eclipsed] is not included in this repository since its a temporary hack and 
+we want to let the user to choose any launcher or service managers such as:
  - systemd/init.d
  - puppet/chef/salt
  
 Once the system is up and running, you can interact with VeloxDFS with the following commands:
 
-    $ dfs put|get|cat|ls|rm|format|pget|update|append
+    $ dfs put|get|cat|ls|rm|format|show
 
 
 COMPILING & INSTALLING
 ======================
-
-_Detailed information can be found in the wiki of this repository_
+<!-- @cond Remove those links for Doxygen-->
+Further information can be found it in: [Installation](https://github.com/DICL/VeloxDFS/wiki/Installation)
+<!-- @endcond -->
 
 Compiling requirements
 ----------------------
@@ -68,7 +67,6 @@ Now edit in your `~/.bashrc` or `~/.profile`:
     export LIBRARY_PATH="/home/*..PATH/To/eclipse/..*/sandbox/lib"
     export C_INCLUDE_PATH="/home/*..PATH/To/eclipse/..*/sandbox/include"
 
-
 Default settings for VELOXDFS 
 -----------------------------
 
@@ -90,6 +88,10 @@ Default settings for VELOXDFS
       "replica"  : 1
     }
 
+<!-- @cond Remove those links for Doxygen-->
+Further information can be found it in: [Conf reference](https://github.com/DICL/VeloxDFS/wiki/Configuration-file-reference)
+<!-- @endcond -->
+
 FAQ
 ---
 
@@ -97,7 +99,7 @@ FAQ
 - _Answer_ : It probably means that you do not have boost library installed in
   the default location, in such case you should specify the boost library location.
 
-    sh ../VeloxDFS/configure --prefix ~/sandbox --with-boost=/usr/local --with-boost-libdir=/usr/local/lib
+        sh ../VeloxDFS/configure --prefix ~/sandbox --with-boost=/usr/local --with-boost-libdir=/usr/local/lib
 
   In this example we assume that the boost headers are in `/usr/local/include` while the library files
   are inside `/usr/local/lib`.
@@ -112,3 +114,6 @@ AUTHORS
  - __AUTHOR:__ [Deukyeon Hwang](https://github.com/deukyeon)
  - __AUTHOR:__ [Prof. Nam Beomseok](http://dicl.unist.ac.kr)
  - __INSTITUTION:__ [DICL laboratory](http://dicl.unist.ac.kr) at _UNIST_ 
+
+<!--links-->
+[eclipsed]: https://github.com/DICL/eclipsed
