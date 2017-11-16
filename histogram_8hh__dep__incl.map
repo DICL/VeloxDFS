@@ -1,0 +1,14 @@
+<map id="/home/vicente/VeloxDFS/src/common/histogram.hh" name="/home/vicente/VeloxDFS/src/common/histogram.hh">
+<area shape="rect" id="node2" href="$cli__driver_8cc.html" title="/home/vicente/VeloxDFS\l/src/client/cli_driver.cc" alt="" coords="5,103,173,145"/>
+<area shape="rect" id="node3" href="$dfs_8cc.html" title="/home/vicente/VeloxDFS\l/src/client/dfs.cc" alt="" coords="197,103,365,145"/>
+<area shape="rect" id="node4" href="$histogram_8cc.html" title="/home/vicente/VeloxDFS\l/src/common/histogram.cc" alt="" coords="390,103,567,145"/>
+<area shape="rect" id="node5" href="$file__leader_8hh.html" title="/home/vicente/VeloxDFS\l/src/fileleader/file_leader.hh" alt="" coords="592,103,773,145"/>
+<area shape="rect" id="node10" href="$logical__blocks__scheduler_8hh.html" title="/home/vicente/VeloxDFS\l/src/stats/logical_blocks\l_scheduler.hh" alt="" coords="935,96,1103,152"/>
+<area shape="rect" id="node11" href="$scheduler__factory_8cc.html" title="/home/vicente/VeloxDFS\l/src/stats/scheduler_factory.cc" alt="" coords="769,207,972,249"/>
+<area shape="rect" id="node6" href="$file__leader_8cc.html" title="/home/vicente/VeloxDFS\l/src/fileleader/file_leader.cc" alt="" coords="372,207,553,249"/>
+<area shape="rect" id="node7" href="$file__leader__router_8hh.html" title="/home/vicente/VeloxDFS\l/src/fileleader/file_leader\l_router.hh" alt="" coords="577,200,745,256"/>
+<area shape="rect" id="node8" href="$file__leader__router_8cc.html" title="/home/vicente/VeloxDFS\l/src/fileleader/file_leader\l_router.cc" alt="" coords="480,304,648,360"/>
+<area shape="rect" id="node9" href="$node__main_8cc.html" title="/home/vicente/VeloxDFS\l/src/targets/node_main.cc" alt="" coords="672,311,845,353"/>
+<area shape="rect" id="node12" href="$scheduler__score__based_8cc.html" title="/home/vicente/VeloxDFS\l/src/stats/scheduler_score\l_based.cc" alt="" coords="996,200,1172,256"/>
+<area shape="rect" id="node13" href="$scheduler__simple_8cc.html" title="/home/vicente/VeloxDFS\l/src/stats/scheduler_simple.cc" alt="" coords="1196,207,1396,249"/>
+</map>

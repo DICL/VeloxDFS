@@ -1,0 +1,27 @@
+<map id="/home/vicente/VeloxDFS/src/common/context_singleton.hh" name="/home/vicente/VeloxDFS/src/common/context_singleton.hh">
+<area shape="rect" id="node2" href="$node_8hh.html" title="/home/vicente/VeloxDFS\l/src/nodes/node.hh" alt="" coords="708,103,876,145"/>
+<area shape="rect" id="node6" href="$block__node__router_8cc.html" title="/home/vicente/VeloxDFS\l/src/blocknode/block_node\l_router.cc" alt="" coords="5,395,181,451"/>
+<area shape="rect" id="node13" href="$local__io_8cc.html" title="/home/vicente/VeloxDFS\l/src/blocknode/local_io.cc" alt="" coords="1051,103,1224,145"/>
+<area shape="rect" id="node14" href="$cli__driver_8cc.html" title="/home/vicente/VeloxDFS\l/src/client/cli_driver.cc" alt="" coords="1248,103,1416,145"/>
+<area shape="rect" id="node15" href="$dfs_8cc.html" title="/home/vicente/VeloxDFS\l/src/client/dfs.cc" alt="" coords="1440,103,1608,145"/>
+<area shape="rect" id="node16" href="$context__singleton_8cc.html" title="/home/vicente/VeloxDFS\l/src/common/context_singleton.cc" alt="" coords="1633,103,1855,145"/>
+<area shape="rect" id="node17" href="$directory_8cc.html" title="/home/vicente/VeloxDFS\l/src/fileleader/directory.cc" alt="" coords="1879,103,2051,145"/>
+<area shape="rect" id="node11" href="$file__leader__router_8cc.html" title="/home/vicente/VeloxDFS\l/src/fileleader/file_leader\l_router.cc" alt="" coords="868,395,1036,451"/>
+<area shape="rect" id="node18" href="$factory_8cc.html" title="/home/vicente/VeloxDFS\l/src/messages/factory.cc" alt="" coords="2076,103,2247,145"/>
+<area shape="rect" id="node19" href="$asyncchannel_8cc.html" title="/home/vicente/VeloxDFS\l/src/network/asyncchannel.cc" alt="" coords="2271,103,2467,145"/>
+<area shape="rect" id="node20" href="$client__handler_8cc.html" title="/home/vicente/VeloxDFS\l/src/network/client_handler.cc" alt="" coords="2491,103,2687,145"/>
+<area shape="rect" id="node21" href="$server__handler_8cc.html" title="/home/vicente/VeloxDFS\l/src/network/server_handler.cc" alt="" coords="2711,103,2912,145"/>
+<area shape="rect" id="node22" href="$simple__router_8cc.html" title="/home/vicente/VeloxDFS\l/src/network/simple_router.cc" alt="" coords="2937,103,3132,145"/>
+<area shape="rect" id="node23" href="$io__monitor__invoker_8cc.html" title="/home/vicente/VeloxDFS\l/src/stats/io_monitor\l_invoker.cc" alt="" coords="3156,96,3324,152"/>
+<area shape="rect" id="node24" href="$scheduler__factory_8cc.html" title="/home/vicente/VeloxDFS\l/src/stats/scheduler_factory.cc" alt="" coords="3348,103,3551,145"/>
+<area shape="rect" id="node25" href="$zk__listener_8cc.html" title="/home/vicente/VeloxDFS\l/src/stats/zk_listener.cc" alt="" coords="3575,103,3743,145"/>
+<area shape="rect" id="node7" href="$node__main_8cc.html" title="/home/vicente/VeloxDFS\l/src/targets/node_main.cc" alt="" coords="207,402,380,443"/>
+<area shape="rect" id="node26" href="$velox__get__config_8cc.html" title="/home/vicente/VeloxDFS\l/src/targets/velox_get\l_config.cc" alt="" coords="3767,96,3935,152"/>
+<area shape="rect" id="node3" href="$block__node_8hh.html" title="/home/vicente/VeloxDFS\l/src/blocknode/block_node.hh" alt="" coords="384,201,579,242"/>
+<area shape="rect" id="node8" href="$file__leader_8hh.html" title="/home/vicente/VeloxDFS\l/src/fileleader/file_leader.hh" alt="" coords="603,201,784,242"/>
+<area shape="rect" id="node12" href="$node_8cc.html" title="/home/vicente/VeloxDFS\l/src/nodes/node.cc" alt="" coords="808,201,976,242"/>
+<area shape="rect" id="node4" href="$block__node_8cc.html" title="/home/vicente/VeloxDFS\l/src/blocknode/block_node.cc" alt="" coords="384,298,579,339"/>
+<area shape="rect" id="node5" href="$block__node__router_8hh.html" title="/home/vicente/VeloxDFS\l/src/blocknode/block_node\l_router.hh" alt="" coords="182,291,359,347"/>
+<area shape="rect" id="node9" href="$file__leader_8cc.html" title="/home/vicente/VeloxDFS\l/src/fileleader/file_leader.cc" alt="" coords="603,298,784,339"/>
+<area shape="rect" id="node10" href="$file__leader__router_8hh.html" title="/home/vicente/VeloxDFS\l/src/fileleader/file_leader\l_router.hh" alt="" coords="808,291,976,347"/>
+</map>

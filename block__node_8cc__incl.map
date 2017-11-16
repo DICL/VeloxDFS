@@ -1,0 +1,19 @@
+<map id="/home/vicente/VeloxDFS/src/blocknode/block_node.cc" name="/home/vicente/VeloxDFS/src/blocknode/block_node.cc">
+<area shape="rect" id="node2" href="$block__node_8hh.html" title="block_node.hh" alt="" coords="1349,96,1456,123"/>
+<area shape="rect" id="node3" href="$node_8hh.html" title="../nodes/node.hh" alt="" coords="1187,171,1305,197"/>
+<area shape="rect" id="node27" href="$local__io_8hh.html" title="local_io.hh" alt="" coords="1497,635,1580,661"/>
+<area shape="rect" id="node29" href="$IOoperation_8hh.html" title="../messages/IOoperation.hh" alt="" coords="1507,560,1689,587"/>
+<area shape="rect" id="node4" href="$machine_8hh.html" title="machine.hh" alt="" coords="43,411,132,437"/>
+<area shape="rect" id="node7" href="$context__singleton_8hh.html" title="../common/context_singleton.hh" alt="" coords="465,245,673,272"/>
+<area shape="rect" id="node14" href="$message_8hh.html" title="../messages/message.hh" alt="" coords="1089,635,1257,661"/>
+<area shape="rect" id="node15" href="$client__handler_8hh.html" title="../network/client_handler.hh" alt="" coords="1066,245,1248,272"/>
+<area shape="rect" id="node8" href="$context_8hh.html" title="context.hh" alt="" coords="408,328,491,355"/>
+<area shape="rect" id="node9" href="$settings_8hh.html" title="settings.hh" alt="" coords="301,411,387,437"/>
+<area shape="rect" id="node10" href="$logger_8hh.html" title="logger.hh" alt="" coords="208,560,283,587"/>
+<area shape="rect" id="node16" href="$netobserver_8hh.html" title="netobserver.hh" alt="" coords="1142,485,1249,512"/>
+<area shape="rect" id="node18" href="$server_8hh.html" title="server.hh" alt="" coords="1082,328,1157,355"/>
+<area shape="rect" id="node17" href="$channel_8hh.html" title="channel.hh" alt="" coords="1091,560,1176,587"/>
+<area shape="rect" id="node19" href="$asyncchannel_8hh.html" title="asyncchannel.hh" alt="" coords="928,411,1048,437"/>
+<area shape="rect" id="node30" href="$block_8hh.html" title="../common/block.hh" alt="" coords="1605,635,1741,661"/>
+<area shape="rect" id="node32" href="$blockmetadata_8hh.html" title="../common/blockmetadata.hh" alt="" coords="1282,635,1472,661"/>
+</map>

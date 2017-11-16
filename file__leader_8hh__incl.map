@@ -1,0 +1,28 @@
+<map id="/home/vicente/VeloxDFS/src/fileleader/file_leader.hh" name="/home/vicente/VeloxDFS/src/fileleader/file_leader.hh">
+<area shape="rect" id="node2" href="$node_8hh.html" title="../nodes/node.hh" alt="" coords="515,96,633,123"/>
+<area shape="rect" id="node26" href="$directory_8hh.html" title="directory.hh" alt="" coords="2089,253,2180,280"/>
+<area shape="rect" id="node31" href="$local__io_8hh.html" title="../blocknode/local\l_io.hh" alt="" coords="1671,427,1795,469"/>
+<area shape="rect" id="node29" href="$fileinfo_8hh.html" title="../messages/fileinfo.hh" alt="" coords="2223,344,2377,371"/>
+<area shape="rect" id="node32" href="$fileupdate_8hh.html" title="../messages/fileupdate.hh" alt="" coords="1773,344,1944,371"/>
+<area shape="rect" id="node33" href="$filerequest_8hh.html" title="../messages/filerequest.hh" alt="" coords="2817,517,2993,544"/>
+<area shape="rect" id="node34" href="$filelist_8hh.html" title="../messages/filelist.hh" alt="" coords="2587,253,2737,280"/>
+<area shape="rect" id="node36" href="$filedel_8hh.html" title="../messages/filedel.hh" alt="" coords="2661,171,2811,197"/>
+<area shape="rect" id="node37" href="$fileexist_8hh.html" title="../messages/fileexist.hh" alt="" coords="2690,96,2851,123"/>
+<area shape="rect" id="node38" href="$filedescription_8hh.html" title="../messages/filedescription.hh" alt="" coords="2338,253,2533,280"/>
+<area shape="rect" id="node40" href="$messages_2metadata_8hh.html" title="../messages/metadata.hh" alt="" coords="1476,96,1647,123"/>
+<area shape="rect" id="node41" href="$histogram_8hh.html" title="../common/histogram.hh" alt="" coords="2943,253,3105,280"/>
+<area shape="rect" id="node3" href="$machine_8hh.html" title="machine.hh" alt="" coords="5,435,93,461"/>
+<area shape="rect" id="node6" href="$context__singleton_8hh.html" title="../common/context_singleton.hh" alt="" coords="299,171,507,197"/>
+<area shape="rect" id="node13" href="$message_8hh.html" title="../messages/message.hh" alt="" coords="1799,592,1968,619"/>
+<area shape="rect" id="node14" href="$client__handler_8hh.html" title="../network/client_handler.hh" alt="" coords="1286,171,1468,197"/>
+<area shape="rect" id="node7" href="$context_8hh.html" title="context.hh" alt="" coords="361,344,444,371"/>
+<area shape="rect" id="node8" href="$settings_8hh.html" title="settings.hh" alt="" coords="303,435,389,461"/>
+<area shape="rect" id="node9" href="$logger_8hh.html" title="logger.hh" alt="" coords="200,592,275,619"/>
+<area shape="rect" id="node15" href="$netobserver_8hh.html" title="netobserver.hh" alt="" coords="1386,435,1493,461"/>
+<area shape="rect" id="node17" href="$server_8hh.html" title="server.hh" alt="" coords="1045,253,1120,280"/>
+<area shape="rect" id="node16" href="$channel_8hh.html" title="channel.hh" alt="" coords="1335,517,1420,544"/>
+<area shape="rect" id="node18" href="$asyncchannel_8hh.html" title="asyncchannel.hh" alt="" coords="955,344,1075,371"/>
+<area shape="rect" id="node28" href="$blockinfo_8hh.html" title="../messages/blockinfo.hh" alt="" coords="2271,435,2439,461"/>
+<area shape="rect" id="node30" href="$blockmetadata_8hh.html" title="../common/blockmetadata.hh" alt="" coords="1922,435,2112,461"/>
+<area shape="rect" id="node39" href="$logical__block__metadata_8hh.html" title="../common/logical_block\l_metadata.hh" alt="" coords="2503,337,2665,378"/>
+</map>

@@ -1,6 +1,7 @@
 var searchData=
 [
   ['veloxdfs',['VeloxDFS',['../index.html',1,'']]],
+  ['veloxdfs_20architecutre',['VeloxDFS Architecutre',['../md_manual_VeloxDFS-architecture.html',1,'']]],
   ['model',['model',['../namespacevelox_1_1model.html',1,'velox']]],
   ['vdfs',['vdfs',['../classvelox_1_1vdfs.html',1,'velox']]],
   ['vdfs',['vdfs',['../classvelox_1_1vdfs.html#a6c03e00db9deb5a199bff81d0aba730c',1,'velox::vdfs::vdfs()'],['../classvelox_1_1vdfs.html#ad67089b5489ffb9aca51bcb2934a3ce4',1,'velox::vdfs::vdfs(vdfs &amp;)']]],
@@ -12,7 +13,8 @@ var searchData=
   ['velox_5fvdfs_2eh',['velox_VDFS.h',['../velox__VDFS_8h.html',1,'']]],
   ['velox_5fveloxdfs_2ecc',['velox_VeloxDFS.cc',['../velox__VeloxDFS_8cc.html',1,'']]],
   ['velox_5fveloxdfs_2eh',['velox_VeloxDFS.h',['../velox__VeloxDFS_8h.html',1,'']]],
-  ['veloxdfs',['VeloxDFS',['../classvelox_1_1VeloxDFS.html#af1ce79aff99faa10e84af55df675936c',1,'velox::VeloxDFS']]],
   ['veloxdfs',['VeloxDFS',['../classvelox_1_1VeloxDFS.html',1,'velox']]],
+  ['veloxdfs',['VeloxDFS',['../classvelox_1_1VeloxDFS.html#af1ce79aff99faa10e84af55df675936c',1,'velox::VeloxDFS']]],
+  ['veloxdfs_2darchitecture_2emd',['VeloxDFS-architecture.md',['../VeloxDFS-architecture_8md.html',1,'']]],
   ['veloxdfs_2ejava',['VeloxDFS.java',['../VeloxDFS_8java.html',1,'']]]
 ];

@@ -1,0 +1,12 @@
+<map id="/home/vicente/VeloxDFS/src/network/server_handler.cc" name="/home/vicente/VeloxDFS/src/network/server_handler.cc">
+<area shape="rect" id="node2" href="$server__handler_8hh.html" title="server_handler.hh" alt="" coords="145,171,271,197"/>
+<area shape="rect" id="node7" href="$context__singleton_8hh.html" title="../common/context_singleton.hh" alt="" coords="1028,96,1236,123"/>
+<area shape="rect" id="node15" href="$server_8hh.html" title="server.hh" alt="" coords="465,96,540,123"/>
+<area shape="rect" id="node3" href="$netobserver_8hh.html" title="netobserver.hh" alt="" coords="5,245,112,272"/>
+<area shape="rect" id="node4" href="$message_8hh.html" title="../messages/message.hh" alt="" coords="181,395,349,421"/>
+<area shape="rect" id="node6" href="$channel_8hh.html" title="channel.hh" alt="" coords="108,320,193,347"/>
+<area shape="rect" id="node8" href="$context_8hh.html" title="context.hh" alt="" coords="1153,171,1236,197"/>
+<area shape="rect" id="node9" href="$settings_8hh.html" title="settings.hh" alt="" coords="1191,245,1277,272"/>
+<area shape="rect" id="node11" href="$logger_8hh.html" title="logger.hh" alt="" coords="1255,395,1329,421"/>
+<area shape="rect" id="node16" href="$asyncchannel_8hh.html" title="asyncchannel.hh" alt="" coords="417,171,537,197"/>
+</map>

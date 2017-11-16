@@ -1,0 +1,8 @@
+<map id="eclipse::FileLeader" name="eclipse::FileLeader">
+<area shape="rect" id="node2" href="$classeclipse_1_1Node.html" title="{eclipse::Node\n|# port\l|+ Node()\l+ ~Node()\l+ get_ip()\l}" alt="" coords="243,353,345,460"/>
+<area shape="rect" id="node3" href="$classeclipse_1_1Machine.html" title="{eclipse::Machine\n|# id\l|+ Machine()\l+ Machine()\l+ ~Machine()\l+ get_ip()\l+ get_id()\l}" alt="" coords="5,43,125,179"/>
+<area shape="rect" id="node4" href="$classeclipse_1_1network_1_1ClientHandler.html" title="{eclipse::network::Client\lHandler\n||+ ClientHandler()\l+ ~ClientHandler()\l+ attach()\l+ send()\l+ send_and_replicate()\l}" alt="" coords="150,35,308,186"/>
+<area shape="rect" id="node6" href="$classLogger.html" title="{Logger\n||+ debug()\l+ info()\l+ notice()\l+ warn()\l+ error()\l+ panic()\l+ panic_if()\l+ error_if()\l+ connect()\l+ disconnect()\l}" alt="" coords="411,6,516,215"/>
+<area shape="rect" id="node7" href="$classeclipse_1_1Local__io.html" title="Represents the local disk. " alt="" coords="371,302,499,511"/>
+<area shape="rect" id="node8" href="$classeclipse_1_1Directory.html" title="{eclipse::Directory\n||+ Directory()\l+ create_tables()\l+ file_table_insert()\l+ file_table_select()\l+ file_table_select_all()\l+ file_table_update()\l+ file_table_delete()\l+ file_table_exists()\l+ file_table_confirm\l_upload()\l+ block_table_insert()\land 6 more...\l# query_exec_simple()\l}" alt="" coords="523,280,679,533"/>
+</map>

@@ -9,7 +9,6 @@ var searchData=
   ['initialize',['initialize',['../classHistogram.html#a3ce04eef0075e68fc69aa6c40e011e3d',1,'Histogram']]],
   ['input',['input',['../classSettings_1_1SettingsImpl.html#a681d0d97ff9956b7cf7409f5bf0a6c3d',1,'Settings::SettingsImpl']]],
   ['insert_5ffile',['insert_file',['../classeclipse_1_1FileLeaderRouter.html#a56dc8ddb60e8af706ef53ee18d7f8439',1,'eclipse::FileLeaderRouter']]],
-  ['installation_2emd',['Installation.md',['../Installation_8md.html',1,'']]],
   ['invoke_5fio_5freporter',['invoke_io_reporter',['../io__monitor__invoker_8cc.html#af1cb8f103a5a72d1d68429f723f0fb2a',1,'invoke_io_reporter():&#160;io_monitor_invoker.cc'],['../io__monitor__invoker_8hh.html#af1cb8f103a5a72d1d68429f723f0fb2a',1,'invoke_io_reporter():&#160;io_monitor_invoker.cc']]],
   ['io',['io',['../classContext.html#a3ef5718bf1294a860b4b5cbe1fe8fd5d',1,'Context']]],
   ['io_5fmonitor_5finvoker_2ecc',['io_monitor_invoker.cc',['../io__monitor__invoker_8cc.html',1,'']]],
@@ -24,6 +23,5 @@ var searchData=
   ['is_5fcommitted',['is_committed',['../structeclipse_1_1BlockMetadata.html#a3d2ae262ef862de399a47ae4aa913997',1,'eclipse::BlockMetadata::is_committed()'],['../structeclipse_1_1messages_1_1BlockInfo.html#ad2261213d614f4c125297eae55d8fd01',1,'eclipse::messages::BlockInfo::is_committed()']]],
   ['is_5fmultiple',['is_multiple',['../classeclipse_1_1network_1_1Server.html#abfc18658ad05f3b31c851e342d813bed',1,'eclipse::network::Server']]],
   ['is_5fopen',['is_open',['../classvelox_1_1file.html#afd776ad82d834f168ad0ccd0db50557a',1,'velox::file::is_open()'],['../classvelox_1_1vdfs.html#ad64dfba643f2d630e882dd19857196b3',1,'velox::vdfs::is_open()']]],
-  ['isopen',['isOpen',['../classvelox_1_1VeloxDFS.html#adc45054d6ec400e5f8667f0b940f0636',1,'velox::VeloxDFS']]],
-  ['installation',['Installation',['../md_manual_Installation.html',1,'']]]
+  ['isopen',['isOpen',['../classvelox_1_1VeloxDFS.html#adc45054d6ec400e5f8667f0b940f0636',1,'velox::VeloxDFS']]]
 ];

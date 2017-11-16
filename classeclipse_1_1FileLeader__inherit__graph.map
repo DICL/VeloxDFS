@@ -1,0 +1,4 @@
+<map id="eclipse::FileLeader" name="eclipse::FileLeader">
+<area shape="rect" id="node2" href="$classeclipse_1_1Node.html" title="{eclipse::Node\n|# network\l# logger\l# ip_of_this\l# port\l|+ Node()\l+ ~Node()\l+ get_ip()\l}" alt="" coords="41,190,143,341"/>
+<area shape="rect" id="node3" href="$classeclipse_1_1Machine.html" title="{eclipse::Machine\n|# id\l|+ Machine()\l+ Machine()\l+ ~Machine()\l+ get_ip()\l+ get_id()\l}" alt="" coords="32,5,152,141"/>
+</map>

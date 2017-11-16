@@ -8,7 +8,7 @@ var searchData=
   ['destination',['destination',['../structeclipse_1_1messages_1_1Message.html#a71011dda040ca0970900f5da2a9e28d6',1,'eclipse::messages::Message']]],
   ['destroy',['destroy',['../classvelox_1_1VeloxDFS.html#a951173da7d8673ba58ddcebf61f5736b',1,'velox::VeloxDFS']]],
   ['details',['details',['../structeclipse_1_1messages_1_1Reply.html#a5869cf9e350a03a637fa327c858180d3',1,'eclipse::messages::Reply']]],
-  ['developing_2declipsemr_2emd',['Developing-EclipseMR.md',['../Developing-EclipseMR_8md.html',1,'']]],
+  ['developing_2dveloxdfs_2emd',['Developing-VeloxDFS.md',['../Developing-VeloxDFS_8md.html',1,'']]],
   ['dfs',['DFS',['../classvelox_1_1DFS.html',1,'velox']]],
   ['dfs',['DFS',['../classvelox_1_1DFS.html#a85ba1daeacb018ad031ff2a7ff2f4f65',1,'velox::DFS::DFS()'],['../classvelox_1_1vdfs.html#a0baa236df4105453c32c73e667d777c9',1,'velox::vdfs::dfs()']]],
   ['dfs_2ecc',['dfs.cc',['../dfs_8cc.html',1,'']]],
@@ -22,5 +22,5 @@ var searchData=
   ['do_5fwrite',['do_write',['../classeclipse_1_1network_1_1AsyncChannel.html#adf4946e410c29712136fb10b3f17a460',1,'eclipse::network::AsyncChannel::do_write(messages::Message *) override'],['../classeclipse_1_1network_1_1AsyncChannel.html#a86de0a11123893f1d5e7dcdcd60cbe63',1,'eclipse::network::AsyncChannel::do_write(std::shared_ptr&lt; std::string &gt; &amp;)'],['../classeclipse_1_1network_1_1Channel.html#a79c808a706fedd0a1722b5f98a91c8fc',1,'eclipse::network::Channel::do_write()']]],
   ['do_5fwrite_5fbuffer',['do_write_buffer',['../classeclipse_1_1network_1_1AsyncChannel.html#a3a81491738529c90e1c5293c8e424edf',1,'eclipse::network::AsyncChannel']]],
   ['download',['download',['../classvelox_1_1DFS.html#a7b928a468f39cbcf49ba11c0b9a4c84f',1,'velox::DFS']]],
-  ['developing_2declipsemr',['Developing-EclipseMR',['../md_manual_Developing-EclipseMR.html',1,'']]]
+  ['developing_2dveloxdfs',['Developing-VeloxDFS',['../md_manual_Developing-VeloxDFS.html',1,'']]]
 ];

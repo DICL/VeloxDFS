@@ -15,6 +15,7 @@ var searchData=
   ['close',['close',['../classvelox_1_1file.html#a4aac06488c6787e0aae48041596398f5',1,'velox::file::close()'],['../classvelox_1_1vdfs.html#a7d43ce60843e13ee3bda8f2aaca6b5d2',1,'velox::vdfs::close()'],['../classvelox_1_1VeloxDFS.html#a9a948db10d56e588a059dad953aac979',1,'velox.VeloxDFS.close()'],['../classeclipse_1_1network_1_1ServerHandler.html#ac0cf22f03f207ba0ea11c30e18f5b3a0',1,'eclipse::network::ServerHandler::close()']]],
   ['coding_2dstyle_2dand_2drules_2emd',['Coding-style-and-rules.md',['../Coding-style-and-rules_8md.html',1,'']]],
   ['commit',['commit',['../classeclipse_1_1network_1_1AsyncChannel.html#a7d3982b9fe859d9d14b71e70098bb9c4',1,'eclipse::network::AsyncChannel']]],
+  ['compiling_2dinstalling_2emd',['Compiling-Installing.md',['../Compiling-Installing_8md.html',1,'']]],
   ['config_5fpath',['config_path',['../classSettings_1_1SettingsImpl.html#aee4a80ef743ef32e26062fa5209638e2',1,'Settings::SettingsImpl']]],
   ['configuration',['Configuration',['../classvelox_1_1Configuration.html',1,'velox']]],
   ['configuration',['Configuration',['../classvelox_1_1Configuration.html#ab80b37cd9295b7792201fc83de29416f',1,'velox::Configuration']]],
@@ -31,6 +32,7 @@ var searchData=
   ['count_5fquery',['count_query',['../classHistogram.html#aa6eed54f4fcb161dc532625983f0ddf3',1,'Histogram']]],
   ['create_5ftables',['create_tables',['../classeclipse_1_1Directory.html#ae25196cea9aa8e2997af63817848ec9b',1,'eclipse::Directory']]],
   ['coding_2dstyle_2dand_2drules',['Coding-style-and-rules',['../md_manual_Coding-style-and-rules.html',1,'']]],
+  ['compiling_2dinstalling',['Compiling-Installing',['../md_manual_Compiling-Installing.html',1,'']]],
   ['configuration',['Configuration',['../md_manual_Configuration.html',1,'']]],
   ['configuration_2dfile_2dreference',['Configuration-file-reference',['../md_manual_Configuration-file-reference.html',1,'']]]
 ];
