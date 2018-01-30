@@ -95,7 +95,6 @@ sysconf_DATA        = doc/eclipse.json
 endif
 
 dist_doc_DATA       = README.md LICENSE doc/eclipse.json
-man1_MANS           = doc/eclipsefs.1
 
 EXTRA_DIST          = doc .autotools_aux $(shell find @srcdir@/src -name "*.hh" -o -name "*.in") \
                       $(sh_scripts) doc/eclipse.json

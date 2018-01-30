@@ -4,7 +4,6 @@ VeloxDFS {#mainpage}
 --- 
 [![Build Status](https://travis-ci.org/DICL/VeloxDFS.svg?branch=master)](https://travis-ci.org/DICL/VeloxDFS)
 [![Slack room](https://img.shields.io/badge/slack-join-pink.svg)](https://dicl.slack.com/messages/general/)
-[![Analytics](https://ga-beacon.appspot.com/UA-87474237-1/veloxdfs)](https://github.com/DICL/VeloxDFS)
 ---
 <!-- @endcond -->
 
@@ -107,12 +106,12 @@ FAQ
 AUTHORS
 =======
 
- - __AUTHOR:__ [Vicente Adolfo Bolea Sanchez](http://vicentebolea.me)
- - __AUTHOR:__ [MooHyeon Nam](https://github.com/nammh)
- - __AUTHOR:__ [WonBae Kim](https://github.com/zwigul)
- - __AUTHOR:__ [KiBeom Jin](https://github.com/kbjin)
- - __AUTHOR:__ [Deukyeon Hwang](https://github.com/deukyeon)
- - __AUTHOR:__ [Prof. Nam Beomseok](http://dicl.unist.ac.kr)
+ - [Vicente Adolfo Bolea Sanchez](http://vicentebolea.me)
+ - [MooHyeon Nam](https://github.com/nammh)
+ - [WonBae Kim](https://github.com/zwigul)
+ - [KiBeom Jin](https://github.com/kbjin)
+ - [Deukyeon Hwang](https://github.com/deukyeon)
+ - [Prof. Nam Beomseok](http://dicl.unist.ac.kr)
  - __INSTITUTION:__ [DICL laboratory](http://dicl.unist.ac.kr) at _UNIST_ 
 
 <!--links-->
