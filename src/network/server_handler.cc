@@ -24,13 +24,13 @@ bool ServerHandler::establish () {
   auto& iosvc = context.io;
 
   spawn(iosvc,[&, p=this->port](boost::asio::yield_context yield) {
-      INFO("Listening at port %u", p);
+    INFO("Listening at port %u", p);
+    try {
       tcp::acceptor acceptor (iosvc, tcp::endpoint(tcp::v4(), p) );
-      acceptor.listen(1);
-      boost::system::error_code ec;
+      acceptor.listen();
 
       for (;;) {
-        try {
+          boost::system::error_code ec;
           auto server = make_shared<Server>(node);
           acceptor.async_accept(server->get_socket(), yield[ec]);
 
@@ -40,14 +40,13 @@ bool ServerHandler::establish () {
           } else {
             ERROR("ERROR in acceptor reason: %s", ec.message().c_str());
           }
-
-          } catch (exception& e) {
-            INFO("Server exception %s", e.what());
-          } catch (boost::exception& e) {
-            INFO("Acceptor exception %s", diagnostic_information(e).c_str());
-          }
-        }
-      });
+      }
+    } catch (exception& e) {
+      INFO("Server exception %s", e.what());
+    } catch (boost::exception& e) {
+      INFO("Acceptor exception %s", diagnostic_information(e).c_str());
+    }
+  });
   return true;
 }
 // }}}

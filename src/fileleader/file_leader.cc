@@ -128,7 +128,7 @@ unique_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
   fd->hash_key = fi.hash_key;
   fd->replica = fi.replica;
   fd->size = fi.size;
-  fd->num_block = fi.num_block;
+  fd->num_block = fd->n_lblock = fi.num_block;
 
   int num_blocks = fi.num_block;
   for (int i = 0; i < num_blocks; i++) {

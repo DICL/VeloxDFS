@@ -30,7 +30,7 @@ echo "CREATING jni header files in \`$JNI_PATH\`..";
 javah -jni -d $JNI_PATH ${JNI_CLASSES[@]/#/${JAVA_PACKAGE}.};
 
 if [[ ! "$JAVA_HOME" ]]; then
-  JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.131-3.b12.el7_3.x86_64
+  JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.144-0.b01.el7_4.x86_64
 fi
 
 JNI_HEADER_PATH=$JAVA_HOME/include
