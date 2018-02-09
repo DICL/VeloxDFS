@@ -3,7 +3,7 @@
 #include <sqlite3.h>
 #include <cinttypes>
 
-#define DEFAULT_QUERY_SIZE 512
+#define DEFAULT_QUERY_SIZE 2048
 
 using namespace std;
 using namespace eclipse;

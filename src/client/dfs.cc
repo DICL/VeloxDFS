@@ -49,14 +49,19 @@ enum class FILETYPE {
 static unique_ptr<tcp::socket> connect(uint32_t hash_value) { 
   auto nodes = GET_VEC_STR("network.nodes");
   auto port = GET_INT("network.ports.client");
-
+  string host;
   auto socket = make_unique<tcp::socket>(context.io);
-  string host = nodes[hash_value % nodes.size()];
-  tcp::resolver resolver(context.io);
-  tcp::resolver::query query(host, to_string(port));
-  tcp::resolver::iterator it(resolver.resolve(query));
-  auto ep = make_unique<tcp::endpoint>(*it);
-  socket->connect(*ep);
+  try {
+
+    host = nodes[hash_value % nodes.size()];
+    tcp::resolver resolver(context.io);
+    tcp::resolver::query query(host, to_string(port));
+    tcp::resolver::iterator it(resolver.resolve(query));
+    auto ep = make_unique<tcp::endpoint>(*it);
+    socket->connect(*ep);
+  } catch (...) {
+    cout << "host:"  << host << " port:" << port << endl;
+  }
   return socket;
 }
 

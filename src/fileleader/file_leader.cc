@@ -60,7 +60,7 @@ bool FileLeader::file_insert_confirm(messages::FileInfo* f) {
     directory.block_table_insert(metadata);
   }
 
-  replicate_metadata();
+  //replicate_metadata();
 
   return true;
 }

@@ -4,7 +4,7 @@ JNI_CLASSES=( VeloxDFS )
 GENERAL_CLASSES=( Configuration )
 
 JAVA_SOURCE_PATH=./src/java/velox
-JAVA_BUILD_PATH=./build/java
+JAVA_BUILD_PATH=~/buildDFS/java
 
 JAVA_PACKAGE=com.dicl.velox
 
@@ -12,7 +12,7 @@ if [ ! -d "$JAVA_BUILD_PATH" ]; then
   mkdir -p $JAVA_BUILD_PATH
 fi
 
-LIB_PATH=./build/lib
+LIB_PATH=~/sandbox/lib
 
 JNI_PATH=$JAVA_SOURCE_PATH/../jni
 JNI_SOURCE_NAMES=( VeloxDFS.cc )
@@ -34,6 +34,7 @@ if [[ ! "$JAVA_HOME" ]]; then
 fi
 
 JNI_HEADER_PATH=$JAVA_HOME/include
+echo $JNI_HEADER_PATH
 
 echo "CREATING jni libraries in \`$LIB_PATH\`..";
 i=0
