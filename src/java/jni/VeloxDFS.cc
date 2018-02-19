@@ -121,11 +121,15 @@ JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_read
   (JNIEnv* env, jobject obj, jlong fid, jlong pos, jbyteArray buf, jlong off, jlong len) {
   velox::vdfs* vdfs = get_vdfs(env, obj);
 
-  char c_buf[len+1] = {0};
+  char* c_buf = new char [len+1];
+
+  bzero(c_buf, len+1);
 
   uint32_t ret = vdfs->read((long)fid, c_buf, (uint64_t)pos, (uint64_t)len);
 
   env->SetByteArrayRegion(buf, off, ret, (jbyte*)c_buf);
+
+  delete[] c_buf;
 
   return ret;
 }
@@ -136,10 +140,10 @@ JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_read
  * Signature: (J)Lcom/dicl/velox/model/Metadata;
  */
 JNIEXPORT jobject JNICALL Java_com_dicl_velox_VeloxDFS_getMetadata
-  (JNIEnv* env, jobject obj, jlong fid) {
+  (JNIEnv* env, jobject obj, jlong fid, jbyte type) {
   velox::vdfs* vdfs = get_vdfs(env, obj);
 
-  velox::model::metadata md(vdfs->get_metadata((long)fid));
+  velox::model::metadata md(vdfs->get_metadata((long)fid, type));
   return convert_jmetadata(env, obj, md);
 }
 

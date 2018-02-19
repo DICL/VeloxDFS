@@ -72,7 +72,7 @@ class DFS {
 
     model::metadata get_metadata(std::string& fname);
 
-    model::metadata get_metadata_optimized(std::string& fname);
+    model::metadata get_metadata_optimized(std::string& fname, int type = 0);
 
     std::vector<model::metadata> get_metadata_all();
 

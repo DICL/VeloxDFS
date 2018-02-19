@@ -31,7 +31,7 @@ class FileLeader: public Node {
     bool file_insert_confirm(messages::FileInfo*);
 
     //! Return a description of the blocks containing the file.
-    unique_ptr<messages::Message> file_request(messages::FileRequest*);
+    std::shared_ptr<messages::Message> file_request(messages::FileRequest*);
 
     bool file_delete(messages::FileDel*);
 
@@ -53,6 +53,7 @@ class FileLeader: public Node {
     Directory directory;
     Local_io local_io;
     std::unique_ptr<Histogram> boundaries;
+    std::map<std::string, std::shared_ptr<messages::FileDescription>> current_file_arrangements;
     int network_size;
 
     void find_best_arrangement(messages::FileDescription* file_desc);

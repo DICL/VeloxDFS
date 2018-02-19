@@ -66,10 +66,10 @@ JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_read
 /*
  * Class:     com_dicl_velox_VeloxDFS
  * Method:    getMetadata
- * Signature: (J)Lcom/dicl/velox/model/Metadata;
+ * Signature: (JB)Lcom/dicl/velox/model/Metadata;
  */
 JNIEXPORT jobject JNICALL Java_com_dicl_velox_VeloxDFS_getMetadata
-  (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jlong, jbyte);
 
 /*
  * Class:     com_dicl_velox_VeloxDFS

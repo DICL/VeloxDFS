@@ -77,6 +77,7 @@ template <typename Archive>
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.name);
     ar & BOOST_SERIALIZATION_NVP(c.type);
+    ar & BOOST_SERIALIZATION_NVP(c.generate);
   }
 
 template <typename Archive>

@@ -111,19 +111,20 @@ bool FileLeader::file_delete(messages::FileDel* f) {
 }
 // }}}
 // file_request {{{
-unique_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
+shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
+  INFO("PROCESSING FILE INFORMARTION REQUEST [F:%s]", m->name.c_str());
   string file_name = m->name;
 
   FileInfo fi;
   fi.num_block = 0;
-  FileDescription* fd = new FileDescription();
+  std::shared_ptr<FileDescription> fd = make_shared<FileDescription>();
   fd->name = file_name;
 
   directory.file_table_select(file_name, &fi);
   fd->uploading = fi.uploading;
 
   if (fi.uploading == 1) //! Cancel if file is being uploading
-    return unique_ptr<Message>(fd);
+    return fd;
 
   fd->hash_key = fi.hash_key;
   fd->replica = fi.replica;
@@ -141,10 +142,30 @@ unique_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
     fd->block_hosts.push_back(bi.node);
   }
 
-  if (m->type == "LOGICAL_BLOCKS")
-    find_best_arrangement(fd);
+  if (m->type == "LOGICAL_BLOCKS") {
+    bool previously_arranged = 
+      (current_file_arrangements.find(file_name) != current_file_arrangements.end());
 
-  return unique_ptr<Message>(fd);
+    if (m->generate == true or (!previously_arranged and m->generate == false)) {
+      find_best_arrangement(fd.get());
+
+      auto it = current_file_arrangements.find(file_name);
+      if (it != current_file_arrangements.end()) {
+        current_file_arrangements.erase(it);
+      }
+
+      // Save the arrangment state
+      current_file_arrangements.insert({file_name, fd});
+
+    } else {
+      auto it = current_file_arrangements.find(file_name);
+      if (it != current_file_arrangements.end()) {
+        fd = it->second;
+      }
+    }
+  }
+
+  return fd;
 }
 // }}}
 // list {{{

@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <ftw.h>
 
 using namespace eclipse;
 using namespace std;
@@ -131,23 +132,25 @@ bool Local_io::format () {
   string fs_path = context.settings.get<string>("path.scratch");
   string md_path = context.settings.get<string>("path.metadata");
 
-  DIR *theFolder = opendir(fs_path.c_str());
-  struct dirent *next_file;
-  char filepath[256] = {0};
+  // Make me more elegant! 
+  int ret = nftw(fs_path.c_str(), 
+      [] (const char* path, const struct stat*, int, struct FTW*) -> int {
+        int ret = 0;
 
-  while ( (next_file = readdir(theFolder)) != NULL ) {
-    sprintf(filepath, "%s/%s", fs_path.c_str(), next_file->d_name);
-    if (strncmp(basename(filepath), "..", 256) == 0 or
-        strncmp(basename(filepath), "...", 256) == 0 or
-        strncmp(basename(filepath), ".", 256) == 0)
-      continue;
+        string fs_path = GET_STR("path.scratch");
+        if (fs_path != string(path)) {
+          DEBUG("FORMAT: Removing %s", path);
 
-    DEBUG("FORMAT: Removing %s", filepath);
-    if (0 != ::remove(filepath)) {
-      ERROR("FORMAT: Can't remove %s.", filepath);
-    }
+          if (0 != (ret = ::remove(path))) {
+            ERROR("FORMAT: Can't remove %s.", path);
+          }
+         }
+        return ret;
+      }, 10, FTW_DEPTH);
+
+  if (ret != 0) {
+    ERROR("FORMAT: Error formating data space");
   }
-  closedir(theFolder);
 
   ::remove((md_path + "/metadata.db").c_str());
   return true;

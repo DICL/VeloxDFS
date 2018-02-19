@@ -4,7 +4,7 @@ JNI_CLASSES=( VeloxDFS )
 GENERAL_CLASSES=( Configuration )
 
 JAVA_SOURCE_PATH=./src/java/velox
-JAVA_BUILD_PATH=~/buildDFS/java
+JAVA_BUILD_PATH=~/buildDFS/java/
 
 JAVA_PACKAGE=com.dicl.velox
 
@@ -17,6 +17,7 @@ LIB_PATH=~/sandbox/lib
 JNI_PATH=$JAVA_SOURCE_PATH/../jni
 JNI_SOURCE_NAMES=( VeloxDFS.cc )
 JNI_OUTPUT_NAMES=( libveloxdfs-jni.so )
+echo $JAVA_SOURCE_PATH
 
 echo "COMPILING JAVA sources in \`$JAVA_BUILD_PATH\`..";
 MODEL_SOURCES=( Metadata.java BlockMetadata.java )

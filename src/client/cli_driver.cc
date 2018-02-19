@@ -53,8 +53,16 @@ bool cli_driver::parse_args (int argc, char** argv) {
       if (argc > 2 && argv[2] == string("-h")) {
         is_human_readable = true;
 
-      } else if (argc > 2 && argv[2] == string("-o")) {
-        file_show_optimized(argv[3]);
+      }
+      
+      if (argc > 2 && argv[2] == string("-o")) {
+        file_show_optimized(argv[3], 2);
+        return true;
+
+      }
+
+      if (argc > 2 && argv[2] == string("-g")) {
+        file_show_optimized(argv[3], 1);
         return true;
       }
 
@@ -103,7 +111,7 @@ void cli_driver::file_download (std::string file) {
 // file_cat {{{
 void cli_driver::file_cat (std::string file) {
   // Read file, display it
-  cout << dfs.read_all(file) << endl;
+  cout << dfs.read_all(file);
 }
 // }}}
 // file_remove {{{
@@ -139,7 +147,7 @@ void cli_driver::file_show (std::string file) {
 }
 // }}}
 // file_show_optimized {{{
-void cli_driver::file_show_optimized(std::string file) {
+void cli_driver::file_show_optimized(std::string file, int type) {
 
 #ifndef LOGICAL_BLOCKS_FEATURE
   cout << "ERROR! LOGICAL BLOCKS FEATURE IS DISABLED IN THIS BUILD" << endl;
@@ -160,7 +168,7 @@ void cli_driver::file_show_optimized(std::string file) {
     << setw(14) << "Host"
     << endl << string(123,'-') << endl;
 
-  model::metadata md = dfs.get_metadata_optimized(file);
+  model::metadata md = dfs.get_metadata_optimized(file, type);
 
   for (unsigned i = 0; i < md.num_block; i++) {
     cout 

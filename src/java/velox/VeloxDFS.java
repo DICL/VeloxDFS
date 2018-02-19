@@ -31,7 +31,7 @@ public class VeloxDFS {
   public native long write(long fid, long pos, byte[] buf, long off, long len);
   public native long read(long fid, long pos, byte[] buf, long off, long len);
 
-  public native Metadata getMetadata(long fid);
+  public native Metadata getMetadata(long fid, byte type);
 
   public native boolean remove(String name);
 

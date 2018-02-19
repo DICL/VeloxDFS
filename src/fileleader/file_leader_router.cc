@@ -89,11 +89,9 @@ void FileLeaderRouter::delete_file (messages::Message* m_, Channel* tcp_connecti
 // request_file {{{
 void FileLeaderRouter::request_file (messages::Message* m_, Channel* tcp_connection) {
   auto m = dynamic_cast<messages::FileRequest*> (m_);
-  INFO ("File Info received %s", m->name.c_str());
+  DEBUG("FILE REQUEST RECIEVED %s", m->name.c_str());
 
-  unique_ptr<Message> fd;
-
-  fd = file_leader->file_request(m);
+  shared_ptr<Message> fd = file_leader->file_request(m);
 
   tcp_connection->do_write(fd.get());
 }

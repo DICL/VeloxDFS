@@ -50,7 +50,7 @@ void scheduler_score_based::generate(FileDescription& file_desc, std::vector<std
       //
       auto& l_blocks = file_desc.logical_blocks;
       auto it = std::find_if(l_blocks.begin(), l_blocks.end(), [host] (auto& l_block) {
-          return (l_block.host_name == host);
+            return (l_block.host_name == host);
           });
 
       if (it == l_blocks.end()) {

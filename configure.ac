@@ -63,6 +63,9 @@ AC_SUBST(libdirfull)
 AH_TEMPLATE([ECLIPSE_CONF_PATH],[Configuration files (ETC) for Eclipse])
 AC_DEFINE_UNQUOTED([ECLIPSE_CONF_PATH], ["$sysconfdirfull"])
 
+AH_TEMPLATE([ECLIPSE_HOME_CONF_PATH],[Home configuration files (ETC) for Eclipse])
+AC_DEFINE_UNQUOTED([ECLIPSE_HOME_CONF_PATH], ["$HOME"])
+
 AH_TEMPLATE([IO_STAT_SCRIPT],[IOSTATS path])
 AC_DEFINE_UNQUOTED([IO_STAT_SCRIPT], ["${bindirfull}/read_io_stats.sh"])
 
