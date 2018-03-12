@@ -22,7 +22,7 @@ struct listener_1_busy : public eclipse::stats_listener {
 };
 
 struct stats_fixture {
-  std::vector<std::string> nodes = {"1", "2", "3", "4"};
+  std::vector<std::string> nodes = {"0", "1", "2", "3"};
   map<string, string> opts;
   FileDescription fd;
 
@@ -34,7 +34,7 @@ struct stats_fixture {
     fd.blocks = {"file_1", "file_2", "file_3", "file_4", "file_5"};
     fd.hash_keys = {123123, 124123, 32323, 4242, 424245};
     fd.block_size = {123123, 124123, 32323, 4242, 424245};
-    fd.block_hosts= {"1", "2", "3", "4", "4"};
+    fd.block_hosts= {"0", "1", "2", "3", "3"};
   }
 };
 
@@ -65,5 +65,12 @@ SUITE(STATS_TESTS) {
     CHECK_EQUAL(1, fd.logical_blocks[0].physical_blocks.size());
     CHECK_EQUAL(2, fd.logical_blocks[1].physical_blocks.size());
     CHECK_EQUAL(2, fd.logical_blocks[2].physical_blocks.size());
+  }
+
+  TEST_FIXTURE(stats_fixture, python_tests) {
+    Histogram boundaries (4, 100);
+    auto scheduler = scheduler_factory("python", &boundaries, opts);
+    scheduler->listener.reset(new listener_1_busy());
+    scheduler->generate(fd, nodes);
   }
 }

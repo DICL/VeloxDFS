@@ -4,7 +4,7 @@ AM_CPPFLAGS      = -I@srcdir@/src/common -I@srcdir@/src -include ./config.h $(BO
 AM_CXXFLAGS      = $(CXXFLAGS) -Wall -Werror
 
 bin_PROGRAMS     = eclipse_node veloxdfs velox_get_config
-dist_bin_SCRIPTS = src/stats/read_io_stats.sh
+dist_bin_SCRIPTS = src/stats/read_io_stats.sh src/stats/scheduler.py
 
 messages_files =   src/messages/message.cc         \
                    src/messages/boost_impl.cc      \
@@ -71,7 +71,8 @@ eclipse_node_SOURCES+= src/stats/io_monitor_invoker.cc \
                        src/stats/zk_listener.cc \
                        src/stats/scheduler_factory.cc \
                        src/stats/scheduler_score_based.cc \
-                       src/stats/scheduler_simple.cc
+                       src/stats/scheduler_simple.cc \
+                       src/stats/scheduler_python.cc
 
 eclipse_node_LDADD  +=  -lzookeeper_mt
 

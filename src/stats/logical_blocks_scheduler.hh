@@ -37,5 +37,10 @@ class scheduler_score_based: public scheduler{
     virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;
 };
 
+class scheduler_python: public scheduler{
+  public:
+    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;
+};
+
 }
 }

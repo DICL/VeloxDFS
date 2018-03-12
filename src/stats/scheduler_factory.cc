@@ -19,6 +19,9 @@ shared_ptr<scheduler> scheduler_factory(string type, Histogram* boundaries, SCHE
   } else if (type == "scheduler_score_based") {
     sch = make_shared<scheduler_score_based>();
 
+  } else if (type == "python") {
+    sch = make_shared<scheduler_python>();
+  
   } else {
     PANIC("No file scheduler chosen, EXITING");
   }

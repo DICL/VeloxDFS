@@ -69,6 +69,9 @@ AC_DEFINE_UNQUOTED([ECLIPSE_HOME_CONF_PATH], ["$HOME"])
 AH_TEMPLATE([IO_STAT_SCRIPT],[IOSTATS path])
 AC_DEFINE_UNQUOTED([IO_STAT_SCRIPT], ["${bindirfull}/read_io_stats.sh"])
 
+AH_TEMPLATE([PY_SCHEDULER_SCRIPT],[PY scheduler path])
+AC_DEFINE_UNQUOTED([PY_SCHEDULER_SCRIPT], ["${bindirfull}/scheduler.py"])
+
 AS_IF([test "x$enable_lblocks" = xyes], [
       AH_TEMPLATE([LOGICAL_BLOCKS_FEATURE],["Enables logical blocks feature" ]) 
       AC_DEFINE_UNQUOTED([LOGICAL_BLOCKS_FEATURE], [1])
