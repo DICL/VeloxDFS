@@ -87,8 +87,20 @@ JNIEXPORT jboolean JNICALL Java_com_dicl_velox_VeloxDFS_isOpen
  * Method:    write
  * Signature: (JJ[BJJ)J
  */
-JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_write
+JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJ
   (JNIEnv* env, jobject obj, jlong fid, jlong pos, jbyteArray buf, jlong off, jlong len) {
+  return Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJJ(env, obj, fid, pos, buf, off, len, 0);
+}
+
+/*
+ * Class:     com_dicl_velox_VeloxDFS
+ * Method:    write
+ * Signature: (JJ[BJJJ)J
+ */
+JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJJ
+  (JNIEnv* env, jobject obj, jlong fid, jlong pos, jbyteArray buf, jlong off, jlong len, 
+  jlong block_size) {
+
   velox::vdfs* vdfs = get_vdfs(env, obj);
 
   char buffer[len];
@@ -100,7 +112,7 @@ JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_write
   // jboolean* isCopy = JNI_FALSE;
   //jbyte* buffer = env->GetByteArrayElements(buf, NULL);
 
-  jlong ret = vdfs->write((long)fid, buffer, (uint64_t)pos, (uint64_t)len);
+  jlong ret = vdfs->write((long)fid, buffer, (uint64_t)pos, (uint64_t)len, block_size);
 
   //env->ReleaseByteArrayElements(buf, buffer, JNI_ABORT);
 
@@ -255,6 +267,22 @@ jobject convert_jmetadata(JNIEnv* env, jobject& obj, velox::model::metadata& md)
     env->DeleteLocalRef(block_data);
 
   return std::move(ret);
+}
+
+/*
+ * Class:     com_dicl_velox_VeloxDFS
+ * Method:    rename
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_dicl_velox_VeloxDFS_rename
+  (JNIEnv *env, jobject obj, jstring src, jstring dst) {
+  velox::vdfs* vdfs = get_vdfs(env, obj);
+  const char* src_name = env->GetStringUTFChars(src, 0);
+  const char* dst_name = env->GetStringUTFChars(dst, 0);
+  jboolean ret = vdfs->rename(src_name, dst_name);
+  env->ReleaseStringUTFChars(src, src_name);
+  env->ReleaseStringUTFChars(dst, dst_name);
+  return ret;
 }
 
 #ifdef __cplusplus

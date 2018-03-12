@@ -18,6 +18,7 @@ class cli_driver {
     void list(bool human_readable);
     void file_show_optimized(std::string path, int type);
     void format();
+    void file_rename(std::string, std::string);
 
     velox::DFS dfs;
 };

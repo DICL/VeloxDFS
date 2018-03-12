@@ -30,7 +30,7 @@ class VeloxDFSTest {
       System.out.println(list[i].name);
 
     System.out.println("Try getMetadata");
-    Metadata metaData = vdfs.getMetadata(fd);
+    Metadata metaData = vdfs.getMetadata(fd, (byte)3);
 
     if(targetName.equals(metaData.name)) {
       System.out.println("getMetadata..\tOK!");
@@ -51,7 +51,7 @@ class VeloxDFSTest {
     for(int i=0; i<6; i++) {
       System.out.println(i + "th writing..");
       //written += vdfs.write(fd, (long)(i * blockBuffer.length) + metaData.size, blockBuffer, 0,  blockBuffer.length);
-      written += vdfs.write(fd, (long)(i * 3) + metaData.size, blockBuffer, 7,  3);
+      written += vdfs.write(fd, (long)(i * 3) + metaData.size, blockBuffer, 7,  3, 2);
       Thread.sleep(1000);
     }
 
@@ -89,7 +89,9 @@ class VeloxDFSTest {
       System.out.println("close..       \tOK!");
     }  
 
-    vdfs.remove(targetName);
+    vdfs.rename(targetName, targetName + "_renamed");
+
+    //vdfs.remove(targetName);
 
     vdfs.destroy();
   }

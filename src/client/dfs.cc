@@ -417,6 +417,87 @@ int DFS::remove(std::string file_name) {
   return EXIT_SUCCESS;
 }
 // }}}
+// rename {{{
+bool DFS::rename(std::string src, std::string dst) {
+  Histogram boundaries(NUM_NODES, 100);
+  boundaries.initialize();
+
+  auto src_socket = connect(h(src));
+  FileRequest fr;
+  fr.name = src;
+  send_message(src_socket.get(), &fr);
+  auto fd = read_reply<FileDescription>(src_socket.get());
+
+  if(fd->uploading) {
+    cout << "uploading :  " << fd->uploading << endl;
+
+    src_socket->close();
+    return false;
+  }
+
+  FileInfo file_info;
+  file_info.name = dst;
+  file_info.hash_key = h(dst);
+  file_info.type = static_cast<unsigned int>(fd->type);
+  file_info.replica = fd->replica;
+  file_info.size = fd->size;
+  file_info.num_block = fd->num_block;
+  file_info.n_lblock = fd->n_lblock;
+
+  cout << fd->num_block << endl;
+
+  auto dst_socket = connect(file_info.hash_key);
+  send_message(dst_socket.get(), &file_info);
+
+  read_reply<FileDescription>(dst_socket.get());
+
+  for (int i = 0; i < (int) fd->num_block; i++) {
+    BlockMetadata metadata;
+    metadata.name = fd->blocks[i];
+    metadata.file_name = dst;
+    metadata.hash_key = fd->hash_keys[i];
+    metadata.seq = i;
+    metadata.size = fd->block_size[i];
+    metadata.type = static_cast<unsigned int>(FILETYPE::Normal);
+    metadata.replica = fd->replica;
+    metadata.node = fd->block_hosts[i];
+    int which_server = 0;
+    for(int j = 0; j < (int) NUM_NODES; ++j) {
+      if(nodes[j] == fd->block_hosts[i]) {
+        which_server = j;
+        break;
+      }
+    }
+    metadata.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
+    metadata.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
+    metadata.is_committed = 1;
+    file_info.blocks_metadata.push_back(metadata);
+  }
+
+  file_info.uploading = 0;
+
+  send_message(dst_socket.get(), &file_info);
+
+  auto reply = read_reply<Reply>(dst_socket.get());
+
+  bool ret = false;
+  if(reply->message == "TRUE") {
+    FileDel file_del;
+    file_del.name = src;
+    send_message(src_socket.get(), &file_del);
+    auto reply = read_reply<Reply>(src_socket.get());
+    ret = true;
+  }
+  else {
+    cout << "failed rename" << endl;
+  }
+
+  dst_socket->close();
+  src_socket->close();
+
+  return ret;
+}
+// }}}
 // format {{{
 int DFS::format() {
   for (unsigned int net_id = 0; net_id < NUM_NODES; net_id++) {
@@ -852,8 +933,14 @@ bool DFS::touch(std::string file_name) {
 // }}}
 // write {{{
 uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint64_t len) {
+  return write(file_name, buf, off, len, BLOCK_SIZE);
+}
+
+uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint64_t len, uint64_t block_size) {
   Histogram boundaries(NUM_NODES, 100);
   boundaries.initialize();
+
+  block_size = (block_size == 0) ? BLOCK_SIZE : block_size;
 
   //auto fd = get_file_description(
     //std::bind(&connect, *this, std::placeholders::_1), file_name
@@ -869,7 +956,7 @@ uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint6
   socket->close();
   if(fd == nullptr) return 0;
 
-  off = std::max(0ul, std::min(off, std::max(fd->size, BLOCK_SIZE - 1)));
+  off = std::max(0ul, std::min(off, std::max(fd->size, block_size - 1)));
 
   //! Insert the blocks
   vector<BlockMetadata> blocks_metadata;
@@ -878,8 +965,8 @@ uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint6
   uint64_t to_write_bytes = len;
   uint64_t written_bytes = 0ul;
 
-  int block_beg_seq = (int) off / BLOCK_SIZE;
-  int block_end_seq = (int) (len + off - 1) / BLOCK_SIZE;
+  int block_beg_seq = (int) off / block_size;
+  int block_end_seq = (int) (len + off - 1) / block_size;
 
   for(int i=block_beg_seq; i<=block_end_seq; i++) {
     BlockMetadata metadata;
@@ -894,8 +981,8 @@ uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint6
       //! Load block metadata info
       int which_server = fd->hash_keys[i] % NUM_NODES;
 
-      pos_to_update = (i == block_beg_seq && fd->block_size[i] > 0) ? (off % BLOCK_SIZE) : 0;
-      len_to_write = (fd->block_size[i] == 0) ? std::min(to_write_bytes, BLOCK_SIZE) : std::min((BLOCK_SIZE - pos_to_update), to_write_bytes);
+      pos_to_update = (i == block_beg_seq && fd->block_size[i] > 0) ? (off % block_size) : 0;
+      len_to_write = (fd->block_size[i] == 0) ? std::min(to_write_bytes, block_size) : std::min((block_size - pos_to_update), to_write_bytes);
 
       metadata.name = fd->blocks[i];
       metadata.file_name = file_name;
@@ -915,7 +1002,7 @@ uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint6
       int which_server = ((fd->hash_key % NUM_NODES) + i) % NUM_NODES;
 
       pos_to_update = 0;
-      len_to_write = std::min(BLOCK_SIZE, to_write_bytes);
+      len_to_write = std::min(block_size, to_write_bytes);
 
       metadata.name = file_name + "_" + to_string(i);
       metadata.file_name = file_name;

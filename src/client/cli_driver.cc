@@ -74,6 +74,11 @@ bool cli_driver::parse_args (int argc, char** argv) {
 
   vec_str files (argv + 2, argv + argc);
 
+  if(command == "rename") {
+    file_rename(files[0], files[1]);
+    return true;
+  }
+
   for (auto& file : files) {
     if (command == "put") {
       file_upload(file);
@@ -95,6 +100,7 @@ bool cli_driver::parse_args (int argc, char** argv) {
       cout << help << endl;
     }
   }
+
   return true;
 }
 // }}}
@@ -257,6 +263,11 @@ void cli_driver::list (bool human_readable) {
 // format {{{
 void cli_driver::format () {
   dfs.format();
+}
+// }}}
+// rename {{{
+void cli_driver::file_rename(std::string src, std::string dst) {
+  dfs.rename(src, dst);
 }
 // }}}
 

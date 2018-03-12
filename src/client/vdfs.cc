@@ -255,11 +255,20 @@ bool vdfs::exists(std::string name) {
 // }}}
 // write {{{
 uint32_t vdfs::write(long fid, const char *buf, uint32_t off, uint32_t len) {
+  return write(fid, buf, off, len, 0);
+}
+
+uint32_t vdfs::write(long fid, const char *buf, uint32_t off, uint32_t len, uint64_t block_size) {
   velox::file* f = this->get_file(fid);
 //  cout << "vdfs::write: " << f->get_name() << endl;
   if(f == nullptr) return -1;
 
-  return dfs->write(f->name, buf, off, len);
+  if(block_size > 0) {
+    return dfs->write(f->name, buf, off, len, block_size);
+  }
+  else {
+    return dfs->write(f->name, buf, off, len);
+  }
 }
 // }}}
 // read {{{
@@ -312,5 +321,10 @@ std::vector<model::metadata> vdfs::list(bool all, std::string name) {
   }
 
   return results;
+}
+// }}}
+// rename {{{
+bool vdfs::rename(std::string src, std::string dst) {
+  return dfs->rename(src, dst);
 }
 // }}}

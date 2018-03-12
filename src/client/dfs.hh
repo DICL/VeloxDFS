@@ -21,9 +21,12 @@ class DFS {
     //! @param buf        contents to be copied.
     //! @param off        offset to append the buffer.
     //! @param len        size of the content.
+    //! @param block_size size of block size to write. (default: by configuration)
     //! @retval >0        bytes successfully uploaded.
     //! @retval 0         The operation failed.
     uint64_t write(std::string& file_name, const char* buf, uint64_t off, uint64_t len);
+    uint64_t write(std::string& file_name, const char* buf, uint64_t off, uint64_t len, 
+      uint64_t block_size);
 
     //! Download a remote file's section into a buffer.
     //!
@@ -67,6 +70,8 @@ class DFS {
     bool touch(std::string);
 
     int remove(std::string);
+
+    bool rename(std::string, std::string);
 
     int format();
 

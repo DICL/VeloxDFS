@@ -61,6 +61,7 @@ class vdfs {
     bool exists(std::string);
 
     uint32_t write(long, const char*, uint32_t, uint32_t);
+    uint32_t write(long, const char*, uint32_t, uint32_t, uint64_t);
     uint32_t read(long, char*, uint32_t, uint32_t);
 
     model::metadata get_metadata(long fid, int type);
@@ -68,6 +69,8 @@ class vdfs {
     void append(std::string, std::string);
 
     std::vector<model::metadata> list(bool all, std::string name = "");
+
+    bool rename(std::string, std::string);
 
   protected:
     DFS* dfs;

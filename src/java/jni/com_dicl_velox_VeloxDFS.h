@@ -52,8 +52,16 @@ JNIEXPORT jboolean JNICALL Java_com_dicl_velox_VeloxDFS_isOpen
  * Method:    write
  * Signature: (JJ[BJJ)J
  */
-JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_write
+JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJ
   (JNIEnv *, jobject, jlong, jlong, jbyteArray, jlong, jlong);
+
+/*
+ * Class:     com_dicl_velox_VeloxDFS
+ * Method:    write
+ * Signature: (JJ[BJJJ)J
+ */
+JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJJ
+  (JNIEnv *, jobject, jlong, jlong, jbyteArray, jlong, jlong, jlong);
 
 /*
  * Class:     com_dicl_velox_VeloxDFS
@@ -94,6 +102,14 @@ JNIEXPORT jboolean JNICALL Java_com_dicl_velox_VeloxDFS_exists
  */
 JNIEXPORT jobjectArray JNICALL Java_com_dicl_velox_VeloxDFS_list
   (JNIEnv *, jobject, jboolean, jstring);
+
+/*
+ * Class:     com_dicl_velox_VeloxDFS
+ * Method:    rename
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_dicl_velox_VeloxDFS_rename
+  (JNIEnv *, jobject, jstring, jstring);
 
 #ifdef __cplusplus
 }
