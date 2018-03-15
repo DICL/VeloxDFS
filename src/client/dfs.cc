@@ -1063,6 +1063,10 @@ uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint6
   auto reply = read_reply<Reply> (socket.get());
   socket->close();
 
+  auto iter = file_description_cache.find(file_name);
+  if(iter != file_description_cache.end())
+    file_description_cache.erase(iter);
+
   return written_bytes;
 }
 // }}}
