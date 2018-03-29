@@ -23,6 +23,7 @@ struct FileInfo: public Message {
   bool reducer_output = false;
   uint32_t job_id = 0;
   int uploading = 1;
+  bool is_input = false;
 
   std::vector<BlockMetadata> blocks_metadata;
 };

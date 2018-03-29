@@ -56,5 +56,6 @@ lblocks_SOURCES   = tests/main.cc \
                     src/stats/scheduler_score_based.cc \
                     src/stats/scheduler_simple.cc \
                     src/stats/scheduler_python.cc \
+                    src/stats/scheduler_vlmb.cc \
                     src/stats/zk_listener.cc
 endif

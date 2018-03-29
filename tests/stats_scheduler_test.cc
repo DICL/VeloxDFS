@@ -1,10 +1,11 @@
 #include <settings.hh>
-#include <iostream>
-#include <sstream>
-#include <vector>
 #include <messages/filedescription.hh>
 #include <common/histogram.hh>
 #include <stats/logical_blocks_scheduler.hh>
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <utility>
 
 using namespace std;
 using namespace eclipse::logical_blocks_schedulers;
@@ -16,8 +17,8 @@ struct listener_1_busy : public eclipse::stats_listener {
   listener_1_busy() = default;
   ~listener_1_busy() = default;
 
-  std::vector<double> get_io_stats() {
-    return {0.01, 0.01, 0.01, 0.99};
+  std::vector<pair<double,int>> get_io_stats() {
+    return {{0.01,1}, {0.01,1}, {0.01,1}, {0.99,1}};
   }
 };
 

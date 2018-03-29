@@ -72,7 +72,8 @@ eclipse_node_SOURCES+= src/stats/io_monitor_invoker.cc \
                        src/stats/scheduler_factory.cc \
                        src/stats/scheduler_score_based.cc \
                        src/stats/scheduler_simple.cc \
-                       src/stats/scheduler_python.cc
+                       src/stats/scheduler_python.cc \
+                       src/stats/scheduler_vlmb.cc
 
 eclipse_node_LDADD  +=  -lzookeeper_mt
 

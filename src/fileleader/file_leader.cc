@@ -129,6 +129,7 @@ shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
   fd->hash_key = fi.hash_key;
   fd->replica = fi.replica;
   fd->size = fi.size;
+  fd->is_input = fi.is_input;
   fd->num_block = fd->n_lblock = fi.num_block;
 
   int num_blocks = fi.num_block;
@@ -142,7 +143,7 @@ shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
     fd->block_hosts.push_back(bi.node);
   }
 
-  if (m->type == "LOGICAL_BLOCKS") {
+  if (m->type == "LOGICAL_BLOCKS" and fd->is_input == true) {
     bool previously_arranged = 
       (current_file_arrangements.find(file_name) != current_file_arrangements.end());
 

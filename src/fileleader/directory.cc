@@ -16,10 +16,11 @@ static int file_callback(void *file_info, int argc, char **argv, char **azColNam
   file->hash_key      = atoi(argv[i++]);
   file->size          = atoll(argv[i++]);
   file->num_block     = atoi(argv[i++]);
-  file->n_lblock     = atoi(argv[i++]);
+  file->n_lblock      = atoi(argv[i++]);
   file->type          = atoi(argv[i++]);
   file->replica       = atoi(argv[i++]);
-  file->uploading     = atoi(argv[i]);
+  file->uploading     = atoi(argv[i++]);
+  file->is_input      = atoi(argv[i]);
   return 0;
 }
 
@@ -53,6 +54,8 @@ static int file_list_callback(void *list, int argc, char **argv, char **azColNam
     tmp_file.n_lblock  = atoi(argv[i++]);
     tmp_file.type      = atoi(argv[i++]);
     tmp_file.replica   = atoi(argv[i++]);
+    tmp_file.uploading = atoi(argv[i++]);
+    tmp_file.is_input  = atoi(argv[i]);
     file_list->push_back(tmp_file);
   }
   return 0;
@@ -145,6 +148,7 @@ void Directory::create_tables() {
       type       INT   NOT NULL, \
       replica    INT   NOT NULL, \
       uploading  INT   NOT NULL, \
+      is_input   INT   NOT NULL, \
       PRIMARY KEY (name));"); 
 
   if (query_exec_simple(sql))
@@ -174,8 +178,8 @@ void Directory::file_table_insert (FileInfo &file_info) {
   char sql[DEFAULT_QUERY_SIZE];
   
   sprintf(sql, "INSERT INTO file_table (\
-    name, hash_key, size, num_block, n_lblock, type, replica, uploading)\
-    VALUES('%s', %" PRIu32 ", %" PRIu64 ", %u, %u, %u, %u, %u);",
+    name, hash_key, size, num_block, n_lblock, type, replica, uploading, is_input)\
+    VALUES('%s', %" PRIu32 ", %" PRIu64 ", %u, %u, %u, %u, %u, %u);",
       file_info.name.c_str(),
       file_info.hash_key,
       file_info.size,
@@ -183,7 +187,8 @@ void Directory::file_table_insert (FileInfo &file_info) {
       file_info.n_lblock,
       file_info.type,
       file_info.replica,
-      file_info.uploading);
+      file_info.uploading,
+      file_info.is_input);
 
   if (query_exec_simple(sql))
     DEBUG("file_metadata inserted successfully");

@@ -164,14 +164,14 @@ void cli_driver::file_show_optimized(std::string file, int type) {
   Histogram boundaries(nodes.size(), 100);
   boundaries.initialize();
 
-  cout 
-    << setw(25) << "FileName" 
-    << setw(14) << "FileID"
-    << setw(14) << "FileSize"
-    << setw(25) << "BlockName"
-    << setw(14) << "BlockSize"
-    << setw(14) << "PyBlocks"
-    << setw(14) << "Host"
+  cout << right 
+    << setw(25) << right << "FileName" 
+    << setw(14) << right << "FileID"
+    << setw(20) << right << "FileSize"
+    << setw(45) << right << "BlockName"
+    << setw(14) << right << "BlockSize"
+    << setw(14) << right << "PyBlocks"
+    << setw(14) << right << "Host"
     << endl << string(123,'-') << endl;
 
   model::metadata md = dfs.get_metadata_optimized(file, type);
@@ -180,8 +180,8 @@ void cli_driver::file_show_optimized(std::string file, int type) {
     cout 
       << setw(25) << md.name
       << setw(14) << md.hash_key
-      << setw(14) << md.size
-      << setw(25) << md.block_data[i].name
+      << setw(20) << md.size
+      << setw(45) << md.block_data[i].name
       << setw(14) << md.block_data[i].size
       << setw(14) << md.block_data[i].chunks_path.size()
       << setw(14) << md.block_data[i].host

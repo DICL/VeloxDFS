@@ -60,7 +60,7 @@ void scheduler_python::generate(FileDescription& file_desc, std::vector<std::str
 
     for (auto& io: io_vec) {
       ptree node_child;
-      node_child.put("", to_string(io));
+      node_child.put("", to_string(io.first));
       io_child.push_back({"", node_child});
     }
 
@@ -68,7 +68,6 @@ void scheduler_python::generate(FileDescription& file_desc, std::vector<std::str
     pt.add_child("nodes", nodes_child);
     pt.add_child("io", io_child);
 
-    //pt.put("chunks", "199");
     std::map<std::string, ptree> ptree_map;
     for (int i = 0; i < (int)file_desc.blocks.size(); i++) {
       int id = find(nodes.begin(), nodes.end(), file_desc.block_hosts[i]) - nodes.begin();
@@ -99,7 +98,6 @@ void scheduler_python::generate(FileDescription& file_desc, std::vector<std::str
   pipe(inputfd);
   pipe(outputfd);
 
-    INFO("LAUNCH PYSCHEDULER");
   // LAUNCH COMMAND
   pid_t pid;
   if ((pid = fork()) == -1) {
@@ -125,7 +123,6 @@ void scheduler_python::generate(FileDescription& file_desc, std::vector<std::str
     close(inputfd[WRITE]);
 
     output.reserve(OUTPUT_LEN);
-    INFO("ABOUT TO WAIT");
     //while ((wpid = wait(&status)) > 0); 
 
     while(!read(outputfd[READ], &output[0], OUTPUT_LEN));

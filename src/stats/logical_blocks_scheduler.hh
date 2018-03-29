@@ -42,5 +42,10 @@ class scheduler_python: public scheduler{
     virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;
 };
 
+class scheduler_vlmb: public scheduler{
+  public:
+    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;
+};
+
 }
 }

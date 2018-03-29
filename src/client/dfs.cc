@@ -156,6 +156,7 @@ int DFS::upload(std::string file_name, bool is_binary) {
   file_info.replica = replica;
   myfile.seekg(0, ios_base::end);
   file_info.size = myfile.tellg();
+  file_info.is_input = true;
 
   //! Send file to be submitted;
   auto socket = connect(file_hash_key);
@@ -1278,6 +1279,11 @@ model::metadata DFS::get_metadata_optimized(std::string& fname, int type) {
   send_message(socket.get(), &fr);
   auto fd = (read_reply<FileDescription> (socket.get()));
   socket->close();
+
+  // If the file is not input file
+  if (fd->is_input == false) {
+    return get_metadata(fname);
+  }
 
   if (type != 3) {
     if(fd != nullptr) {
