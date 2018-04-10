@@ -30,6 +30,9 @@
 #include "../common/context_singleton.hh"
 #include <sys/resource.h>
 
+#define FD_CACHE_KEY(file_name, only_metadata, logical_block) \
+  (file_name + "-" + to_string(only_metadata) + "-" + to_string(logical_block))
+
 using namespace std;
 using namespace eclipse;
 using namespace boost::archive;
@@ -69,10 +72,12 @@ static unique_ptr<tcp::socket> connect(uint32_t hash_value) {
 }
 
 shared_ptr<FileDescription> get_file_description
-(std::function<unique_ptr<tcp::socket>(uint32_t)> connect, std::string& fname, bool only_metadata) {
+(std::function<unique_ptr<tcp::socket>(uint32_t)> connect, std::string& fname, bool only_metadata, bool logical_block) {
 
-  if (file_description_cache.find(fname) != file_description_cache.end()) {
-    return (*file_description_cache.find(fname)).second;
+  string cache_key = FD_CACHE_KEY(fname, (int)only_metadata, (int)logical_block);
+
+  if (file_description_cache.find(cache_key) != file_description_cache.end()) {
+    return (*file_description_cache.find(cache_key)).second;
   }
 
   uint32_t file_hash_key = h(fname);
@@ -90,6 +95,10 @@ shared_ptr<FileDescription> get_file_description
 
   FileRequest fr;
   fr.name = fname;
+  if(logical_block) {
+    fr.type = "LOGICAL_BLOCKS";
+    fr.generate = false;
+  }
 
   send_message(socket.get(), &fr);
   shared_ptr<FileDescription> fd = (read_reply<FileDescription> (socket.get()));
@@ -103,7 +112,7 @@ shared_ptr<FileDescription> get_file_description
 shared_ptr<FileDescription> get_file_description
   (std::function<unique_ptr<tcp::socket>(uint32_t)> connect, std::string& fname) {
 
-  return get_file_description(connect, fname, false);
+  return get_file_description(connect, fname, false, false);
 }
 
 static bool file_exists_local(std::string filename) {
@@ -444,8 +453,7 @@ bool DFS::rename(std::string src, std::string dst) {
   file_info.size = fd->size;
   file_info.num_block = fd->num_block;
   file_info.n_lblock = fd->n_lblock;
-
-  cout << fd->num_block << endl;
+  file_info.is_input = fd->is_input;
 
   auto dst_socket = connect(file_info.hash_key);
   send_message(dst_socket.get(), &file_info);
@@ -702,14 +710,17 @@ int DFS::append(string file_name, string buf) {
       string sbuffer(buffer);
       delete[] buffer;
 
+      int which_server = (hash_key  % NUM_NODES);
+
       metadata.name = fd->blocks[block_seq];
       metadata.file_name = ori_file_name;
       metadata.seq = block_seq;
       metadata.replica = fd->replica;
       metadata.hash_key = hash_key;
       metadata.size = ori_start_pos + write_length;
-      metadata.l_node = "0";
-      metadata.r_node = "0";
+      metadata.node = nodes[which_server];
+      metadata.l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
+      metadata.r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
       metadata.is_committed = 1;
 
       blocks_metadata.push_back(metadata);
@@ -969,7 +980,7 @@ uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint6
   int block_beg_seq = (int) off / block_size;
   int block_end_seq = (int) (len + off - 1) / block_size;
 
-  for(int i=block_beg_seq; i<=block_end_seq; i++) {
+  for(int i=block_beg_seq; i<=block_end_seq && to_write_bytes > 0; i++) {
     BlockMetadata metadata;
     Block block;
     IOoperation io_ops;
@@ -1064,15 +1075,28 @@ uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint6
   auto reply = read_reply<Reply> (socket.get());
   socket->close();
 
-  auto iter = file_description_cache.find(file_name);
-  if(iter != file_description_cache.end())
-    file_description_cache.erase(iter);
+  for(int only_metadata = 0; only_metadata < 2; ++only_metadata) {
+    for(int logical_block = 0; logical_block < 2; ++logical_block) {
+      auto iter = file_description_cache.find(
+        FD_CACHE_KEY(file_name, only_metadata, logical_block)
+      );
+      if(iter != file_description_cache.end())
+        file_description_cache.erase(iter);
+    }
+  }
 
   return written_bytes;
 }
 // }}}
 // read {{{
 uint64_t DFS::read(std::string& file_name, char* buf, uint64_t off, uint64_t len) {
+  //if(GET_BOOL("addons.zk.enabled")) 
+    return read_logical(file_name, buf, off, len);
+  //else
+    //return read_physical(file_name, buf, off, len);
+}
+
+uint64_t DFS::read_physical(std::string& file_name, char* buf, uint64_t off, uint64_t len) {
   auto nodes = GET_VEC_STR("network.nodes");
   Histogram boundaries(NUM_NODES, 100);
   boundaries.initialize();
@@ -1081,13 +1105,13 @@ uint64_t DFS::read(std::string& file_name, char* buf, uint64_t off, uint64_t len
   core_limits.rlim_cur = core_limits.rlim_max = RLIM_INFINITY;
   setrlimit(RLIMIT_CORE, &core_limits);
 
+  // TODO: fd should have infomation for logical blocks
   auto fd = get_file_description( std::bind(&connect, std::placeholders::_1), file_name);
 
   if(fd == nullptr) return 0;
 
   off = std::max(0ul, std::min(off, fd->size));
   if(off >= fd->size) return 0;
-
 
   // Find where is the block
   int block_beg_seq = 0, block_end_seq = 0;
@@ -1187,6 +1211,143 @@ uint64_t DFS::read(std::string& file_name, char* buf, uint64_t off, uint64_t len
     if(remain_len <= 0) break;
   }
 
+  if (read_bytes != len) {
+    INFO("read_bytes: %lu != len: %lu (off:%lu, f:%s r:%lu, cu:%lu) [%lu, %lu]", 
+        read_bytes, len, off, file_name.c_str(), remain_len, current_block_offset,
+        block_beg_seq, block_end_seq);
+  }
+
+  return read_bytes;
+}
+// }}}
+// read_logical {{{
+uint64_t DFS::read_logical(std::string& file_name, char* buf, uint64_t off, uint64_t len) {
+  auto nodes = GET_VEC_STR("network.nodes");
+  Histogram boundaries(NUM_NODES, 100);
+  boundaries.initialize();
+
+  struct rlimit core_limits;
+  core_limits.rlim_cur = core_limits.rlim_max = RLIM_INFINITY;
+  setrlimit(RLIMIT_CORE, &core_limits);
+
+  // TODO: fd should have infomation for logical blocks
+  auto fd = get_file_description( std::bind(&connect, std::placeholders::_1), file_name, false, true);
+
+  if(fd == nullptr) {
+    cout << "fd is null" << endl;
+    return 0;
+  }
+
+  off = std::max(0ul, std::min(off, fd->size));
+  if(off >= fd->size) {
+    cout << "offset is greater than the size" << endl;
+    cout << "offset: " << off << ", " << "size: " << fd->size << endl;
+    return 0;
+  }
+
+  // Find where is the block
+  int block_beg_seq = 0, block_end_seq = 0;
+  uint64_t current_block_offset = 0;
+  
+  {
+    uint64_t total_size = 0;
+    for (int i = 0; i < (int)fd->logical_blocks.size(); i++) {
+      total_size += fd->logical_blocks[i].size;
+
+      if (total_size > off) {
+        block_beg_seq = i;
+        current_block_offset = total_size - fd->logical_blocks[i].size;
+        break;
+      }
+    }
+  }
+
+  {
+    uint64_t total_size = 0;
+    for (int i = 0; i < (int)fd->logical_blocks.size(); i++) {
+      total_size += fd->logical_blocks[i].size;
+
+      if (total_size >= (off+len-1)) {
+        block_end_seq = i;
+        break;
+      }
+
+      if (i == ((int)fd->logical_blocks.size() - 1))
+        block_end_seq = i;
+    }
+  }
+
+  uint64_t remain_len = len;
+  uint64_t read_bytes = 0;
+
+  auto is_replica = [](int a, int b, int size) {
+    if (a == b) 
+      return true;
+
+    if (b - 1 == a or b + 1 == a)
+      return true;
+
+    if (b == 0 and a == size-1)
+      return true;
+
+    if (b == size-1 and a == 0)
+      return true;
+
+    return false;
+  };
+
+  if(fd->logical_blocks.size() == 0) {
+    INFO("logical_block size is zero");
+    return 0; // no read bytes
+  }
+
+  // Request blocks
+  for(int i = block_beg_seq; i <= block_end_seq && remain_len > 0; i++) {
+    for(auto physical_block : fd->logical_blocks[i].physical_blocks) {
+      uint32_t hash_key = physical_block.hash_key;
+      int which_node = boundaries.get_index(hash_key);
+      uint64_t cursor = (i == block_beg_seq && physical_block.size > 0) ? (off-current_block_offset) : 0;
+      uint64_t length = std::min((physical_block.size - cursor), remain_len);
+
+      //INFO("DFS CLIENT: READ [ID:%d|FN:%s|NODE:%i]", context.id, fd->blocks[i].c_str(), which_node);
+      if (is_replica(which_node, context.id, nodes.size())) {
+
+        //INFO("DFS CLIENT: LOCAL READ HIT");
+        string disk_path = GET_STR("path.scratch");
+        string file_path = disk_path + string("/") + physical_block.name;
+
+        ifstream ifs (file_path, ios::in | ios::binary | ios::ate);
+        if (!ifs.good()) {
+          INFO("DFS CLIENT: Error opening local file %s", file_path.c_str()); 
+          break;
+        }
+
+        ifs.seekg(cursor, ios::beg);
+        ifs.read(buf + read_bytes, length);
+        ifs.close();
+
+      } else {
+        auto block_socket = connect(which_node);
+
+        IOoperation io_ops;
+        io_ops.operation = eclipse::messages::IOoperation::OpType::BLOCK_REQUEST;
+        io_ops.block.first = physical_block.name;
+        io_ops.pos = cursor;
+        io_ops.length = length;
+
+        auto slave_socket = connect(which_node);
+        send_message(slave_socket.get(), &io_ops);
+        auto msg = read_reply<IOoperation>(slave_socket.get());
+        memcpy(buf + read_bytes, msg->block.second.c_str(), (size_t)msg->block.second.length());
+        slave_socket->close();
+      }
+
+      remain_len -= length;
+      read_bytes += length;
+
+      if(remain_len <= 0) break;
+    }
+  }
   if (read_bytes != len) {
     INFO("read_bytes: %lu != len: %lu (off:%lu, f:%s r:%lu, cu:%lu) [%lu, %lu]", 
         read_bytes, len, off, file_name.c_str(), remain_len, current_block_offset,

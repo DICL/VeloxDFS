@@ -39,6 +39,18 @@ class DFS {
     //! @retval 0          The operation failed.
     uint64_t read(std::string& file_name, char* buf, uint64_t off, uint64_t len);
 
+    //! Read remote logical blocks into a buffer.
+    //!
+    //! @pre The file must exist.
+    //! @param file_name   File to peform the operation.
+    //! @param[out] buffer Destination buffer.
+    //! @param off         offset from where to read.
+    //! @param len         size of segment to read.
+    //! @retval >0         bytes successfully uploaded.
+    //! @retval 0          The operation failed.
+    uint64_t read_physical(std::string& file_name, char* buf, uint64_t off, uint64_t len);
+    uint64_t read_logical(std::string& file_name, char* buf, uint64_t off, uint64_t len);
+
     //! Load all the file into a string.
     //!
     //! @param file_name   File to peform the operation.

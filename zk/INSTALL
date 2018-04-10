@@ -1,0 +1,11 @@
+* Checking docker and docker-compose are installed. If not, use the following command to install them.
+
+sudo yum install docker docker-compose
+
+* Starting a docker daemon
+
+sudo systemctl start docker
+
+* Attatch Zookeeper image for VeloxDFS on docker
+
+sudo docker-compose -f ./docker-composer.yml up --no-recreate

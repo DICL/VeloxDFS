@@ -1,10 +1,14 @@
 #!/bin/bash
 
+if [[ ! "$VELOX_HOME" ]]; then
+  VELOX_HOME=`pwd`
+fi
+
 JNI_CLASSES=( VeloxDFS )
 GENERAL_CLASSES=( Configuration )
 
 JAVA_SOURCE_PATH=./src/java/velox
-JAVA_BUILD_PATH=~/buildDFS/java/
+JAVA_BUILD_PATH=$VELOX_HOME/build/java/
 
 JAVA_PACKAGE=com.dicl.velox
 
@@ -12,7 +16,7 @@ if [ ! -d "$JAVA_BUILD_PATH" ]; then
   mkdir -p $JAVA_BUILD_PATH
 fi
 
-LIB_PATH=~/sandbox/lib
+LIB_PATH=$VELOX_HOME/build/lib
 
 JNI_PATH=$JAVA_SOURCE_PATH/../jni
 JNI_SOURCE_NAMES=( VeloxDFS.cc )

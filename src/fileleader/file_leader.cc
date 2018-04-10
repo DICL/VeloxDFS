@@ -91,6 +91,11 @@ bool FileLeader::file_update(messages::FileUpdate* f) {
       }
     }
 
+    auto it = current_file_arrangements.find(f->name);
+    if (it != current_file_arrangements.end()) {
+      current_file_arrangements.erase(it);
+    }
+
     INFO("Updating to SQLite db");
     return true;
   }
@@ -104,6 +109,12 @@ bool FileLeader::file_delete(messages::FileDel* f) {
     directory.file_table_delete(f->name);
     directory.block_table_delete_all(f->name);
     replicate_metadata();
+
+    auto it = current_file_arrangements.find(f->name);
+    if (it != current_file_arrangements.end()) {
+      current_file_arrangements.erase(it);
+    }
+
     INFO("Removing from SQLite db");
     return true;
   }

@@ -86,7 +86,6 @@ void scheduler_vlmb::generate(FileDescription& file_desc, std::vector<std::strin
       key_it = lblocks_dist.insert({smallest_id, {}}).first;
     }
 
-    double current_usage = usage[smallest_id];
     double current_cpus  = stats[smallest_id].second;
     int current_lblocks  = key_it->second.size();
 
