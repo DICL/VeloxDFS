@@ -5,7 +5,7 @@ export VELOX_HOME=`pwd`
 cd $VELOX_HOME
 
 # Your Install Path
-INSTALL_PATH=$VELOX_HOME/build
+INSTALL_PATH=~/buildDFS
 
 export PATH="$INSTALL_PATH/bin:$PATH"
 export LIBRARY_PATH="$INSTALL_PATH/lib:/usr/local/lib:$LIBRARY_PATH"

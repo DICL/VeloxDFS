@@ -7,8 +7,8 @@
 #include <functional>
 #include <set>
 
-// Default 16MiB
-#define MIN_BLOCK_SIZE (1 << 24) 
+// Default 32MiB
+#define MIN_BLOCK_SIZE (1 << 25) 
 
 using namespace std;
 using namespace eclipse;
@@ -33,8 +33,12 @@ vector<uint32_t> get_replicas_id(VEC_STR nodes, string node) {
 // }}}
 // score {{{
 double score(VEC_STATS& stats, VEC_DOUBLE& usage, double alpha, int id) {
-  return 1.00 - ((alpha*stats[id].first) + ((1.00-alpha)*usage[id]));
-};
+  double w = alpha / 2.0;
+  double cpu_percentage = 1.0 - double(double(stats[id].second) / 8.0f);
+  double io_percentage = double(stats[id].first);
+
+  return 1.00 - ((w*io_percentage) + (w*cpu_percentage) + ((1.00-alpha)*usage[id])) - double(stats[id].second == 0) ;
+}
 // }}}
 // get_highest_id {{{
 int get_highest_id(VEC_STATS& stats, VEC_DOUBLE& usage, VEC_STR hosts,
@@ -66,50 +70,50 @@ void scheduler_vlmb::generate(FileDescription& file_desc, std::vector<std::strin
   vector<double> usage;
   usage.resize(nodes.size(), .0);
 
-  // HOST-> [L1, L2, L3...]
+  // HOST -> [L1, L2, L3...]
   std::map<int, std::vector<logical_block_metadata>> lblocks_dist; 
   
   //---------------------LOGIC STARTS HERE---------------------------
 
   // For each chunk find its logical block
   int logical_block_counter = 0;
-  for (int i = 0; i < (int)file_desc.blocks.size(); i++) {
+  for (int i = 0; i < int(file_desc.blocks.size()); i++) {
     int smallest_id = get_highest_id(stats,
         usage, nodes, file_desc.block_hosts[i], alpha);
 
     // Iterators to key and to logical block
-    auto key_it = lblocks_dist.find(smallest_id);
+    auto node_it = lblocks_dist.find(smallest_id);
     vector<logical_block_metadata>::iterator current_lblock_it;
 
     // Create new node's lblocks key
-    if (key_it == lblocks_dist.end()) {
-      key_it = lblocks_dist.insert({smallest_id, {}}).first;
+    if (node_it == lblocks_dist.end()) {
+      node_it = lblocks_dist.insert({smallest_id, {}}).first;
     }
 
     double current_cpus  = stats[smallest_id].second;
-    int current_lblocks  = key_it->second.size();
+    int current_lblocks  = node_it->second.size();
 
     // No maximum logical blocks formed
-    if (current_lblocks < current_cpus) {
+    if (current_lblocks < current_cpus and current_cpus != 0) {
 
       // Add new logical block
-      if (key_it->second.size() == 0 || key_it->second.back().size >= MIN_BLOCK_SIZE) {
+      if (node_it->second.size() == 0 || node_it->second.back().size >= MIN_BLOCK_SIZE) {
         logical_block_metadata metadata;
         metadata.seq = logical_block_counter;
         metadata.name = string("logical_") + file_desc.name + "_" + to_string(logical_block_counter++);
         metadata.file_name = file_desc.name;
         metadata.hash_key = boundaries->random_within_boundaries(smallest_id);
         metadata.host_name = nodes[smallest_id];
-        current_lblock_it = key_it->second.insert(key_it->second.end(), {metadata});
+        current_lblock_it = node_it->second.insert(node_it->second.end(), {metadata});
 
       // If last block size is small enough
       } else {
-        current_lblock_it = key_it->second.end() - 1;
+        current_lblock_it = node_it->second.end() - 1;
       }
 
     // No free cpus
     } else {
-      current_lblock_it = min_element(key_it->second.begin(), key_it->second.end(), 
+      current_lblock_it = min_element(node_it->second.begin(), node_it->second.end(), 
           [] (auto& a, auto& b) { return a.size < b.size; });
     }
 
@@ -119,17 +123,23 @@ void scheduler_vlmb::generate(FileDescription& file_desc, std::vector<std::strin
     physical_block.file_name = file_desc.name;
     physical_block.hash_key  = file_desc.hash_keys[i];
     physical_block.size      = file_desc.block_size[i];
+    physical_block.seq       = i;
     physical_block.node      = nodes[smallest_id]; //Choose this replica
 
     current_lblock_it->size += physical_block.size;
     current_lblock_it->physical_blocks.push_back(physical_block);
 
-    usage[smallest_id] += (double)(1.0/(double)file_desc.blocks.size());
+    usage[smallest_id] += double(1.0/double(file_desc.blocks.size()));
   }
 
   // Copy the block distribution to the file_descriptior
   for (auto& kv : lblocks_dist) {
     std::copy(kv.second.begin(), kv.second.end(), back_inserter(file_desc.logical_blocks));
+  }
+
+  int i = 0;
+  for (auto us : usage) {
+    INFO("USAGE %d : %lf", i++, us);
   }
 
   file_desc.n_lblock = file_desc.logical_blocks.size();

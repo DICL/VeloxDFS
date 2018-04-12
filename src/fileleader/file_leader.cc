@@ -2,9 +2,9 @@
 #include "file_leader.hh"
 #include "../messages/boost_impl.hh"
 #include "../messages/filedescription.hh"
-#include "../common/logical_block_metadata.hh"
 
 #ifdef LOGICAL_BLOCKS_FEATURE
+#include "../common/logical_block_metadata.hh"
 #include "../stats/logical_blocks_scheduler.hh"
 #endif
 
@@ -22,7 +22,7 @@ FileLeader::FileLeader (ClientHandler* net) : Node () {
   network = net;
 
   network_size = context.settings.get<vec_str>("network.nodes").size();
-  boundaries.reset( new Histogram {network_size, 100});
+  boundaries.reset(new Histogram {network_size, 100});
   boundaries->initialize();
 
   directory.create_tables();
@@ -124,6 +124,8 @@ bool FileLeader::file_delete(messages::FileDel* f) {
 // file_request {{{
 shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
   INFO("PROCESSING FILE INFORMARTION REQUEST [F:%s]", m->name.c_str());
+  using namespace std;
+  clock_t schedule, end, begin = clock();
   string file_name = m->name;
 
   FileInfo fi;
@@ -143,23 +145,26 @@ shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
   fd->is_input = fi.is_input;
   fd->num_block = fd->n_lblock = fi.num_block;
 
-  int num_blocks = fi.num_block;
-  for (int i = 0; i < num_blocks; i++) {
-    BlockInfo bi;
-    directory.block_table_select(file_name, i, &bi);
-    string block_name = bi.name;
-    fd->blocks.push_back(block_name);
-    fd->hash_keys.push_back(bi.hash_key);
-    fd->block_size.push_back(bi.size);
-    fd->block_hosts.push_back(bi.node);
-  }
-
-  if (m->type == "LOGICAL_BLOCKS" and fd->is_input == true) {
+#ifdef LOGICAL_BLOCKS_FEATURE
+  if (fd->is_input == true) {
     bool previously_arranged = 
       (current_file_arrangements.find(file_name) != current_file_arrangements.end());
 
     if (m->generate == true or (!previously_arranged and m->generate == false)) {
+
+      std::vector<BlockInfo> blocks;
+      directory.block_table_select(file_name, blocks);
+      for (auto& block : blocks) {
+        fd->blocks.push_back(block.name);
+        fd->hash_keys.push_back(block.hash_key);
+        fd->block_size.push_back(block.size);
+        fd->block_hosts.push_back(block.node);
+      }
+
+      schedule = clock();
       find_best_arrangement(fd.get());
+
+      end = clock();
 
       auto it = current_file_arrangements.find(file_name);
       if (it != current_file_arrangements.end()) {
@@ -175,6 +180,25 @@ shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
         fd = it->second;
       }
     }
+
+    double time_1 = double(schedule - begin) / CLOCKS_PER_SEC;
+    double time_2 = double(end - schedule) / CLOCKS_PER_SEC;
+
+    INFO("TIME 1:%lf 2:%lf", time_1, time_2);
+    return fd;
+
+  } 
+#endif
+
+  int num_blocks = fi.num_block;
+  for (int i = 0; i < num_blocks; i++) {
+    BlockInfo bi;
+    directory.block_table_select_by_index(file_name, i, &bi);
+    string block_name = bi.name;
+    fd->blocks.push_back(block_name);
+    fd->hash_keys.push_back(bi.hash_key);
+    fd->block_size.push_back(bi.size);
+    fd->block_hosts.push_back(bi.node);
   }
 
   return fd;

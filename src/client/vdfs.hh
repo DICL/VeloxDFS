@@ -62,7 +62,7 @@ class vdfs {
 
     uint32_t write(long, const char*, uint32_t, uint32_t);
     uint32_t write(long, const char*, uint32_t, uint32_t, uint64_t);
-    uint32_t read(long, char*, uint32_t, uint32_t);
+    uint32_t read(long, char*, uint64_t, uint64_t);
 
     model::metadata get_metadata(long fid, int type);
 

@@ -54,6 +54,7 @@ std::vector<pair<double,int>> zk_listener::get_io_stats() {
       ret.reserve(n_childrens);
 
       for (int i = 0; i < n_childrens; i++) {
+        buflen = ZK_BUFFER_LEN;
         bzero(buffer, ZK_BUFFER_LEN);
         bzero(&stat, sizeof(struct Stat));
         string children_path = "/stats/io/" + to_string(i);
@@ -66,6 +67,7 @@ std::vector<pair<double,int>> zk_listener::get_io_stats() {
 
           double io  = atof(strtok_r(buffer,",", &savepoint));
           int cpu    = atoi(strtok_r(NULL,",", &savepoint));
+          INFO("IO %lf", io * .01);
           ret.push_back({io * .01, cpu});  // values from 0.00-1.00
 
         // Error reporting for child ZNODE

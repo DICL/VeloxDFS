@@ -47,5 +47,10 @@ class scheduler_vlmb: public scheduler{
     virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;
 };
 
+class scheduler_multiwave: public scheduler{
+  public:
+    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;
+};
+
 }
 }

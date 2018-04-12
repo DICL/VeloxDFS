@@ -158,8 +158,8 @@ void cli_driver::file_show_optimized(std::string file, int type) {
 #ifndef LOGICAL_BLOCKS_FEATURE
   cout << "ERROR! LOGICAL BLOCKS FEATURE IS DISABLED IN THIS BUILD" << endl;
   exit(EXIT_FAILURE);
-#endif
 
+#else
   vec_str nodes = GET_VEC_STR("network.nodes");
   Histogram boundaries(nodes.size(), 100);
   boundaries.initialize();
@@ -187,6 +187,7 @@ void cli_driver::file_show_optimized(std::string file, int type) {
       << setw(14) << md.block_data[i].host
       << endl;
   } 
+#endif
 }
 // }}}
 // list {{{

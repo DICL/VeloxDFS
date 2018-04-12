@@ -103,7 +103,7 @@ JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJJ
 
   velox::vdfs* vdfs = get_vdfs(env, obj);
 
-  char buffer[len];
+  char* buffer = new char[(uint64_t)len + 1];
   
   env->GetByteArrayRegion(buf, off, (jsize)len, reinterpret_cast<jbyte*>(buffer));
 
@@ -113,6 +113,8 @@ JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJJ
   //jbyte* buffer = env->GetByteArrayElements(buf, NULL);
 
   jlong ret = vdfs->write((long)fid, buffer, (uint64_t)pos, (uint64_t)len, block_size);
+
+  delete[] buffer;
 
   //env->ReleaseByteArrayElements(buf, buffer, JNI_ABORT);
 
@@ -137,9 +139,13 @@ JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_read
 
   bzero(c_buf, len+1);
 
-  uint32_t ret = vdfs->read((long)fid, c_buf, (uint64_t)pos, (uint64_t)len);
+  int32_t ret = vdfs->read((long)fid, c_buf, (uint64_t)pos, (uint64_t)len);
+  int32_t read_bytes = ret;
 
-  env->SetByteArrayRegion(buf, off, ret, (jbyte*)c_buf);
+  if (ret < 0)
+    read_bytes = 0;
+
+  env->SetByteArrayRegion(buf, off, read_bytes, (jbyte*)c_buf);
 
   delete[] c_buf;
 

@@ -48,8 +48,8 @@ class DFS {
     //! @param len         size of segment to read.
     //! @retval >0         bytes successfully uploaded.
     //! @retval 0          The operation failed.
-    uint64_t read_physical(std::string& file_name, char* buf, uint64_t off, uint64_t len);
-    uint64_t read_logical(std::string& file_name, char* buf, uint64_t off, uint64_t len);
+    //uint64_t read_physical(std::string& file_name, char* buf, uint64_t off, uint64_t len);
+    //uint64_t read_logical(std::string& file_name, char* buf, uint64_t off, uint64_t len);
 
     //! Load all the file into a string.
     //!
@@ -92,10 +92,6 @@ class DFS {
     model::metadata get_metadata_optimized(std::string& fname, int type = 0);
 
     std::vector<model::metadata> get_metadata_all();
-
-    //! @attention char out is dynamically allocated, needs to be freed after 
-    //! being used.
-    int read_block(model::metadata& md, std::string block_name, char* out);
 
     void file_metadata_append(std::string, size_t, model::metadata&);
 

@@ -25,6 +25,9 @@ shared_ptr<scheduler> scheduler_factory(string type, Histogram* boundaries, SCHE
   } else if (type == "scheduler_vlmb") {
     sch = make_shared<scheduler_vlmb>();
   
+  } else if (type == "scheduler_multiwave") {
+    sch = make_shared<scheduler_multiwave>();
+  
   } else {
     PANIC("No file scheduler chosen, EXITING");
   }

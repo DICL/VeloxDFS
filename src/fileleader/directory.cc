@@ -43,6 +43,7 @@ static int block_callback(void *block_info, int argc, char **argv, char **azColN
   return 0;
 } 
 
+
 static int file_list_callback(void *list, int argc, char **argv, char **azColName) {
   auto file_list = reinterpret_cast<vector<FileInfo>*>(list);
   for (int i=0; i<argc; i++) {
@@ -278,7 +279,16 @@ void Directory::block_table_insert(BlockMetadata& metadata) {
 }
 // }}}
 // block_table_select {{{
-void Directory::block_table_select(string file_name, unsigned int block_seq, BlockInfo *block_info) {
+void Directory::block_table_select(string file_name, std::vector<BlockInfo>& blocks) {
+  char sql[DEFAULT_QUERY_SIZE];
+
+  sprintf(sql, "SELECT * from block_table where (file_name='%s');", file_name.c_str());
+
+  query_exec_simple(sql, block_list_callback, (void*)&blocks);
+} 
+// }}}
+// block_table_select_by_index {{{
+void Directory::block_table_select_by_index(string file_name, unsigned int block_seq, BlockInfo *block_info) {
   char sql[DEFAULT_QUERY_SIZE];
 
   sprintf(sql, "SELECT * from block_table where (file_name='%s') and \

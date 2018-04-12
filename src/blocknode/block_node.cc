@@ -36,6 +36,7 @@ void BlockNode::replicate_message(IOoperation* m) {
 //! @brief This method insert the block locally and replicated it.
 bool BlockNode::block_insert_local(Block& block, bool replicate) {
   local_io.write(block.first, block.second);
+  INFO("[DFS] BLOCK: %s SIZE: %lu", block.first.c_str(), block.second.length());
 
   if (replicate) {
     INFO("[DFS] Saving locally BLOCK: %s", block.first.c_str());

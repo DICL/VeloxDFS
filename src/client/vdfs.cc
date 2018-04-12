@@ -272,10 +272,10 @@ uint32_t vdfs::write(long fid, const char *buf, uint32_t off, uint32_t len, uint
 }
 // }}}
 // read {{{
-uint32_t vdfs::read(long fid, char *buf, uint32_t off, uint32_t len) {
+uint32_t vdfs::read(long fid, char *buf, uint64_t off, uint64_t len) {
 //  cout << "vdfs::read" << endl;
   velox::file* f = this->get_file(fid);
-  if(f == nullptr) return -1;
+  if(f == nullptr) return 0;
 
   return dfs->read(f->name, buf, off, len);
 }
