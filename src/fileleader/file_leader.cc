@@ -125,7 +125,6 @@ bool FileLeader::file_delete(messages::FileDel* f) {
 shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
   INFO("PROCESSING FILE INFORMARTION REQUEST [F:%s]", m->name.c_str());
   using namespace std;
-  clock_t schedule, end, begin = clock();
   string file_name = m->name;
 
   FileInfo fi;
@@ -161,10 +160,7 @@ shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
         fd->block_hosts.push_back(block.node);
       }
 
-      schedule = clock();
       find_best_arrangement(fd.get());
-
-      end = clock();
 
       auto it = current_file_arrangements.find(file_name);
       if (it != current_file_arrangements.end()) {
@@ -181,10 +177,6 @@ shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
       }
     }
 
-    double time_1 = double(schedule - begin) / CLOCKS_PER_SEC;
-    double time_2 = double(end - schedule) / CLOCKS_PER_SEC;
-
-    INFO("TIME 1:%lf 2:%lf", time_1, time_2);
     return fd;
 
   } 

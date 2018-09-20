@@ -352,8 +352,6 @@ uint64_t read_logical(std::string& file_name, char* buf, uint64_t off,
   Histogram boundaries(nodes.size(), 100);
   boundaries.initialize();
 
-  //clock_t before_read = clock();
-
   DEBUG("Current_chunk_offset %ld [%i,%i] off %lu len %lu", 
       current_chunk_offset, chunk_beg_seq, chunk_end_seq, off, len);
 

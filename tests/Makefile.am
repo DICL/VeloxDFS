@@ -22,7 +22,7 @@ integration:
 # MESSAGES TEST
 # ---------------------------------------------------------------------
 check_PROGRAMS    += messages
-TESTS             += messages
+#TESTS             += messages
 messages_LDADD     = $(LDADD_T) -ldl -lsqlite3
 messages_CPPFLAGS  = $(AM_CPPFLAGS_T)
 messages_SOURCES   = $(messages_files) \
@@ -57,5 +57,6 @@ lblocks_SOURCES   = tests/main.cc \
                     src/stats/scheduler_simple.cc \
                     src/stats/scheduler_python.cc \
                     src/stats/scheduler_vlmb.cc \
+                    src/stats/scheduler_multiwave.cc \
                     src/stats/zk_listener.cc
 endif

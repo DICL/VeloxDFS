@@ -3,6 +3,7 @@ VeloxDFS {#mainpage}
 <!-- @cond Remove those links for Doxygen-->
 --- 
 [![Build Status](https://travis-ci.org/DICL/VeloxDFS.svg?branch=master)](https://travis-ci.org/DICL/VeloxDFS)
+[![Release](https://img.shields.io/github/release/DICL/VeloxDFS.svg)](https://img.shields.io/github/release/DICL/VeloxDFS.svg)
 [![Slack room](https://img.shields.io/badge/slack-join-pink.svg)](https://dicl.slack.com/messages/general/)
 ---
 <!-- @endcond -->
