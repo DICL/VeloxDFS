@@ -16,7 +16,7 @@ Local_io::Local_io() {
 //  }}}
 // write {{{
 //! @brief Unbuffered write to disk
-void Local_io::write (std::string name, std::string& v) {
+void Local_io::write (const std::string& name, const std::string& v) {
   string file_path = disk_path + string("/") + name;
   ofstream file;
 
@@ -27,7 +27,7 @@ void Local_io::write (std::string name, std::string& v) {
 }
 // }}}
 // update {{{
-void Local_io::update (std::string name, std::string v, uint32_t pos, uint32_t len) {
+void Local_io::update (const std::string& name, const std::string& v, uint32_t pos, uint32_t len) {
   string file_path = disk_path + string("/") + name;
   fstream file (file_path, fstream::binary | fstream::in | fstream::out);
   file.seekp(pos, ios_base::beg);
@@ -36,15 +36,15 @@ void Local_io::update (std::string name, std::string v, uint32_t pos, uint32_t l
 }
 // }}}
 // read {{{
-std::string Local_io::read (string name) {
+std::string Local_io::read (const string& name) {
   return read(name, 0, 0, true);
 }
 
-std::string Local_io::read (string name, uint32_t off, uint32_t len) {
+std::string Local_io::read (const string& name, uint32_t off, uint32_t len) {
   return read(name, off, len, false);
 }
 
-std::string Local_io::read (string name, uint32_t off, uint32_t len, bool is_whole = false) {
+std::string Local_io::read (const string& name, uint32_t off, uint32_t len, bool is_whole = false) {
   ifstream in (disk_path + string("/") + name, ios::in | ios::binary | ios::ate);
   uint32_t file_size = (uint32_t)in.tellg();
   in.seekg(off, ios::beg);
@@ -74,7 +74,7 @@ std::string Local_io::read_metadata() {
 }
 // }}}
 // pread {{{
-std::string Local_io::pread (string name, uint32_t pos, uint32_t len) {
+std::string Local_io::pread (const string& name, uint32_t pos, uint32_t len) {
   ifstream in (disk_path + string("/") + name);
   in.seekg(pos, in.beg);
   char *buffer = new char[len];
@@ -92,7 +92,7 @@ bool Local_io::format () {
 
   DIR *theFolder = opendir(fs_path.c_str());
   struct dirent *next_file;
-  char filepath[256] = {0};
+  char filepath[257] = {0};
 
   while ( (next_file = readdir(theFolder)) != NULL ) {
     sprintf(filepath, "%s/%s", fs_path.c_str(), next_file->d_name);
@@ -113,7 +113,7 @@ bool Local_io::format () {
 }
 // }}}
 // remove {{{
-void Local_io::remove (std::string k) {
+void Local_io::remove (const std::string& k) {
   string file_path = disk_path + string("/") + k;
   ::remove(file_path.c_str());
 }

@@ -10,14 +10,14 @@ namespace eclipse {
  */
 class Local_io {
   public:
-    void write(std::string, std::string&);
-    void update(std::string, std::string, uint32_t, uint32_t);
-    std::string read(std::string);
-    std::string read(std::string, uint32_t, uint32_t);
-    std::string read(std::string, uint32_t, uint32_t, bool);
+    void write(const std::string&, const std::string&);
+    void update(const std::string&, const std::string&, uint32_t, uint32_t);
+    std::string read(const std::string&);
+    std::string read(const std::string&, uint32_t, uint32_t);
+    std::string read(const std::string&, uint32_t, uint32_t, bool);
     std::string read_metadata();
-    std::string pread(std::string, uint32_t, uint32_t);
-    void remove(std::string);
+    std::string pread(const std::string&, uint32_t, uint32_t);
+    void remove(const std::string&);
     bool format();
 
     Local_io();
