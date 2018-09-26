@@ -69,7 +69,6 @@ std::string Local_io::read_metadata() {
   string value ((std::istreambuf_iterator<char>(in)),
       std::istreambuf_iterator<char>());
 
-  in.close();
   return value;
 }
 // }}}
@@ -92,13 +91,13 @@ bool Local_io::format () {
 
   DIR *theFolder = opendir(fs_path.c_str());
   struct dirent *next_file;
-  char filepath[257] = {0};
+  char filepath[FILENAME_MAX] = {0};
 
   while ( (next_file = readdir(theFolder)) != NULL ) {
-    sprintf(filepath, "%s/%s", fs_path.c_str(), next_file->d_name);
-    if (strncmp(basename(filepath), "..", 256) == 0 or
-        strncmp(basename(filepath), "...", 256) == 0 or
-        strncmp(basename(filepath), ".", 256) == 0)
+    snprintf(filepath, FILENAME_MAX, "%s/%s", fs_path.c_str(), next_file->d_name);
+    if (strncmp(basename(filepath), "..", FILENAME_MAX) == 0 or
+        strncmp(basename(filepath), "...", FILENAME_MAX) == 0 or
+        strncmp(basename(filepath), ".", FILENAME_MAX) == 0)
       continue;
 
     DEBUG("FORMAT: Removing %s", filepath);
