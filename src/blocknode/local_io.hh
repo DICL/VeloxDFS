@@ -16,7 +16,6 @@ class Local_io {
     std::string read(const std::string&, uint32_t, uint32_t);
     std::string read(const std::string&, uint32_t, uint32_t, bool);
     std::string read_metadata();
-    std::string pread(const std::string&, uint32_t, uint32_t);
     void remove(const std::string&);
     bool format();
 

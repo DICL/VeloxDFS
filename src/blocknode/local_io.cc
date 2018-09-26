@@ -72,18 +72,6 @@ std::string Local_io::read_metadata() {
   return value;
 }
 // }}}
-// pread {{{
-std::string Local_io::pread (const string& name, uint32_t pos, uint32_t len) {
-  ifstream in (disk_path + string("/") + name);
-  in.seekg(pos, in.beg);
-  char *buffer = new char[len];
-  in.read(buffer, len);
-  string value(buffer);
-  delete[] buffer;
-  in.close();
-  return value;
-}
-// }}}
 // format {{{
 bool Local_io::format () {
   string fs_path = context.settings.get<string>("path.scratch");
