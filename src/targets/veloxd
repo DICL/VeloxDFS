@@ -1,0 +1,121 @@
+#!/bin/bash
+
+VERSION="1.8.x"
+
+HELP="\
+VELOXD (Velox Daemon Controler) $VERSION
+Usage: veloxd [options] <actions>
+ACTIONS
+    up           Starts Velox in every node
+    down         Stop Velox in every node
+    restart      down-up Velox
+    status       Show connected nodes
+
+OPTIONS
+    -h           Help,       print this text.
+    -n           Dry-run,    it will print what it will do without actually doing it.
+    -f           Force,      kills every current user process in every node (Use it carefully).
+    -v           Verbose,    printout verbose info.
+    -d           Debug,      veloxd debug mode (To debug this very script).
+    -e 'args'    Extra-args, pass extra arguments for the ssh connection (up action).
+    -V           Version     show its compiled version.
+
+This is a re-written version in BASH of the previously used Eclipsed Ruby gem.
+The rationale to change from our Ruby gem is that Ruby gems are a myriad to install
+in HPC systems, thus the motivation.
+
+This shell script is still very incomplete. Please feel free helping porting all
+the features and adding new ones.
+
+AUTHORS
+- Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com>
+"
+
+# Options
+VERBOSE=no
+DEBUG=no
+DRYRUN=no
+RSH=ssh
+FORCE=no
+RUN_EXTRA_ARGS="ulimit -Sn 4000"
+
+function exec_cmd {
+  local CMD="$*"
+  [ $VERBOSE = yes -o $DRYRUN = yes ] && echo $CMD
+  local ret=
+  if [ $DRYRUN = no ]; then
+    ret=`$CMD`
+  fi
+  [ -n "$ret" ] && echo "$ret"
+}
+
+function up {
+  local ENV="export PATH=$PATH; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+  for host in `velox_get_config "network.nodes" -v`; do
+    exec_cmd $RSH $host "$ENV; $RUN_EXTRA_ARGS; nohup eclipse_node </dev/null &>/dev/null &"
+  done
+}
+
+function down {
+  if [ $FORCE = yes ]; then
+    hard-down
+  else
+    soft-down
+  fi
+}
+
+function soft-down {
+  for host in `velox_get_config "network.nodes" -v`; do
+    exec_cmd $RSH $host "pkill -u $USER eclipse_node"
+    exec_cmd $RSH $host "pkill -f -u $USER read_io_stats.sh$"
+  done
+}
+
+function hard-down {
+  for host in `velox_get_config "network.nodes" -v`; do
+    exec_cmd $RSH $host "pkill -u $USER"
+  done
+}
+
+function stats {
+  for host in `velox_get_config "network.nodes" -v`; do
+    local output=`exec_cmd $RSH $host "pgrep -u $USER -x eclipse_node"`
+
+    # Pretty-print the output
+    local n_proc=`wc -w <<<"$output"` # Counts number of PIDs
+    local alive=online
+    [ $n_proc = "0" ] && alive=offline
+    echo "host=$host status=$alive procs=$n_proc"
+  done
+}
+
+# Die early
+which velox_get_config &>/dev/null || { echo "ERROR: velox_get_config not found, check your \$PATH"; exit; }
+
+# Parse options
+OPTIND=1
+while getopts "hdvVnfe:" opt; do
+  case $opt in
+    h) echo "$HELP"; exit;;
+    v) VERBOSE=yes;;
+    V) echo "$VERSION"; exit;;
+    d) DEBUG=yes;;
+    n) DRYRUN=yes;;
+    f) FORCE=yes;;
+    e) RUN_EXTRA_ARGS="$OPTARG";;
+  esac
+done
+shift $((OPTIND - 1))
+
+[ $DEBUG = yes ] && set -x
+
+# Parse actions
+case $1 in
+  up)      up;;
+  down)    down;;
+  restart) down; up;;
+  status)  stats;;
+  *)       echo "$HELP"; exit;;
+esac
+
+set +x

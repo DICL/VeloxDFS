@@ -5,6 +5,7 @@ AM_CXXFLAGS      = $(CXXFLAGS) -Wall -Werror
 
 bin_PROGRAMS     = eclipse_node veloxdfs velox_get_config
 dist_bin_SCRIPTS = src/stats/read_io_stats.sh src/stats/scheduler.py
+bin_SCRIPTS      = src/targets/veloxd
 
 messages_files =   src/messages/message.cc         \
                    src/messages/boost_impl.cc      \
