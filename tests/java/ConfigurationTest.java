@@ -1,4 +1,4 @@
-import velox.Configuration;
+import com.dicl.velox.Configuration;
 
 public class ConfigurationTest {
   public static void main(String[] args) {

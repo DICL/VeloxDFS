@@ -2,9 +2,9 @@
 #include "file_leader.hh"
 #include "../messages/boost_impl.hh"
 #include "../messages/filedescription.hh"
-#include "../common/logical_block_metadata.hh"
 
 #ifdef LOGICAL_BLOCKS_FEATURE
+#include "../common/logical_block_metadata.hh"
 #include "../stats/logical_blocks_scheduler.hh"
 #endif
 
@@ -22,7 +22,7 @@ FileLeader::FileLeader (ClientHandler* net) : Node () {
   network = net;
 
   network_size = context.settings.get<vec_str>("network.nodes").size();
-  boundaries.reset( new Histogram {network_size, 100});
+  boundaries.reset(new Histogram {network_size, 100});
   boundaries->initialize();
 
   directory.create_tables();
@@ -60,7 +60,7 @@ bool FileLeader::file_insert_confirm(messages::FileInfo* f) {
     directory.block_table_insert(metadata);
   }
 
-  replicate_metadata();
+  //replicate_metadata();
 
   return true;
 }
@@ -91,6 +91,11 @@ bool FileLeader::file_update(messages::FileUpdate* f) {
       }
     }
 
+    auto it = current_file_arrangements.find(f->name);
+    if (it != current_file_arrangements.end()) {
+      current_file_arrangements.erase(it);
+    }
+
     INFO("Updating to SQLite db");
     return true;
   }
@@ -104,6 +109,12 @@ bool FileLeader::file_delete(messages::FileDel* f) {
     directory.file_table_delete(f->name);
     directory.block_table_delete_all(f->name);
     replicate_metadata();
+
+    auto it = current_file_arrangements.find(f->name);
+    if (it != current_file_arrangements.end()) {
+      current_file_arrangements.erase(it);
+    }
+
     INFO("Removing from SQLite db");
     return true;
   }
@@ -111,29 +122,70 @@ bool FileLeader::file_delete(messages::FileDel* f) {
 }
 // }}}
 // file_request {{{
-unique_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
+shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
+  INFO("PROCESSING FILE INFORMARTION REQUEST [F:%s]", m->name.c_str());
+  using namespace std;
   string file_name = m->name;
 
   FileInfo fi;
   fi.num_block = 0;
-  FileDescription* fd = new FileDescription();
+  std::shared_ptr<FileDescription> fd = make_shared<FileDescription>();
   fd->name = file_name;
 
   directory.file_table_select(file_name, &fi);
   fd->uploading = fi.uploading;
 
   if (fi.uploading == 1) //! Cancel if file is being uploading
-    return unique_ptr<Message>(fd);
+    return fd;
 
   fd->hash_key = fi.hash_key;
   fd->replica = fi.replica;
   fd->size = fi.size;
-  fd->num_block = fi.num_block;
+  fd->is_input = fi.is_input;
+  fd->num_block = fd->n_lblock = fi.num_block;
+
+#ifdef LOGICAL_BLOCKS_FEATURE
+  if (fd->is_input == true) {
+    bool previously_arranged = 
+      (current_file_arrangements.find(file_name) != current_file_arrangements.end());
+
+    if (m->generate == true or (!previously_arranged and m->generate == false)) {
+
+      std::vector<BlockInfo> blocks;
+      directory.block_table_select(file_name, blocks);
+      for (auto& block : blocks) {
+        fd->blocks.push_back(block.name);
+        fd->hash_keys.push_back(block.hash_key);
+        fd->block_size.push_back(block.size);
+        fd->block_hosts.push_back(block.node);
+      }
+
+      find_best_arrangement(fd.get());
+
+      auto it = current_file_arrangements.find(file_name);
+      if (it != current_file_arrangements.end()) {
+        current_file_arrangements.erase(it);
+      }
+
+      // Save the arrangment state
+      current_file_arrangements.insert({file_name, fd});
+
+    } else {
+      auto it = current_file_arrangements.find(file_name);
+      if (it != current_file_arrangements.end()) {
+        fd = it->second;
+      }
+    }
+
+    return fd;
+
+  } 
+#endif
 
   int num_blocks = fi.num_block;
   for (int i = 0; i < num_blocks; i++) {
     BlockInfo bi;
-    directory.block_table_select(file_name, i, &bi);
+    directory.block_table_select_by_index(file_name, i, &bi);
     string block_name = bi.name;
     fd->blocks.push_back(block_name);
     fd->hash_keys.push_back(bi.hash_key);
@@ -141,10 +193,7 @@ unique_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
     fd->block_hosts.push_back(bi.node);
   }
 
-  if (m->type == "LOGICAL_BLOCKS")
-    find_best_arrangement(fd);
-
-  return unique_ptr<Message>(fd);
+  return fd;
 }
 // }}}
 // list {{{

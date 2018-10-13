@@ -1,6 +1,6 @@
-package velox;
+package com.dicl.velox;
 
-import velox.model.Metadata;
+import com.dicl.velox.model.Metadata;
 
 public class VeloxDFS {
   static {
@@ -29,7 +29,16 @@ public class VeloxDFS {
   public native boolean isOpen(long fid);
 
   public native long write(long fid, long pos, byte[] buf, long off, long len);
+  public native long write(long fid, long pos, byte[] buf, long off, long len, long blockSize);
   public native long read(long fid, long pos, byte[] buf, long off, long len);
 
-  public native Metadata getMetadata(long fid);
+  public native Metadata getMetadata(long fid, byte type);
+
+  public native boolean remove(String name);
+
+  public native boolean exists(String name);
+
+  public native Metadata[] list(boolean all, String name);
+
+  public native boolean rename(String src, String dst);
 }

@@ -92,7 +92,11 @@ bool Settings::SettingsImpl::get_project_path ()
     config_path = system_location;
 
   } else {
-#ifdef ECLIPSE_CONF_PATH
+
+#ifdef ECLIPSE_HOME_CONF_PATH
+    config_path = string(ECLIPSE_HOME_CONF_PATH) + "/.eclipse.json";
+
+#elif defined ECLIPSE_CONF_PATH
     config_path = string(ECLIPSE_CONF_PATH) + FINAL_PATH;               // Then configure one
 #else
     return false;

@@ -11,7 +11,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile ])
 
 AM_CONDITIONAL([DEFAULT_CXXFLAGS], [test -z "$CXXFLAGS"])
-AM_COND_IF([DEFAULT_CXXFLAGS], [CXXFLAGS='-g -O0 -march=native'])
+AM_COND_IF([DEFAULT_CXXFLAGS], [CXXFLAGS='-g3 -O0 -march=native'])
 
 AC_PROG_CXX
 AC_LANG([C++])
@@ -42,12 +42,21 @@ AC_TYPE_UINT8_T
 AC_HEADER_STDC
 AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h sys/socket.h sys/time.h unistd.h])
 AC_SEARCH_LIBS([pthread_create], [pthread])
-AC_SEARCH_LIBS([sqlite3_exec], [sqlite3])
+AC_SEARCH_LIBS([sqlite3_exec], [sqlite3], [], [AC_MSG_ERROR([sqlite3 not found, please install it.])])
 
 AX_BOOST_BASE([1.53.0], ,
               [AC_MSG_ERROR([Needs BOOST])])
 have_unittest=no
 PKG_CHECK_EXISTS([UnitTest++], [have_unittest=yes], [have_unittest=no])
+
+#}}}
+# JNI and javac {{{
+if test "x$enable_lblocks" = xyes; then
+  AX_JNI_INCLUDE_DIR
+  for include in $JNI_INCLUDE_DIRS; do
+    CPPFLAGS="$CPPFLAGS -I$include"
+  done
+fi
 
 #}}}
 # PATHS {{{
@@ -63,8 +72,14 @@ AC_SUBST(libdirfull)
 AH_TEMPLATE([ECLIPSE_CONF_PATH],[Configuration files (ETC) for Eclipse])
 AC_DEFINE_UNQUOTED([ECLIPSE_CONF_PATH], ["$sysconfdirfull"])
 
+AH_TEMPLATE([ECLIPSE_HOME_CONF_PATH],[Home configuration files (ETC) for Eclipse])
+AC_DEFINE_UNQUOTED([ECLIPSE_HOME_CONF_PATH], ["$HOME"])
+
 AH_TEMPLATE([IO_STAT_SCRIPT],[IOSTATS path])
 AC_DEFINE_UNQUOTED([IO_STAT_SCRIPT], ["${bindirfull}/read_io_stats.sh"])
+
+AH_TEMPLATE([PY_SCHEDULER_SCRIPT],[PY scheduler path])
+AC_DEFINE_UNQUOTED([PY_SCHEDULER_SCRIPT], ["${bindirfull}/scheduler.py"])
 
 AS_IF([test "x$enable_lblocks" = xyes], [
       AH_TEMPLATE([LOGICAL_BLOCKS_FEATURE],["Enables logical blocks feature" ]) 

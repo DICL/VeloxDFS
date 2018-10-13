@@ -21,9 +21,12 @@ class DFS {
     //! @param buf        contents to be copied.
     //! @param off        offset to append the buffer.
     //! @param len        size of the content.
+    //! @param block_size size of block size to write. (default: by configuration)
     //! @retval >0        bytes successfully uploaded.
     //! @retval 0         The operation failed.
     uint64_t write(std::string& file_name, const char* buf, uint64_t off, uint64_t len);
+    uint64_t write(std::string& file_name, const char* buf, uint64_t off, uint64_t len, 
+      uint64_t block_size);
 
     //! Download a remote file's section into a buffer.
     //!
@@ -35,6 +38,18 @@ class DFS {
     //! @retval >0         bytes successfully uploaded.
     //! @retval 0          The operation failed.
     uint64_t read(std::string& file_name, char* buf, uint64_t off, uint64_t len);
+
+    //! Read remote logical blocks into a buffer.
+    //!
+    //! @pre The file must exist.
+    //! @param file_name   File to peform the operation.
+    //! @param[out] buffer Destination buffer.
+    //! @param off         offset from where to read.
+    //! @param len         size of segment to read.
+    //! @retval >0         bytes successfully uploaded.
+    //! @retval 0          The operation failed.
+    //uint64_t read_physical(std::string& file_name, char* buf, uint64_t off, uint64_t len);
+    //uint64_t read_logical(std::string& file_name, char* buf, uint64_t off, uint64_t len);
 
     //! Load all the file into a string.
     //!
@@ -68,17 +83,15 @@ class DFS {
 
     int remove(std::string);
 
+    bool rename(std::string, std::string);
+
     int format();
 
     model::metadata get_metadata(std::string& fname);
 
-    model::metadata get_metadata_optimized(std::string& fname);
+    model::metadata get_metadata_optimized(std::string& fname, int type = 0);
 
     std::vector<model::metadata> get_metadata_all();
-
-    //! @attention char out is dynamically allocated, needs to be freed after 
-    //! being used.
-    int read_block(model::metadata& md, std::string block_name, char* out);
 
     void file_metadata_append(std::string, size_t, model::metadata&);
 

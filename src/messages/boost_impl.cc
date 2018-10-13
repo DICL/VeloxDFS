@@ -32,6 +32,7 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.uploading);
     ar & BOOST_SERIALIZATION_NVP(c.blocks_metadata);
     ar & BOOST_SERIALIZATION_NVP(c.n_lblock);
+    ar & BOOST_SERIALIZATION_NVP(c.is_input);
   }
 
 template <typename Archive>
@@ -77,6 +78,7 @@ template <typename Archive>
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.name);
     ar & BOOST_SERIALIZATION_NVP(c.type);
+    ar & BOOST_SERIALIZATION_NVP(c.generate);
   }
 
 template <typename Archive>

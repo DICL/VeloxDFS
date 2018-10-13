@@ -12,3 +12,4 @@ extern Context& context;
 #define GET_INT(X) context.settings.get<int>(X)
 #define GET_STR(X) context.settings.get<std::string>(X)
 #define GET_VEC_STR(X) context.settings.get<std::vector<std::string>>(X)
+#define GET_BOOL(X) (GET_STR(X) == "true" ? true : false)

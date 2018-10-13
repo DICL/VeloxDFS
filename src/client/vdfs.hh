@@ -55,16 +55,22 @@ class vdfs {
     velox::file upload(std::string);
 
     bool rm(std::string);
+    bool rm(long);
     bool format();
 
     bool exists(std::string);
 
     uint32_t write(long, const char*, uint32_t, uint32_t);
-    uint32_t read(long, char*, uint32_t, uint32_t);
+    uint32_t write(long, const char*, uint32_t, uint32_t, uint64_t);
+    uint32_t read(long, char*, uint64_t, uint64_t);
 
-    model::metadata get_metadata(long fid);
+    model::metadata get_metadata(long fid, int type);
 
     void append(std::string, std::string);
+
+    std::vector<model::metadata> list(bool all, std::string name = "");
+
+    bool rename(std::string, std::string);
 
   protected:
     DFS* dfs;

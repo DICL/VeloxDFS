@@ -4,6 +4,10 @@
 
 #include <chrono>
 #include <cstring>
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 using namespace velox;
 
@@ -140,6 +144,7 @@ vdfs& vdfs::operator=(vdfs& rhs) {
 // }}}
 // open {{{
 file vdfs::open(std::string name) {
+//  cout << "vdfs::open " << name << endl;
   // Examine if file is already opened
   if(opened_files != nullptr) {
     for(auto f : *opened_files) {
@@ -163,23 +168,37 @@ file vdfs::open(std::string name) {
 // }}}
 // open_file {{{
 long vdfs::open_file(std::string fname) {
+//  cout << "vdfs::open_file" << endl;
   return (this->open(fname)).get_id();
 }
 // }}}
 // close {{{
 bool vdfs::close(long fid) {
+//  cout << "vdfs::close" << endl;
   if(opened_files == nullptr) return false;
 
-  velox::file* f = this->get_file(fid);
+  int i = 0;
+  bool found = false;
+  for(auto& f : *(this->opened_files)) {
+    if(f.get_id() == fid) {
+      f.close();
+      found = true;
+      break;
+    }
+    i++;
+  }
 
-  if(f == nullptr) return false;
-
-  f->close();
-  return true;
+  if(found) {
+    opened_files->erase(opened_files->begin() + i);
+    return true;
+  }
+  else
+    return false;
 }
 // }}}
 // is_open() {{{
 bool vdfs::is_open(long fid) {
+//  cout << "vdfs::is_open" << endl;
   if(opened_files == nullptr) return false;
 
   velox::file* f = this->get_file(fid);
@@ -190,67 +209,122 @@ bool vdfs::is_open(long fid) {
 // }}}
 // upload {{{
 file vdfs::upload(std::string name) {
+//  cout << "vdfs::upload" << endl;
   dfs->upload(name, false);
   return velox::file(this, name);
 }
 // }}}
 // append {{{
 void vdfs::append (std::string name, std::string content) {
+//  cout << "vdfs::append " << endl;
   dfs->append(name, content);
 }
 // }}}
 // load {{{
 std::string vdfs::load(std::string name) { 
+//  cout << "vdfs::load" << endl;
   return dfs->read_all(name);
 }
 // }}}
 // rm {{{
 bool vdfs::rm (std::string name) {
+//  cout << "vdfs::rm " << name << endl;
   return dfs->remove(name);
+}
+bool vdfs::rm (long fid) {
+//  cout << "vdfs::rm " << endl;
+  velox::file* f = this->get_file(fid);
+  if(f != nullptr) 
+    close(f->get_id());
+  return rm(f->name);
 }
 // }}}
 // format {{{
 bool vdfs::format () {
+//  cout << "vdfs::format " << endl;
   return dfs->format();
 }
 // }}}
 // exists {{{
 bool vdfs::exists(std::string name) {
-  return dfs->exists(name);
+//  cout << "vdfs::exists " << name << endl;
+  bool ret = dfs->exists(name);
+//  cout << "vdfs::exists finished: " << ret << endl;
+  return ret;
 }
 // }}}
 // write {{{
 uint32_t vdfs::write(long fid, const char *buf, uint32_t off, uint32_t len) {
+  return write(fid, buf, off, len, 0);
+}
+
+uint32_t vdfs::write(long fid, const char *buf, uint32_t off, uint32_t len, uint64_t block_size) {
   velox::file* f = this->get_file(fid);
+//  cout << "vdfs::write: " << f->get_name() << endl;
   if(f == nullptr) return -1;
 
-  return dfs->write(f->name, buf, off, len);
+  if(block_size > 0) {
+    return dfs->write(f->name, buf, off, len, block_size);
+  }
+  else {
+    return dfs->write(f->name, buf, off, len);
+  }
 }
 // }}}
 // read {{{
-uint32_t vdfs::read(long fid, char *buf, uint32_t off, uint32_t len) {
+uint32_t vdfs::read(long fid, char *buf, uint64_t off, uint64_t len) {
+//  cout << "vdfs::read" << endl;
   velox::file* f = this->get_file(fid);
-  if(f == nullptr) return -1;
+  if(f == nullptr) return 0;
 
   return dfs->read(f->name, buf, off, len);
 }
 // }}}
 // get_file {{{
 velox::file* vdfs::get_file(long fid) {
+//  cout << "vdfs::get_file: " << fid << endl;
   for(auto& f : *(this->opened_files)) {
-    if(f.get_id() == fid) 
+    if(f.get_id() == fid)  {
+//      cout << ":" << f.get_name() << endl;
       return &f;
+    }
   }
 
   return nullptr;
 }
 // }}}
 // get_metadata {{{
-model::metadata vdfs::get_metadata(long fid) {
+model::metadata vdfs::get_metadata(long fid, int type = 0) {
+//  cout << "vdfs::get_metadata" << endl;
   velox::file* f = this->get_file(fid);
   if(f == nullptr) return model::metadata();
 
-  return dfs->get_metadata(f->name);
+  return dfs->get_metadata_optimized(f->name, type);
 }
 // }}}
+// list {{{
+std::vector<model::metadata> vdfs::list(bool all, std::string name) {
+//  cout << "vdfs::list" << endl;
+  std::vector<model::metadata> metadatas = dfs->get_metadata_all();
+  if(all) return metadatas;
 
+  std::vector<model::metadata> results;
+  std::size_t found = name.find("/", name.length()-1, 1);
+  if(found == std::string::npos)
+    name += "/";
+  
+  for(auto m : metadatas) {
+    //found = m.name.find(name.c_str(), 0, name.length());
+    //if(found != std::string::npos)
+    if(m.name.compare(0, name.length(), name.c_str()) == 0)
+      results.push_back(m);
+  }
+
+  return results;
+}
+// }}}
+// rename {{{
+bool vdfs::rename(std::string src, std::string dst) {
+  return dfs->rename(src, dst);
+}
+// }}}

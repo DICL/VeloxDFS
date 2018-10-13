@@ -15,6 +15,10 @@ std::ostream& operator<<(std::ostream& os, const velox::model::metadata& md) {
 
 int main () {
   vdfs cloud;
+
+  if(cloud.exists("test.txt"))
+    cloud.rm("test.txt");
+
   long fd = cloud.open_file("test.txt");
   cout << "test.txt is opened." << endl;
 
@@ -29,13 +33,12 @@ int main () {
   //  cloud.write(fd, input, md.size, write_length);
   //}
 
-  model::metadata md = cloud.get_metadata(fd);
-
-  strncpy(input, abc, 3);
-  cloud.write(fd, input, md.size, 3);
+  cloud.write(fd, abc, 0, 3);
   cloud.append("test.txt", " THIS LINE GOES AT LAST");
 
   cout << "write" << endl;
+
+  model::metadata md = cloud.get_metadata(fd, 1);
 
   int read_length = 3;
   char str[read_length];
@@ -46,7 +49,7 @@ int main () {
   DFS dfs;
   cout << "read all: " << dfs.read_all("test.txt") << endl;
 
-  md = cloud.get_metadata(fd);
+  md = cloud.get_metadata(fd, 0);
 
   cout << md << endl;
 
@@ -57,6 +60,17 @@ int main () {
   cloud.rm("test.txt");
 
 
+  /*
+  long fd = cloud.open_file("/big_file.dat");
+
+  //model::metadata md = cloud.get_metadata(fd, 1);
+
+  char buf[1024];
+
+  cloud.read(fd, buf, 8 * 1024 * 1024 - 100, 1024);
+  cout << buf << endl;
+  cloud.close(fd);
+*/  
 
   return 0;
 }

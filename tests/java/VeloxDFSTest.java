@@ -3,9 +3,9 @@ import java.lang.Thread;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-import velox.VeloxDFS;
-import velox.model.Metadata;
-import velox.model.BlockMetadata;
+import com.dicl.velox.VeloxDFS;
+import com.dicl.velox.model.Metadata;
+import com.dicl.velox.model.BlockMetadata;
 
 class VeloxDFSTest {
   public static void main(String[] args) throws InterruptedException {
@@ -22,8 +22,16 @@ class VeloxDFSTest {
       System.out.println("isOpen..     \tOK!");
     }  
 
-    Metadata metaData = vdfs.getMetadata(fd);
+    if(vdfs.exists(targetName))
+      System.out.println("File exists");
+
+    Metadata[] list = vdfs.list(false, "/");
+    for(int i=0; i<list.length; i++)
+      System.out.println(list[i].name);
+
     System.out.println("Try getMetadata");
+    Metadata metaData = vdfs.getMetadata(fd, (byte)3);
+
     if(targetName.equals(metaData.name)) {
       System.out.println("getMetadata..\tOK!");
       System.out.println("Printing BlockHosts");
@@ -43,7 +51,7 @@ class VeloxDFSTest {
     for(int i=0; i<6; i++) {
       System.out.println(i + "th writing..");
       //written += vdfs.write(fd, (long)(i * blockBuffer.length) + metaData.size, blockBuffer, 0,  blockBuffer.length);
-      written += vdfs.write(fd, (long)(i * 3) + metaData.size, blockBuffer, 7,  3);
+      written += vdfs.write(fd, (long)(i * 3) + metaData.size, blockBuffer, 7,  3, 2);
       Thread.sleep(1000);
     }
 
@@ -80,6 +88,10 @@ class VeloxDFSTest {
     if(!vdfs.isOpen(fd)) {
       System.out.println("close..       \tOK!");
     }  
+
+    vdfs.rename(targetName, targetName + "_renamed");
+
+    //vdfs.remove(targetName);
 
     vdfs.destroy();
   }

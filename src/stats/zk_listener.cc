@@ -2,8 +2,9 @@
 #include <zookeeper/zookeeper.h>
 #include "../common/context_singleton.hh"
 #include <string>
+#include <utility>
 
-#define ZK_BUFFER_LEN 512
+#define ZK_BUFFER_LEN 128 
 
 using namespace eclipse;
 using namespace std;
@@ -35,12 +36,12 @@ zk_listener::zk_listener() {
 
 // }}}
 // get_io_stats {{{
-std::vector<double> zk_listener::get_io_stats() {
+std::vector<pair<double,int>> zk_listener::get_io_stats() {
   char buffer[ZK_BUFFER_LEN] {0};
   int buflen = ZK_BUFFER_LEN;
   int rc = 0;
   struct Stat stat;
-  vector<double> ret;
+  vector<pair<double,int>> ret;
 
   auto zh = connect_to_zk(zk_server_addr, zk_server_port);
 
@@ -48,10 +49,12 @@ std::vector<double> zk_listener::get_io_stats() {
     rc = zoo_get(zh, "/stats/io", 0, buffer, &buflen, &stat);
 
     if (!rc) {
+      buflen = ZK_BUFFER_LEN;
       int n_childrens = stat.numChildren;
       ret.reserve(n_childrens);
 
       for (int i = 0; i < n_childrens; i++) {
+        buflen = ZK_BUFFER_LEN;
         bzero(buffer, ZK_BUFFER_LEN);
         bzero(&stat, sizeof(struct Stat));
         string children_path = "/stats/io/" + to_string(i);
@@ -59,7 +62,13 @@ std::vector<double> zk_listener::get_io_stats() {
         rc = zoo_get(zh, children_path.c_str(), 0, buffer, &buflen, &stat);
 
         if (!rc) {
-          ret.push_back(atof(buffer) * .01);  // values from 0.00-1.00
+          INFO ("Got the buffer %s", buffer);
+          char* savepoint = nullptr;
+
+          double io  = atof(strtok_r(buffer,",", &savepoint));
+          int cpu    = atoi(strtok_r(NULL,",", &savepoint));
+          INFO("IO %lf", io * .01);
+          ret.push_back({io * .01, cpu});  // values from 0.00-1.00
 
         // Error reporting for child ZNODE
         } else {

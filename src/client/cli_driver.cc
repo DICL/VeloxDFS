@@ -53,8 +53,16 @@ bool cli_driver::parse_args (int argc, char** argv) {
       if (argc > 2 && argv[2] == string("-h")) {
         is_human_readable = true;
 
-      } else if (argc > 2 && argv[2] == string("-o")) {
-        file_show_optimized(argv[3]);
+      }
+      
+      if (argc > 2 && argv[2] == string("-o")) {
+        file_show_optimized(argv[3], 2);
+        return true;
+
+      }
+
+      if (argc > 2 && argv[2] == string("-g")) {
+        file_show_optimized(argv[3], 1);
         return true;
       }
 
@@ -65,6 +73,11 @@ bool cli_driver::parse_args (int argc, char** argv) {
   }
 
   vec_str files (argv + 2, argv + argc);
+
+  if(command == "rename") {
+    file_rename(files[0], files[1]);
+    return true;
+  }
 
   for (auto& file : files) {
     if (command == "put") {
@@ -87,6 +100,7 @@ bool cli_driver::parse_args (int argc, char** argv) {
       cout << help << endl;
     }
   }
+
   return true;
 }
 // }}}
@@ -103,7 +117,7 @@ void cli_driver::file_download (std::string file) {
 // file_cat {{{
 void cli_driver::file_cat (std::string file) {
   // Read file, display it
-  cout << dfs.read_all(file) << endl;
+  cout << dfs.read_all(file);
 }
 // }}}
 // file_remove {{{
@@ -139,40 +153,41 @@ void cli_driver::file_show (std::string file) {
 }
 // }}}
 // file_show_optimized {{{
-void cli_driver::file_show_optimized(std::string file) {
+void cli_driver::file_show_optimized(std::string file, int type) {
 
 #ifndef LOGICAL_BLOCKS_FEATURE
   cout << "ERROR! LOGICAL BLOCKS FEATURE IS DISABLED IN THIS BUILD" << endl;
   exit(EXIT_FAILURE);
-#endif
 
+#else
   vec_str nodes = GET_VEC_STR("network.nodes");
   Histogram boundaries(nodes.size(), 100);
   boundaries.initialize();
 
-  cout 
-    << setw(25) << "FileName" 
-    << setw(14) << "FileID"
-    << setw(14) << "FileSize"
-    << setw(25) << "BlockName"
-    << setw(14) << "BlockSize"
-    << setw(14) << "PyBlocks"
-    << setw(14) << "Host"
+  cout << right 
+    << setw(25) << right << "FileName" 
+    << setw(14) << right << "FileID"
+    << setw(20) << right << "FileSize"
+    << setw(45) << right << "BlockName"
+    << setw(14) << right << "BlockSize"
+    << setw(14) << right << "PyBlocks"
+    << setw(14) << right << "Host"
     << endl << string(123,'-') << endl;
 
-  model::metadata md = dfs.get_metadata_optimized(file);
+  model::metadata md = dfs.get_metadata_optimized(file, type);
 
   for (unsigned i = 0; i < md.num_block; i++) {
     cout 
       << setw(25) << md.name
       << setw(14) << md.hash_key
-      << setw(14) << md.size
-      << setw(25) << md.block_data[i].name
+      << setw(20) << md.size
+      << setw(45) << md.block_data[i].name
       << setw(14) << md.block_data[i].size
       << setw(14) << md.block_data[i].chunks_path.size()
       << setw(14) << md.block_data[i].host
       << endl;
   } 
+#endif
 }
 // }}}
 // list {{{
@@ -249,6 +264,11 @@ void cli_driver::list (bool human_readable) {
 // format {{{
 void cli_driver::format () {
   dfs.format();
+}
+// }}}
+// rename {{{
+void cli_driver::file_rename(std::string src, std::string dst) {
+  dfs.rename(src, dst);
 }
 // }}}
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "stats_listener.hh"
 #include <string>
+#include <utility>
 
 namespace eclipse {
 
@@ -9,7 +10,7 @@ class zk_listener: public stats_listener {
     zk_listener ();
     virtual ~zk_listener () override = default;
 
-    virtual std::vector<double> get_io_stats() override;
+    virtual std::vector<std::pair<double, int>> get_io_stats() override;
 
   private:
     std::string zk_server_addr;

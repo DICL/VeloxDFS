@@ -1,4 +1,4 @@
-package velox.model;
+package com.dicl.velox.model;
 
 import java.lang.String;
 
@@ -11,9 +11,11 @@ public class Metadata {
     type = _type;
     replica = _replica;
 
-    blocks = new BlockMetadata[_blocks.length];
-    for(int i=0; i<_blocks.length; i++)
-      blocks[i] = new BlockMetadata(_blocks[i]);
+    if(_blocks != null) {
+      blocks = new BlockMetadata[_blocks.length];
+      for(int i=0; i<_blocks.length; i++)
+        blocks[i] = new BlockMetadata(_blocks[i]);
+    }
   };
 
   public String name;

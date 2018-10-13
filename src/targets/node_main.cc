@@ -1,3 +1,4 @@
+#include <sys/resource.h>
 #include <common/context_singleton.hh>
 #include <network/server_handler.hh>
 #include <network/client_handler.hh>
@@ -15,6 +16,11 @@ using namespace eclipse;
 using namespace std;
 
 int main (int argc, char ** argv) {
+
+  struct rlimit core_limits;
+  core_limits.rlim_cur = core_limits.rlim_max = RLIM_INFINITY;
+  setrlimit(RLIMIT_CORE, &core_limits);
+
   uint32_t ex_port = GET_INT("network.ports.client");
 
   auto internal_net = make_unique<network::ClientHandler> (ex_port);

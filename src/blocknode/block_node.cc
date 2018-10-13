@@ -36,6 +36,7 @@ void BlockNode::replicate_message(IOoperation* m) {
 //! @brief This method insert the block locally and replicated it.
 bool BlockNode::block_insert_local(Block& block, bool replicate) {
   local_io.write(block.first, block.second);
+  INFO("[DFS] BLOCK: %s SIZE: %lu", block.first.c_str(), block.second.length());
 
   if (replicate) {
     INFO("[DFS] Saving locally BLOCK: %s", block.first.c_str());
@@ -53,7 +54,7 @@ bool BlockNode::block_insert_local(Block& block, bool replicate) {
 // block_read_local {{{
 //! @brief This method read the block locally.
 bool BlockNode::block_read_local(Block& block, uint64_t off, uint64_t len, bool ignore_params) {
-  INFO("BLOCK REQUEST: %s", block.first.c_str());
+  INFO("BLOCK REQUEST: %s [%lu,%lu]", block.first.c_str(), off, len);
   block.second = local_io.read(block.first, off, len, ignore_params);
   return true;
 }

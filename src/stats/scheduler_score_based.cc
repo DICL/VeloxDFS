@@ -40,7 +40,7 @@ void scheduler_score_based::generate(FileDescription& file_desc, std::vector<std
       string host;
 
       for (int server_id : replica(file_desc.block_hosts[i])) {
-        double score = (alpha * (1.00 - io_vec[server_id])) + (beta * (0.0));
+        double score = (alpha * (1.00 - io_vec[server_id].first)) + (beta * (0.0));
         if (score >= max_score) {
           max_score = score;
           host = nodes[server_id];
@@ -50,7 +50,7 @@ void scheduler_score_based::generate(FileDescription& file_desc, std::vector<std
       //
       auto& l_blocks = file_desc.logical_blocks;
       auto it = std::find_if(l_blocks.begin(), l_blocks.end(), [host] (auto& l_block) {
-          return (l_block.host_name == host);
+            return (l_block.host_name == host);
           });
 
       if (it == l_blocks.end()) {

@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <ftw.h>
 
 using namespace eclipse;
 using namespace std;
@@ -17,13 +18,42 @@ Local_io::Local_io() {
 // write {{{
 //! @brief Unbuffered write to disk
 void Local_io::write (const std::string& name, const std::string& v) {
-  string file_path = disk_path + string("/") + name;
-  ofstream file;
+	//split path  
+  std::size_t curpos = name.find_first_not_of("/", 0);
+  std::size_t delimpos = name.find_first_of("/", curpos);
 
-  file.rdbuf()->pubsetbuf(0, 0);      //! No buffer
-  file.open(file_path, ios::binary);  //! Binary write
-  file.write(v.c_str(), v.length());
-  file.close();
+	std::vector<std::string> path_tokens;
+
+  while(true){
+    if(curpos == std::string::npos) break;
+    path_tokens.push_back(name.substr(curpos, delimpos-curpos));
+    curpos = name.find_first_not_of("/", delimpos);
+    delimpos = name.find_first_of("/", curpos);
+  }
+	//
+
+  ofstream file;
+  string curPath = disk_path;
+
+	//make dir if not exist
+  for(string& token : path_tokens){
+    curPath += "/" + token;
+    
+    if(token == path_tokens.back()){
+      file.rdbuf()->pubsetbuf(0, 0);      //! No buffer
+      file.open(curPath, ios::binary);  //! Binary write
+  		file.write(v.c_str(), v.length());
+      file.close();
+    }
+    else {
+      struct stat st = {0};
+      //create directory
+      if(stat(curPath.c_str(), &st) == -1){
+        mkdir(curPath.c_str(), 0777);
+      }
+    }
+  }
+//
 }
 // }}}
 // update {{{
@@ -77,23 +107,25 @@ bool Local_io::format () {
   string fs_path = context.settings.get<string>("path.scratch");
   string md_path = context.settings.get<string>("path.metadata");
 
-  DIR *theFolder = opendir(fs_path.c_str());
-  struct dirent *next_file;
-  char filepath[FILENAME_MAX] = {0};
+  // Make me more elegant! 
+  int ret = nftw(fs_path.c_str(), 
+      [] (const char* path, const struct stat*, int, struct FTW*) -> int {
+        int ret = 0;
 
-  while ( (next_file = readdir(theFolder)) != NULL ) {
-    snprintf(filepath, FILENAME_MAX, "%s/%s", fs_path.c_str(), next_file->d_name);
-    if (strncmp(basename(filepath), "..", FILENAME_MAX) == 0 or
-        strncmp(basename(filepath), "...", FILENAME_MAX) == 0 or
-        strncmp(basename(filepath), ".", FILENAME_MAX) == 0)
-      continue;
+        string fs_path = GET_STR("path.scratch");
+        if (fs_path != string(path)) {
+          DEBUG("FORMAT: Removing %s", path);
 
-    DEBUG("FORMAT: Removing %s", filepath);
-    if (0 != ::remove(filepath)) {
-      ERROR("FORMAT: Can't remove %s.", filepath);
-    }
+          if (0 != (ret = ::remove(path))) {
+            ERROR("FORMAT: Can't remove %s.", path);
+          }
+         }
+        return ret;
+      }, 10, FTW_DEPTH);
+
+  if (ret != 0) {
+    ERROR("FORMAT: Error formating data space");
   }
-  closedir(theFolder);
 
   ::remove((md_path + "/metadata.db").c_str());
   return true;
