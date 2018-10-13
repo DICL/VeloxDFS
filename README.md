@@ -28,7 +28,7 @@ Related projects
 | VeloxMR           |  experimental MapReduce engine based on VeloxDFS | https://github.com/DICL/VeloxMR |
 | eclipsed          | deployment/debugging helper script writen in RUBY| https://github.com/DICL/eclipsed|
 | velox-hadoop      | VeloxDFS JAVA library for Hadoop                 | https://github.com/DICL/velox-hadoop |
-| velox-deploy-ansible | ansible playbook to automatize velox/hadoop installation | https://github.com/DICL/velox-experiments-utils |
+| velox-deploy-ansible | ansible playbook to automatize velox/hadoop installation | https://github.com/DICL/velox-deploy-ansible |
 | hadoop-etc        | Hadoop configuration files to use VeloxDFS       | https://github.com/vicentebolea/hadoop-etc |
 | velox-report      | Project to benchmark and log VeloxDFS performance | https://github.com/vicentebolea/velox-report |
 
