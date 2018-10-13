@@ -1,0 +1,10 @@
+#!/bin/bash
+
+case "$1" in
+  -allbut)
+    shift
+    veloxdfs ls | cut -d ' ' -f 1 | grep -v "$*" | xargs -n1 veloxdfs remove
+    ;;
+
+  *) veloxdfs rm "$*"
+esac

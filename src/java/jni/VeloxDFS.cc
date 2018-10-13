@@ -1,8 +1,8 @@
 #include "com_dicl_velox_VeloxDFS.h"
 
-#include <eclipsedfs/vdfs.hh>
-#include <eclipsedfs/model/metadata.hh>
-#include <eclipsedfs/model/block_metadata.hh>
+#include "../../client/vdfs.hh"
+#include "../../client/model/metadata.hh"
+#include "../../client/model/block_metadata.hh"
 #include <cstring>
 
 #include <iostream>
@@ -207,10 +207,10 @@ JNIEXPORT jobjectArray JNICALL Java_com_dicl_velox_VeloxDFS_list
   env->ReleaseStringUTFChars(name, n);
 
   jclass MetadataClass = env->FindClass("Lcom/dicl/velox/model/Metadata;");
-  jmethodID MetadataClassInit = env->GetMethodID(MetadataClass, "<init>", "(Ljava/lang/String;JJIII[Lcom/dicl/velox/model/BlockMetadata;)V");
+//jmethodID MetadataClassInit = env->GetMethodID(MetadataClass, "<init>", "(Ljava/lang/String;JJIII[Lcom/dicl/velox/model/BlockMetadata;)V");
   jobjectArray list = (jobjectArray)env->NewObjectArray(metadatas.size(), MetadataClass, NULL);
 
-  for(int i=0; i<metadatas.size(); i++) 
+  for(uint32_t i=0; i<metadatas.size(); i++) 
     env->SetObjectArrayElement(list, (jsize)i, convert_jmetadata(env, obj, metadatas[i]));
 
   return list;
@@ -229,7 +229,7 @@ jobject convert_jmetadata(JNIEnv* env, jobject& obj, velox::model::metadata& md)
     // file_name
     jfieldID fn_field_id = env->GetFieldID(velox_model_BlockMetadata, "fileName", "Ljava/lang/String;");
 
-    for(int i=0; i<md.num_block; i++) {
+    for(uint32_t i=0; i<md.num_block; i++) {
       velox::model::block_metadata& bdata = md.block_data[i];
 
       jobject data = env->NewObject(velox_model_BlockMetadata, velox_model_BlockMetadata_init);

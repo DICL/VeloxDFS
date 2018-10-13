@@ -42,12 +42,21 @@ AC_TYPE_UINT8_T
 AC_HEADER_STDC
 AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h sys/socket.h sys/time.h unistd.h])
 AC_SEARCH_LIBS([pthread_create], [pthread])
-AC_SEARCH_LIBS([sqlite3_exec], [sqlite3])
+AC_SEARCH_LIBS([sqlite3_exec], [sqlite3], [], [AC_MSG_ERROR([sqlite3 not found, please install it.])])
 
 AX_BOOST_BASE([1.53.0], ,
               [AC_MSG_ERROR([Needs BOOST])])
 have_unittest=no
 PKG_CHECK_EXISTS([UnitTest++], [have_unittest=yes], [have_unittest=no])
+
+#}}}
+# JNI and javac {{{
+if test "x$enable_lblocks" = xyes; then
+  AX_JNI_INCLUDE_DIR
+  for include in $JNI_INCLUDE_DIRS; do
+    CPPFLAGS="$CPPFLAGS -I$include"
+  done
+fi
 
 #}}}
 # PATHS {{{
