@@ -1,4 +1,0 @@
-<map id="eclipse::BlockNode" name="eclipse::BlockNode">
-<area shape="rect" id="node2" href="$classeclipse_1_1Node.html" title="{eclipse::Node\n|# network\l# logger\l# ip_of_this\l# port\l|+ Node()\l+ ~Node()\l+ get_ip()\l}" alt="" coords="30,190,132,341"/>
-<area shape="rect" id="node3" href="$classeclipse_1_1Machine.html" title="{eclipse::Machine\n|# id\l|+ Machine()\l+ Machine()\l+ ~Machine()\l+ get_ip()\l+ get_id()\l}" alt="" coords="21,5,141,141"/>
-</map>

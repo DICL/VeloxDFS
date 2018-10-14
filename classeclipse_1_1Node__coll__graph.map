@@ -1,5 +1,0 @@
-<map id="eclipse::Node" name="eclipse::Node">
-<area shape="rect" id="node2" href="$classeclipse_1_1Machine.html" title="{eclipse::Machine\n|# id\l|+ Machine()\l+ Machine()\l+ ~Machine()\l+ get_ip()\l+ get_id()\l}" alt="" coords="5,43,125,179"/>
-<area shape="rect" id="node3" href="$classeclipse_1_1network_1_1ClientHandler.html" title="{eclipse::network::Client\lHandler\n||+ ClientHandler()\l+ ~ClientHandler()\l+ attach()\l+ send()\l+ send_and_replicate()\l}" alt="" coords="150,35,308,186"/>
-<area shape="rect" id="node5" href="$classLogger.html" title="{Logger\n||+ debug()\l+ info()\l+ notice()\l+ warn()\l+ error()\l+ panic()\l+ panic_if()\l+ error_if()\l+ connect()\l+ disconnect()\l}" alt="" coords="411,6,516,215"/>
-</map>

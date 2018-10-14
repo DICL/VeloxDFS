@@ -1,0 +1,6 @@
+digraph "Logger"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{Logger\n||+ debug()\l+ info()\l+ notice()\l+ warn()\l+ error()\l+ panic()\l+ panic_if()\l+ error_if()\l+ connect()\l+ disconnect()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+}

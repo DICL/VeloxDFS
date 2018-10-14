@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['random_5fwithin_5fboundaries',['random_within_boundaries',['../classHistogram.html#a28575fe2b0be80d3785c83dffe1bf319',1,'Histogram']]],
+  ['read',['read',['../classeclipse_1_1Local__io.html#a4c1ecb78731c663e0d1fb599fa480834',1,'eclipse::Local_io::read(const std::string &amp;)'],['../classeclipse_1_1Local__io.html#a978b3ff46d1309666976304ef988e995',1,'eclipse::Local_io::read(const std::string &amp;, uint32_t, uint32_t)'],['../classeclipse_1_1Local__io.html#aca6ba87dd07e78dc4ff92ee21dc505a5',1,'eclipse::Local_io::read(const std::string &amp;, uint32_t, uint32_t, bool)'],['../classvelox_1_1DFS.html#a1005ef927db6079c70f0690c474a3d46',1,'velox::DFS::read()'],['../classvelox_1_1vdfs.html#a5a20422fa97309e699a2605219f8d72d',1,'velox::vdfs::read()'],['../classcom_1_1dicl_1_1velox_1_1VeloxDFS.html#afcab585bf30dbcdebe34d8cf2788f3c7',1,'com.dicl.velox.VeloxDFS.read()']]],
+  ['read_5fall',['read_all',['../classvelox_1_1DFS.html#a87d9efc760ac5b7e3a9c12fcb5f24586',1,'velox::DFS']]],
+  ['read_5ffrom_5fdisk',['read_from_disk',['../namespacevelox.html#a062efb51f8b5be06978bf905d452496f',1,'velox']]],
+  ['read_5ffrom_5fremote',['read_from_remote',['../namespacevelox.html#ab9df919c81d0fb719f41889132a91cd8',1,'velox']]],
+  ['read_5finput',['read_input',['../namespacescheduler.html#af6cc86394903905f0b1be0c037ff0d2c',1,'scheduler']]],
+  ['read_5flogical',['read_logical',['../namespacevelox.html#a9ad5024f6ae49c8217fd007c95b64120',1,'velox']]],
+  ['read_5fmetadata',['read_metadata',['../classeclipse_1_1Local__io.html#a09a2510217ebe3ec4ddf36904b2de6d8',1,'eclipse::Local_io']]],
+  ['read_5fphysical',['read_physical',['../namespacevelox.html#a768a1d8f244b1f33571a7f3a844e8762',1,'velox']]],
+  ['read_5freply',['read_reply',['../namespaceeclipse_1_1messages.html#a7820351b984403084d989ee6aa96e76d',1,'eclipse::messages']]],
+  ['remove',['remove',['../classeclipse_1_1Local__io.html#a30c69d09a895ad0390b194487e3d194f',1,'eclipse::Local_io::remove()'],['../classvelox_1_1DFS.html#a4c9ad2f6debe8841accd6873be6c8973',1,'velox::DFS::remove()'],['../classcom_1_1dicl_1_1velox_1_1VeloxDFS.html#a6c59b84ff0f363e0e62e259c9ab10099',1,'com.dicl.velox.VeloxDFS.remove()']]],
+  ['rename',['rename',['../classvelox_1_1DFS.html#a33c6803a8b8c3a0a3c7a77f9c5ca8802',1,'velox::DFS::rename()'],['../classvelox_1_1vdfs.html#a3bde09c0b6528e789f1f79451608335e',1,'velox::vdfs::rename()'],['../classcom_1_1dicl_1_1velox_1_1VeloxDFS.html#acb824de242c0c4479b0267ce1ce2343f',1,'com.dicl.velox.VeloxDFS.rename()']]],
+  ['replicate_5fmessage',['replicate_message',['../classeclipse_1_1BlockNode.html#a8224e81d91399f352130f74cc2345a3b',1,'eclipse::BlockNode']]],
+  ['replicate_5fmetadata',['replicate_metadata',['../classeclipse_1_1FileLeader.html#aeaeb834acdfc70121d8e0a48bb68b1bc',1,'eclipse::FileLeader::replicate_metadata()'],['../classeclipse_1_1FileLeaderRouter.html#a4f2e96ab21bc1b3122521a8e5128f715',1,'eclipse::FileLeaderRouter::replicate_metadata()']]],
+  ['reply',['Reply',['../structeclipse_1_1messages_1_1Reply.html#a502ba960e33f511905026b3508b86143',1,'eclipse::messages::Reply']]],
+  ['request_5ffile',['request_file',['../classeclipse_1_1FileLeaderRouter.html#ad740c31c5f35b653c4e80b9746f6c1e1',1,'eclipse::FileLeaderRouter']]],
+  ['request_5fformat',['request_format',['../classeclipse_1_1FileLeaderRouter.html#a5fe892b4015fb91ded4aa6210f084ba5',1,'eclipse::FileLeaderRouter']]],
+  ['request_5fls',['request_ls',['../classeclipse_1_1FileLeaderRouter.html#afe033f23605706c10eec423ef35fa566',1,'eclipse::FileLeaderRouter']]],
+  ['rm',['rm',['../classvelox_1_1vdfs.html#a5eded61aae70f9cc9d60faf95e8df010',1,'velox::vdfs::rm(std::string)'],['../classvelox_1_1vdfs.html#a9e2975b76c9574b5bed3ac9dd5862b51',1,'velox::vdfs::rm(long)']]],
+  ['router',['Router',['../group__RouterDecorator.html#ga18e74fc4899046a0f91091eba2c6a5ab',1,'eclipse::Router']]],
+  ['routerdecorator',['RouterDecorator',['../classeclipse_1_1RouterDecorator.html#a520a1e0b28a8d45174fa2aea7290eda4',1,'eclipse::RouterDecorator']]],
+  ['run',['run',['../classContext.html#ab8600ccc0cdeec87eca468c6534c00b4',1,'Context']]]
+];

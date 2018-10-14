@@ -1,6 +1,0 @@
-<map id="eclipse::RouterDecorator" name="eclipse::RouterDecorator">
-<area shape="rect" id="node4" href="$classeclipse_1_1BlockNodeRouter.html" title="{eclipse::BlockNodeRouter\n||+ BlockNodeRouter()\l+ ~BlockNodeRouter()\l+ io_operation()\l}" alt="" coords="5,508,179,615"/>
-<area shape="rect" id="node5" href="$classeclipse_1_1FileLeaderRouter.html" title="{eclipse::FileLeaderRouter\n|# file_leader\l|+ FileLeaderRouter()\l+ ~FileLeaderRouter()\l# insert_file()\l# update_file()\l# request_file()\l# request_ls()\l# delete_file()\l# file_exist()\l# replicate_metadata()\l# request_format()\l}" alt="" coords="204,457,375,666"/>
-<area shape="rect" id="node2" href="$classeclipse_1_1Router.html" title="{eclipse::Router\n|# routing_table\l|+ Router()\l+ ~Router()\l+ on_read()\l}" alt="" coords="135,147,245,253"/>
-<area shape="rect" id="node3" href="$structeclipse_1_1network_1_1NetObserver.html" title="{eclipse::network::NetObserver\n||+ ~NetObserver()\l+ on_read()\l}" alt="" coords="91,6,289,98"/>
-</map>

@@ -1,0 +1,33 @@
+digraph "Graphical Class Hierarchy"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="eclipse::messages::\lMessage",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1Message.html"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="eclipse::messages::\lBlockInfo",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1BlockInfo.html"];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="eclipse::messages::\lBlockRequest",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1BlockRequest.html"];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="eclipse::messages::\lFileDel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1FileDel.html"];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="eclipse::messages::\lFileExist",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1FileExist.html"];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="eclipse::messages::\lFileInfo",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1FileInfo.html"];
+  Node6 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="eclipse::messages::\lFileDescription",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1FileDescription.html"];
+  Node1 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="eclipse::messages::\lFileList",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1FileList.html"];
+  Node1 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="eclipse::messages::\lFileRequest",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1FileRequest.html"];
+  Node1 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="eclipse::messages::\lFileUpdate",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1FileUpdate.html"];
+  Node1 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="eclipse::messages::\lFormatRequest",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1FormatRequest.html"];
+  Node1 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node12 [label="eclipse::messages::\lIOoperation",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1IOoperation.html"];
+  Node1 -> Node13 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node13 [label="eclipse::messages::\lMetaData",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1MetaData.html"];
+  Node1 -> Node14 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node14 [label="eclipse::messages::\lReply",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1messages_1_1Reply.html"];
+}

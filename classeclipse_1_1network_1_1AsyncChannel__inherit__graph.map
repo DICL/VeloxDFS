@@ -1,4 +1,0 @@
-<map id="eclipse::network::AsyncChannel" name="eclipse::network::AsyncChannel">
-<area shape="rect" id="node4" href="$classeclipse_1_1network_1_1Server.html" title="{eclipse::network::Server\n||+ Server()\l+ is_multiple()\l}" alt="" coords="112,390,275,482"/>
-<area shape="rect" id="node2" href="$classeclipse_1_1network_1_1Channel.html" title="{eclipse::network::Channel\n||+ Channel()\l+ ~Channel()\l+ do_write()\l}" alt="" coords="5,5,179,112"/>
-</map>

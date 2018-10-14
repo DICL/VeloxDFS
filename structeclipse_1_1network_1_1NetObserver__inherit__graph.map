@@ -1,7 +1,0 @@
-<map id="eclipse::network::NetObserver" name="eclipse::network::NetObserver">
-<area shape="rect" id="node2" href="$classeclipse_1_1Router.html" title="{eclipse::Router\n|# routing_table\l|+ Router()\l+ ~Router()\l+ on_read()\l}" alt="" coords="226,147,336,253"/>
-<area shape="rect" id="node3" href="$classeclipse_1_1RouterDecorator.html" title="{eclipse::RouterDecorator\n|# router\l|+ RouterDecorator()\l+ ~RouterDecorator()\l+ on_read()\l}" alt="" coords="107,301,273,408"/>
-<area shape="rect" id="node6" href="$classeclipse_1_1SimpleRouter.html" title="{eclipse::SimpleRouter\n||+ on_read()\l}" alt="" coords="298,316,448,393"/>
-<area shape="rect" id="node4" href="$classeclipse_1_1BlockNodeRouter.html" title="{eclipse::BlockNodeRouter\n||+ BlockNodeRouter()\l+ ~BlockNodeRouter()\l+ io_operation()\l}" alt="" coords="5,508,179,615"/>
-<area shape="rect" id="node5" href="$classeclipse_1_1FileLeaderRouter.html" title="{eclipse::FileLeaderRouter\n|# file_leader\l|+ FileLeaderRouter()\l+ ~FileLeaderRouter()\l# insert_file()\l# update_file()\l# request_file()\l# request_ls()\l# delete_file()\l# file_exist()\l# replicate_metadata()\l# request_format()\l}" alt="" coords="204,457,375,666"/>
-</map>

@@ -1,0 +1,42 @@
+digraph "/home/travis/build/DICL/VeloxDFS/src/network/simple_router.cc"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="/home/travis/build\l/DICL/VeloxDFS/src/network\l/simple_router.cc",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="simple_router.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$simple__router_8hh.html"];
+  Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="router.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$router_8hh.html"];
+  Node3 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="../network/netobserver.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$netobserver_8hh.html"];
+  Node4 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="../messages/message.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$message_8hh.html"];
+  Node5 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="string",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node4 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="channel.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$channel_8hh.html"];
+  Node7 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="functional",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node3 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="map",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node1 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="../common/context_singleton.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$context__singleton_8hh.html"];
+  Node10 -> Node11 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="context.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$context_8hh.html"];
+  Node11 -> Node12 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node12 [label="settings.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$settings_8hh.html"];
+  Node12 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node12 -> Node13 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node13 [label="memory",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node11 -> Node14 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node14 [label="logger.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$logger_8hh.html"];
+  Node14 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 -> Node15 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node15 [label="boost/asio.hpp",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node11 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 -> Node16 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node16 [label="vector",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node11 -> Node17 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node17 [label="thread",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+}

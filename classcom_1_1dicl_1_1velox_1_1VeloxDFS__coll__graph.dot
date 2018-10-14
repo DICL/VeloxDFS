@@ -1,0 +1,6 @@
+digraph "com.dicl.velox.VeloxDFS"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{com.dicl.velox.VeloxDFS\n||+ VeloxDFS()\l+ destroy()\l+ getVeloxDFS()\l+ open()\l+ close()\l+ isOpen()\l+ write()\l+ write()\l+ read()\l+ getMetadata()\l+ remove()\l+ exists()\l+ list()\l+ rename()\l~ [static initializer]()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+}
