@@ -8,6 +8,8 @@ public class BlockMetadata {
   public int index;
   public String fileName;
   public long size;
+  public long numChunks; 
+  public BlockMetadata[] chunks = null;
 
   public BlockMetadata() { }
 
@@ -17,5 +19,9 @@ public class BlockMetadata {
     this.index = that.index;
     this.fileName = that.fileName;
     this.size = that.size;
+    this.numChunks = that.numChunks;
+    if (that.chunks != null) {
+        this.chunks = that.chunks.clone();
+    }
   }
 }

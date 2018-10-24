@@ -20,7 +20,6 @@ using FD = FileDescription;
 namespace {
 
 const uint32_t MIN_BLOCK_SIZE = GET_INT("addons.min_block_size"); //#33554432;
-const uint32_t CHUNK_SIZE = GET_INT("filesystem.block"); //33554432;
 const uint32_t SLOTS = GET_INT("addons.cores");
 
 // split_blocks {{{
@@ -57,7 +56,6 @@ vector<uint32_t> get_replicas_id(VEC_STR nodes, string node) {
 // }}}
 //  assign_chunks_to_slots {{{
 void assign_chunks_to_slots(CHUNKS chunks, FD& fd, std::vector<std::string> nodes) {
-  Histogram boundaries(nodes.size(), 100);
 
   const uint32_t N_SLOTS = (SLOTS*nodes.size());
   map<uint32_t, vector<uint32_t>> slots_dist;
@@ -99,7 +97,7 @@ void assign_chunks_to_slots(CHUNKS chunks, FD& fd, std::vector<std::string> node
     metadata.name = string("logical_") + fd.name + "_" + to_string(lblock_idx);
     metadata.file_name = fd.name;
     metadata.seq = lblock_idx;
-    metadata.hash_key = boundaries.random_within_boundaries(node_id);
+    metadata.hash_key = GET_INDEX_IN_BOUNDARY(node_id);
     metadata.host_name = host;
 
     lblock_idx++;
@@ -126,6 +124,7 @@ void assign_chunks_to_slots(CHUNKS chunks, FD& fd, std::vector<std::string> node
 // }}}
 // schedule {{{
 bool schedule(CHUNKS chunks, FD& fd, std::vector<std::string> nodes) {
+  const uint32_t CHUNK_SIZE = fd.intended_block_size;
   const uint32_t N_SLOTS = SLOTS*nodes.size();
   if (double(chunks.size())/N_SLOTS * CHUNK_SIZE < MIN_BLOCK_SIZE)
     return false;

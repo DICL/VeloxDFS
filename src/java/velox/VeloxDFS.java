@@ -1,3 +1,4 @@
+//package org.dicl.velox.native
 package com.dicl.velox;
 
 import com.dicl.velox.model.Metadata;
@@ -31,6 +32,7 @@ public class VeloxDFS {
   public native long write(long fid, long pos, byte[] buf, long off, long len);
   public native long write(long fid, long pos, byte[] buf, long off, long len, long blockSize);
   public native long read(long fid, long pos, byte[] buf, long off, long len);
+  public native long readChunk(String chunk_name, String host, byte[] buf, long boff, long off, long len);
 
   public native Metadata getMetadata(long fid, byte type);
 
