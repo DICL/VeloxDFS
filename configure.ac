@@ -1,5 +1,5 @@
-AC_INIT([EclipseDFS], 
-    m4_esyscmd_s([git describe --tags | grep -o "[[:digit:]]\.[[:digit:]]\.[[:digit:]]"]), 
+AC_INIT([VeloxDFS], 
+    [1.10.0],
     [vicente.bolea@gmail.com], 
     [], [dicl.unist.ac.kr])
 AC_CONFIG_AUX_DIR([./.autotools_aux])
