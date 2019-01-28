@@ -93,7 +93,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classcli__driver.html#a6b583f396464f42ac0782a215f825c9a">parse_args</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv);</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keywordtype">void</span> file_upload(std::string);</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keywordtype">void</span> file_upload(std::string, uint64_t block_size);</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keywordtype">void</span> file_download(std::string);</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keywordtype">void</span> file_cat(std::string);</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keywordtype">void</span> file_remove(std::string);</div>
@@ -103,19 +103,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keywordtype">void</span> file_show_optimized(std::string path, <span class="keywordtype">int</span> type);</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keywordtype">void</span> format();</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keywordtype">void</span> file_rename(std::string, std::string);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <a class="code" href="classvelox_1_1DFS.html">velox::DFS</a> dfs;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;};</div>
-<div class="ttc" id="classcli__driver_html_a430b1220bfbf1d3b9cab4205a795a224"><div class="ttname"><a href="classcli__driver.html#a430b1220bfbf1d3b9cab4205a795a224">cli_driver::cli_driver</a></div><div class="ttdeci">cli_driver()</div><div class="ttdef"><b>Definition:</b> cli_driver.cc:33</div></div>
-<div class="ttc" id="classcli__driver_html_a6b583f396464f42ac0782a215f825c9a"><div class="ttname"><a href="classcli__driver.html#a6b583f396464f42ac0782a215f825c9a">cli_driver::parse_args</a></div><div class="ttdeci">bool parse_args(int argc, char **argv)</div><div class="ttdef"><b>Definition:</b> cli_driver.cc:36</div></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keywordtype">void</span> attributes(std::string);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <a class="code" href="classvelox_1_1DFS.html">velox::DFS</a> dfs;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;};</div>
+<div class="ttc" id="classcli__driver_html_a430b1220bfbf1d3b9cab4205a795a224"><div class="ttname"><a href="classcli__driver.html#a430b1220bfbf1d3b9cab4205a795a224">cli_driver::cli_driver</a></div><div class="ttdeci">cli_driver()</div><div class="ttdef"><b>Definition:</b> cli_driver.cc:38</div></div>
+<div class="ttc" id="classcli__driver_html_a6b583f396464f42ac0782a215f825c9a"><div class="ttname"><a href="classcli__driver.html#a6b583f396464f42ac0782a215f825c9a">cli_driver::parse_args</a></div><div class="ttdeci">bool parse_args(int argc, char **argv)</div><div class="ttdef"><b>Definition:</b> cli_driver.cc:41</div></div>
 <div class="ttc" id="classcli__driver_html"><div class="ttname"><a href="classcli__driver.html">cli_driver</a></div><div class="ttdef"><b>Definition:</b> cli_driver.hh:4</div></div>
-<div class="ttc" id="classvelox_1_1DFS_html"><div class="ttname"><a href="classvelox_1_1DFS.html">velox::DFS</a></div><div class="ttdef"><b>Definition:</b> dfs.hh:13</div></div>
+<div class="ttc" id="classvelox_1_1DFS_html"><div class="ttname"><a href="classvelox_1_1DFS.html">velox::DFS</a></div><div class="ttdef"><b>Definition:</b> dfs.hh:17</div></div>
 <div class="ttc" id="classcli__driver_html_aba82b74e4a1b66d8ea9f0a79f477c829"><div class="ttname"><a href="classcli__driver.html#aba82b74e4a1b66d8ea9f0a79f477c829">cli_driver::~cli_driver</a></div><div class="ttdeci">~cli_driver()=default</div></div>
 <div class="ttc" id="dfs_8hh_html"><div class="ttname"><a href="dfs_8hh.html">dfs.hh</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Oct 14 2018 10:15:19 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 28 2019 06:02:54 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

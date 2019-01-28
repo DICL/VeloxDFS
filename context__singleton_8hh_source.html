@@ -97,13 +97,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="context__singleton_8hh.html#a8fad77d883c07a1377901bbc30f82b85">   13</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GET_STR(X) context.settings.get&lt;std::string&gt;(X)</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="context__singleton_8hh.html#aec1dceab670a7706fda48c3bec334038">   14</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GET_VEC_STR(X) context.settings.get&lt;std::vector&lt;std::string&gt;&gt;(X)</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="context__singleton_8hh.html#adcf20e2ce3c8921f7e620ac057010724">   15</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GET_BOOL(X) (GET_STR(X) == &quot;true&quot; ? true : false)</span></div>
-<div class="ttc" id="classContext_html"><div class="ttname"><a href="classContext.html">Context</a></div><div class="ttdef"><b>Definition:</b> context.hh:10</div></div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="context__singleton_8hh.html#af35b181a9b6638d0e93c2adef1ff22f9">   16</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GET_INDEX(X) context.histogram-&gt;get_index(X)</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="context__singleton_8hh.html#a0fc344dc840afe97d456d05e9234d0d5">   17</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define GET_INDEX_IN_BOUNDARY(X) context.histogram-&gt;random_within_boundaries(X)</span></div>
+<div class="ttc" id="classContext_html"><div class="ttname"><a href="classContext.html">Context</a></div><div class="ttdef"><b>Definition:</b> context.hh:11</div></div>
 <div class="ttc" id="context_8hh_html"><div class="ttname"><a href="context_8hh.html">context.hh</a></div></div>
 <div class="ttc" id="context__singleton_8hh_html_af0983958573fe876c7fbadee37d9f6f4"><div class="ttname"><a href="context__singleton_8hh.html#af0983958573fe876c7fbadee37d9f6f4">context</a></div><div class="ttdeci">Context &amp; context</div><div class="ttdef"><b>Definition:</b> context_singleton.cc:4</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Oct 14 2018 10:15:19 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 28 2019 06:02:54 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

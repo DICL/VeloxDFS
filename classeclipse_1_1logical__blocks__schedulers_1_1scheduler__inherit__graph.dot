@@ -4,13 +4,15 @@ digraph "eclipse::logical_blocks_schedulers::scheduler"
   node [fontname="Helvetica",fontsize="10",shape=record];
   Node1 [label="{eclipse::logical_blocks\l_schedulers::scheduler\n|+ listener\l+ options\l+ boundaries\l|+ generate()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
   Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
-  Node2 [label="{eclipse::logical_blocks\l_schedulers::scheduler\l_multiwave\n||+ generate()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1logical__blocks__schedulers_1_1scheduler__multiwave.html"];
+  Node2 [label="{eclipse::logical_blocks\l_schedulers::scheduler_lean\n||+ generate()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1logical__blocks__schedulers_1_1scheduler__lean.html"];
   Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
-  Node3 [label="{eclipse::logical_blocks\l_schedulers::scheduler\l_python\n||+ generate()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1logical__blocks__schedulers_1_1scheduler__python.html"];
+  Node3 [label="{eclipse::logical_blocks\l_schedulers::scheduler\l_multiwave\n||+ generate()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1logical__blocks__schedulers_1_1scheduler__multiwave.html"];
   Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
-  Node4 [label="{eclipse::logical_blocks\l_schedulers::scheduler\l_score_based\n||+ generate()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1logical__blocks__schedulers_1_1scheduler__score__based.html"];
+  Node4 [label="{eclipse::logical_blocks\l_schedulers::scheduler\l_python\n||+ generate()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1logical__blocks__schedulers_1_1scheduler__python.html"];
   Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
-  Node5 [label="{eclipse::logical_blocks\l_schedulers::scheduler\l_simple\n||+ generate()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1logical__blocks__schedulers_1_1scheduler__simple.html"];
+  Node5 [label="{eclipse::logical_blocks\l_schedulers::scheduler\l_score_based\n||+ generate()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1logical__blocks__schedulers_1_1scheduler__score__based.html"];
   Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
-  Node6 [label="{eclipse::logical_blocks\l_schedulers::scheduler_vlmb\n||+ generate()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1logical__blocks__schedulers_1_1scheduler__vlmb.html"];
+  Node6 [label="{eclipse::logical_blocks\l_schedulers::scheduler\l_simple\n||+ generate()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1logical__blocks__schedulers_1_1scheduler__simple.html"];
+  Node1 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node7 [label="{eclipse::logical_blocks\l_schedulers::scheduler_vlmb\n||+ generate()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1logical__blocks__schedulers_1_1scheduler__vlmb.html"];
 }

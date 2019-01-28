@@ -98,8 +98,8 @@ Collaboration diagram for com.dicl.velox.model.Metadata:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a91dfc07c5f0a5e80a869b88a0aa4bd99"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html#a91dfc07c5f0a5e80a869b88a0aa4bd99">Metadata</a> (String _name, long _hashKey, long _size, int _numBlock, int _type, int _replica, <a class="el" href="classcom_1_1dicl_1_1velox_1_1model_1_1BlockMetadata.html">BlockMetadata</a>[] _blocks)</td></tr>
-<tr class="separator:a91dfc07c5f0a5e80a869b88a0aa4bd99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17ccebcf95f9e3747dea0e8cb7ba26a3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html#a17ccebcf95f9e3747dea0e8cb7ba26a3">Metadata</a> (String _name, long _hashKey, long _size, int _numBlock, int _type, int _replica, int <a class="el" href="classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html#a7c14ced78870b009ca1f61ebea8d0b73">numChunks</a>, int <a class="el" href="classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html#a9420ce6626f01faa25fed1f49ce46ec3">numStaticBlocks</a>, <a class="el" href="classcom_1_1dicl_1_1velox_1_1model_1_1BlockMetadata.html">BlockMetadata</a>[] _blocks)</td></tr>
+<tr class="separator:a17ccebcf95f9e3747dea0e8cb7ba26a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -111,6 +111,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ab257361b20d77dd8eef4605f018c23aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e9ddf87414acf7ca4bd288e1b64355e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html#a1e9ddf87414acf7ca4bd288e1b64355e">numBlock</a></td></tr>
 <tr class="separator:a1e9ddf87414acf7ca4bd288e1b64355e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c14ced78870b009ca1f61ebea8d0b73"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html#a7c14ced78870b009ca1f61ebea8d0b73">numChunks</a></td></tr>
+<tr class="separator:a7c14ced78870b009ca1f61ebea8d0b73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9420ce6626f01faa25fed1f49ce46ec3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html#a9420ce6626f01faa25fed1f49ce46ec3">numStaticBlocks</a></td></tr>
+<tr class="separator:a9420ce6626f01faa25fed1f49ce46ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a612a72f4bc55325859ed555b84cfbcd5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html#a612a72f4bc55325859ed555b84cfbcd5">type</a></td></tr>
 <tr class="separator:a612a72f4bc55325859ed555b84cfbcd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f52b8e8508b1e5bb3a7df6e59a113a7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html#a4f52b8e8508b1e5bb3a7df6e59a113a7">replica</a></td></tr>
@@ -119,7 +123,7 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a80a9147df556532c6f72ec13e8cf07b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a91dfc07c5f0a5e80a869b88a0aa4bd99"></a>
+<a class="anchor" id="a17ccebcf95f9e3747dea0e8cb7ba26a3"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -161,6 +165,18 @@ Public Attributes</h2></td></tr>
           <td></td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>_replica</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>numChunks</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>numStaticBlocks</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -232,6 +248,30 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a7c14ced78870b009ca1f61ebea8d0b73"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int com.dicl.velox.model.Metadata.numChunks</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9420ce6626f01faa25fed1f49ce46ec3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int com.dicl.velox.model.Metadata.numStaticBlocks</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a4f52b8e8508b1e5bb3a7df6e59a113a7"></a>
 <div class="memitem">
 <div class="memproto">
@@ -274,7 +314,7 @@ Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Oct 14 2018 10:15:19 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 28 2019 06:02:54 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

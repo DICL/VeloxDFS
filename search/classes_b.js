@@ -1,6 +1,7 @@
 var searchData=
 [
   ['scheduler',['scheduler',['../classeclipse_1_1logical__blocks__schedulers_1_1scheduler.html',1,'eclipse::logical_blocks_schedulers']]],
+  ['scheduler_5flean',['scheduler_lean',['../classeclipse_1_1logical__blocks__schedulers_1_1scheduler__lean.html',1,'eclipse::logical_blocks_schedulers']]],
   ['scheduler_5fmultiwave',['scheduler_multiwave',['../classeclipse_1_1logical__blocks__schedulers_1_1scheduler__multiwave.html',1,'eclipse::logical_blocks_schedulers']]],
   ['scheduler_5fpython',['scheduler_python',['../classeclipse_1_1logical__blocks__schedulers_1_1scheduler__python.html',1,'eclipse::logical_blocks_schedulers']]],
   ['scheduler_5fscore_5fbased',['scheduler_score_based',['../classeclipse_1_1logical__blocks__schedulers_1_1scheduler__score__based.html',1,'eclipse::logical_blocks_schedulers']]],

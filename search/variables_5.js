@@ -6,6 +6,7 @@ var searchData=
   ['hashkey',['hashKey',['../classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html#a48a6c8e4805487fcd04557886175cb21',1,'com::dicl::velox::model::Metadata']]],
   ['header_5fsize',['header_size',['../namespaceeclipse_1_1network.html#a8c8e680059281fa46bad852cc7be2f65',1,'eclipse::network']]],
   ['help',['help',['../cli__driver_8cc.html#a1937c90bcdaf05646694ef183a16d7d3',1,'cli_driver.cc']]],
+  ['histogram',['histogram',['../classContext.html#ad2d712c84802bfd802acccc869020c5b',1,'Context']]],
   ['host',['host',['../classvelox_1_1model_1_1block__metadata.html#af149646bda4a897ac8090cb6436c314f',1,'velox::model::block_metadata::host()'],['../classcom_1_1dicl_1_1velox_1_1model_1_1BlockMetadata.html#a395cd241b4cf575e035a568bb4bbc37c',1,'com.dicl.velox.model.BlockMetadata.host()']]],
   ['host_5fname',['host_name',['../structeclipse_1_1logical__block__metadata.html#a9d6d3fd1ed397a56ba13ecb9c183d737',1,'eclipse::logical_block_metadata']]]
 ];

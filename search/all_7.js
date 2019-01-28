@@ -11,7 +11,7 @@ var searchData=
   ['hashlength',['HASHLENGTH',['../hash_8hh.html#a663a695f0855a54eae517d4b68e704a0',1,'hash.hh']]],
   ['header_5fsize',['header_size',['../namespaceeclipse_1_1network.html#a8c8e680059281fa46bad852cc7be2f65',1,'eclipse::network']]],
   ['help',['help',['../cli__driver_8cc.html#a1937c90bcdaf05646694ef183a16d7d3',1,'cli_driver.cc']]],
-  ['histogram',['Histogram',['../classHistogram.html',1,'Histogram'],['../classHistogram.html#af681f293852ac145f867ecfcce3062a5',1,'Histogram::Histogram()'],['../classHistogram.html#a01e4973bbe65be7728be5d94c79e06cc',1,'Histogram::Histogram(int numserver, int numbin)']]],
+  ['histogram',['Histogram',['../classHistogram.html',1,'Histogram'],['../classContext.html#ad2d712c84802bfd802acccc869020c5b',1,'Context::histogram()'],['../classHistogram.html#af681f293852ac145f867ecfcce3062a5',1,'Histogram::Histogram()'],['../classHistogram.html#a01e4973bbe65be7728be5d94c79e06cc',1,'Histogram::Histogram(int numserver, int numbin)']]],
   ['histogram_2ecc',['histogram.cc',['../histogram_8cc.html',1,'']]],
   ['histogram_2ehh',['histogram.hh',['../histogram_8hh.html',1,'']]],
   ['host',['host',['../classvelox_1_1model_1_1block__metadata.html#af149646bda4a897ac8090cb6436c314f',1,'velox::model::block_metadata::host()'],['../classcom_1_1dicl_1_1velox_1_1model_1_1BlockMetadata.html#a395cd241b4cf575e035a568bb4bbc37c',1,'com.dicl.velox.model.BlockMetadata.host()']]],

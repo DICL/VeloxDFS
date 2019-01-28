@@ -4,7 +4,7 @@ var searchData=
   ['schedulebasedonio',['scheduleBasedOnIO',['../namespacescheduler.html#ac3b276ab3e22ccf08e0e6857fffd0197',1,'scheduler']]],
   ['scheduler_5ffactory',['scheduler_factory',['../namespaceeclipse_1_1logical__blocks__schedulers.html#acfe556b30f7f5708391827ceee537ba3',1,'eclipse::logical_blocks_schedulers::scheduler_factory(std::string, Histogram *, SCHEDULER_OPTS=SCHEDULER_OPTS())'],['../namespaceeclipse_1_1logical__blocks__schedulers.html#a38aa194c87bf4f0519c7a2833db29271',1,'eclipse::logical_blocks_schedulers::scheduler_factory(string type, Histogram *boundaries, SCHEDULER_OPTS options)']]],
   ['score',['score',['../scheduler__vlmb_8cc.html#ac0b7fbcdfc07151d4b6fad2aae67d2c2',1,'scheduler_vlmb.cc']]],
-  ['select_5flast_5fblock_5fmetadata',['select_last_block_metadata',['../classeclipse_1_1Directory.html#a087f16f85250608b9af839042bec7f78',1,'eclipse::Directory']]],
+  ['select_5flast_5fblock_5fmetadata',['select_last_block_metadata',['../classeclipse_1_1Directory.html#a3df26c97a3611546265bdd1edda6f6a2',1,'eclipse::Directory']]],
   ['send',['send',['../classeclipse_1_1network_1_1ClientHandler.html#a1732a1f470aedac2b4beab67646deeea',1,'eclipse::network::ClientHandler']]],
   ['send_5fand_5freplicate',['send_and_replicate',['../classeclipse_1_1network_1_1ClientHandler.html#aa408051d96ab4fcd26187c856d296ac5',1,'eclipse::network::ClientHandler']]],
   ['send_5fmessage',['send_message',['../namespaceeclipse_1_1messages.html#a947c13005939dce193d6cd7c90f91e99',1,'eclipse::messages']]],

@@ -4,7 +4,6 @@ var searchData=
   ['debug',['debug',['../classLogger.html#a693a6a3d95f9b10ef27ef8e06c39fe94',1,'Logger::debug()'],['../context__singleton_8hh.html#a4cdfd3701c18f83234bc2e195742827c',1,'DEBUG():&#160;context_singleton.hh']]],
   ['default_5fquery_5fsize',['DEFAULT_QUERY_SIZE',['../directory_8cc.html#a1c003d3bb4c1122d9f0c44ca1dc99539',1,'directory.cc']]],
   ['delete_5ffile',['delete_file',['../classeclipse_1_1FileLeaderRouter.html#a12955111bc93ce14ba510533397f23bd',1,'eclipse::FileLeaderRouter']]],
-  ['deprecated_20list',['Deprecated List',['../deprecated.html',1,'']]],
   ['destination',['destination',['../structeclipse_1_1messages_1_1Message.html#a71011dda040ca0970900f5da2a9e28d6',1,'eclipse::messages::Message']]],
   ['destroy',['destroy',['../classcom_1_1dicl_1_1velox_1_1VeloxDFS.html#a0aa297dcb4bf666b540116ad4076201b',1,'com::dicl::velox::VeloxDFS']]],
   ['details',['details',['../structeclipse_1_1messages_1_1Reply.html#a5869cf9e350a03a637fa327c858180d3',1,'eclipse::messages::Reply']]],
@@ -22,5 +21,6 @@ var searchData=
   ['do_5fwrite',['do_write',['../classeclipse_1_1network_1_1AsyncChannel.html#adf4946e410c29712136fb10b3f17a460',1,'eclipse::network::AsyncChannel::do_write(messages::Message *) override'],['../classeclipse_1_1network_1_1AsyncChannel.html#a86de0a11123893f1d5e7dcdcd60cbe63',1,'eclipse::network::AsyncChannel::do_write(std::shared_ptr&lt; std::string &gt; &amp;)'],['../classeclipse_1_1network_1_1Channel.html#a79c808a706fedd0a1722b5f98a91c8fc',1,'eclipse::network::Channel::do_write()']]],
   ['do_5fwrite_5fbuffer',['do_write_buffer',['../classeclipse_1_1network_1_1AsyncChannel.html#a3a81491738529c90e1c5293c8e424edf',1,'eclipse::network::AsyncChannel']]],
   ['download',['download',['../classvelox_1_1DFS.html#a7b928a468f39cbcf49ba11c0b9a4c84f',1,'velox::DFS']]],
+  ['dump_5fmetadata',['dump_metadata',['../classvelox_1_1DFS.html#ad7734e887a3ac8b0f14234e04929d457',1,'velox::DFS']]],
   ['developing_2dveloxdfs',['Developing-VeloxDFS',['../md_manual_Developing-VeloxDFS.html',1,'']]]
 ];

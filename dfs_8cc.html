@@ -80,7 +80,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
@@ -116,6 +115,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;<a class="el" href="context__singleton_8hh_source.html">../common/context_singleton.hh</a>&quot;</code><br/>
 <code>#include &lt;sys/resource.h&gt;</code><br/>
 <code>#include &lt;ctime&gt;</code><br/>
+<code>#include &lt;chrono&gt;</code><br/>
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for dfs.cc:</div>
 <div class="dyncontent">
@@ -129,20 +129,10 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacevelox"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevelox.html">velox</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:a953fd49def0979defd765a3db2310dd0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevelox.html#a953fd49def0979defd765a3db2310dd0">velox::FILETYPE</a> { <a class="el" href="namespacevelox.html#a953fd49def0979defd765a3db2310dd0a960b44c579bc2f6818d2daaf9e4c16f0">velox::FILETYPE::Normal</a> = 0x0, 
-<a class="el" href="namespacevelox.html#a953fd49def0979defd765a3db2310dd0aac863f346e618f9a959b5c95d5d28941">velox::FILETYPE::App</a> = 0x1, 
-<a class="el" href="namespacevelox.html#a953fd49def0979defd765a3db2310dd0a86d821ef8882b47deed115a40b07ff17">velox::FILETYPE::Idata</a> = 0x2
- }</td></tr>
-<tr class="separator:a953fd49def0979defd765a3db2310dd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a744f9f9757c261ddeef2bc39ddad69eb"><td class="memItemLeft" align="right" valign="top">shared_ptr&lt; <a class="el" href="structeclipse_1_1messages_1_1FileDescription.html">FileDescription</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevelox.html#a744f9f9757c261ddeef2bc39ddad69eb">velox::get_file_description</a> (std::function&lt; unique_ptr&lt; tcp::socket &gt;(uint32_t)&gt; connect, std::string &amp;fname, bool logical_block)</td></tr>
-<tr class="separator:a744f9f9757c261ddeef2bc39ddad69eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af22105e03be51fad729f89d74fce6472"><td class="memItemLeft" align="right" valign="top">shared_ptr&lt; <a class="el" href="structeclipse_1_1messages_1_1FileDescription.html">FileDescription</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevelox.html#af22105e03be51fad729f89d74fce6472">velox::get_file_description</a> (std::function&lt; unique_ptr&lt; tcp::socket &gt;(uint32_t)&gt; connect, std::string &amp;fname)</td></tr>
-<tr class="separator:af22105e03be51fad729f89d74fce6472"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a906d4606457b03625686541eebd83046"><td class="memItemLeft" align="right" valign="top">shared_ptr&lt; <a class="el" href="structeclipse_1_1messages_1_1FileDescription.html">FileDescription</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevelox.html#a906d4606457b03625686541eebd83046">velox::get_file_description</a> (std::function&lt; unique_ptr&lt; tcp::socket &gt;(uint32_t)&gt; connect, std::string &amp;fname, bool logical_block=false)</td></tr>
+<tr class="separator:a906d4606457b03625686541eebd83046"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a062efb51f8b5be06978bf905d452496f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevelox.html#a062efb51f8b5be06978bf905d452496f">velox::read_from_disk</a> (char *buf, <a class="el" href="structeclipse_1_1messages_1_1BlockInfo.html">BlockInfo</a> chunk, uint64_t *read_bytes, uint64_t cursor, uint64_t length)</td></tr>
 <tr class="separator:a062efb51f8b5be06978bf905d452496f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9df919c81d0fb719f41889132a91cd8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevelox.html#ab9df919c81d0fb719f41889132a91cd8">velox::read_from_remote</a> (char *buf, <a class="el" href="structeclipse_1_1messages_1_1BlockInfo.html">BlockInfo</a> chunk, uint64_t *read_bytes, uint64_t cursor, uint64_t length, int which_node)</td></tr>
@@ -164,7 +154,7 @@ std::shared_ptr<br class="typebreak"/>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Oct 14 2018 10:15:19 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 28 2019 06:02:54 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

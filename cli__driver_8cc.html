@@ -87,13 +87,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="cli__driver_8hh_source.html">cli_driver.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="context__singleton_8hh_source.html">../common/context_singleton.hh</a>&quot;</code><br/>
-<code>#include &quot;<a class="el" href="histogram_8hh_source.html">../common/histogram.hh</a>&quot;</code><br/>
 <code>#include &lt;vector&gt;</code><br/>
 <code>#include &lt;iostream&gt;</code><br/>
 <code>#include &lt;iterator&gt;</code><br/>
 <code>#include &lt;iomanip&gt;</code><br/>
-<code>#include &lt;boost/algorithm/string/split.hpp&gt;</code><br/>
-<code>#include &lt;boost/algorithm/string/classification.hpp&gt;</code><br/>
+<code>#include &lt;unistd.h&gt;</code><br/>
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for cli_driver.cc:</div>
 <div class="dyncontent">
@@ -135,28 +133,36 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= <span class="stringliteral">&quot;veloxdfs [options] &lt;command&gt; &lt;FILES...&gt;\n\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;Commands\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;========\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;\tput\t\t\tUpload a file\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;\tget\t\t\tDownload a file\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;\tremove\t\t\tRemove a file\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;\tcat\t\t\tDisplay a file&#39;s content\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;\tshow\t\t\tShow block location of a file\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;\tls\t\t\tList all the files\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;\tformat\t\t\tFormat storage and metadata\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;Options\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;=======\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;\t-h, --help\t\tPrint help\n&quot;</span></div>
-<div class="line"><span class="stringliteral">&quot;\t-v, --verbose\t\tEnable debugging messages\n&quot;</span></div>
+<b>Initial value:</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><span class="stringliteral">VELOXDFS (VELOX File System CLI client controler)</span></div>
+<div class="line"><span class="stringliteral">Usage: veloxdfs [options] &lt;ACTIONS&gt; FILE</span></div>
+<div class="line"><span class="stringliteral">ACTIONS</span></div>
+<div class="line"><span class="stringliteral">    put &lt;FILE&gt;               Upload a file</span></div>
+<div class="line"><span class="stringliteral">    get &lt;FILE&gt;               Download a file</span></div>
+<div class="line"><span class="stringliteral">    rm &lt;FILE&gt;                Remove a file</span></div>
+<div class="line"><span class="stringliteral">    cat &lt;FILE&gt;               Display a file&#39;s content</span></div>
+<div class="line"><span class="stringliteral">    show &lt;FILE&gt;              Show block location of a file</span></div>
+<div class="line"><span class="stringliteral">    ls -H|-g|-o [FILE]       List all the files</span></div>
+<div class="line"><span class="stringliteral">    format                   Format storage and metadata</span></div>
+<div class="line"><span class="stringliteral">    rename &lt;FILE1&gt; &lt;FILE2&gt;   Rename file </span></div>
+<div class="line"><span class="stringliteral">  </span></div>
+<div class="line"><span class="stringliteral">OPTIONS</span></div>
+<div class="line"><span class="stringliteral">    -H           Human,      Show Human readable sizes, MiB|GiB...</span></div>
+<div class="line"><span class="stringliteral">    -b &lt;size&gt;    BlockSize,  Set intended size of block for uploading file</span></div>
+<div class="line"><span class="stringliteral">    -g           Generate,   Generate logical block distribution</span></div>
+<div class="line"><span class="stringliteral">    -o           Output,     Output current logical block distribution</span></div>
+<div class="line"><span class="stringliteral">    -h           Help,       Print this text.</span></div>
+<div class="line"><span class="stringliteral">    -v           Version,    Print version</span></div>
+<div class="line"><span class="stringliteral"></span></div>
+<div class="line"><span class="stringliteral"></span></div>
+<div class="line"><span class="stringliteral">Data Intensive Computing Lab at &lt;SKKU/UNIST&gt;, ROK. ver:)&quot; + string(PACKAGE_VERSION) + </span><span class="stringliteral">&quot; Builded at: &quot;</span> + string(__DATE__)</div>
 </div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Oct 14 2018 10:15:19 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 28 2019 06:02:54 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

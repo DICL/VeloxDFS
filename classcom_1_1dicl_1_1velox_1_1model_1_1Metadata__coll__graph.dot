@@ -2,9 +2,10 @@ digraph "com.dicl.velox.model.Metadata"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{com.dicl.velox.model.Metadata\n|+ hashKey\l+ size\l+ numBlock\l+ type\l+ replica\l|+ Metadata()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 [label="{com.dicl.velox.model.Metadata\n|+ hashKey\l+ size\l+ numBlock\l+ numChunks\l+ numStaticBlocks\l+ type\l+ replica\l|+ Metadata()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
   Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +blocks" ,arrowhead="odiamond",fontname="Helvetica"];
-  Node2 [label="{com.dicl.velox.model.Block\lMetadata\n|+ index\l+ size\l|+ BlockMetadata()\l+ BlockMetadata()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcom_1_1dicl_1_1velox_1_1model_1_1BlockMetadata.html"];
+  Node2 [label="{com.dicl.velox.model.Block\lMetadata\n|+ index\l+ size\l+ numChunks\l|+ BlockMetadata()\l+ BlockMetadata()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcom_1_1dicl_1_1velox_1_1model_1_1BlockMetadata.html"];
+  Node2 -> Node2 [color="grey25",fontsize="10",style="solid",label=" +chunks" ,arrowhead="odiamond",fontname="Helvetica"];
   Node3 -> Node2 [color="grey25",fontsize="10",style="solid",label=" +host\n+name\n+fileName" ,arrowhead="odiamond",fontname="Helvetica"];
   Node3 [label="{String\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
   Node3 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +name" ,arrowhead="odiamond",fontname="Helvetica"];

@@ -115,9 +115,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7a2f893a17864b8d9a9bdd54f1ba9aca"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a7a2f893a17864b8d9a9bdd54f1ba9aca">append</a> (std::string file_name, std::string buf)</td></tr>
 <tr class="memdesc:a7a2f893a17864b8d9a9bdd54f1ba9aca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Append a string to the end of a remote file.  <a href="#a7a2f893a17864b8d9a9bdd54f1ba9aca">More...</a><br/></td></tr>
 <tr class="separator:a7a2f893a17864b8d9a9bdd54f1ba9aca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab73d4aee78b1da4481fcc6c3b0e7f99b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#ab73d4aee78b1da4481fcc6c3b0e7f99b">upload</a> (std::string file_name, bool is_binary)</td></tr>
-<tr class="memdesc:ab73d4aee78b1da4481fcc6c3b0e7f99b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upload a local file to a the veloxdfs intance.  <a href="#ab73d4aee78b1da4481fcc6c3b0e7f99b">More...</a><br/></td></tr>
-<tr class="separator:ab73d4aee78b1da4481fcc6c3b0e7f99b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02bed747d24bba53616b50fc3f92350e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a02bed747d24bba53616b50fc3f92350e">upload</a> (std::string file_name, bool is_binary, uint64_t block_size=0)</td></tr>
+<tr class="memdesc:a02bed747d24bba53616b50fc3f92350e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upload a local file to a the veloxdfs intance.  <a href="#a02bed747d24bba53616b50fc3f92350e">More...</a><br/></td></tr>
+<tr class="separator:a02bed747d24bba53616b50fc3f92350e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b928a468f39cbcf49ba11c0b9a4c84f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a7b928a468f39cbcf49ba11c0b9a4c84f">download</a> (std::string file_name)</td></tr>
 <tr class="memdesc:a7b928a468f39cbcf49ba11c0b9a4c84f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Download a remote file to your current local directory.  <a href="#a7b928a468f39cbcf49ba11c0b9a4c84f">More...</a><br/></td></tr>
 <tr class="separator:a7b928a468f39cbcf49ba11c0b9a4c84f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -140,10 +140,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a85d26657b82f29e5336878402ad3ca34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7164a95c540e1be3fc94ea641fc33785"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a7164a95c540e1be3fc94ea641fc33785">file_metadata_append</a> (std::string, size_t, <a class="el" href="classvelox_1_1model_1_1metadata.html">model::metadata</a> &amp;)</td></tr>
 <tr class="separator:a7164a95c540e1be3fc94ea641fc33785"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63324577c9a8f29fb2623ea9479cf074"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a63324577c9a8f29fb2623ea9479cf074">pget</a> (<a class="el" href="namespacevelox.html#acdff98ab56b7ef1a8e89df7fe812d1a4">vec_str</a>)</td></tr>
-<tr class="separator:a63324577c9a8f29fb2623ea9479cf074"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f03c93f13ff9dc535b30b4eabf2092e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a9f03c93f13ff9dc535b30b4eabf2092e">update</a> (<a class="el" href="namespacevelox.html#acdff98ab56b7ef1a8e89df7fe812d1a4">vec_str</a>)</td></tr>
-<tr class="separator:a9f03c93f13ff9dc535b30b4eabf2092e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7734e887a3ac8b0f14234e04929d457"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#ad7734e887a3ac8b0f14234e04929d457">dump_metadata</a> (std::string &amp;fname)</td></tr>
+<tr class="memdesc:ad7734e887a3ac8b0f14234e04929d457"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dump all the metadata for the give file.  <a href="#ad7734e887a3ac8b0f14234e04929d457">More...</a><br/></td></tr>
+<tr class="separator:ad7734e887a3ac8b0f14234e04929d457"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bb6dfb3305077ced47e209c6931ddeb"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvelox_1_1DFS.html#a4bb6dfb3305077ced47e209c6931ddeb">read_chunk</a> (std::string &amp;fname, std::string host, char *buf, uint64_t buffer_offset, uint64_t off, uint64_t len)</td></tr>
+<tr class="memdesc:a4bb6dfb3305077ced47e209c6931ddeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a chunk directly.  <a href="#a4bb6dfb3305077ced47e209c6931ddeb">More...</a><br/></td></tr>
+<tr class="separator:a4bb6dfb3305077ced47e209c6931ddeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a85ba1daeacb018ad031ff2a7ff2f4f65"></a>
@@ -222,6 +224,24 @@ Public Member Functions</h2></td></tr>
 </dl>
 <p>Does the file exists</p>
 <p>No buffer </p>
+
+</div>
+</div>
+<a class="anchor" id="ad7734e887a3ac8b0f14234e04929d457"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string velox::DFS::dump_metadata </td>
+          <td>(</td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>fname</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dump all the metadata for the give file. </p>
 
 </div>
 </div>
@@ -347,24 +367,6 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a63324577c9a8f29fb2623ea9479cf074"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int velox::DFS::pget </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacevelox.html#acdff98ab56b7ef1a8e89df7fe812d1a4">vec_str</a>&#160;</td>
-          <td class="paramname"><em>argv</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000002">Deprecated:</a></b></dt><dd></dd></dl>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd></dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="a1005ef927db6079c70f0690c474a3d46"></a>
 <div class="memitem">
 <div class="memproto">
@@ -469,6 +471,58 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a4bb6dfb3305077ced47e209c6931ddeb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t velox::DFS::read_chunk </td>
+          <td>(</td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>fname</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>host</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>buffer_offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>off</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read a chunk directly. </p>
+
+</div>
+</div>
 <a class="anchor" id="a4c9ad2f6debe8841accd6873be6c8973"></a>
 <div class="memitem">
 <div class="memproto">
@@ -524,31 +578,13 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>If it is an app to be upload :TODO:</p>
 <p>Insert the file</p>
 <p>Send file to be submitted;</p>
 <p>Get information of where to send the file </p>
 
 </div>
 </div>
-<a class="anchor" id="a9f03c93f13ff9dc535b30b4eabf2092e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int velox::DFS::update </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacevelox.html#acdff98ab56b7ef1a8e89df7fe812d1a4">vec_str</a>&#160;</td>
-          <td class="paramname"><em>argv</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000003">Deprecated:</a></b></dt><dd></dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="ab73d4aee78b1da4481fcc6c3b0e7f99b"></a>
+<a class="anchor" id="a02bed747d24bba53616b50fc3f92350e"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -562,7 +598,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>is_binary</em>&#160;</td>
+          <td class="paramname"><em>is_binary</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>block_size</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -577,6 +619,7 @@ Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">file_name</td><td>File to peform the operation. </td></tr>
     <tr><td class="paramname">is_binary</td><td>Whether to broadcast the file to all the nodes. </td></tr>
+    <tr><td class="paramname">block_size</td><td>Intended block size (Overrides .eclipse.json blocksize) </td></tr>
   </table>
   </dd>
 </dl>
@@ -706,7 +749,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Oct 14 2018 10:15:19 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 28 2019 06:02:54 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

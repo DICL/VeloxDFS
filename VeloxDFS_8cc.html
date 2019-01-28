@@ -84,7 +84,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">VeloxDFS.cc File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="com__dicl__velox__VeloxDFS_8h_source.html">com_dicl_velox_VeloxDFS.h</a>&quot;</code><br/>
+<div class="textblock"><code>#include &lt;jni.h&gt;</code><br/>
 <code>#include &quot;<a class="el" href="vdfs_8hh_source.html">../../client/vdfs.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="client_2model_2metadata_8hh_source.html">../../client/model/metadata.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="block__metadata_8hh_source.html">../../client/model/block_metadata.hh</a>&quot;</code><br/>
@@ -100,6 +100,8 @@ Include dependency graph for VeloxDFS.cc:</div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ab4a1312901558804da875bf6607ac26c"><td class="memItemLeft" align="right" valign="top">JNIEXPORT jlong JNICALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VeloxDFS_8cc.html#ab4a1312901558804da875bf6607ac26c">Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJJ</a> (JNIEnv *env, jobject obj, jlong fid, jlong pos, jbyteArray buf, jlong off, jlong len, jlong block_size)</td></tr>
+<tr class="separator:ab4a1312901558804da875bf6607ac26c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0311b5101f3cd163e33baecf3ff36763"><td class="memItemLeft" align="right" valign="top">jobject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VeloxDFS_8cc.html#a0311b5101f3cd163e33baecf3ff36763">convert_jmetadata</a> (JNIEnv *env, jobject &amp;obj, <a class="el" href="classvelox_1_1model_1_1metadata.html">velox::model::metadata</a> &amp;md)</td></tr>
 <tr class="separator:a0311b5101f3cd163e33baecf3ff36763"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90db60db11796e55becc9c848e6f7ca2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvelox_1_1vdfs.html">velox::vdfs</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VeloxDFS_8cc.html#a90db60db11796e55becc9c848e6f7ca2">get_vdfs</a> (JNIEnv *env, jobject &amp;obj)</td></tr>
@@ -116,8 +118,6 @@ Functions</h2></td></tr>
 <tr class="separator:a4ff3383823dffc5b50f12dbb2a5804cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2eec367b1b81e63d861252c639d1c4f0"><td class="memItemLeft" align="right" valign="top">JNIEXPORT jlong JNICALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VeloxDFS_8cc.html#a2eec367b1b81e63d861252c639d1c4f0">Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJ</a> (JNIEnv *env, jobject obj, jlong fid, jlong pos, jbyteArray buf, jlong off, jlong len)</td></tr>
 <tr class="separator:a2eec367b1b81e63d861252c639d1c4f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4a1312901558804da875bf6607ac26c"><td class="memItemLeft" align="right" valign="top">JNIEXPORT jlong JNICALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VeloxDFS_8cc.html#ab4a1312901558804da875bf6607ac26c">Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJJ</a> (JNIEnv *env, jobject obj, jlong fid, jlong pos, jbyteArray buf, jlong off, jlong len, jlong block_size)</td></tr>
-<tr class="separator:ab4a1312901558804da875bf6607ac26c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8edad02c258992620869995ec11b5c25"><td class="memItemLeft" align="right" valign="top">JNIEXPORT jlong JNICALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VeloxDFS_8cc.html#a8edad02c258992620869995ec11b5c25">Java_com_dicl_velox_VeloxDFS_read</a> (JNIEnv *env, jobject obj, jlong fid, jlong pos, jbyteArray buf, jlong off, jlong len)</td></tr>
 <tr class="separator:a8edad02c258992620869995ec11b5c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd8bca31475c766ac85538511f37b5f0"><td class="memItemLeft" align="right" valign="top">JNIEXPORT jobject JNICALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VeloxDFS_8cc.html#afd8bca31475c766ac85538511f37b5f0">Java_com_dicl_velox_VeloxDFS_getMetadata</a> (JNIEnv *env, jobject obj, jlong fid, jbyte type)</td></tr>
@@ -130,6 +130,8 @@ Functions</h2></td></tr>
 <tr class="separator:a9f63c83ff477b3a2c11085f9f454ebf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c583c6334bd263526f64970f134d04e"><td class="memItemLeft" align="right" valign="top">JNIEXPORT jboolean JNICALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VeloxDFS_8cc.html#a1c583c6334bd263526f64970f134d04e">Java_com_dicl_velox_VeloxDFS_rename</a> (JNIEnv *env, jobject obj, jstring src, jstring dst)</td></tr>
 <tr class="separator:a1c583c6334bd263526f64970f134d04e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5063d10faa9aa459dbb70f0344028fc1"><td class="memItemLeft" align="right" valign="top">JNIEXPORT jlong JNICALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="VeloxDFS_8cc.html#a5063d10faa9aa459dbb70f0344028fc1">Java_com_dicl_velox_VeloxDFS_readChunk</a> (JNIEnv *env, jobject obj, jstring chunk_name, jstring host, jbyteArray buf, jlong boff, jlong off, jlong len)</td></tr>
+<tr class="separator:a5063d10faa9aa459dbb70f0344028fc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a0311b5101f3cd163e33baecf3ff36763"></a>
@@ -502,6 +504,68 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a5063d10faa9aa459dbb70f0344028fc1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_readChunk </td>
+          <td>(</td>
+          <td class="paramtype">JNIEnv *&#160;</td>
+          <td class="paramname"><em>env</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">jobject&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">jstring&#160;</td>
+          <td class="paramname"><em>chunk_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">jstring&#160;</td>
+          <td class="paramname"><em>host</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">jbyteArray&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">jlong&#160;</td>
+          <td class="paramname"><em>boff</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">jlong&#160;</td>
+          <td class="paramname"><em>off</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">jlong&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a6388799c00f4bd074b53b9bb504bab44"></a>
 <div class="memitem">
 <div class="memproto">
@@ -693,7 +757,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Oct 14 2018 10:15:19 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 28 2019 06:02:54 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

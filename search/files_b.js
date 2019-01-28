@@ -2,6 +2,7 @@ var searchData=
 [
   ['scheduler_2epy',['scheduler.py',['../scheduler_8py.html',1,'']]],
   ['scheduler_5ffactory_2ecc',['scheduler_factory.cc',['../scheduler__factory_8cc.html',1,'']]],
+  ['scheduler_5flean_2ecc',['scheduler_lean.cc',['../scheduler__lean_8cc.html',1,'']]],
   ['scheduler_5fmultiwave_2ecc',['scheduler_multiwave.cc',['../scheduler__multiwave_8cc.html',1,'']]],
   ['scheduler_5fpython_2ecc',['scheduler_python.cc',['../scheduler__python_8cc.html',1,'']]],
   ['scheduler_5fscore_5fbased_2ecc',['scheduler_score_based.cc',['../scheduler__score__based_8cc.html',1,'']]],

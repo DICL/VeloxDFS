@@ -115,6 +115,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a48577543ca645abdde70216b9fc50206"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afcab585bf30dbcdebe34d8cf2788f3c7"><td class="memItemLeft" align="right" valign="top">native long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1dicl_1_1velox_1_1VeloxDFS.html#afcab585bf30dbcdebe34d8cf2788f3c7">read</a> (long fid, long pos, byte[] buf, long off, long len)</td></tr>
 <tr class="separator:afcab585bf30dbcdebe34d8cf2788f3c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a393eb695f04f06e754e4bc826158acf1"><td class="memItemLeft" align="right" valign="top">native long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1dicl_1_1velox_1_1VeloxDFS.html#a393eb695f04f06e754e4bc826158acf1">readChunk</a> (String chunk_name, String host, byte[] buf, long boff, long off, long len)</td></tr>
+<tr class="separator:a393eb695f04f06e754e4bc826158acf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31a6e76b9e53157a1ebf31102251f964"><td class="memItemLeft" align="right" valign="top">native <a class="el" href="classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html">Metadata</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1dicl_1_1velox_1_1VeloxDFS.html#a31a6e76b9e53157a1ebf31102251f964">getMetadata</a> (long fid, byte type)</td></tr>
 <tr class="separator:a31a6e76b9e53157a1ebf31102251f964"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c59b84ff0f363e0e62e259c9ab10099"><td class="memItemLeft" align="right" valign="top">native boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1dicl_1_1velox_1_1VeloxDFS.html#a6c59b84ff0f363e0e62e259c9ab10099">remove</a> (String name)</td></tr>
@@ -357,6 +359,56 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a393eb695f04f06e754e4bc826158acf1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">native long com.dicl.velox.VeloxDFS.readChunk </td>
+          <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>chunk_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>host</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">byte[]&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>boff</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>off</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a6c59b84ff0f363e0e62e259c9ab10099"></a>
 <div class="memitem">
 <div class="memproto">
@@ -499,7 +551,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Oct 14 2018 10:15:19 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 28 2019 06:02:54 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

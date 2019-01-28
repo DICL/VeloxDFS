@@ -13,10 +13,16 @@ digraph "/home/travis/build/DICL/VeloxDFS/src/common/context.hh"
   Node5 [label="logger.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$logger_8hh.html"];
   Node5 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node1 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node6 [label="boost/asio.hpp",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node6 [label="histogram.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$histogram_8hh.html"];
+  Node6 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="iostream",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node6 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="ctime",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node1 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="boost/asio.hpp",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
   Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node7 [label="vector",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
-  Node1 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node8 [label="thread",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node1 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="vector",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node1 -> Node11 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="thread",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
 }

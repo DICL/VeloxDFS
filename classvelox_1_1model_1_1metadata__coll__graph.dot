@@ -2,7 +2,7 @@ digraph "velox::model::metadata"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{velox::model::metadata\n|+ hash_key\l+ size\l+ num_block\l+ type\l+ replica\l+ blocks\l+ hash_keys\l+ block_size\l+ block_data\l+ has_block_data\l|+ metadata()\l+ metadata()\l+ operator=()\l+ ~metadata()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 [label="{velox::model::metadata\n|+ hash_key\l+ size\l+ num_block\l+ num_chunks\l+ num_static_blocks\l+ type\l+ replica\l+ has_block_data\l+ blocks\l+ hash_keys\l+ block_size\l+ block_data\l|+ metadata()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
   Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +name" ,arrowhead="odiamond",fontname="Helvetica"];
   Node2 [label="{string\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
 }

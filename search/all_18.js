@@ -16,7 +16,6 @@ var searchData=
   ['_7ehistogram',['~Histogram',['../classHistogram.html#aaf22daf3b8e3f0578337109005532f51',1,'Histogram']]],
   ['_7emachine',['~Machine',['../classeclipse_1_1Machine.html#ae7c30f438e7bf6701f245a17123797ee',1,'eclipse::Machine']]],
   ['_7emessage',['~Message',['../structeclipse_1_1messages_1_1Message.html#a6dd95626bf676965b11791e9d00651b8',1,'eclipse::messages::Message']]],
-  ['_7emetadata',['~metadata',['../classvelox_1_1model_1_1metadata.html#a5f75537a1b019cf7a50eee91ca94f6aa',1,'velox::model::metadata']]],
   ['_7enetobserver',['~NetObserver',['../structeclipse_1_1network_1_1NetObserver.html#a496c0eee52d1fb74ecfd6d59bed625d8',1,'eclipse::network::NetObserver']]],
   ['_7enode',['~Node',['../classeclipse_1_1Node.html#a7f78fdb784e042a24d7eafc3e63bf6cc',1,'eclipse::Node']]],
   ['_7erouter',['~Router',['../group__RouterDecorator.html#gac8c2267d51e4d986c26117f206001d57',1,'eclipse::Router']]],

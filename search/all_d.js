@@ -7,14 +7,17 @@ var searchData=
   ['network',['network',['../classeclipse_1_1Node.html#a390adb488ec039d19851fd9e0b6af68c',1,'eclipse::Node']]],
   ['network_5fsize',['network_size',['../classeclipse_1_1BlockNode.html#a03a7536306794f7a6c5191fb9d5bfe77',1,'eclipse::BlockNode::network_size()'],['../classeclipse_1_1FileLeader.html#a3ff99f81829957fdcfe56ee19cc5e342',1,'eclipse::FileLeader::network_size()']]],
   ['node',['Node',['../classeclipse_1_1Node.html',1,'eclipse']]],
-  ['node',['node',['../structeclipse_1_1BlockMetadata.html#aa317f5faee28f53d4565cdbf64b69a0e',1,'eclipse::BlockMetadata::node()'],['../structeclipse_1_1messages_1_1BlockInfo.html#ae94ed8d8e8af91794a60e486f0dc5e01',1,'eclipse::messages::BlockInfo::node()'],['../structeclipse_1_1messages_1_1MetaData.html#a4f6fb1313ab35e84e8b13f560c652b35',1,'eclipse::messages::MetaData::node()'],['../classeclipse_1_1Node.html#a6d2036c4be1c1563526930549e2a31a3',1,'eclipse::Node::Node()']]],
+  ['node',['Node',['../classeclipse_1_1Node.html#a6d2036c4be1c1563526930549e2a31a3',1,'eclipse::Node::Node()'],['../structeclipse_1_1BlockMetadata.html#aa317f5faee28f53d4565cdbf64b69a0e',1,'eclipse::BlockMetadata::node()'],['../structeclipse_1_1messages_1_1BlockInfo.html#ae94ed8d8e8af91794a60e486f0dc5e01',1,'eclipse::messages::BlockInfo::node()'],['../structeclipse_1_1messages_1_1MetaData.html#a4f6fb1313ab35e84e8b13f560c652b35',1,'eclipse::messages::MetaData::node()']]],
   ['node_2ecc',['node.cc',['../node_8cc.html',1,'']]],
   ['node_2ehh',['node.hh',['../node_8hh.html',1,'']]],
   ['node_5fmain_2ecc',['node_main.cc',['../node__main_8cc.html',1,'']]],
   ['nofile',['nofile',['../classSettings_1_1SettingsImpl.html#a73ed48a015d8fe014a8b0aabe17fd2b3',1,'Settings::SettingsImpl']]],
-  ['normal',['Normal',['../namespacevelox.html#a953fd49def0979defd765a3db2310dd0a960b44c579bc2f6818d2daaf9e4c16f0',1,'velox']]],
   ['notice',['notice',['../classLogger.html#a200f418426e2dc1cc14c904b4fa6a886',1,'Logger']]],
   ['num_5fblock',['num_block',['../classvelox_1_1model_1_1metadata.html#a28da8a987517d5127fb1ca3f65b4bc26',1,'velox::model::metadata::num_block()'],['../structeclipse_1_1messages_1_1FileInfo.html#a14ddcd017c63afc8054cf0d5bc4893b6',1,'eclipse::messages::FileInfo::num_block()'],['../structeclipse_1_1messages_1_1FileUpdate.html#aa9d0b561b54f5660b84a62c9a38a5cd6',1,'eclipse::messages::FileUpdate::num_block()']]],
+  ['num_5fchunks',['num_chunks',['../classvelox_1_1model_1_1metadata.html#af1fe6e38245696c40d9552b4657f875f',1,'velox::model::metadata']]],
+  ['num_5fstatic_5fblocks',['num_static_blocks',['../classvelox_1_1model_1_1metadata.html#a6b57d14048f52372942c7366f6295ce8',1,'velox::model::metadata::num_static_blocks()'],['../structeclipse_1_1messages_1_1FileDescription.html#a8d4579a2e96b87e316d7f31379af67ac',1,'eclipse::messages::FileDescription::num_static_blocks()']]],
   ['numblock',['numBlock',['../classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html#a1e9ddf87414acf7ca4bd288e1b64355e',1,'com::dicl::velox::model::Metadata']]],
-  ['numofreplications',['numOfReplications',['../classcom_1_1dicl_1_1velox_1_1Configuration.html#a8dc65d12adee01fb77f6a077c1cc9b78',1,'com::dicl::velox::Configuration']]]
+  ['numchunks',['numChunks',['../classcom_1_1dicl_1_1velox_1_1model_1_1BlockMetadata.html#a77bdad55711c076fa561445658d62bb6',1,'com.dicl.velox.model.BlockMetadata.numChunks()'],['../classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html#a7c14ced78870b009ca1f61ebea8d0b73',1,'com.dicl.velox.model.Metadata.numChunks()']]],
+  ['numofreplications',['numOfReplications',['../classcom_1_1dicl_1_1velox_1_1Configuration.html#a8dc65d12adee01fb77f6a077c1cc9b78',1,'com::dicl::velox::Configuration']]],
+  ['numstaticblocks',['numStaticBlocks',['../classcom_1_1dicl_1_1velox_1_1model_1_1Metadata.html#a9420ce6626f01faa25fed1f49ce46ec3',1,'com::dicl::velox::model::Metadata']]]
 ];

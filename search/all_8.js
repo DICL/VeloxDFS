@@ -1,7 +1,6 @@
 var searchData=
 [
   ['id',['id',['../classContext.html#a134a1f80c8256db2afdb6d6f3096e0d6',1,'Context::id()'],['../classeclipse_1_1Machine.html#a8a306c5feccd001619f436fb248beff2',1,'eclipse::Machine::id()']]],
-  ['idata',['Idata',['../namespacevelox.html#a953fd49def0979defd765a3db2310dd0a86d821ef8882b47deed115a40b07ff17',1,'velox']]],
   ['index',['index',['../classvelox_1_1model_1_1block__metadata.html#ad45a30de4b1c5d2703e39602499b835b',1,'velox::model::block_metadata::index()'],['../classcom_1_1dicl_1_1velox_1_1model_1_1BlockMetadata.html#afe3686bf785c57413e4c95e553f6d995',1,'com.dicl.velox.model.BlockMetadata.index()']]],
   ['info',['info',['../classLogger.html#a461308e8b24343b55b84a45a7a2223eb',1,'Logger::info()'],['../context__singleton_8hh.html#a52bd7bf9d5f9a1a3d6191f10cb607a51',1,'INFO():&#160;context_singleton.hh']]],
   ['init',['init',['../classContext.html#a29146137dbdb16814f4994de6c21c27f',1,'Context']]],
@@ -9,6 +8,7 @@ var searchData=
   ['initialize',['initialize',['../classHistogram.html#a3ce04eef0075e68fc69aa6c40e011e3d',1,'Histogram']]],
   ['input',['input',['../classSettings_1_1SettingsImpl.html#a681d0d97ff9956b7cf7409f5bf0a6c3d',1,'Settings::SettingsImpl::input()'],['../scheduler__python_8cc.html#a508a666821904fea6b45e2a063753d13',1,'input():&#160;scheduler_python.cc']]],
   ['insert_5ffile',['insert_file',['../classeclipse_1_1FileLeaderRouter.html#a56dc8ddb60e8af706ef53ee18d7f8439',1,'eclipse::FileLeaderRouter']]],
+  ['intended_5fblock_5fsize',['intended_block_size',['../structeclipse_1_1messages_1_1FileInfo.html#aeacb9fe59867c68c9eedefaad9dff098',1,'eclipse::messages::FileInfo']]],
   ['invoke_5fio_5freporter',['invoke_io_reporter',['../io__monitor__invoker_8cc.html#af1cb8f103a5a72d1d68429f723f0fb2a',1,'invoke_io_reporter():&#160;io_monitor_invoker.cc'],['../io__monitor__invoker_8hh.html#af1cb8f103a5a72d1d68429f723f0fb2a',1,'invoke_io_reporter():&#160;io_monitor_invoker.cc']]],
   ['io',['io',['../classContext.html#a3ef5718bf1294a860b4b5cbe1fe8fd5d',1,'Context']]],
   ['io_5fmonitor_5finvoker_2ecc',['io_monitor_invoker.cc',['../io__monitor__invoker_8cc.html',1,'']]],

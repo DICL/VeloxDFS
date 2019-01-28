@@ -39,13 +39,19 @@ digraph "/home/travis/build/DICL/VeloxDFS/src/fileleader/directory.cc"
   Node14 [label="logger.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$logger_8hh.html"];
   Node14 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node11 -> Node15 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node15 [label="boost/asio.hpp",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node15 [label="histogram.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$histogram_8hh.html"];
+  Node15 -> Node16 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node16 [label="iostream",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node15 -> Node17 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node17 [label="ctime",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node11 -> Node18 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node18 [label="boost/asio.hpp",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
   Node11 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node11 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node11 -> Node16 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node16 [label="thread",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
-  Node1 -> Node17 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node17 [label="sqlite3.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
-  Node1 -> Node18 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node18 [label="cinttypes",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node11 -> Node19 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node19 [label="thread",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node1 -> Node20 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node20 [label="sqlite3.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node1 -> Node21 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node21 [label="cinttypes",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
 }

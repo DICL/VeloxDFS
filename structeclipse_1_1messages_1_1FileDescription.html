@@ -151,6 +151,8 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a6b267ff57089751fa5c9c61e7f806319"><td class="memItemLeft" align="right" valign="top">std::vector<br class="typebreak"/>
 &lt; <a class="el" href="structeclipse_1_1logical__block__metadata.html">logical_block_metadata</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structeclipse_1_1messages_1_1FileDescription.html#a6b267ff57089751fa5c9c61e7f806319">logical_blocks</a></td></tr>
 <tr class="separator:a6b267ff57089751fa5c9c61e7f806319"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d4579a2e96b87e316d7f31379af67ac"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structeclipse_1_1messages_1_1FileDescription.html#a8d4579a2e96b87e316d7f31379af67ac">num_static_blocks</a> = 0</td></tr>
+<tr class="separator:a8d4579a2e96b87e316d7f31379af67ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_structeclipse_1_1messages_1_1FileInfo"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_structeclipse_1_1messages_1_1FileInfo')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="structeclipse_1_1messages_1_1FileInfo.html">eclipse::messages::FileInfo</a></td></tr>
 <tr class="memitem:a5329afef5d6b5e74906d29cb47de5cca inherit pub_attribs_structeclipse_1_1messages_1_1FileInfo"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structeclipse_1_1messages_1_1FileInfo.html#a5329afef5d6b5e74906d29cb47de5cca">name</a></td></tr>
 <tr class="separator:a5329afef5d6b5e74906d29cb47de5cca inherit pub_attribs_structeclipse_1_1messages_1_1FileInfo"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,6 +176,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a0e79174d1e81b62d9875515f432d8ad4 inherit pub_attribs_structeclipse_1_1messages_1_1FileInfo"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7129125d06c558fb9e277e2f06537a2e inherit pub_attribs_structeclipse_1_1messages_1_1FileInfo"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structeclipse_1_1messages_1_1FileInfo.html#a7129125d06c558fb9e277e2f06537a2e">is_input</a> = false</td></tr>
 <tr class="separator:a7129125d06c558fb9e277e2f06537a2e inherit pub_attribs_structeclipse_1_1messages_1_1FileInfo"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeacb9fe59867c68c9eedefaad9dff098 inherit pub_attribs_structeclipse_1_1messages_1_1FileInfo"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structeclipse_1_1messages_1_1FileInfo.html#aeacb9fe59867c68c9eedefaad9dff098">intended_block_size</a> = 0</td></tr>
+<tr class="separator:aeacb9fe59867c68c9eedefaad9dff098 inherit pub_attribs_structeclipse_1_1messages_1_1FileInfo"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3016b8a98daee146051ce5ea529989e2 inherit pub_attribs_structeclipse_1_1messages_1_1FileInfo"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structeclipse_1_1BlockMetadata.html">BlockMetadata</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structeclipse_1_1messages_1_1FileInfo.html#a3016b8a98daee146051ce5ea529989e2">blocks_metadata</a></td></tr>
 <tr class="separator:a3016b8a98daee146051ce5ea529989e2 inherit pub_attribs_structeclipse_1_1messages_1_1FileInfo"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_structeclipse_1_1messages_1_1Message"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_structeclipse_1_1messages_1_1Message')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="structeclipse_1_1messages_1_1Message.html">eclipse::messages::Message</a></td></tr>
@@ -332,6 +336,18 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8d4579a2e96b87e316d7f31379af67ac"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t eclipse::messages::FileDescription::num_static_blocks = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
 <li>/home/travis/build/DICL/VeloxDFS/src/messages/<a class="el" href="filedescription_8hh_source.html">filedescription.hh</a></li>
 <li>/home/travis/build/DICL/VeloxDFS/src/messages/<a class="el" href="filedescription_8cc.html">filedescription.cc</a></li>
@@ -339,7 +355,7 @@ Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Oct 14 2018 10:15:19 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 28 2019 06:02:54 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

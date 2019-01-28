@@ -7,7 +7,6 @@ var searchData=
   ['client_5fhandler_2ecc',['client_handler.cc',['../client__handler_8cc.html',1,'']]],
   ['client_5fhandler_2ehh',['client_handler.hh',['../client__handler_8hh.html',1,'']]],
   ['coding_2dstyle_2dand_2drules_2emd',['Coding-style-and-rules.md',['../Coding-style-and-rules_8md.html',1,'']]],
-  ['com_5fdicl_5fvelox_5fveloxdfs_2eh',['com_dicl_velox_VeloxDFS.h',['../com__dicl__velox__VeloxDFS_8h.html',1,'']]],
   ['compiling_2dinstalling_2emd',['Compiling-Installing.md',['../Compiling-Installing_8md.html',1,'']]],
   ['configuration_2dfile_2dreference_2emd',['Configuration-file-reference.md',['../Configuration-file-reference_8md.html',1,'']]],
   ['configuration_2ejava',['Configuration.java',['../Configuration_8java.html',1,'']]],

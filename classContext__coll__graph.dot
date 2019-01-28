@@ -2,7 +2,7 @@ digraph "Context"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{Context\n|+ io\l+ logger\l+ id\l# threads\l# work\l|+ run()\l+ join()\l+ connect()\l+ connect()\l# Context()\l# Context()\l# ~Context()\l# init()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 [label="{Context\n|+ io\l+ logger\l+ histogram\l+ id\l# threads\l# work\l|+ run()\l+ join()\l+ connect()\l+ connect()\l# Context()\l# Context()\l# ~Context()\l# init()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
   Node1 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +singleton" ,arrowhead="odiamond",fontname="Helvetica"];
   Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +settings" ,arrowhead="odiamond",fontname="Helvetica"];
   Node2 [label="{Settings\n||+ Settings()\l+ Settings()\l+ Settings()\l+ operator=()\l+ ~Settings()\l+ load()\l+ load()\l+ get()\l+ getip()\l+ get()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classSettings.html",tooltip="This is the implementation file of Settings. "];

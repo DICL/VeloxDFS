@@ -32,13 +32,15 @@ digraph "/home/travis/build/DICL/VeloxDFS/src/messages/filedescription.hh"
   Node12 -> Node13 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node13 [label="/home/travis/build\l/DICL/VeloxDFS/src/stats\l/scheduler_factory.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$scheduler__factory_8cc.html"];
   Node12 -> Node14 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node14 [label="/home/travis/build\l/DICL/VeloxDFS/src/stats\l/scheduler_multiwave.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$scheduler__multiwave_8cc.html"];
+  Node14 [label="/home/travis/build\l/DICL/VeloxDFS/src/stats\l/scheduler_lean.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$scheduler__lean_8cc.html"];
   Node12 -> Node15 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node15 [label="/home/travis/build\l/DICL/VeloxDFS/src/stats\l/scheduler_python.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$scheduler__python_8cc.html"];
+  Node15 [label="/home/travis/build\l/DICL/VeloxDFS/src/stats\l/scheduler_multiwave.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$scheduler__multiwave_8cc.html"];
   Node12 -> Node16 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node16 [label="/home/travis/build\l/DICL/VeloxDFS/src/stats\l/scheduler_score_based.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$scheduler__score__based_8cc.html"];
+  Node16 [label="/home/travis/build\l/DICL/VeloxDFS/src/stats\l/scheduler_python.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$scheduler__python_8cc.html"];
   Node12 -> Node17 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node17 [label="/home/travis/build\l/DICL/VeloxDFS/src/stats\l/scheduler_simple.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$scheduler__simple_8cc.html"];
+  Node17 [label="/home/travis/build\l/DICL/VeloxDFS/src/stats\l/scheduler_score_based.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$scheduler__score__based_8cc.html"];
   Node12 -> Node18 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node18 [label="/home/travis/build\l/DICL/VeloxDFS/src/stats\l/scheduler_vlmb.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$scheduler__vlmb_8cc.html"];
+  Node18 [label="/home/travis/build\l/DICL/VeloxDFS/src/stats\l/scheduler_simple.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$scheduler__simple_8cc.html"];
+  Node12 -> Node19 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node19 [label="/home/travis/build\l/DICL/VeloxDFS/src/stats\l/scheduler_vlmb.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$scheduler__vlmb_8cc.html"];
 }

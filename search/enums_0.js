@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['filetype',['FILETYPE',['../namespacevelox.html#a953fd49def0979defd765a3db2310dd0',1,'velox']]]
+  ['optype',['OpType',['../structeclipse_1_1messages_1_1IOoperation.html#a32aae2ef42f59505f54bb16af1baa117',1,'eclipse::messages::IOoperation']]]
 ];

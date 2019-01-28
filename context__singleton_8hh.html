@@ -123,6 +123,10 @@ Macros</h2></td></tr>
 <tr class="separator:aec1dceab670a7706fda48c3bec334038"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcf20e2ce3c8921f7e620ac057010724"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="context__singleton_8hh.html#adcf20e2ce3c8921f7e620ac057010724">GET_BOOL</a>(X)&#160;&#160;&#160;(<a class="el" href="context__singleton_8hh.html#a8fad77d883c07a1377901bbc30f82b85">GET_STR</a>(X) == &quot;true&quot; ? true : false)</td></tr>
 <tr class="separator:adcf20e2ce3c8921f7e620ac057010724"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af35b181a9b6638d0e93c2adef1ff22f9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="context__singleton_8hh.html#af35b181a9b6638d0e93c2adef1ff22f9">GET_INDEX</a>(X)&#160;&#160;&#160;context.histogram-&gt;get_index(X)</td></tr>
+<tr class="separator:af35b181a9b6638d0e93c2adef1ff22f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fc344dc840afe97d456d05e9234d0d5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="context__singleton_8hh.html#a0fc344dc840afe97d456d05e9234d0d5">GET_INDEX_IN_BOUNDARY</a>(X)&#160;&#160;&#160;context.histogram-&gt;random_within_boundaries(X)</td></tr>
+<tr class="separator:a0fc344dc840afe97d456d05e9234d0d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -192,6 +196,38 @@ Variables</h2></td></tr>
           <td class="paramtype">&#160;</td>
           <td class="paramname">X</td><td>)</td>
           <td>&#160;&#160;&#160;(<a class="el" href="context__singleton_8hh.html#a8fad77d883c07a1377901bbc30f82b85">GET_STR</a>(X) == &quot;true&quot; ? true : false)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af35b181a9b6638d0e93c2adef1ff22f9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GET_INDEX</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">X</td><td>)</td>
+          <td>&#160;&#160;&#160;context.histogram-&gt;get_index(X)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0fc344dc840afe97d456d05e9234d0d5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GET_INDEX_IN_BOUNDARY</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">X</td><td>)</td>
+          <td>&#160;&#160;&#160;context.histogram-&gt;random_within_boundaries(X)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -340,7 +376,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Oct 14 2018 10:15:19 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 28 2019 06:02:54 for VeloxDFS by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
