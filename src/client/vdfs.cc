@@ -328,3 +328,8 @@ bool vdfs::rename(std::string src, std::string dst) {
   return dfs->rename(src, dst);
 }
 // }}}
+// read_chunk {{{
+uint32_t vdfs::read_chunk(std::string name, std::string host, char *buf, uint64_t boff, uint64_t off, uint64_t len) {
+  return dfs->read_chunk(name, host, buf, boff, off, len);
+}
+// }}}

@@ -5,6 +5,10 @@
 #include <string>
 #include <vector>
 #include <stdint.h>
+#define VELOX_LOGICAL_DISABLE  0
+#define VELOX_LOGICAL_OUTPUT   1
+#define VELOX_LOGICAL_NOOP     2
+#define VELOX_LOGICAL_GENERATE 3
 
 namespace velox {
 
@@ -66,9 +70,10 @@ class DFS {
     //!
     //! @param file_name   File to peform the operation.
     //! @param is_binary   Whether to broadcast the file to all the nodes.
+    //! @param block_size  Intended block size (Overrides .eclipse.json blocksize)
     //! @retval 0          SUCCESS
     //! @retval 1          FAILURE 
-    int upload(std::string file_name, bool is_binary);
+    int upload(std::string file_name, bool is_binary, uint64_t block_size = 0);
 
     //! Download a remote file to your current local directory.
     //!
@@ -95,14 +100,14 @@ class DFS {
 
     void file_metadata_append(std::string, size_t, model::metadata&);
 
-    //! @deprecated
-    int pget(vec_str);
+    //! Dump all the metadata for the give file
+    std::string dump_metadata(std::string& fname);
 
-    //! @deprecated
-    int update(vec_str);
+    //! Read a chunk directly
+    uint64_t read_chunk(std::string& fname, std::string host, char* buf, 
+        uint64_t buffer_offset, uint64_t off, uint64_t len);
 
   private:
-    uint64_t BLOCK_SIZE;
     uint32_t NUM_NODES;
     int replica;
     std::vector<std::string> nodes;

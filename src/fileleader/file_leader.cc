@@ -55,13 +55,7 @@ unique_ptr<Message> FileLeader::file_insert(messages::FileInfo* f) {
 // file_insert_confirm {{{
 bool FileLeader::file_insert_confirm(messages::FileInfo* f) {
   directory.file_table_confirm_upload(f->name, f->num_block);
-
-  for (auto& metadata : f->blocks_metadata) {
-    directory.block_table_insert(metadata);
-  }
-
-  //replicate_metadata();
-
+  directory.block_table_insert_all(f->blocks_metadata);
   return true;
 }
 // }}}
@@ -71,7 +65,7 @@ bool FileLeader::file_update(messages::FileUpdate* f) {
     DEBUG("[file_update] name: %s, size: %lu, num_block: %d", f->name.c_str(), f->size, f->num_block);
 
     if (f->is_append) {
-      BlockInfo bi;
+      BlockMetadata bi;
       directory.select_last_block_metadata(f->name, &bi);
       int last_seq = bi.seq;
 
@@ -123,15 +117,23 @@ bool FileLeader::file_delete(messages::FileDel* f) {
 // }}}
 // file_request {{{
 shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
-  INFO("PROCESSING FILE INFORMARTION REQUEST [F:%s]", m->name.c_str());
   using namespace std;
+  using namespace std::chrono;
   string file_name = m->name;
 
-  FileInfo fi;
-  fi.num_block = 0;
   std::shared_ptr<FileDescription> fd = make_shared<FileDescription>();
   fd->name = file_name;
 
+  // Early exit for tasks
+  auto file_cached_it = current_file_arrangements.find(file_name);
+  if (m->generate == false and file_cached_it != current_file_arrangements.end()) {
+    fd = file_cached_it->second;
+    return fd;
+  }
+
+  INFO("PROCESSING FILE INFORMARTION REQUEST [F:%s]", m->name.c_str());
+  FileInfo fi;
+  fi.num_block = 0;
   directory.file_table_select(file_name, &fi);
   fd->uploading = fi.uploading;
 
@@ -143,55 +145,29 @@ shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
   fd->size = fi.size;
   fd->is_input = fi.is_input;
   fd->num_block = fd->n_lblock = fi.num_block;
+  fd->intended_block_size = fi.intended_block_size;
+
+  std::vector<BlockMetadata> blocks;
+  directory.block_table_select(file_name, blocks);
+  for (auto& block : blocks) {
+    fd->blocks.push_back(block.name);
+    fd->hash_keys.push_back(block.hash_key);
+    fd->block_size.push_back(block.size);
+    fd->block_hosts.push_back(block.node);
+  }
 
 #ifdef LOGICAL_BLOCKS_FEATURE
-  if (fd->is_input == true) {
-    bool previously_arranged = 
-      (current_file_arrangements.find(file_name) != current_file_arrangements.end());
+  if (fd->is_input == true and m->generate == true )  {
+    auto beg_clock = high_resolution_clock::now();
 
-    if (m->generate == true or (!previously_arranged and m->generate == false)) {
+    find_best_arrangement(fd.get());
+    current_file_arrangements[file_name] = fd;
 
-      std::vector<BlockInfo> blocks;
-      directory.block_table_select(file_name, blocks);
-      for (auto& block : blocks) {
-        fd->blocks.push_back(block.name);
-        fd->hash_keys.push_back(block.hash_key);
-        fd->block_size.push_back(block.size);
-        fd->block_hosts.push_back(block.node);
-      }
-
-      find_best_arrangement(fd.get());
-
-      auto it = current_file_arrangements.find(file_name);
-      if (it != current_file_arrangements.end()) {
-        current_file_arrangements.erase(it);
-      }
-
-      // Save the arrangment state
-      current_file_arrangements.insert({file_name, fd});
-
-    } else {
-      auto it = current_file_arrangements.find(file_name);
-      if (it != current_file_arrangements.end()) {
-        fd = it->second;
-      }
-    }
-
-    return fd;
-
+    auto end_clock = high_resolution_clock::now();
+    auto time_elapsed = duration_cast<microseconds>(end_clock - beg_clock).count();
+    INFO("FILELEADER TIME TT:%ld", time_elapsed);
   } 
 #endif
-
-  int num_blocks = fi.num_block;
-  for (int i = 0; i < num_blocks; i++) {
-    BlockInfo bi;
-    directory.block_table_select_by_index(file_name, i, &bi);
-    string block_name = bi.name;
-    fd->blocks.push_back(block_name);
-    fd->hash_keys.push_back(bi.hash_key);
-    fd->block_size.push_back(bi.size);
-    fd->block_hosts.push_back(bi.node);
-  }
 
   return fd;
 }

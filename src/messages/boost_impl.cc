@@ -33,6 +33,7 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.blocks_metadata);
     ar & BOOST_SERIALIZATION_NVP(c.n_lblock);
     ar & BOOST_SERIALIZATION_NVP(c.is_input);
+    ar & BOOST_SERIALIZATION_NVP(c.intended_block_size);
   }
 
 template <typename Archive>
@@ -100,6 +101,7 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.block_size);
     ar & BOOST_SERIALIZATION_NVP(c.block_hosts);
     ar & BOOST_SERIALIZATION_NVP(c.logical_blocks);
+    ar & BOOST_SERIALIZATION_NVP(c.num_static_blocks);
   }
 
 template <typename Archive>

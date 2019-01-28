@@ -24,6 +24,7 @@ struct FileInfo: public Message {
   uint32_t job_id = 0;
   int uploading = 1;
   bool is_input = false;
+  uint64_t intended_block_size = 0;
 
   std::vector<BlockMetadata> blocks_metadata;
 };

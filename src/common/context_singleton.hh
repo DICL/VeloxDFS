@@ -13,3 +13,5 @@ extern Context& context;
 #define GET_STR(X) context.settings.get<std::string>(X)
 #define GET_VEC_STR(X) context.settings.get<std::vector<std::string>>(X)
 #define GET_BOOL(X) (GET_STR(X) == "true" ? true : false)
+#define GET_INDEX(X) context.histogram->get_index(X)
+#define GET_INDEX_IN_BOUNDARY(X) context.histogram->random_within_boundaries(X)

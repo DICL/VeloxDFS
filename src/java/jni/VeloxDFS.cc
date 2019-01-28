@@ -1,4 +1,4 @@
-#include "com_dicl_velox_VeloxDFS.h"
+#include <jni.h>
 
 #include "../../client/vdfs.hh"
 #include "../../client/model/metadata.hh"
@@ -11,6 +11,10 @@ using namespace std;
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJJ
+  (JNIEnv* env, jobject obj, jlong fid, jlong pos, jbyteArray buf, jlong off, jlong len, 
+  jlong block_size);
 
 jobject convert_jmetadata(JNIEnv* env, jobject& obj, velox::model::metadata& md);
 
@@ -255,7 +259,49 @@ jobject convert_jmetadata(JNIEnv* env, jobject& obj, velox::model::metadata& md)
 
       // size
       jfieldID size_field_id = env->GetFieldID(velox_model_BlockMetadata, "size", "J");
-      env->SetLongField(data, size_field_id, (jlong)md.block_size[i]);
+      env->SetLongField(data, size_field_id, (jlong)bdata.size);
+
+      uint32_t num_chunks = bdata.chunks.size();
+
+      // size
+      jfieldID chunk_size_field_id = env->GetFieldID(velox_model_BlockMetadata, "numChunks", "J");
+      env->SetLongField(data, chunk_size_field_id, (jlong)num_chunks);
+
+      jobjectArray chunk_array = (jobjectArray)env->NewObjectArray(num_chunks, velox_model_BlockMetadata, NULL);
+
+      for (uint32_t j = 0; j < num_chunks; j++) {
+        jobject jchunk = env->NewObject(velox_model_BlockMetadata, velox_model_BlockMetadata_init);
+        velox::model::block_metadata& chunk = bdata.chunks[j];
+
+        // name
+        jfieldID name_field_id = env->GetFieldID(velox_model_BlockMetadata, "name", "Ljava/lang/String;");
+        jstring name = env->NewStringUTF(chunk.name.c_str());
+        env->SetObjectField(jchunk, name_field_id, name);
+        env->DeleteLocalRef(name);
+
+        // host
+        jfieldID host_field_id = env->GetFieldID(velox_model_BlockMetadata, "host", "Ljava/lang/String;");
+        jstring host = env->NewStringUTF(chunk.host.c_str());
+        env->SetObjectField(jchunk, host_field_id, host);
+        env->DeleteLocalRef(host);
+
+        // index
+        jfieldID index_field_id = env->GetFieldID(velox_model_BlockMetadata, "index", "I");
+        env->SetIntField(jchunk, index_field_id, (jint)chunk.index);
+
+        // size
+        jfieldID size_field_id = env->GetFieldID(velox_model_BlockMetadata, "size", "J");
+        env->SetLongField(jchunk, size_field_id, (jlong)chunk.size);
+
+        env->SetObjectArrayElement(chunk_array, (jsize)j, jchunk);
+        env->DeleteLocalRef(jchunk);
+      }
+
+
+      jfieldID chunks_field_id = env->GetFieldID(velox_model_BlockMetadata, "chunks", "[Lcom/dicl/velox/model/BlockMetadata;");
+
+      env->SetObjectField(data, chunks_field_id, chunk_array);
+      env->DeleteLocalRef(chunk_array);
 
       env->SetObjectArrayElement(block_data, (jsize)i, data);
       env->DeleteLocalRef(data);
@@ -263,9 +309,9 @@ jobject convert_jmetadata(JNIEnv* env, jobject& obj, velox::model::metadata& md)
   }
 
   jclass MetadataClass = env->FindClass("Lcom/dicl/velox/model/Metadata;");
-  jmethodID init = env->GetMethodID(MetadataClass, "<init>", "(Ljava/lang/String;JJIII[Lcom/dicl/velox/model/BlockMetadata;)V");
+  jmethodID init = env->GetMethodID(MetadataClass, "<init>", "(Ljava/lang/String;JJIIIII[Lcom/dicl/velox/model/BlockMetadata;)V");
   jobject ret = env->NewObject(MetadataClass, init,
-    file_name, md.hash_key, md.size, md.num_block, md.type, md.replica, block_data
+    file_name, md.hash_key, md.size, md.num_block, md.type, md.replica, md.num_chunks, md.num_static_blocks, block_data
   );
   
   env->DeleteLocalRef(file_name);
@@ -291,6 +337,39 @@ JNIEXPORT jboolean JNICALL Java_com_dicl_velox_VeloxDFS_rename
   return ret;
 }
 
+/*
+ * Class:     com_dicl_velox_VeloxDFS
+ * Method:    readChunk
+ * Signature: (Ljava/lang/String;Ljava/lang/String;[BJJJ)J
+ * fid : File descriptor
+ * pos : position to read in a file
+ * buf : buffer to store read data
+ * off : offset to read in the buffer
+ * len : length to read
+ */
+JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_readChunk
+  (JNIEnv* env, jobject obj, jstring chunk_name, jstring host, jbyteArray buf, jlong boff, jlong off, jlong len) {
+  velox::vdfs* vdfs = get_vdfs(env, obj);
+
+  const char* chunk_name_ = env->GetStringUTFChars(chunk_name, 0);
+  const char* host_ = env->GetStringUTFChars(host, 0);
+
+  char* c_buf = new char [len+1];
+
+  bzero(c_buf, len+1);
+
+  int32_t ret = vdfs->read_chunk(chunk_name_, host_, c_buf, (uint64_t)boff, (uint64_t)off, (uint64_t)len);
+  int32_t read_bytes = ret;
+
+  if (ret < 0)
+    read_bytes = 0;
+
+  env->SetByteArrayRegion(buf, boff, read_bytes, (jbyte*)c_buf);
+
+  delete[] c_buf;
+
+  return ret;
+}
 #ifdef __cplusplus
 }
 #endif

@@ -37,7 +37,7 @@ int main (int argc, char ** argv) {
   external_net->establish();
 
 #ifdef LOGICAL_BLOCKS_FEATURE
-  invoke_io_reporter();
+//  invoke_io_reporter();
 #endif
 
   context.run();
