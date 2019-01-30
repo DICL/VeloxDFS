@@ -24,7 +24,7 @@ class scheduler {
     Histogram* boundaries;
 };
 
-std::shared_ptr<eclipse::logical_blocks_schedulers::scheduler> 
+std::shared_ptr<eclipse::logical_blocks_schedulers::scheduler>
     scheduler_factory(std::string, Histogram*, SCHEDULER_OPTS = SCHEDULER_OPTS());
 
 class scheduler_simple: public scheduler{
@@ -48,6 +48,11 @@ class scheduler_vlmb: public scheduler{
 };
 
 class scheduler_multiwave: public scheduler{
+  public:
+    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;
+};
+
+class scheduler_lean: public scheduler{
   public:
     virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;
 };

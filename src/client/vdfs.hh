@@ -63,6 +63,7 @@ class vdfs {
     uint32_t write(long, const char*, uint32_t, uint32_t);
     uint32_t write(long, const char*, uint32_t, uint32_t, uint64_t);
     uint32_t read(long, char*, uint64_t, uint64_t);
+    uint32_t read_chunk(std::string name, std::string host, char *buf, uint64_t boff, uint64_t , uint64_t);
 
     model::metadata get_metadata(long fid, int type);
 

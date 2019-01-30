@@ -1,112 +1,127 @@
 #include "cli_driver.hh"
 #include "../common/context_singleton.hh"
-#include "../common/histogram.hh"
 #include <vector>
 #include <iostream>
 #include <iterator>
 #include <iomanip>
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/classification.hpp>
+#include <unistd.h>
 
 using vec_str = std::vector<std::string>;
 using namespace std;
 using namespace velox;
 
-const string help = "veloxdfs [options] <command> <FILES...>\n\n"
-"Commands\n"
-"========\n"
-"\tput\t\t\tUpload a file\n"
-"\tget\t\t\tDownload a file\n"
-"\tremove\t\t\tRemove a file\n"
-"\tcat\t\t\tDisplay a file's content\n"
-"\tshow\t\t\tShow block location of a file\n"
-"\tls\t\t\tList all the files\n"
-"\tformat\t\t\tFormat storage and metadata\n"
-"\n"
-"Options\n"
-"=======\n"
-"\t-h, --help\t\tPrint help\n"
-"\t-v, --verbose\t\tEnable debugging messages\n"
-;
+const string help = R"(
+VELOXDFS (VELOX File System CLI client controler)
+Usage: veloxdfs [options] <ACTIONS> FILE
+ACTIONS
+    put <FILE>               Upload a file
+    get <FILE>               Download a file
+    rm <FILE>                Remove a file
+    cat <FILE>               Display a file's content
+    show <FILE>              Show block location of a file
+    ls -H|-g|-o [FILE]       List all the files
+    format                   Format storage and metadata
+    rename <FILE1> <FILE2>   Rename file 
+  
+OPTIONS
+    -H           Human,      Show Human readable sizes, MiB|GiB...
+    -b <size>    BlockSize,  Set intended size of block for uploading file
+    -g           Generate,   Generate logical block distribution
+    -o           Output,     Output current logical block distribution
+    -h           Help,       Print this text.
+    -v           Version,    Print version
+
+
+Data Intensive Computing Lab at <SKKU/UNIST>, ROK. ver:)" + string(PACKAGE_VERSION) + " Builded at: " + string(__DATE__);
 
 
 cli_driver::cli_driver() { }
 
 // parse_args {{{
 bool cli_driver::parse_args (int argc, char** argv) {
-  if (argc < 2) {
-    cerr << help << endl;
-    return true;
-  }
+  try {
 
-  string command = argv[1];
+    // PARSE OPTIONS
+    bool human_readable     = false;
+    bool scheduler_generate = false;
+    bool scheduler_output   = false;
+    uint64_t block_size     = 0;
 
-  if (command == "-h" or command == "--help") {
-    cerr << help << endl;
-    return true;
-  }
-
-  if (command == "ls" or command == "format") {
-    if (command == "ls") { 
-
-      bool is_human_readable = false;
-      if (argc > 2 && argv[2] == string("-h")) {
-        is_human_readable = true;
-
+    int c = 0;
+    while ((c = getopt(argc, argv, "hHogb:v")) != -1) {
+      switch (c) {
+        case 'H': human_readable = true; break;
+        case 'h': cout << help << endl; exit(EXIT_SUCCESS); break;
+        case 'o': scheduler_output = true; break;
+        case 'g': scheduler_generate = true; break;
+        case 'b': block_size = atoll(optarg); break;
+        case 'v': cout << "VERSION: " << PACKAGE_VERSION << endl; exit(EXIT_SUCCESS); break;
       }
-      
-      if (argc > 2 && argv[2] == string("-o")) {
-        file_show_optimized(argv[3], 2);
-        return true;
+    }
 
+    // PARSE ACTIONS
+    if (optind < argc) {
+      vector<char*> args (argv, argv + argc);
+      string cmd = args.at(optind);
+      optind++;
+
+      try {
+        if (cmd == "put") {
+          file_upload(args.at(optind), block_size);
+
+        } else if (cmd == "get") {
+          file_download(args.at(optind));
+
+        } else if (cmd == "rm") {
+          file_remove(args.at(optind));
+
+        } else if (cmd == "ls") {
+
+          if (scheduler_output)
+            file_show_optimized(args.at(optind), 1);
+
+          else if (scheduler_generate)
+            file_show_optimized(args.at(optind), 3);
+
+          else
+            list(human_readable);
+
+        } else if (cmd == "cat") {
+          file_cat(args.at(optind));
+
+        } else if (cmd == "show") {
+          file_show(args.at(optind));
+
+        } else if (cmd == "format") {
+          format();
+
+        } else if (cmd == "rename") {
+          file_rename(args.at(optind), argv[optind+1]);
+
+        } else if (cmd == "attr") {
+          attributes(args.at(optind));
+
+        } else {
+          throw(std::invalid_argument("ERROR: <ACTION> = <" + string(cmd) +">  is not supported"));
+        }
+      } catch (std::out_of_range& e) {
+        throw(std::invalid_argument("ERROR: <ACTION>'s argument missing or misplaced"));
       }
-
-      if (argc > 2 && argv[2] == string("-g")) {
-        file_show_optimized(argv[3], 1);
-        return true;
-      }
-
-      list(is_human_readable);
-    } else format();
-   
-    return true;
-  }
-
-  vec_str files (argv + 2, argv + argc);
-
-  if(command == "rename") {
-    file_rename(files[0], files[1]);
-    return true;
-  }
-
-  for (auto& file : files) {
-    if (command == "put") {
-      file_upload(file);
-
-    } else if (command == "get") {
-      file_download(file);
-
-    } else if (command == "cat") {
-      file_cat(file);
-
-    } else if (command == "show") {
-      file_show(file);
-
-    } else if (command == "remove") {
-      file_remove(file);
 
     } else {
-      cerr << "[ERR] Unknown operation" << endl;
-      cout << help << endl;
+      throw(std::invalid_argument("ERROR: <ACTION> not specified"));
     }
-  }
 
+  } catch (std::invalid_argument& e ) {
+    cerr << e.what() << endl;
+    cerr << help << endl;
+  }
   return true;
 }
 // }}}
 // file_upload {{{
-void cli_driver::file_upload (std::string file) {
-  dfs.upload(file, false);
+void cli_driver::file_upload (std::string file, uint64_t block_size) {
+  dfs.upload(file, false, block_size);
 }
 // }}}
 // file_download {{{
@@ -128,8 +143,6 @@ void cli_driver::file_remove (std::string file) {
 // file_show {{{
 void cli_driver::file_show (std::string file) {
   vec_str nodes = GET_VEC_STR("network.nodes");
-  Histogram boundaries(nodes.size(), 100);
-  boundaries.initialize();
 
   model::metadata md = dfs.get_metadata(file);
   cout << file << endl;
@@ -137,7 +150,7 @@ void cli_driver::file_show (std::string file) {
   int block_seq = 0;
   for (auto block_name : md.blocks) {
     uint32_t hash_key = md.hash_keys[block_seq++]; 
-    int which_node = boundaries.get_index(hash_key);
+    int which_node = GET_INDEX(hash_key);
     int tmp_node;
     for (int i=0; i<(int)md.replica; i++) {
       if (i%2 == 1) {
@@ -161,8 +174,6 @@ void cli_driver::file_show_optimized(std::string file, int type) {
 
 #else
   vec_str nodes = GET_VEC_STR("network.nodes");
-  Histogram boundaries(nodes.size(), 100);
-  boundaries.initialize();
 
   cout << right 
     << setw(25) << right << "FileName" 
@@ -183,7 +194,7 @@ void cli_driver::file_show_optimized(std::string file, int type) {
       << setw(20) << md.size
       << setw(45) << md.block_data[i].name
       << setw(14) << md.block_data[i].size
-      << setw(14) << md.block_data[i].chunks_path.size()
+      << setw(14) << md.block_data[i].chunks.size()
       << setw(14) << md.block_data[i].host
       << endl;
   } 
@@ -209,18 +220,18 @@ void cli_driver::list (bool human_readable) {
       return (a.name < b.name);
       });
   cout 
-    << setw(25) << "FileName" 
-    << setw(14) << "Hash Key"
-    << setw(14) << "Size"
-    << setw(8)  << "Blocks"
-    << setw(14) << "Host"
+    << setw(30) << "FileName" 
+    << setw(15) << "Hash Key"
+    << setw(20) << "Size"
+    << setw(10)  << "Blocks"
+    << setw(15) << "Host"
     << setw(5)  << "Repl"
-    << endl << string(80,'-') << endl;
+    << endl << string(95,'-') << endl;
 
   for (auto& md: metadatas) {
     cout 
-      << setw(25) << md.name
-      << setw(14) << md.hash_key;
+      << setw(30) << md.name.substr(0, 30)
+      << setw(15) << md.hash_key;
     if (human_readable) {
       float hsize = 0;
       int tabsize = 12;
@@ -248,14 +259,14 @@ void cli_driver::list (bool human_readable) {
         unit = "PB";
       }
       cout << fixed;
-      cout << setw(tabsize) << hsize << unit;
+      cout << setw(20) << (to_string(hsize) + unit);
     } else {
-      cout << setw(14) << md.size;
+      cout << setw(20) << md.size;
     }
 
     cout
-      << setw(8) << md.num_block
-      << setw(14) << nodes[md.hash_key % nodes.size()]
+      << setw(10) << md.num_block
+      << setw(15) << nodes[md.hash_key % nodes.size()]
       << setw(5) << md.replica
       << endl;
   }
@@ -271,4 +282,8 @@ void cli_driver::file_rename(std::string src, std::string dst) {
   dfs.rename(src, dst);
 }
 // }}}
-
+// attributes {{{
+void cli_driver::attributes(std::string file) {
+  cout << dfs.dump_metadata(file) << endl;
+}
+// }}}

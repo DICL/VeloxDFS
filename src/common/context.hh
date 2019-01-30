@@ -1,6 +1,7 @@
 #pragma once
 #include "settings.hh"
 #include "logger.hh"
+#include "histogram.hh"
 
 #include <boost/asio.hpp>
 #include <string>
@@ -13,6 +14,7 @@ class Context {
     std::unique_ptr<Logger, decltype(&Logger::disconnect)>
       logger {nullptr, Logger::disconnect};
     Settings settings;
+    std::unique_ptr<Histogram> histogram;
     int id;
 
     void run ();

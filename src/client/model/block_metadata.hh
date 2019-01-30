@@ -14,38 +14,7 @@ namespace velox {
       std::string host;
       int index;
       std::string file_name;
-      std::vector<std::string> chunks_path;
-
-      // TODO: information about replicas
-      //int num_replicas;
-      //std::vector<std::string> replica_hosts;
-      //
-      
-      block_metadata() = default;
-      
-      block_metadata(const block_metadata& that) {
-        this->name = that.name;
-        this->size = that.size;
-        this->host = that.host;
-        this->index = that.index;
-        this->file_name = that.file_name;
-        for(auto path : that.chunks_path) {
-          this->chunks_path.push_back(path);
-        }
-      };
-
-      block_metadata& operator=(const block_metadata& rhs) {
-        this->name = rhs.name;
-        this->size = rhs.size;
-        this->host = rhs.host;
-        this->index = rhs.index;
-        this->file_name = rhs.file_name;
-        for(auto path : rhs.chunks_path) {
-          this->chunks_path.push_back(path);
-        }
-
-        return *this;
-      };
+      std::vector<block_metadata> chunks;
     };
   }
 }

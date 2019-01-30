@@ -3,7 +3,7 @@
 case "$1" in
   -allbut)
     shift
-    veloxdfs ls | cut -d ' ' -f 1 | grep -v "$*" | xargs -n1 veloxdfs remove
+    veloxdfs ls | awk '{ print $1 }' | grep -v "$*" | xargs -n1 veloxdfs rm
     ;;
 
   *) veloxdfs rm "$*"

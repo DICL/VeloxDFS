@@ -20,13 +20,14 @@ static int file_callback(void *file_info, int argc, char **argv, char **azColNam
   file->type          = atoi(argv[i++]);
   file->replica       = atoi(argv[i++]);
   file->uploading     = atoi(argv[i++]);
-  file->is_input      = atoi(argv[i]);
+  file->is_input      = atoi(argv[i++]);
+  file->intended_block_size = atoi(argv[i]);
   return 0;
 }
 
 static int block_callback(void *block_info, int argc, char **argv, char **azColName) {
   int i = 0;
-  auto block = reinterpret_cast<BlockInfo*>(block_info);
+  auto block = reinterpret_cast<BlockMetadata*>(block_info);
   block->name         = argv[i++];
   block->file_name    = argv[i++];
   block->seq          = atoi(argv[i++]);
@@ -41,7 +42,7 @@ static int block_callback(void *block_info, int argc, char **argv, char **azColN
   i++;
   block->is_committed = argv[i] ? atoi(argv[i]) : 0;
   return 0;
-} 
+}
 
 
 static int file_list_callback(void *list, int argc, char **argv, char **azColName) {
@@ -56,16 +57,17 @@ static int file_list_callback(void *list, int argc, char **argv, char **azColNam
     tmp_file.type      = atoi(argv[i++]);
     tmp_file.replica   = atoi(argv[i++]);
     tmp_file.uploading = atoi(argv[i++]);
-    tmp_file.is_input  = atoi(argv[i]);
+    tmp_file.is_input  = atoi(argv[i++]);
+    tmp_file.intended_block_size = atoi(argv[i]);
     file_list->push_back(tmp_file);
   }
   return 0;
 }
 
 static int block_list_callback(void *list, int argc, char **argv, char **azColName) {
-  auto block_list = reinterpret_cast<vector<BlockInfo>*>(list);
+  auto block_list = reinterpret_cast<vector<BlockMetadata>*>(list);
   for (int i=0; i<argc; i++) {
-    BlockInfo tmp_block;
+    BlockMetadata tmp_block;
     tmp_block.name      = argv[i++];
     tmp_block.file_name = atoi(argv[i++]);
     tmp_block.seq       = atoi(argv[i++]);
@@ -94,7 +96,7 @@ static sqlite3* open(string path) {
   sqlite3* db = NULL;
 
   int rc;
-  if ((rc = sqlite3_open_v2(path.c_str(), &db, 
+  if ((rc = sqlite3_open_v2(path.c_str(), &db,
           SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL)) != SQLITE_OK) {
     ERROR("Can't open database: %i", rc);
   } else {
@@ -150,6 +152,7 @@ void Directory::create_tables() {
       replica    INT   NOT NULL, \
       uploading  INT   NOT NULL, \
       is_input   INT   NOT NULL, \
+      intended_block_size INT   NOT NULL, \
       PRIMARY KEY (name));"); 
 
   if (query_exec_simple(sql))
@@ -179,8 +182,8 @@ void Directory::file_table_insert (FileInfo &file_info) {
   char sql[DEFAULT_QUERY_SIZE];
   
   sprintf(sql, "INSERT INTO file_table (\
-    name, hash_key, size, num_block, n_lblock, type, replica, uploading, is_input)\
-    VALUES('%s', %" PRIu32 ", %" PRIu64 ", %u, %u, %u, %u, %u, %u);",
+    name, hash_key, size, num_block, n_lblock, type, replica, uploading, is_input, intended_block_size)\
+    VALUES('%s', %" PRIu32 ", %" PRIu64 ", %u, %u, %u, %u, %u, %u, %" PRIu64 ");",
       file_info.name.c_str(),
       file_info.hash_key,
       file_info.size,
@@ -189,7 +192,8 @@ void Directory::file_table_insert (FileInfo &file_info) {
       file_info.type,
       file_info.replica,
       file_info.uploading,
-      file_info.is_input);
+      file_info.is_input,
+      file_info.intended_block_size);
 
   if (query_exec_simple(sql))
     DEBUG("file_metadata inserted successfully");
@@ -278,8 +282,47 @@ void Directory::block_table_insert(BlockMetadata& metadata) {
     DEBUG("block_metadata inserted successfully");
 }
 // }}}
+// block_table_insert_all {{{
+void Directory::block_table_insert_all(std::vector<BlockMetadata>& metadata) {
+  char *zErrMsg = nullptr;
+  sqlite3* db = nullptr;
+  sqlite3_stmt * stmt;
+  const char * tail = 0;
+  db = open(path);
+
+  char sql[DEFAULT_QUERY_SIZE];
+  sprintf(sql, "INSERT OR REPLACE INTO block_table VALUES (@NAME, @FNAME, @SEQ, @H , @SZ , @TYPE, @REP, @NODE, @LNODE, @RNODE, @COM);");
+  sqlite3_prepare_v2(db,  sql, DEFAULT_QUERY_SIZE, &stmt, &tail);
+
+  sqlite3_exec(db, "BEGIN TRANSACTION", NULL, NULL, &zErrMsg);
+
+  for (auto& block : metadata) {
+    sqlite3_bind_text  (stmt, 1, block.name.c_str()     , -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text  (stmt, 2, block.file_name.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int   (stmt, 3, block.seq);
+    sqlite3_bind_int64 (stmt, 4, block.hash_key);
+    sqlite3_bind_int64 (stmt, 5, block.size);
+    sqlite3_bind_int   (stmt, 6, block.type);
+    sqlite3_bind_int   (stmt, 7, block.replica);
+    sqlite3_bind_text  (stmt, 8, block.node.c_str()     , -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text  (stmt, 9, block.l_node.c_str()   , -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text  (stmt,10, block.r_node.c_str()   , -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int   (stmt,11, block.is_committed);
+
+    sqlite3_step(stmt);        
+
+    sqlite3_clear_bindings(stmt);
+    sqlite3_reset(stmt);
+  }
+
+  sqlite3_exec(db, "END TRANSACTION", NULL, NULL, &zErrMsg);
+
+  sqlite3_finalize(stmt);
+  sqlite3_close(db);
+}
+// }}}
 // block_table_select {{{
-void Directory::block_table_select(string file_name, std::vector<BlockInfo>& blocks) {
+void Directory::block_table_select(string file_name, std::vector<BlockMetadata>& blocks) {
   char sql[DEFAULT_QUERY_SIZE];
 
   sprintf(sql, "SELECT * from block_table where (file_name='%s');", file_name.c_str());
@@ -288,7 +331,7 @@ void Directory::block_table_select(string file_name, std::vector<BlockInfo>& blo
 } 
 // }}}
 // block_table_select_by_index {{{
-void Directory::block_table_select_by_index(string file_name, unsigned int block_seq, BlockInfo *block_info) {
+void Directory::block_table_select_by_index(string file_name, unsigned int block_seq, BlockMetadata *block_info) {
   char sql[DEFAULT_QUERY_SIZE];
 
   sprintf(sql, "SELECT * from block_table where (file_name='%s') and \
@@ -298,7 +341,7 @@ void Directory::block_table_select_by_index(string file_name, unsigned int block
 } 
 // }}}
 // block_table_select_all {{{
-void Directory::block_table_select_all(vector<BlockInfo> &block_info) {
+void Directory::block_table_select_all(vector<BlockMetadata> &block_info) {
   char sql[DEFAULT_QUERY_SIZE];
 
   sprintf(sql, "SELECT * from block_table;");
@@ -337,7 +380,7 @@ void Directory::block_table_delete_all(string file_name) {
 // }}}
 // select_last_block_metadata {{{
 void Directory::select_last_block_metadata(string file_name, 
-    BlockInfo *block_info) {
+    BlockMetadata *block_info) {
   char sql[DEFAULT_QUERY_SIZE];
 
   sprintf(sql, "SELECT * FROM block_table WHERE (file_name='%s') \
@@ -345,5 +388,5 @@ void Directory::select_last_block_metadata(string file_name,
 
   if (query_exec_simple(sql, block_callback, (void*)block_info))
     DEBUG("The last block_metadata selected successfully");
-} 
+}
 // }}}

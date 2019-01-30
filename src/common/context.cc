@@ -78,5 +78,7 @@ void Context::init() {
   logger.reset(Logger::connect(logname, logtype, logmask));
 
   id = find(nodes.begin(), nodes.end(), ip) - nodes.begin();
+  histogram = make_unique<Histogram>(nodes.size(), 100);
+  histogram->initialize();
 }
 // }}}

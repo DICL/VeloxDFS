@@ -9,7 +9,7 @@ class cli_driver {
     bool parse_args(int argc, char** argv);
 
   private:
-    void file_upload(std::string);
+    void file_upload(std::string, uint64_t block_size);
     void file_download(std::string);
     void file_cat(std::string);
     void file_remove(std::string);
@@ -19,6 +19,7 @@ class cli_driver {
     void file_show_optimized(std::string path, int type);
     void format();
     void file_rename(std::string, std::string);
+    void attributes(std::string);
 
     velox::DFS dfs;
 };

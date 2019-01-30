@@ -31,6 +31,9 @@ AUTHORS
 - Vicente Adolfo Bolea Sanchez <vicente.bolea@gmail.com>
 "
 
+# ENV VARIABLES
+VELOXD_SSH_OPTS="${VELOXD_SSH_OPTS:--4}"
+
 # Options
 VERBOSE=no
 DEBUG=no
@@ -52,7 +55,7 @@ function exec_cmd {
 function up {
   local ENV="export PATH=$PATH; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
   for host in `velox_get_config "network.nodes" -v`; do
-    exec_cmd $RSH $host "$ENV; $RUN_EXTRA_ARGS; nohup eclipse_node </dev/null &>/dev/null &"
+    exec_cmd $RSH $VELOXD_SSH_OPTS $host "$ENV; $RUN_EXTRA_ARGS; nohup eclipse_node </dev/null &>/dev/null &"
   done
 }
 
