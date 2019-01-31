@@ -2,6 +2,8 @@
 
 VERSION="1.8.x"
 
+declare -A hooks
+
 HELP="\
 VELOXD (Velox Daemon Controler) $VERSION
 Usage: veloxd [options] <actions>
@@ -11,10 +13,14 @@ ACTIONS
     restart      down-up Velox
     status       Show connected nodes
 
+ACTIONS (from addons)
+`compgen -c | grep -Po 'velox-\K\w*'| sort -u | xargs printf "    %s\n"`
+
 OPTIONS
     -h           Help,       print this text.
     -n           Dry-run,    it will print what it will do without actually doing it.
     -f           Force,      kills every current user process in every node (Use it carefully).
+    -F           Fork level, how many parallel connections for the commands (Good to speedup things).
     -v           Verbose,    printout verbose info.
     -d           Debug,      veloxd debug mode (To debug this very script).
     -e 'args'    Extra-args, pass extra arguments for the ssh connection (up action).
@@ -35,9 +41,10 @@ AUTHORS
 VELOXD_SSH_OPTS="${VELOXD_SSH_OPTS:--4}"
 
 # Options
-VERBOSE=no
-DEBUG=no
-DRYRUN=no
+export VERBOSE=${VERBOSE:-no}
+export DEBUG=${DEBUG:-no}
+export DRYRUN=${DRYRUN:-no}
+export FORK_LEVEL=${FORK_LEVEL:-10}
 RSH=ssh
 FORCE=no
 RUN_EXTRA_ARGS="ulimit -Sn 4000"
@@ -52,11 +59,18 @@ function exec_cmd {
   [ -n "$ret" ] && echo "$ret"
 }
 
+function parallel_exec {
+  export -f exec_cmd
+  velox_get_config "network.nodes" -v | xargs -P${FORK_LEVEL} -I {} bash -c "$*"
+}
+
+
 function up {
   local ENV="export PATH=$PATH; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
-  for host in `velox_get_config "network.nodes" -v`; do
-    exec_cmd $RSH $VELOXD_SSH_OPTS $host "$ENV; $RUN_EXTRA_ARGS; nohup eclipse_node </dev/null &>/dev/null &"
-  done
+  parallel_exec exec_cmd $RSH $VELOXD_SSH_OPTS {} "\"$ENV; $RUN_EXTRA_ARGS; nohup eclipse_node </dev/null &>/dev/null &\""
+  #for host in `velox_get_config "network.nodes" -v`; do
+  #  exec_cmd $RSH $VELOXD_SSH_OPTS $host "$ENV; $RUN_EXTRA_ARGS; nohup eclipse_node </dev/null &>/dev/null &"
+  #done
 }
 
 function down {
@@ -68,16 +82,19 @@ function down {
 }
 
 function soft-down {
-  for host in `velox_get_config "network.nodes" -v`; do
-    exec_cmd $RSH $host "pkill -u $USER eclipse_node"
-    exec_cmd $RSH $host "pkill -f -u $USER read_io_stats.sh$"
-  done
+  parallel_exec exec_cmd $RSH {} "pkill -u $USER eclipse_node"          
+  parallel_exec exec_cmd $RSH {} "pkill -f -u $USER read_io_stats.sh"
+  #for host in `velox_get_config "network.nodes" -v`; do
+  #  exec_cmd $RSH $host "pkill -u $USER eclipse_node"
+  #  exec_cmd $RSH $host "pkill -f -u $USER read_io_stats.sh$"
+  #done
 }
 
 function hard-down {
-  for host in `velox_get_config "network.nodes" -v`; do
-    exec_cmd $RSH $host "pkill -u $USER"
-  done
+  parallel_exec exec_cmd $RSH {} "pkill -u $USER"
+  #for host in `velox_get_config "network.nodes" -v`; do
+  #  exec_cmd $RSH $host "pkill -u $USER"
+  #done
 }
 
 function stats {
@@ -97,7 +114,7 @@ which velox_get_config &>/dev/null || { echo "ERROR: velox_get_config not found,
 
 # Parse options
 OPTIND=1
-while getopts "hdvVnfe:" opt; do
+while getopts "hdvVnfF:e:" opt; do
   case $opt in
     h) echo "$HELP"; exit;;
     v) VERBOSE=yes;;
@@ -105,12 +122,27 @@ while getopts "hdvVnfe:" opt; do
     d) DEBUG=yes;;
     n) DRYRUN=yes;;
     f) FORCE=yes;;
+    F) FORK_LEVEL=$OPTARG;;
     e) RUN_EXTRA_ARGS="$OPTARG";;
   esac
 done
 shift $((OPTIND - 1))
 
 [ $DEBUG = yes ] && set -x
+
+# Die here if this file is included as a library
+[[ $BASH_SOURCE != $0 ]] && return 0
+
+# Search and exec addons
+if [ -n "$1" ]; then
+  which "velox-$1" &> /dev/null
+  if [ "$?" == "0" ]; then
+    cmd="velox-$1"
+    shift
+    exec $cmd $*
+  fi
+fi
+
 
 # Parse actions
 case $1 in
