@@ -98,16 +98,10 @@ long file::get_size() {
 
 // vdfs {{{
 vdfs::vdfs() {
-  dfs = new DFS();
-//  dfs->load_settings();
-
   opened_files = nullptr;
 }
 
 vdfs::vdfs(vdfs& that) {
-  dfs = new DFS();
-  //dfs->load_settings();
-
   if(that.opened_files != nullptr) 
     opened_files = new std::vector<velox::file>(*that.opened_files);
   else
@@ -121,16 +115,10 @@ vdfs::~vdfs() {
 
     delete this->opened_files;
   }
-
-  delete dfs;
 }
 // }}}
 // operator= {{{
 vdfs& vdfs::operator=(vdfs& rhs) {
-  if(dfs != nullptr) delete dfs;
-
-  dfs = new DFS();
-  //dfs->load_settings();
 
   if(opened_files != nullptr) delete opened_files;
 
@@ -154,7 +142,7 @@ file vdfs::open(std::string name) {
   }
 
   // When a file doesn't exist
-  dfs->touch(name);
+  velox::touch(name);
 
   velox::file new_file(this, name, true);
 
@@ -210,26 +198,26 @@ bool vdfs::is_open(long fid) {
 // upload {{{
 file vdfs::upload(std::string name) {
 //  cout << "vdfs::upload" << endl;
-  dfs->upload(name, false);
+  velox::upload(name, false);
   return velox::file(this, name);
 }
 // }}}
 // append {{{
 void vdfs::append (std::string name, std::string content) {
 //  cout << "vdfs::append " << endl;
-  dfs->append(name, content);
+  velox::append(name, content);
 }
 // }}}
 // load {{{
 std::string vdfs::load(std::string name) { 
 //  cout << "vdfs::load" << endl;
-  return dfs->read_all(name);
+  return velox::read_all(name);
 }
 // }}}
 // rm {{{
 bool vdfs::rm (std::string name) {
 //  cout << "vdfs::rm " << name << endl;
-  return dfs->remove(name);
+  return velox::remove(name);
 }
 bool vdfs::rm (long fid) {
 //  cout << "vdfs::rm " << endl;
@@ -242,13 +230,13 @@ bool vdfs::rm (long fid) {
 // format {{{
 bool vdfs::format () {
 //  cout << "vdfs::format " << endl;
-  return dfs->format();
+  return velox::format();
 }
 // }}}
 // exists {{{
 bool vdfs::exists(std::string name) {
 //  cout << "vdfs::exists " << name << endl;
-  bool ret = dfs->exists(name);
+  bool ret = velox::exists(name);
 //  cout << "vdfs::exists finished: " << ret << endl;
   return ret;
 }
@@ -264,10 +252,10 @@ uint32_t vdfs::write(long fid, const char *buf, uint32_t off, uint32_t len, uint
   if(f == nullptr) return -1;
 
   if(block_size > 0) {
-    return dfs->write(f->name, buf, off, len, block_size);
+    return velox::write(f->name, buf, off, len, block_size);
   }
   else {
-    return dfs->write(f->name, buf, off, len);
+    return velox::write(f->name, buf, off, len);
   }
 }
 // }}}
@@ -277,7 +265,7 @@ uint32_t vdfs::read(long fid, char *buf, uint64_t off, uint64_t len) {
   velox::file* f = this->get_file(fid);
   if(f == nullptr) return 0;
 
-  return dfs->read(f->name, buf, off, len);
+  return velox::read(f->name, buf, off, len);
 }
 // }}}
 // get_file {{{
@@ -299,13 +287,13 @@ model::metadata vdfs::get_metadata(long fid, int type = 0) {
   velox::file* f = this->get_file(fid);
   if(f == nullptr) return model::metadata();
 
-  return dfs->get_metadata_optimized(f->name, type);
+  return velox::get_metadata(f->name, type);
 }
 // }}}
 // list {{{
 std::vector<model::metadata> vdfs::list(bool all, std::string name) {
 //  cout << "vdfs::list" << endl;
-  std::vector<model::metadata> metadatas = dfs->get_metadata_all();
+  std::vector<model::metadata> metadatas = velox::get_metadata_all();
   if(all) return metadatas;
 
   std::vector<model::metadata> results;
@@ -325,11 +313,11 @@ std::vector<model::metadata> vdfs::list(bool all, std::string name) {
 // }}}
 // rename {{{
 bool vdfs::rename(std::string src, std::string dst) {
-  return dfs->rename(src, dst);
+  return velox::rename(src, dst);
 }
 // }}}
 // read_chunk {{{
 uint32_t vdfs::read_chunk(std::string name, std::string host, char *buf, uint64_t boff, uint64_t off, uint64_t len) {
-  return dfs->read_chunk(name, host, buf, boff, off, len);
+  return velox::read_chunk(name, host, buf, boff, off, len);
 }
 // }}}

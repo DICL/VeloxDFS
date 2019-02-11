@@ -121,30 +121,30 @@ bool cli_driver::parse_args (int argc, char** argv) {
 // }}}
 // file_upload {{{
 void cli_driver::file_upload (std::string file, uint64_t block_size) {
-  dfs.upload(file, false, block_size);
+  velox::upload(file, false, block_size);
 }
 // }}}
 // file_download {{{
 void cli_driver::file_download (std::string file) {
-  dfs.download(file);
+  velox::download(file);
 }
 // }}}
 // file_cat {{{
 void cli_driver::file_cat (std::string file) {
   // Read file, display it
-  cout << dfs.read_all(file);
+  cout << velox::read_all(file);
 }
 // }}}
 // file_remove {{{
 void cli_driver::file_remove (std::string file) {
-  dfs.remove(file);
+  velox::remove(file);
 }
 // }}}
 // file_show {{{
 void cli_driver::file_show (std::string file) {
   vec_str nodes = GET_VEC_STR("network.nodes");
 
-  model::metadata md = dfs.get_metadata(file);
+  model::metadata md = velox::get_metadata(file);
   cout << file << endl;
 
   int block_seq = 0;
@@ -185,7 +185,7 @@ void cli_driver::file_show_optimized(std::string file, int type) {
     << setw(14) << right << "Host"
     << endl << string(123,'-') << endl;
 
-  model::metadata md = dfs.get_metadata_optimized(file, type);
+  model::metadata md = velox::get_metadata(file, type);
 
   for (unsigned i = 0; i < md.num_block; i++) {
     cout 
@@ -214,7 +214,7 @@ void cli_driver::list (bool human_readable) {
   const uint64_t T = (uint64_t) 1000 * 1000 * 1000 * 1000;
   const uint64_t P = (uint64_t) 1000 * 1000 * 1000 * 1000 * 1000;
   vec_str nodes = GET_VEC_STR("network.nodes");
-  vector<model::metadata> metadatas = dfs.get_metadata_all(); 
+  vector<model::metadata> metadatas = velox::get_metadata_all(); 
 
   std::sort(metadatas.begin(), metadatas.end(), [] (const model::metadata& a, const model::metadata& b) {
       return (a.name < b.name);
@@ -274,16 +274,16 @@ void cli_driver::list (bool human_readable) {
 // }}}
 // format {{{
 void cli_driver::format () {
-  dfs.format();
+  velox::format();
 }
 // }}}
 // rename {{{
 void cli_driver::file_rename(std::string src, std::string dst) {
-  dfs.rename(src, dst);
+  velox::rename(src, dst);
 }
 // }}}
 // attributes {{{
 void cli_driver::attributes(std::string file) {
-  cout << dfs.dump_metadata(file) << endl;
+  cout << velox::dump_metadata(file) << endl;
 }
 // }}}

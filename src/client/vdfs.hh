@@ -74,7 +74,6 @@ class vdfs {
     bool rename(std::string, std::string);
 
   protected:
-    DFS* dfs;
     std::string load(std::string);
 
   private:

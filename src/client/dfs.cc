@@ -41,10 +41,17 @@ using boost::asio::ip::tcp;
 
 namespace velox {
 
-std::map<std::string, std::shared_ptr<FileDescription>> file_description_cache;
+model::metadata get_metadata_optimized(std::string& fname, int type);
 
 // Static functions {{{
-static unique_ptr<tcp::socket> connect(uint32_t hash_value) { 
+namespace {
+uint32_t NUM_NODES             = GET_VEC_STR("network.nodes").size();
+int replica                    = GET_INT("filesystem.replica");
+std::vector<std::string> nodes = GET_VEC_STR("network.nodes");
+
+std::map<std::string, std::shared_ptr<FileDescription>> file_description_cache;
+
+unique_ptr<tcp::socket> connect(uint32_t hash_value) { 
   auto nodes = GET_VEC_STR("network.nodes");
   auto port = GET_INT("network.ports.client");
   string host;
@@ -101,9 +108,10 @@ shared_ptr<FileDescription> get_file_description
   return fd;
 }
 
-static bool file_exists_local(std::string filename) {
+bool file_exists_local(std::string filename) {
   ifstream ifile(filename);
   return ifile.good();
+}
 }
 // }}} 
 // read_from_disk {{{
@@ -169,7 +177,7 @@ uint64_t read_physical(std::string& file_name, char* buf, uint64_t off, uint64_t
 
   auto nodes = GET_VEC_STR("network.nodes");
 
-  off = std::max(0ul, std::min(off, fd->size));
+  off = std::max(0l, (long)std::min(off, fd->size));
   if (off >= fd->size) return 0;
 
   // Find where is the block
@@ -283,7 +291,7 @@ uint64_t read_physical(std::string& file_name, char* buf, uint64_t off, uint64_t
 // 3. Find ending chunk
 // 4. Read chunk
 //
-uint64_t read_logical(std::string& file_name, char* buf, uint64_t off, 
+uint64_t read_logical(__attribute__((unused)) std::string& file_name, char* buf, uint64_t off, 
     uint64_t len, FileDescription* fd) {
 
   using namespace std;
@@ -295,7 +303,7 @@ uint64_t read_logical(std::string& file_name, char* buf, uint64_t off,
   auto nodes = GET_VEC_STR("network.nodes");
   int lblock_beg_seq = 0;
   uint64_t current_lblock_offset = 0;
-  off = std::max(0ul, std::min(off, fd->size));
+  off = std::max(0l, (long)std::min(off, fd->size));
 
   // --------------- COMPUTING OFFSETS ------------------
 
@@ -391,20 +399,49 @@ uint64_t read_logical(std::string& file_name, char* buf, uint64_t off,
   return read_bytes;
 }
 // }}}
-// Constructors and misc {{{
-DFS::DFS() { 
-  NUM_NODES = context.settings.get<vector<string>>("network.nodes").size();
-  replica = context.settings.get<int>("filesystem.replica");
-  nodes = context.settings.get<vector<string>>("network.nodes");
+// read_chunk {{{
+uint64_t read_chunk(std::string& fname, std::string host, char* buf, uint64_t buffer_offset, uint64_t off, uint64_t len) {
+  bool is_local_node = bool(host == nodes[context.id]);
 
-  struct rlimit core_limits;
-  core_limits.rlim_cur = core_limits.rlim_max = RLIM_INFINITY;
-  setrlimit(RLIMIT_CORE, &core_limits);
+  cout << "CHUNK: " << fname << " host: " << host << " off: " << off << " boff: " << buffer_offset <<  " len: " << len << endl;
+
+  BlockInfo chunk;
+  chunk.name = fname;
+
+  uint64_t read_bytes = 0;
+  if (is_local_node) {
+    read_from_disk(buf, chunk, &read_bytes, off, len);
+
+  } else {
+    int which_node = find(nodes.begin(), nodes.end(), host) - nodes.begin();
+    read_from_remote(buf, chunk, &read_bytes, off, len, which_node);
+  }
+  return read_bytes;
 }
+// }}}
+// read {{{
+uint64_t read(std::string& file_name, char* buf, uint64_t off, uint64_t len) {
+  cout << "Calling read " << off << endl;
 
+  auto fd = get_file_description( std::bind(&connect, std::placeholders::_1), file_name, true);
+
+  if (fd == nullptr) {
+    cout << "fd is null" << endl;
+    return 0;
+  }
+
+  // If it is an MapReduce input file
+  if (fd->is_input) {
+    return read_logical(file_name, buf, off, len, fd.get());
+
+  // If it is just a regular file
+  } else {
+    return read_physical(file_name, buf, off, len, fd.get());
+  }
+}
 // }}}
 // upload {{{
-int DFS::upload(std::string file_name, bool is_binary, uint64_t block_size) {
+int upload(std::string file_name, bool is_binary, uint64_t block_size) {
   uint64_t BLOCK_SIZE = block_size;
   if (block_size == 0) {
     BLOCK_SIZE = context.settings.get<int>("filesystem.block");
@@ -424,7 +461,7 @@ int DFS::upload(std::string file_name, bool is_binary, uint64_t block_size) {
   }
 
   //! Does the file exists
-  if (this->exists(file_name)) {
+  if (exists(file_name)) {
     cerr << "[ERR] " << file_name << " already exists in VeloxDFS." << endl;
     return EXIT_FAILURE;
   }
@@ -564,10 +601,10 @@ int DFS::upload(std::string file_name, bool is_binary, uint64_t block_size) {
 }
 // }}}
 // download {{{
-int DFS::download(std::string file_name) {
+int download(std::string file_name) {
 
   //! Does the file exists
-  if (not this->exists(file_name)) {
+  if (not exists(file_name)) {
     cerr << "[ERR] " << file_name << " already doesn't exists in VeloxDFS." << endl;
     return EXIT_FAILURE;
   }
@@ -605,7 +642,7 @@ int DFS::download(std::string file_name) {
 }
 // }}}
 // read_all {{{
-std::string DFS::read_all(std::string file) {
+std::string read_all(std::string file) {
 
   auto fd = get_file_description(
     std::bind(&connect, std::placeholders::_1), file
@@ -632,7 +669,7 @@ std::string DFS::read_all(std::string file) {
 }
 // }}} 
 // remove {{{
-int DFS::remove(std::string file_name) {
+int remove(std::string file_name) {
 
   uint32_t file_hash_key = h(file_name);
   auto socket = connect(file_hash_key);
@@ -671,7 +708,7 @@ int DFS::remove(std::string file_name) {
 }
 // }}}
 // rename {{{
-bool DFS::rename(std::string src, std::string dst) {
+bool rename(std::string src, std::string dst) {
 
   auto src_socket = connect(h(src));
   FileRequest fr;
@@ -747,7 +784,7 @@ bool DFS::rename(std::string src, std::string dst) {
 }
 // }}}
 // format {{{
-int DFS::format() {
+int format() {
   for (unsigned int net_id = 0; net_id < NUM_NODES; net_id++) {
     FormatRequest fr;
     auto socket = connect(net_id);
@@ -765,7 +802,7 @@ int DFS::format() {
 // }}}
 // append {{{
 //! @todo fix implementation
-int DFS::append(string file_name, string buf) {
+int append(string file_name, string buf) {
   string ori_file_name = file_name; 
 
   uint32_t file_hash_key = h(ori_file_name);
@@ -969,7 +1006,7 @@ int DFS::append(string file_name, string buf) {
 }
 /// }}} 
 // exists {{{
-bool DFS::exists(std::string name) {
+bool exists(std::string name) {
   FileExist fe;
   fe.name = name;
   uint32_t hash_key = h(name);
@@ -982,7 +1019,7 @@ bool DFS::exists(std::string name) {
 }
 // }}}
 // touch {{{
-bool DFS::touch(std::string file_name) {
+bool touch(std::string file_name) {
   if (exists(file_name))
     return false;
 
@@ -1062,12 +1099,12 @@ bool DFS::touch(std::string file_name) {
 }
 // }}}
 // write {{{
-uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint64_t len) {
-  uint64_t BLOCK_SIZE = context.settings.get<int>("filesystem.block");
-  return write(file_name, buf, off, len, BLOCK_SIZE);
-}
+uint64_t write(std::string& file_name, const char* buf, uint64_t off, uint64_t len, uint64_t block_size) {
 
-uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint64_t len, uint64_t block_size) {
+  // Fall back to default value
+  if (block_size == 0) {
+    block_size = GET_INT("filesystem.block");
+  }
 
   INFO("Start writing %s len %ld off %ld blocksize %ld", file_name.c_str(), len, off, block_size);
 
@@ -1082,7 +1119,7 @@ uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint6
 
   if(fd == nullptr) return 0;
 
-  off = std::max(0ul, std::min(off, std::max(fd->size, block_size - 1)));
+  off = std::max(0l, (long)std::min(off, std::max(fd->size, block_size - 1)));
 
   //! Insert the blocks
   vector<BlockMetadata> blocks_metadata;
@@ -1196,27 +1233,6 @@ uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint6
   return written_bytes;
 }
 // }}}
-// read {{{
-uint64_t DFS::read(std::string& file_name, char* buf, uint64_t off, uint64_t len) {
-  cout << "Calling read " << off << endl;
-
-  auto fd = get_file_description( std::bind(&connect, std::placeholders::_1), file_name, true);
-
-  if (fd == nullptr) {
-    cout << "fd is null" << endl;
-    return 0;
-  }
-
-  // If it is an MapReduce input file
-  if (fd->is_input) {
-    return read_logical(file_name, buf, off, len, fd.get());
-
-  // If it is just a regular file
-  } else {
-    return read_physical(file_name, buf, off, len, fd.get());
-  }
-}
-// }}}
 // make_metadata {{{
 model::metadata make_metadata(FileInfo* fi) {
   model::metadata md;
@@ -1255,24 +1271,29 @@ model::metadata make_metadata(FileInfo* fi) {
     md.has_block_data = false;
   }
 
-  return std::move(md);
+  return md;
 }
 // }}}
 // get_metadata {{{
-model::metadata DFS::get_metadata(std::string& fname) {
+model::metadata get_metadata(std::string& fname, int type) {
 
-  auto fd = get_file_description( std::bind(&connect, std::placeholders::_1), fname);
+  if (type != 0) {
+    return get_metadata_optimized(fname, type);
 
-  if(fd != nullptr) {
-    FileInfo& fi = *fd;
-    return make_metadata(&fi);
+  } else {
+    auto fd = get_file_description( std::bind(&connect, std::placeholders::_1), fname);
+
+    if(fd != nullptr) {
+      FileInfo& fi = *fd;
+      return make_metadata(&fi);
+    }
+    else
+      return model::metadata();
   }
-  else
-    return model::metadata();
 }
 // }}}
 // get_metadata_optimized {{{
-model::metadata DFS::get_metadata_optimized(std::string& fname, int type) {
+model::metadata get_metadata_optimized(std::string& fname, int type) {
   bool is_logical_blocks = GET_STR("addons.zk.enabled") == string("true");
   if (!is_logical_blocks or type == VELOX_LOGICAL_DISABLE) {
     return get_metadata(fname);
@@ -1341,7 +1362,7 @@ model::metadata DFS::get_metadata_optimized(std::string& fname, int type) {
 }
 // }}}
 // get_metadata_all {{{
-vector<model::metadata> DFS::get_metadata_all() {
+vector<model::metadata> get_metadata_all() {
   vector<FileInfo> total; 
 
   for (unsigned int net_id=0; net_id<NUM_NODES; net_id++) {
@@ -1358,11 +1379,11 @@ vector<model::metadata> DFS::get_metadata_all() {
     metadata_vector.push_back(make_metadata(&fd));
   }
   
-  return move(metadata_vector);
+  return metadata_vector;
 }
 // }}}
 // file_metadata_append {{{
-void DFS::file_metadata_append(std::string name, size_t size, model::metadata& blocks) {
+void file_metadata_append(std::string name, size_t size, model::metadata& blocks) {
   FileUpdate fu;
   fu.name = name;
   fu.num_block = blocks.blocks.size();
@@ -1395,7 +1416,7 @@ void DFS::file_metadata_append(std::string name, size_t size, model::metadata& b
 }
 // }}}
 // dump_metadata {{{
-std::string DFS::dump_metadata(std::string& fname) {
+std::string dump_metadata(std::string& fname) {
   const uint32_t s4KB = 4 << 10;
   char output [s4KB];
 
@@ -1435,26 +1456,6 @@ R"(
   }
 
   return string(output);
-}
-// }}}
-// read_chunk {{{
-uint64_t DFS::read_chunk(std::string& fname, std::string host, char* buf, uint64_t buffer_offset, uint64_t off, uint64_t len) {
-  bool is_local_node = bool(host == nodes[context.id]);
-
-  cout << "CHUNK: " << fname << " host: " << host << " off: " << off << " boff: " << buffer_offset <<  " len: " << len << endl;
-
-  BlockInfo chunk;
-  chunk.name = fname;
-
-  uint64_t read_bytes = 0;
-  if (is_local_node) {
-    read_from_disk(buf, chunk, &read_bytes, off, len);
-
-  } else {
-    int which_node = find(nodes.begin(), nodes.end(), host) - nodes.begin();
-    read_from_remote(buf, chunk, &read_bytes, off, len, which_node);
-  }
-  return read_bytes;
 }
 // }}}
 }

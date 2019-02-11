@@ -31,13 +31,14 @@ lib_LTLIBRARIES     = libvdfs.la
 libvdfs_la_SOURCES  = $(messages_files) \
                       src/client/dfs.cc \
                       src/client/vdfs.cc \
+                      src/client/dfs_zookeeper.cc \
                       src/common/hash.cc src/common/settings.cc \
                       src/common/logger.cc src/common/histogram.cc \
                       src/common/context.cc \
                       src/common/context_singleton.cc
 
 libvdfs_la_LDFLAGS  = $(BOOST_LDFLAGS) -version-info 0:0:0
-libvdfs_la_LIBADD   = -lboost_system -lboost_serialization -lboost_coroutine -lboost_thread -lboost_context -ldl
+libvdfs_la_LIBADD   = -lboost_system -lboost_serialization -lboost_coroutine -lboost_thread -lboost_context -ldl -lzookeeper_mt
 
 # BOOST_STATIC only for environments where we cannot install all the dependencies in every node
 if BOOST_STATIC
