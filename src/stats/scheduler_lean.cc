@@ -17,6 +17,7 @@ using VEC_STR = std::vector<std::string>;
 
 namespace {
 // get_replicas_id {{{
+// It should be modifed! -> random replica
 vector<uint32_t> get_replicas_id(VEC_STR nodes, string node) {
   vector<uint32_t> output;
   int which_node = find(nodes.begin(), nodes.end(), node) - nodes.begin();
@@ -34,8 +35,7 @@ void scheduler_lean::generate(FileDescription& file_desc, std::vector<std::strin
   std::map<int, std::vector<logical_block_metadata>> lblocks_dist; 
 
   int SLOTS = GET_INT("addons.cores");
-
-  //---------------------LOGIC STARTS HERE---------------------------
+	
   // Intialize the logical blocks
   int logical_block_counter = 0;
   for (int i = 0; i < (int)nodes.size(); i++) {
@@ -55,7 +55,6 @@ void scheduler_lean::generate(FileDescription& file_desc, std::vector<std::strin
   double input_split = atof(GET_STR("addons.lean_input_split").c_str());
   int nChunks =  int(file_desc.blocks.size());
   int cut     =  int(nChunks*input_split);
-
   file_desc.num_static_blocks = cut;
 
   vector<int> node_chunks_counter(nodes.size(), 0);
@@ -66,11 +65,15 @@ void scheduler_lean::generate(FileDescription& file_desc, std::vector<std::strin
 
     BlockInfo physical_block;
     physical_block.name      = file_desc.blocks[i];
+    physical_block.primary_file    = file_desc.primary_files[i]; // added
     physical_block.file_name = file_desc.name;
     physical_block.hash_key  = file_desc.hash_keys[i];
-    physical_block.size      = file_desc.block_size[i];
+    physical_block.size      = file_desc.block_size[i]; 
+    physical_block.offset 	 = file_desc.offsets[i];  // added
+    physical_block.foffset 	 = file_desc.offsets_in_file[i];  // added
+    physical_block.primary_seq 	 = file_desc.primary_sequences[i];  // added
     physical_block.seq       = i;
-    physical_block.node      = nodes[replicas[1]]; //Choose this replica
+    //physical_block.node      = nodes[replicas[0]]; //Choose this replica
 
     // First half predetermined
     if (i < cut) {
@@ -89,23 +92,24 @@ void scheduler_lean::generate(FileDescription& file_desc, std::vector<std::strin
       node_chunks_counter[target_node_id] += 1;
       auto& lblock = lblocks_dist[target_node_id][current_index];
 
+      physical_block.node      = lblock.host_name; 
       lblock.size += physical_block.size;
       lblock.physical_blocks.push_back(physical_block);
-    
+	  lblock.primary_chunk_num++;
     } else {
-      // Per each node holding the replica
       for (int id : replicas) {
         int current_index = node_chunks_counter[id] % SLOTS;
         node_chunks_counter[id] += 1;
 
         auto& lblock = lblocks_dist[id][current_index];
+    	physical_block.node      = lblock.host_name; 
         lblock.size += physical_block.size;
         lblock.physical_blocks.push_back(physical_block);
       }
+
     }
   }
 
-  // Copy the block distribution to the file_descriptior
   for (auto& kv : lblocks_dist) {
     std::copy(kv.second.begin(), kv.second.end(), back_inserter(file_desc.logical_blocks));
   }

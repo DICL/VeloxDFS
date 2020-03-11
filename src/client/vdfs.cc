@@ -97,15 +97,15 @@ long file::get_size() {
 /******************************************/
 
 // vdfs {{{
-vdfs::vdfs() {
-  dfs = new DFS();
+vdfs::vdfs(std::string job_id, int tid, bool initializer) {
+  dfs = new DFS(job_id, tid, initializer);
 //  dfs->load_settings();
 
   opened_files = nullptr;
 }
 
 vdfs::vdfs(vdfs& that) {
-  dfs = new DFS();
+  dfs = new DFS(that.job_id, that.tmg_id, that.initializer);
   //dfs->load_settings();
 
   if(that.opened_files != nullptr) 
@@ -129,7 +129,7 @@ vdfs::~vdfs() {
 vdfs& vdfs::operator=(vdfs& rhs) {
   if(dfs != nullptr) delete dfs;
 
-  dfs = new DFS();
+  dfs = new DFS(rhs.job_id, rhs.tmg_id, rhs.initializer);
   //dfs->load_settings();
 
   if(opened_files != nullptr) delete opened_files;
@@ -144,7 +144,6 @@ vdfs& vdfs::operator=(vdfs& rhs) {
 // }}}
 // open {{{
 file vdfs::open(std::string name) {
-//  cout << "vdfs::open " << name << endl;
   // Examine if file is already opened
   if(opened_files != nullptr) {
     for(auto f : *opened_files) {
@@ -198,7 +197,7 @@ bool vdfs::close(long fid) {
 // }}}
 // is_open() {{{
 bool vdfs::is_open(long fid) {
-//  cout << "vdfs::is_open" << endl;
+  cout << "VDFS::is_open()" << endl;
   if(opened_files == nullptr) return false;
 
   velox::file* f = this->get_file(fid);
@@ -209,7 +208,6 @@ bool vdfs::is_open(long fid) {
 // }}}
 // upload {{{
 file vdfs::upload(std::string name) {
-//  cout << "vdfs::upload" << endl;
   dfs->upload(name, false);
   return velox::file(this, name);
 }
@@ -247,9 +245,7 @@ bool vdfs::format () {
 // }}}
 // exists {{{
 bool vdfs::exists(std::string name) {
-//  cout << "vdfs::exists " << name << endl;
   bool ret = dfs->exists(name);
-//  cout << "vdfs::exists finished: " << ret << endl;
   return ret;
 }
 // }}}
@@ -260,7 +256,6 @@ uint32_t vdfs::write(long fid, const char *buf, uint32_t off, uint32_t len) {
 
 uint32_t vdfs::write(long fid, const char *buf, uint32_t off, uint32_t len, uint64_t block_size) {
   velox::file* f = this->get_file(fid);
-//  cout << "vdfs::write: " << f->get_name() << endl;
   if(f == nullptr) return -1;
 
   if(block_size > 0) {
@@ -273,7 +268,7 @@ uint32_t vdfs::write(long fid, const char *buf, uint32_t off, uint32_t len, uint
 // }}}
 // read {{{
 uint32_t vdfs::read(long fid, char *buf, uint64_t off, uint64_t len) {
-//  cout << "vdfs::read" << endl;
+  cout << "VDFS::READ()" << endl;
   velox::file* f = this->get_file(fid);
   if(f == nullptr) return 0;
 
@@ -282,10 +277,8 @@ uint32_t vdfs::read(long fid, char *buf, uint64_t off, uint64_t len) {
 // }}}
 // get_file {{{
 velox::file* vdfs::get_file(long fid) {
-//  cout << "vdfs::get_file: " << fid << endl;
   for(auto& f : *(this->opened_files)) {
     if(f.get_id() == fid)  {
-//      cout << ":" << f.get_name() << endl;
       return &f;
     }
   }
@@ -298,13 +291,14 @@ model::metadata vdfs::get_metadata(long fid, int type = 0) {
 //  cout << "vdfs::get_metadata" << endl;
   velox::file* f = this->get_file(fid);
   if(f == nullptr) return model::metadata();
-
+	
+  
   return dfs->get_metadata_optimized(f->name, type);
 }
 // }}}
 // list {{{
 std::vector<model::metadata> vdfs::list(bool all, std::string name) {
-//  cout << "vdfs::list" << endl;
+ // cout << "******vdfs::list******" << endl;
   std::vector<model::metadata> metadatas = dfs->get_metadata_all();
   if(all) return metadatas;
 
@@ -320,16 +314,28 @@ std::vector<model::metadata> vdfs::list(bool all, std::string name) {
       results.push_back(m);
   }
 
+ // cout << "******END vdfs::list******" << endl;
   return results;
 }
 // }}}
 // rename {{{
 bool vdfs::rename(std::string src, std::string dst) {
+	//			cout<<"********vdfs::rename****** "<<src<<" to "<<dst<<endl;
   return dfs->rename(src, dst);
 }
 // }}}
 // read_chunk {{{
-uint32_t vdfs::read_chunk(std::string name, std::string host, char *buf, uint64_t boff, uint64_t off, uint64_t len) {
-  return dfs->read_chunk(name, host, buf, boff, off, len);
+
+uint32_t vdfs::read_chunk(char *buf, uint32_t boff) {
+  return dfs->read_chunk(buf, boff);
 }
 // }}}
+
+file vdfs::write_file(std::string name, const std::string& buf, uint64_t len) {
+  dfs->write_file(name, false, buf, len);
+  return velox::file(this, name);
+}
+
+int vdfs::get_tmg_id(){
+	return this->tmg_id;
+}

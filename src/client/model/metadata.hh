@@ -22,6 +22,7 @@ class metadata {
     unsigned int type;
     unsigned int replica;
     bool has_block_data = true;
+	int lbm_id;
 
     std::vector<std::string> blocks;
     std::vector<uint32_t> hash_keys;

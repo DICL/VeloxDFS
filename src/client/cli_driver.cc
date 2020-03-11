@@ -5,6 +5,7 @@
 #include <iterator>
 #include <iomanip>
 #include <unistd.h>
+#include <fstream>
 
 using vec_str = std::vector<std::string>;
 using namespace std;
@@ -35,7 +36,10 @@ OPTIONS
 Data Intensive Computing Lab at <SKKU/UNIST>, ROK. ver:)" + string(PACKAGE_VERSION) + " Builded at: " + string(__DATE__);
 
 
-cli_driver::cli_driver() { }
+cli_driver::cli_driver() { 
+	dfs = new DFS("VeloxClient",-1, true);
+}
+
 
 // parse_args {{{
 bool cli_driver::parse_args (int argc, char** argv) {
@@ -101,9 +105,13 @@ bool cli_driver::parse_args (int argc, char** argv) {
         } else if (cmd == "attr") {
           attributes(args.at(optind));
 
-        } else {
+        } else if (cmd == "wt") {
+					test_vdfs_write_io(args.at(optind));
+				} else if (cmd == "rt") {
+					test_vdfs_read_io(args.at(optind));
+				} else {
           throw(std::invalid_argument("ERROR: <ACTION> = <" + string(cmd) +">  is not supported"));
-        }
+        } 
       } catch (std::out_of_range& e) {
         throw(std::invalid_argument("ERROR: <ACTION>'s argument missing or misplaced"));
       }
@@ -121,30 +129,30 @@ bool cli_driver::parse_args (int argc, char** argv) {
 // }}}
 // file_upload {{{
 void cli_driver::file_upload (std::string file, uint64_t block_size) {
-  dfs.upload(file, false, block_size);
+  dfs->upload(file, false, block_size);
 }
 // }}}
 // file_download {{{
 void cli_driver::file_download (std::string file) {
-  dfs.download(file);
+  dfs->download(file);
 }
 // }}}
 // file_cat {{{
 void cli_driver::file_cat (std::string file) {
   // Read file, display it
-  cout << dfs.read_all(file);
+  cout << dfs->read_all(file);
 }
 // }}}
 // file_remove {{{
 void cli_driver::file_remove (std::string file) {
-  dfs.remove(file);
+  dfs->remove(file);
 }
 // }}}
 // file_show {{{
 void cli_driver::file_show (std::string file) {
   vec_str nodes = GET_VEC_STR("network.nodes");
 
-  model::metadata md = dfs.get_metadata(file);
+  model::metadata md = dfs->get_metadata(file);
   cout << file << endl;
 
   int block_seq = 0;
@@ -185,7 +193,7 @@ void cli_driver::file_show_optimized(std::string file, int type) {
     << setw(14) << right << "Host"
     << endl << string(123,'-') << endl;
 
-  model::metadata md = dfs.get_metadata_optimized(file, type);
+  model::metadata md = dfs->get_metadata_optimized(file, type);
 
   for (unsigned i = 0; i < md.num_block; i++) {
     cout 
@@ -214,7 +222,7 @@ void cli_driver::list (bool human_readable) {
   const uint64_t T = (uint64_t) 1000 * 1000 * 1000 * 1000;
   const uint64_t P = (uint64_t) 1000 * 1000 * 1000 * 1000 * 1000;
   vec_str nodes = GET_VEC_STR("network.nodes");
-  vector<model::metadata> metadatas = dfs.get_metadata_all(); 
+  vector<model::metadata> metadatas = dfs->get_metadata_all(); 
 
   std::sort(metadatas.begin(), metadatas.end(), [] (const model::metadata& a, const model::metadata& b) {
       return (a.name < b.name);
@@ -274,16 +282,75 @@ void cli_driver::list (bool human_readable) {
 // }}}
 // format {{{
 void cli_driver::format () {
-  dfs.format();
+  dfs->format();
 }
 // }}}
 // rename {{{
 void cli_driver::file_rename(std::string src, std::string dst) {
-  dfs.rename(src, dst);
+  dfs->rename(src, dst);
 }
 // }}}
 // attributes {{{
 void cli_driver::attributes(std::string file) {
-  cout << dfs.dump_metadata(file) << endl;
+  cout << dfs->dump_metadata(file) << endl;
 }
 // }}}
+
+void cli_driver::test_vdfs_write_io(std::string file ) {
+	struct timespec start, end;
+	uint64_t len, off = 0;
+	uint64_t block_size = context.settings.get<int>("filesystem.block");
+	double time = 0;
+
+	std::ifstream ifs (file, ios::in | ios::binary | ios::ate);
+	len = ifs.tellg();
+	ifs.seekg(0, ios::beg);	
+	
+	//char* buf = new char[block_size];
+	//char* buf = new char[len];
+	string upload_str;
+	upload_str.reserve(len);
+	
+//	cout << " File to String Start Len : " << len << endl; 
+
+//	ifs.read(buf, len);
+	dfs->touch(file);
+	bool t = true;
+	uint64_t read_bytes = 0;
+	while((long)len > 0) {
+	//	bzero(buf, block_size);
+		string line;
+		while(read_bytes < 1024 * 1024 * 2 && read_bytes < len){
+			string line2;
+			getline(ifs, line2);
+			line2+="\n";
+			read_bytes += line2.length();
+			line += line2;
+		}
+		//uint64_t read_bytes = std::min((uint64_t)block_size / 3, len);
+		//uint64_t read_bytes = std::min((uint64_t)block_size, len);
+		//vector<char> buf(read_bytes);	
+		
+		//ifs.read(&buf[0], read_bytes);
+		clock_gettime(CLOCK_REALTIME, &start);
+		uint64_t written_bytes = dfs->write(file, line.c_str(), off, read_bytes, block_size);
+		clock_gettime(CLOCK_REALTIME, &end);
+		len -= read_bytes;
+		off += read_bytes;
+		
+		time += (end.tv_sec - start.tv_sec) + (double)(end.tv_nsec - start.tv_nsec ) / 1000000000;
+		read_bytes = 0;
+		cout << "Remaining Len : " << len << endl;
+	//	ifs.seekg(written_bytes, ios::beg);
+	}
+	
+	//delete[] buf;
+	ifs.close();
+	cout <<"Write time: "<< time  << endl;
+	
+}
+
+
+void cli_driver::test_vdfs_read_io(std::string file){
+	dfs->download(file);
+}

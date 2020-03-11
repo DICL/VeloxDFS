@@ -63,7 +63,8 @@ void assign_chunks_to_slots(CHUNKS chunks, FD& fd, std::vector<std::string> node
   for(uint32_t i = 0; i < N_SLOTS; i++) { 
     slots_dist[i] = vector<uint32_t>();
   }
-  std::cout << "SIZE " << slots_dist.size() << std::endl;
+
+  std::cout << "Chunk Num :" << chunks.size() << std::endl;
 
   // Equally fill every bucket
   for (uint32_t i = 0; i < chunks.size(); i++) {
@@ -83,7 +84,7 @@ void assign_chunks_to_slots(CHUNKS chunks, FD& fd, std::vector<std::string> node
     slots_dist[core_id].push_back(i);
   }
 
-  std::cout << "SIZE " << slots_dist.size() << std::endl;
+  //std::cout << "SIZE " << slots_dist.size() << std::endl;
 
   // Append to the FD
   uint32_t lblock_idx = fd.n_lblock;
@@ -110,7 +111,12 @@ void assign_chunks_to_slots(CHUNKS chunks, FD& fd, std::vector<std::string> node
       physical_block.hash_key  = fd.hash_keys[index];
       physical_block.size      = fd.block_size[index];
       physical_block.node      = host;
-
+  	  physical_block.primary_file = fd.primary_files[index];
+      physical_block.offset 	 = fd.offsets[index];  // added
+      physical_block.foffset 	 = fd.offsets_in_file[index];  // added
+      physical_block.primary_seq 	 = fd.primary_sequences[index];  // added
+      physical_block.seq       = index; 
+ 
       size_of_chunks += physical_block.size; 
       metadata.physical_blocks.push_back(physical_block);
     }
@@ -126,8 +132,12 @@ void assign_chunks_to_slots(CHUNKS chunks, FD& fd, std::vector<std::string> node
 bool schedule(CHUNKS chunks, FD& fd, std::vector<std::string> nodes) {
   const uint32_t CHUNK_SIZE = fd.intended_block_size;
   const uint32_t N_SLOTS = SLOTS*nodes.size();
-  if (double(chunks.size())/N_SLOTS * CHUNK_SIZE < MIN_BLOCK_SIZE)
-    return false;
+  cout << "Chunk Size : " << chunks.size() << endl;
+  //if (double(chunks.size())/N_SLOTS * CHUNK_SIZE < MIN_BLOCK_SIZE)
+  if (chunks.size() < N_SLOTS){
+   
+	 return false;
+  }
 
   CHUNKS C_1, C_2;
 
@@ -138,7 +148,19 @@ bool schedule(CHUNKS chunks, FD& fd, std::vector<std::string> nodes) {
 
   cout << "One more iteration" << endl;
   assign_chunks_to_slots(C_1, fd, nodes);
+	
+  /* queue implementation 
+  uint32_t chunks_size = chunks.size();
+  CHUNKS& remain_C = chunks;
 
+  while(chunks_size >= N_SLOTS){
+	  CHUNKS C_1, C_2;
+
+  }
+
+		
+  }
+*/
   return true;
 }
 // }}}

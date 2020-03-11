@@ -49,12 +49,19 @@ namespace velox {
 	std::map<std::string, std::shared_ptr<FileDescription>> file_description_cache;
 	std::map<std::string, std::shared_ptr<ifstream> > primary_fd;
 
+	/* For the Map-Reduce task */
+	//int cores = context.settings.get<int>("addons.cores"); // GET_INT("addons.cores");
+	//int shm_buf_depth = GET_INT("addons.shm_buf_depth");
+	//int shm_buf_idx = 0;
+	//int total_shm_buf_num = cores * shm_buf_depth;
+	//uint64_t shm_idx_addr;
+	//uint64_t shm_base_chunk_addr;
+	//uint64_t shm_status_addr;
+		
 	double total_read_time = 0.0;
 	uint64_t BLOCK_SIZE;
 	bool is_likely_finish;
 	int processed_chunk;
-	int failed_cnt, likely;
-
 	//std::map<std::string, ifstream* > primary_fd;
 	// Static functions {{{
 	static unique_ptr<tcp::socket> connect(uint32_t hash_value) { 
@@ -519,9 +526,8 @@ namespace velox {
 
 		cores = context.settings.get<int>("addons.cores"); // GET_INT("addons.cores");
 		shm_buf_depth = GET_INT("addons.shm_buf_depth");
-		shm_buf_width = GET_INT("addons.shm_buf_width");
 		shm_buf_idx = 0;
-		total_shm_buf_num = shm_buf_width * shm_buf_depth;
+		total_shm_buf_num = cores * shm_buf_depth;
 
 		struct rlimit core_limits;
 		core_limits.rlim_cur = core_limits.rlim_max = RLIM_INFINITY;
@@ -531,13 +537,15 @@ namespace velox {
 		mr_job_id = _mr_job_id;
 
 		if(!initializer){
-			uint64_t total_buf_size = sizeof(bool) + (sizeof(struct shm_buf) + BLOCK_SIZE) * shm_buf_depth * shm_buf_width;
+			uint64_t total_buf_size = sizeof(bool) + (sizeof(struct shm_buf) + BLOCK_SIZE) * shm_buf_depth * cores;
+			cout << "MR Job ID : " << mr_job_id << " , Task ID : " << tmg_id << " shm size : " << total_buf_size << endl;
 			shmid = shmget((key_t)(tmg_id + DEFAULT_KEY), total_buf_size, 0666);
 			if(shmid == -1) {
 				perror("shmget failed");
 				exit(-1);	// exit failure
 			}
 
+			//	cout << "Get shared memory" << endl;
 			shared_memory = shmat(shmid, NULL, 0);
 			if(shared_memory == (void*)-1) {
 				perror("shmat attach is failed\n");
@@ -546,15 +554,13 @@ namespace velox {
 
 			shm_status_addr = (uint64_t)shared_memory;	
 			shm_idx_addr = (uint64_t)shared_memory + sizeof(bool);
-			shm_base_chunk_addr = shm_idx_addr + sizeof(struct shm_buf) * shm_buf_width * shm_buf_depth;
+			shm_base_chunk_addr = shm_idx_addr + sizeof(struct shm_buf) * cores * shm_buf_depth;
 			is_likely_finish = false;
 			processed_chunk = 0;
-			failed_cnt = 0; 
-			likely = (shm_buf_width * shm_buf_depth - 1) <= 0 ? 1 : shm_buf_width * shm_buf_depth - 1;
-
-			to_del_buf = NULL;
+			cout << "Addr : " << shm_status_addr << " " << shm_idx_addr << " " << shm_base_chunk_addr << endl;
 		}
 
+		cout << "VeloxDFS Client is initialized successfully" << endl; 
 	}
 
 	DFS::~DFS(){
@@ -1683,6 +1689,7 @@ namespace velox {
 	// }}}
 	// get_metadata_optimized {{{
 	model::metadata DFS::get_metadata_optimized(std::string& fname, int type) {
+		cout << "Get Optimized Metadata" << endl;
 		bool is_logical_blocks = GET_STR("addons.zk.enabled") == string("true");
 		if (!is_logical_blocks or type == VELOX_LOGICAL_DISABLE) {
 			return get_metadata(fname);
@@ -1738,7 +1745,9 @@ namespace velox {
 			md.block_data.push_back(bdata);
 		}
 		
+		cout << "Send request message to all of nodes " << endl;
 		for(auto& lblock : fd->logical_blocks){
+			cout << "Request to Task Manager : " << lblock.host_name << " task id : " << tmg_id << endl;
 			TaskOperation task_ops;
 			task_ops.operation = eclipse::messages::TaskOperation::OpType::TASK_INIT;
 			task_ops.file = lblock.physical_blocks[0].primary_file;
@@ -1857,88 +1866,84 @@ namespace velox {
 		uint64_t read_bytes = 0;
 		struct shm_buf* cur_index;
 		int processed_buf = 0;
+		int failed_cnt = 0, likely = cores;
 		int begin_check_idx = shm_buf_idx;	
+	//	long shm_bitmap = 0;		
 
 		while(true){
 
-			while(failed_cnt < likely && !is_likely_finish){  // Get Chunk From Shared Memory 
+			while(failed_cnt < cores && !is_likely_finish){  // Get Chunk From Shared Memory 
 				shm_buf_idx = shm_buf_idx % total_shm_buf_num;
 				cur_index = (struct shm_buf*)(shm_idx_addr + sizeof(struct shm_buf) * shm_buf_idx);
 				
 				if(!pthread_mutex_trylock(&cur_index->lock)){
 					if(cur_index->commit == true){
+						cout << "failed cnt: " << failed_cnt << endl;
 						char* buf_addr = (char*)(shm_base_chunk_addr + BLOCK_SIZE * shm_buf_idx); 
-						//char* buf_addr = (char*)(shm_base_chunk_addr + BLOCK_SIZE * cur_index->read_buf_idx); 
-						//cout << "[VDFS] : Get a Chunk from Shared Memory : " << cur_index->chunk_index << " " <<cur_index->chunk_size << " " << cur_index->chunk_offset << endl;
 						//memcpy(buf, &(buf_addr[0]), cur_index->chunk_size);
-						//strncpy(buf, &(buf_addr[cur_index->chunk_offset]), cur_index->chunk_size);
 						strncpy(buf, &(buf_addr[0]), cur_index->chunk_size);
 						read_bytes = cur_index->chunk_size;
-						//memset(&(buf_addr[cur_index->chunk_offset]), 0, cur_index->chunk_size);
-						memset(&(buf_addr[0]), 0, cur_index->chunk_size);
+						memset(&(buf_addr[0]), 0, BLOCK_SIZE);
 						cur_index->commit = false;
 						pthread_mutex_unlock(&cur_index->lock);
 						failed_cnt = 0;
+						cout << "[VDFS] : Get a Chunk from Shared Memory : " 
+							<< cur_index->chunk_index << " " <<cur_index->chunk_size << endl;
 						processed_chunk++;
-
-						if(to_del_buf != NULL) delete[] to_del_buf;
-						to_del_buf = buf;
-						return read_bytes;
+						break;
 					} else {
+						cout << "[VDFS] : Failed to a Chunk from Shared Memory : " 
+							<< cur_index->chunk_index << " " <<cur_index->chunk_size << endl;
+
 						failed_cnt++;
 					}
 					pthread_mutex_unlock(&cur_index->lock);
 				} 
 				shm_buf_idx++;
+				//shm_buf_idx += cores;
 			}
 			
 			if(failed_cnt >= likely){
+		//	if(shm_bitmap == -1)
 				if(*(bool*)shm_status_addr)
 					is_likely_finish = true;
 				else {
+				//	shm_bitmap = 0;
 					failed_cnt = 0;
 				}
-			} 
+			} else 
+				break; 
 
 			begin_check_idx = shm_buf_idx;
-			shm_buf_idx++;
 			while(is_likely_finish) {  // Check, if all of chunks were processed
+				cout << "wrap up" << endl;
 				if(shm_buf_idx != begin_check_idx) {
 					shm_buf_idx = shm_buf_idx % total_shm_buf_num;
 					cur_index = (struct shm_buf*)(shm_idx_addr + sizeof(struct shm_buf) * shm_buf_idx);
 					if(!pthread_mutex_trylock(&cur_index->lock)){
 						if(cur_index->commit){
-							//char* buf_addr = (char*)(shm_base_chunk_addr + BLOCK_SIZE * cur_index->read_buf_idx); 
-							char* buf_addr = (char*)cur_index->chunk_offset; 
 							strncpy(buf, cur_index->buf, cur_index->chunk_size);
-							//strncpy(buf, &(buf_addr[cur_index->chunk_offset]), cur_index->chunk_size);
 							//memcpy(buf, cur_index->buf, cur_index->chunk_size);
 							read_bytes = cur_index->chunk_size;
 							cur_index->commit = false;
-							//memset(&(buf_addr[cur_index->chunk_offset]), 0, cur_index->chunk_size);
-							memset(&(buf_addr[0]), 0, cur_index->chunk_size);
+							memset(&(cur_index->buf[0]), 0, BLOCK_SIZE);
 							pthread_mutex_unlock(&cur_index->lock);
-	//						cout << "[VDFS-likely] : Get a Chunk from Shared Memory : " << cur_index->chunk_index << " " << read_bytes << endl;
+					//		cout << "[VDFS-steal] : Get a Chunk from Shared Memory : " << cur_index->chunk_index << " " << read_bytes << endl;
 							processed_chunk++;
-							if(to_del_buf != NULL) delete[] to_del_buf;
-							to_del_buf = buf;
 							return read_bytes;
 						} 
 						pthread_mutex_unlock(&cur_index->lock);
 					} 
 					shm_buf_idx++;				
 
-				} else {
+				}
+				else {
 					cout << "Client end : " << processed_chunk << endl;
-					if(to_del_buf != NULL) delete[] to_del_buf;
-					to_del_buf = buf;
 					return 0;
 				}
 			}
 		}
 
-		if(to_del_buf != NULL) delete[] to_del_buf;
-		to_del_buf = buf;
 		return read_bytes;
 	}
 	// }}}

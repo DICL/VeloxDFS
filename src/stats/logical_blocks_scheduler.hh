@@ -57,5 +57,15 @@ class scheduler_lean: public scheduler{
     virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;
 };
 
+class scheduler_steal: public scheduler{
+  public:
+    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;
+};
+
+class scheduler_base: public scheduler{
+  public:
+    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;
+};
+
 }
 }

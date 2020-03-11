@@ -1,0 +1,236 @@
+#include "task_manager.hh"
+#include <zookeeper/zookeeper.h>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+using namespace eclipse;
+using namespace eclipse::messages;
+using namespace eclipse::network;
+
+namespace eclipse {
+
+TaskManager::TaskManager (ClientHandler* net) : Node() {
+	network = net;
+  	network_size = context.settings.get<vec_str>("network.nodes").size();
+
+	cout << "Task Manager Init" << endl;
+}
+
+TaskManager::~TaskManager(){}
+
+
+/* Implemented by using zookeeper */
+DistLockStatus get_dist_lock(zhandle_t * zh, string znode, bool isPrimary){
+	string znode_contents = isPrimary ? "1" : "0"; 
+	char buffer[512] = {0};
+	int zoo_get_buf_len = 512;
+	int rc = zoo_create(zh, znode.c_str(), znode_contents.c_str(), 1, &ZOO_OPEN_ACL_UNSAFE, ZOO_EPHEMERAL, buffer, 512);
+
+	if(rc){  // Failed to get a dist lock
+		char buf[512];
+		if(!zoo_get(zh, znode.c_str(), 0, buf, &zoo_get_buf_len, NULL)){
+			if(!strncmp(buf, "1", zoo_get_buf_len)){  // conflict with primary node
+				return END_OF_FILE;		
+			} else { 										 // conflict with replica nodes
+				return isPrimary ? END_OF_FILE : TRY_NEXT_DIST_LOCK;
+			}
+		}	
+	}
+	
+	return GET_DIST_LOCK;
+}
+
+bool read_chunk_to_shm(ifstream& ifs, struct shm_buf** chunk_indices, vector<messages::BlockInfo>& md, vector<int>& indices, 
+	vector<int>::iterator it, int beg, int end, uint64_t len){
+	
+	
+	ifs.read(chunk_indices[beg]->buf, len);
+	//cout << "Read Chunk to SHM : " << beg << " " << end << " " << len << " " << *it << endl;
+	uint64_t shm_buf_offset = 0;
+	int md_beg = *it;
+	for(int idx = beg; idx < end; idx++){
+		chunk_indices[idx]->chunk_size = md[*it].size;
+		chunk_indices[idx]->read_buf_idx = beg;
+		chunk_indices[idx]->chunk_offset = shm_buf_offset;
+		chunk_indices[idx]->chunk_index = md[*it].seq;
+		chunk_indices[idx]->commit = true;
+		shm_buf_offset += md[*it].size;
+		it++;
+	}
+}
+
+void task_worker(std::string file, struct logical_block_metadata& lblock_metadata, string _job_id, int _task_id){
+	string job_id = _job_id;
+	/* For Shared Memory */
+	uint64_t BLOCK_SIZE = context.settings.get<int>("filesystem.block");
+	int shm_buf_depth = context.settings.get<int>("addons.shm_buf_depth");
+	int shm_buf_width = context.settings.get<int>("addons.shm_buf_width");
+	//int cores = context.settings.get<int>("addons.cores");
+	uint64_t buf_pool_size = sizeof(bool) + (sizeof(struct shm_buf) + BLOCK_SIZE) * shm_buf_depth * shm_buf_width;
+	string disk_path = context.settings.get<string>("path.scratch") + "/";
+	
+	/* For Zookeepr */	
+	string zk_server_addr = GET_STR("addons.zk.addr");
+  	int zk_server_port = GET_INT("addons.zk.port");
+  	string addr_port = zk_server_addr + ":" + to_string(zk_server_port);	
+	
+	zoo_set_debug_level((ZooLogLevel)0);
+ 	zhandle_t* zh = zookeeper_init(addr_port.c_str(), NULL , 40000, 0, 0, 0);
+	if(!zh){
+		cout << "[ " << job_id << " ] : " << "Zookeeper Connection Error" << endl;
+	}
+ 	string zk_prefix = "/chunks/" + job_id + "/";
+
+	/* For FD*/
+	ifstream ifs;
+	ifs.open(disk_path + file, ios::in | ios::binary);
+	ifs.seekg(ios::beg);
+
+	int input_block_num = lblock_metadata.primary_chunk_num;
+	auto& md = lblock_metadata.physical_blocks;
+	int task_id = _task_id;	
+
+	int shmid;
+	void* shared_memory; 
+	uint64_t shm_status_addr;
+	uint64_t shm_base_addr;
+	uint64_t shm_chunk_base_addr;
+	
+	/* Get Shared Memory Pool */
+	struct shm_buf** chunk_index = new struct shm_buf*[shm_buf_width * shm_buf_depth]; 
+	shmid = shmget((key_t)(DEFAULT_KEY + task_id), buf_pool_size, 0666|IPC_CREAT);
+
+	if(shmid == -1){
+		cout << "shmget failed" << endl;
+		exit(1);
+	}
+
+	shared_memory = shmat(shmid, NULL, 0);
+	if(shared_memory == (void*)-1){
+		cout << "shmat failed" << endl;
+		exit(1);
+	}
+
+	memset(shared_memory, 0, buf_pool_size);
+	shm_status_addr = (uint64_t)shared_memory;
+	shm_base_addr = (uint64_t)shared_memory + sizeof(bool);
+	shm_chunk_base_addr = shm_base_addr + sizeof(struct shm_buf) * shm_buf_width * shm_buf_depth;
+	int shm_buf_num = shm_buf_width * shm_buf_depth;
+
+	/* Init Mutex Locks for each shm_buf && store chunk addr*/
+	pthread_mutexattr_t lock_attr;
+	pthread_mutexattr_init(&lock_attr);
+	pthread_mutexattr_setpshared(&lock_attr, PTHREAD_PROCESS_SHARED);
+	for(int i = 0; i < shm_buf_num; i++){
+		chunk_index[i] = (struct shm_buf*)(shm_base_addr + sizeof(struct shm_buf) * i);
+		pthread_mutex_init(&(chunk_index[i]->lock), &lock_attr);
+		chunk_index[i]->buf = (char*)(shm_chunk_base_addr + (BLOCK_SIZE * i));
+	}
+	
+	int md_index = 0;
+	uint64_t input_file_offset = 0, read_bytes = 0;
+	bool isPrimary = true;
+	
+	int processed_file_cnt = 0, r_idx = 0, replica_num = 3, shm_idx = 0;
+	char* prefetch_buf = new char[BLOCK_SIZE];
+	
+	int processed_chunk_num = 0;
+	while( processed_file_cnt < replica_num ) {
+
+		while(md_index < input_block_num){
+			uint64_t replica_offset = 0;
+			vector<int> indices(0, shm_buf_width);
+			processed_chunk_num = input_block_num < (processed_chunk_num + shm_buf_width) ? input_block_num : (processed_chunk_num + shm_buf_width);
+			//processed_chunk_num = input_block_num < (processed_chunk_num + 1) ? input_block_num : (processed_chunk_num + 1);
+
+			while(md_index < processed_chunk_num){
+				string zk_path = zk_prefix + to_string(md[md_index].seq);
+				DistLockStatus rc = get_dist_lock(zh, zk_path.c_str(), isPrimary);
+	
+				if(rc == GET_DIST_LOCK){
+					indices.push_back(md_index);
+					md_index++;
+				} else if(rc == END_OF_FILE){
+					md_index = input_block_num;
+					break;
+				} else if(rc == TRY_NEXT_DIST_LOCK){
+					md_index++;
+					break;
+				} else {
+					exit(static_cast<int>(ZOO_CREATE_ERROR));
+				}
+			}
+
+			if(!isPrimary) reverse(indices.begin(), indices.end());
+			vector<int>::iterator it = indices.begin(), cur = indices.begin();
+			
+			while(it != indices.end()){
+				uint32_t read_bytes = 0;
+
+				int shm_it = shm_idx, shm_it_num = 0;	
+				while(!chunk_index[shm_idx]->commit && shm_it + shm_it_num < shm_buf_num && it != indices.end()){
+					pthread_mutex_lock(&chunk_index[shm_idx]->lock);
+					read_bytes += md[*it].size;
+					shm_it_num++; 
+					shm_idx = (shm_idx+1) % shm_buf_num;
+					it++; 
+				}
+				
+				if(shm_it_num > 0){
+					uint32_t next_cidx = (shm_it + shm_it_num) % shm_buf_num;
+//					cout << "Read Chunk to SHM : " << md[md_index].primary_file << " " << shm_it_num << endl;
+					ifs.seekg(md[*cur].offset);
+
+					while( chunk_index[next_cidx]->commit && shm_it_num < shm_buf_width);
+					read_chunk_to_shm(ifs, chunk_index, md, indices, cur, shm_it, shm_it_num + shm_it, read_bytes);
+
+					int shm_unlock_it = shm_it;
+					for( ; cur != it; cur++){
+						pthread_mutex_unlock(&chunk_index[shm_unlock_it]->lock);
+						shm_unlock_it++;
+					}
+				}
+			}
+			
+			processed_chunk_num = md_index;
+		}
+
+		ifs.close();	
+		isPrimary = false;
+		processed_file_cnt++;
+		if(md.size() == md_index) break;
+		ifs.open(disk_path + md[md_index].primary_file, ios::in | ios::binary | ios::ate);
+	//	cout << "Replica : " << md[md_index].primary_file << endl;
+		input_block_num += lblock_metadata.replica_chunk_num[r_idx++];
+		input_file_offset = 0;
+	}
+	
+	*(bool*)shm_status_addr = true;	
+  	//zookeeper_close(zh);
+
+	sleep(600);
+
+	/* Close Task */
+
+	cout << "Detach all" << endl;
+	delete[] chunk_index;
+	shmdt(shared_memory);
+	shmctl(shmid, IPC_RMID, 0);
+
+	return;
+}
+
+void TaskManager::task_init(std::string file, struct logical_block_metadata& metadata, string job_id, int _task_id){
+//	cout << " Create Worker For Job : " << job_id << endl;
+	std::thread worker = thread(&task_worker, file, std::ref(metadata), job_id, _task_id);
+	worker.detach();
+
+}
+
+//bool TaskManager::destroy_TaskManager(){
+
+//}
+	
+
+}

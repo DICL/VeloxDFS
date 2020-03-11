@@ -54,8 +54,12 @@ unique_ptr<Message> FileLeader::file_insert(messages::FileInfo* f) {
 // }}}
 // file_insert_confirm {{{
 bool FileLeader::file_insert_confirm(messages::FileInfo* f) {
-  directory.file_table_confirm_upload(f->name, f->num_block);
+  directory.file_table_confirm_upload(f->name, f->num_block, f->num_primary_file);
   directory.block_table_insert_all(f->blocks_metadata);
+
+	for(auto& metadata : f->blocks_metadata){
+		directory.chunk_table_insert_all(metadata.chunks, f->name);
+	}
   return true;
 }
 // }}}
@@ -66,22 +70,32 @@ bool FileLeader::file_update(messages::FileUpdate* f) {
 
     if (f->is_append) {
       BlockMetadata bi;
+			ChunkMetadata sbi;
       directory.select_last_block_metadata(f->name, &bi);
-      int last_seq = bi.seq;
+      directory.select_last_chunk_metadata(bi.name, &sbi);
+      //int last_seq = bi.seq;
+      int last_seq = sbi.chunk_seq;
 
-      for (auto& metadata : f->blocks_metadata) {
+      /*for (auto& metadata : f->blocks_metadata) {
         metadata.seq = ++last_seq;
         directory.block_table_insert(metadata);
+      }*/
+			for (auto& metadata : bi.chunks) {
+        metadata.chunk_seq = ++last_seq;
+        directory.chunk_table_insert(metadata, f->name);
       }
 
       FileInfo fi;
       directory.file_table_select(f->name, &fi);
-      directory.file_table_update(f->name, f->size + fi.size, last_seq + 1);
+      directory.file_table_update(f->name, f->size + fi.size, last_seq + 1, fi.num_primary_file);
 
     } else {
-      directory.file_table_update(f->name, f->size, f->num_block);
+      directory.file_table_update(f->name, f->size, f->num_block, f->num_primary_file);
       for (auto& metadata : f->blocks_metadata) {
         directory.block_table_insert(metadata);
+				for(auto& Smetadata: metadata.chunks){
+					directory.chunk_table_insert(Smetadata, f->name);
+				}
       }
     }
 
@@ -102,6 +116,7 @@ bool FileLeader::file_delete(messages::FileDel* f) {
   if (file_exist(f->name)) {
     directory.file_table_delete(f->name);
     directory.block_table_delete_all(f->name);
+    directory.chunk_table_delete_all(f->name);
     replicate_metadata();
 
     auto it = current_file_arrangements.find(f->name);
@@ -120,11 +135,11 @@ shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
   using namespace std;
   using namespace std::chrono;
   string file_name = m->name;
-
   std::shared_ptr<FileDescription> fd = make_shared<FileDescription>();
   fd->name = file_name;
 
   // Early exit for tasks
+	
   auto file_cached_it = current_file_arrangements.find(file_name);
   if (m->generate == false and file_cached_it != current_file_arrangements.end()) {
     fd = file_cached_it->second;
@@ -147,14 +162,60 @@ shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {
   fd->num_block = fd->n_lblock = fi.num_block;
   fd->intended_block_size = fi.intended_block_size;
 
-  std::vector<BlockMetadata> blocks;
+  
+	std::vector<BlockMetadata> blocks;
   directory.block_table_select(file_name, blocks);
-  for (auto& block : blocks) {
-    fd->blocks.push_back(block.name);
-    fd->hash_keys.push_back(block.hash_key);
-    fd->block_size.push_back(block.size);
-    fd->block_hosts.push_back(block.node);
-  }
+
+
+	fd->num_primary_file = blocks.size();
+	uint32_t primary_num = blocks.size();	
+
+	std::vector< std::vector<ChunkMetadata> > sblock(primary_num);
+	//for(uint32_t i = 0; i < primary_num; i++){
+	uint32_t idx = 0 , EOP = 0; // EOP == End of Primary's chunk
+	uint32_t chunk_start_idx = 0;
+
+	for(auto& block : blocks){
+		directory.chunk_table_select(block.name, sblock[idx]);
+		if(sblock[idx][0].chunk_seq == 0){
+			int h_idx = GET_INDEX(block.hash_key);
+			for(int i = 0; i< (int)primary_num; i++){
+				if(h_idx == GET_INDEX(blocks[i].hash_key)){
+					chunk_start_idx = i;
+					break;
+				}
+			}
+			//chunk_start_idx = GET_INDEX(block.hash_key);  
+			//break;
+		}
+		idx++;
+	}
+  
+	if(fd->num_block != 0){
+		for (uint32_t i = 0;  ; i++) {
+			if(EOP >= primary_num)
+				break;
+			uint32_t end_iter = chunk_start_idx + primary_num;
+			for(uint32_t j = chunk_start_idx; j < end_iter ; j++) {
+				idx = j % primary_num;
+
+				if(sblock[idx].size() > i){					
+					fd->blocks.push_back(sblock[idx][i].name);
+					fd->primary_files.push_back(blocks[idx].name);
+					fd->hash_keys.push_back(blocks[idx].hash_key);
+					fd->block_size.push_back(sblock[idx][i].size);
+					fd->block_hosts.push_back(blocks[idx].node);
+					fd->offsets.push_back(sblock[idx][i].offset);
+					fd->offsets_in_file.push_back(sblock[idx][i].foffset);
+					fd->chunk_sequences.push_back(sblock[idx][i].chunk_seq);
+					fd->primary_sequences.push_back(sblock[idx][i].primary_seq);
+
+				} else {
+					EOP++;
+				}
+			} 
+		}	
+	}
 
 #ifdef LOGICAL_BLOCKS_FEATURE
   if (fd->is_input == true and m->generate == true )  {

@@ -2,7 +2,7 @@
 
 using namespace eclipse;
 
-RouterDecorator::RouterDecorator(Router* _router) : router(_router) { }
+RouterDecorator::RouterDecorator(Router* _router) : router(_router){ }
 
 void RouterDecorator::on_read(messages::Message* m, Channel* c) {
   auto type = m->get_type();

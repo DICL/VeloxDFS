@@ -8,6 +8,7 @@ using namespace std;
 
 // }}}
 
+
 namespace eclipse {
 // Constructor & destructor {{{
 BlockNode::BlockNode (ClientHandler* net) : Node () { 
@@ -58,6 +59,7 @@ bool BlockNode::block_read_local(Block& block, uint64_t off, uint64_t len, bool 
   block.second = local_io.read(block.first, off, len, ignore_params);
   return true;
 }
+
 // }}}
 // block_delete_local {{{
 //! @brief This method read the block locally.
@@ -77,7 +79,8 @@ bool BlockNode::block_delete_local(Block& block, bool replicate) {
 }
 // }}}
 // block_update_local {{{
-bool BlockNode::block_update_local(Block& block, uint32_t pos, uint32_t len, bool replicate) {
+//bool BlockNode::block_update_local(Block& block, uint32_t pos, uint32_t len, bool replicate) {
+bool BlockNode::block_update_local(Block& block, uint64_t pos, uint64_t len, bool replicate) {
   local_io.update(block.first, block.second, pos, len);
 
   if (replicate) {
@@ -94,5 +97,5 @@ bool BlockNode::block_update_local(Block& block, uint32_t pos, uint32_t len, boo
   }
   return true;
 }
-// }}}
+
 }

@@ -40,7 +40,7 @@ class file {
 class vdfs {
   friend file;
   public:
-    vdfs();
+    vdfs(std::string job_id, int tid, bool initializer);
     vdfs(vdfs&);
     ~vdfs();
 
@@ -63,7 +63,9 @@ class vdfs {
     uint32_t write(long, const char*, uint32_t, uint32_t);
     uint32_t write(long, const char*, uint32_t, uint32_t, uint64_t);
     uint32_t read(long, char*, uint64_t, uint64_t);
-    uint32_t read_chunk(std::string name, std::string host, char *buf, uint64_t boff, uint64_t , uint64_t);
+    //uint32_t read_chunk(std::string name, std::string host, char *buf, uint32_t boff, uint64_t , uint64_t, int);
+    uint32_t read_chunk(char *buf, uint32_t boff);
+    //int* read_chunk(std::string name, std::string host, char *buf, uint32_t boff, uint64_t , uint64_t, int);
 
     model::metadata get_metadata(long fid, int type);
 
@@ -73,6 +75,13 @@ class vdfs {
 
     bool rename(std::string, std::string);
 
+		velox::file write_file(std::string, const std::string&, uint64_t);
+	
+	int get_tmg_id();
+	
+	int tmg_id;
+	std::string job_id;
+	bool initializer;
   protected:
     DFS* dfs;
     std::string load(std::string);

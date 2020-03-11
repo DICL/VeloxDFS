@@ -20,9 +20,9 @@
 #include "fileupdate.hh"
 #include "metadata.hh"
 #include "IOoperation.hh"
+#include "task_operation.hh"
 #include "../common/blockmetadata.hh"
 #include "../common/logical_block_metadata.hh"
-
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/base_object.hpp>
@@ -51,8 +51,10 @@ template <typename Archive> void serialize (Archive&, eclipse::messages::FormatR
 template <typename Archive> void serialize (Archive&, eclipse::messages::FileExist&, unsigned);
 template <typename Archive> void serialize (Archive&, eclipse::messages::MetaData&, unsigned);
 template <typename Archive> void serialize (Archive&, eclipse::BlockMetadata&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::ChunkMetadata&, unsigned);
 template <typename Archive> void serialize (Archive&, eclipse::messages::IOoperation&, unsigned);
 template <typename Archive> void serialize (Archive&, eclipse::logical_block_metadata&, unsigned);
+template <typename Archive> void serialize (Archive&, eclipse::messages::TaskOperation&, unsigned);
 }
 }
 
@@ -72,9 +74,10 @@ BOOST_CLASS_EXPORT_KEY(eclipse::messages::FormatRequest);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileExist);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::MetaData);
 BOOST_CLASS_EXPORT_KEY(eclipse::BlockMetadata);
+BOOST_CLASS_EXPORT_KEY(eclipse::ChunkMetadata);
 BOOST_CLASS_EXPORT_KEY(eclipse::messages::IOoperation);
 BOOST_CLASS_EXPORT_KEY(eclipse::logical_block_metadata);
-
+BOOST_CLASS_EXPORT_KEY(eclipse::messages::TaskOperation);
 // 4) and here
 BOOST_CLASS_TRACKING(eclipse::messages::Message, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::FileInfo, boost::serialization::track_never);
@@ -89,5 +92,7 @@ BOOST_CLASS_TRACKING(eclipse::messages::FileDel, boost::serialization::track_nev
 BOOST_CLASS_TRACKING(eclipse::messages::FormatRequest, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::FileExist, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::BlockMetadata, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::ChunkMetadata, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::messages::IOoperation, boost::serialization::track_never);
 BOOST_CLASS_TRACKING(eclipse::logical_block_metadata, boost::serialization::track_never);
+BOOST_CLASS_TRACKING(eclipse::messages::TaskOperation, boost::serialization::track_never);

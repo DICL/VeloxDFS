@@ -20,6 +20,9 @@ class cli_driver {
     void format();
     void file_rename(std::string, std::string);
     void attributes(std::string);
-
-    velox::DFS dfs;
+	
+		void test_vdfs_write_io(std::string);
+		void test_vdfs_read_io(std::string);
+    velox::DFS *dfs;
+    //velox::DFS dfs(-1,0);
 };

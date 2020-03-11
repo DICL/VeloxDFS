@@ -30,4 +30,5 @@ public class Metadata {
   public int type;
   public int replica;
   public BlockMetadata[] blocks;
+  public int lbm_id;
 }

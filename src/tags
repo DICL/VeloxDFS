@@ -1,0 +1,965 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ALPHA	common/histogram.hh	11;"	d
+AsyncChannel	network/asyncchannel.cc	/^AsyncChannel::AsyncChannel(NetObserver* node_) : $/;"	f	class:AsyncChannel
+AsyncChannel	network/asyncchannel.hh	/^class AsyncChannel: public Channel, public std::enable_shared_from_this<AsyncChannel> {$/;"	c	namespace:eclipse::network
+BASE_OBJECT	messages/boost_impl.hh	31;"	d
+BLOCK_DELETE	messages/IOoperation.hh	/^    BLOCK_DELETE,$/;"	m	class:eclipse::messages::IOoperation::OpType
+BLOCK_DELETE_REPLICA	messages/IOoperation.hh	/^    BLOCK_DELETE_REPLICA,$/;"	m	class:eclipse::messages::IOoperation::OpType
+BLOCK_INSERT	messages/IOoperation.hh	/^    BLOCK_INSERT,$/;"	m	class:eclipse::messages::IOoperation::OpType
+BLOCK_INSERT_REPLICA	messages/IOoperation.hh	/^    BLOCK_INSERT_REPLICA,$/;"	m	class:eclipse::messages::IOoperation::OpType
+BLOCK_REQUEST	messages/IOoperation.hh	/^    BLOCK_REQUEST,$/;"	m	class:eclipse::messages::IOoperation::OpType
+BLOCK_SIZE	blocknode/lblock_manager.hh	8;"	d
+BLOCK_SIZE	client/dfs.cc	/^	uint64_t BLOCK_SIZE;$/;"	m	namespace:velox	file:
+BLOCK_TRANSFER	messages/IOoperation.hh	/^    BLOCK_TRANSFER,$/;"	m	class:eclipse::messages::IOoperation::OpType
+BLOCK_UPDATE	messages/IOoperation.hh	/^    BLOCK_UPDATE,$/;"	m	class:eclipse::messages::IOoperation::OpType
+BLOCK_UPDATE_REPLICA	messages/IOoperation.hh	/^    BLOCK_UPDATE_REPLICA,$/;"	m	class:eclipse::messages::IOoperation::OpType
+BOOST_SPIRIT_THREADSAFE	common/settings.cc	6;"	d	file:
+Block	common/block.hh	/^typedef std::pair<std::string, std::string> Block;$/;"	t
+BlockInfo	messages/blockinfo.hh	/^  struct BlockInfo: public Message {$/;"	s	namespace:eclipse::messages
+BlockInfo	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::BlockInfo);$/;"	v
+BlockInfo	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::BlockInfo);$/;"	v
+BlockMetadata	common/blockmetadata.hh	/^struct BlockMetadata {$/;"	s	namespace:eclipse
+BlockMetadata	java/velox/model/BlockMetadata.java	/^  public BlockMetadata() { }$/;"	m	class:BlockMetadata
+BlockMetadata	java/velox/model/BlockMetadata.java	/^  public BlockMetadata(BlockMetadata that) {$/;"	m	class:BlockMetadata
+BlockMetadata	java/velox/model/BlockMetadata.java	/^public class BlockMetadata {$/;"	c
+BlockMetadata	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::BlockMetadata);$/;"	v
+BlockMetadata	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::BlockMetadata);$/;"	v
+BlockNode	blocknode/block_node.cc	/^BlockNode::BlockNode (ClientHandler* net) : Node () { $/;"	f	class:eclipse::BlockNode
+BlockNode	blocknode/block_node.hh	/^class BlockNode: public Node {$/;"	c	namespace:eclipse
+BlockNodeRouter	blocknode/block_node_router.cc	/^BlockNodeRouter::BlockNodeRouter (BlockNode* b_node, Router* router) : RouterDecorator(router) {$/;"	f	class:BlockNodeRouter
+BlockNodeRouter	blocknode/block_node_router.hh	/^class BlockNodeRouter: public RouterDecorator {$/;"	c	namespace:eclipse
+BlockRequest	messages/blockrequest.hh	/^struct BlockRequest: public Message {$/;"	s	namespace:eclipse::messages
+BlockRequest	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::BlockRequest);$/;"	v
+BlockRequest	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::BlockRequest);$/;"	v
+Channel	network/channel.hh	/^class Channel  {$/;"	c	namespace:eclipse::network
+ChunkMetadata	common/blockmetadata.hh	/^struct ChunkMetadata{$/;"	s	namespace:eclipse
+ChunkMetadata	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::ChunkMetadata);$/;"	v
+ChunkMetadata	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::ChunkMetadata);$/;"	v
+ClientHandler	network/client_handler.cc	/^ClientHandler::ClientHandler (uint32_t p):$/;"	f	class:ClientHandler
+ClientHandler	network/client_handler.hh	/^class ClientHandler {$/;"	c	namespace:eclipse::network
+Configuration	java/velox/Configuration.java	/^    public Configuration(String path) {$/;"	m	class:Configuration
+Configuration	java/velox/Configuration.java	/^public class Configuration {$/;"	c
+Context	common/context.cc	/^Context::Context(): work(io) {$/;"	f	class:Context
+Context	common/context.cc	/^Context::Context(string s): settings(s), work(io) {$/;"	f	class:Context
+Context	common/context.hh	/^class Context {$/;"	c
+DEBUG	common/context_singleton.hh	10;"	d
+DEFAULT_KEY	common/shared_memory.hh	6;"	d
+DEFAULT_QUERY_SIZE	fileleader/directory.cc	6;"	d	file:
+DFS	client/dfs.cc	/^	DFS::DFS(string _mr_job_id, int _tmg_id, bool _initializer) { $/;"	f	class:velox::DFS
+DFS	client/dfs.hh	/^class DFS {$/;"	c	namespace:velox
+Directory	fileleader/directory.cc	/^Directory::Directory() {$/;"	f	class:Directory
+Directory	fileleader/directory.hh	/^class Directory {$/;"	c	namespace:eclipse
+DistLockStatus	taskmanager/task_manager.hh	/^enum DistLockStatus {$/;"	g
+END_OF_FILE	taskmanager/task_manager.hh	/^		END_OF_FILE,$/;"	e	enum:DistLockStatus
+ERROR	common/context_singleton.hh	7;"	d
+FINAL_PATH	common/settings.cc	30;"	d	file:
+FileDel	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FileDel);$/;"	v
+FileDel	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileDel);$/;"	v
+FileDel	messages/filedel.hh	/^struct FileDel: public Message {$/;"	s	namespace:eclipse::messages
+FileDescription	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FileDescription);$/;"	v
+FileDescription	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileDescription);$/;"	v
+FileDescription	messages/filedescription.hh	/^struct FileDescription: public FileInfo {$/;"	s	namespace:eclipse::messages
+FileExist	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FileExist);$/;"	v
+FileExist	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileExist);$/;"	v
+FileExist	messages/fileexist.hh	/^struct FileExist: public Message {$/;"	s	namespace:eclipse::messages
+FileInfo	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileInfo);$/;"	v
+FileInfo	messages/fileinfo.hh	/^struct FileInfo: public Message {$/;"	s	namespace:eclipse::messages
+FileLeader	fileleader/file_leader.cc	/^FileLeader::FileLeader (ClientHandler* net) : Node () { $/;"	f	class:FileLeader
+FileLeader	fileleader/file_leader.hh	/^class FileLeader: public Node {$/;"	c	namespace:eclipse
+FileLeaderRouter	fileleader/file_leader_router.cc	/^FileLeaderRouter::FileLeaderRouter(FileLeader* fl, Router* router): RouterDecorator(router) {$/;"	f	class:FileLeaderRouter
+FileLeaderRouter	fileleader/file_leader_router.hh	/^class FileLeaderRouter: public RouterDecorator {$/;"	c	namespace:eclipse
+FileList	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FileList);$/;"	v
+FileList	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileList);$/;"	v
+FileList	messages/filelist.cc	/^FileList::FileList (std::vector<FileInfo> v) : data(v) { }$/;"	f	class:eclipse::messages::FileList
+FileList	messages/filelist.hh	/^struct FileList: public Message {$/;"	s	namespace:eclipse::messages
+FileRequest	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FileRequest);$/;"	v
+FileRequest	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileRequest);$/;"	v
+FileRequest	messages/filerequest.hh	/^struct FileRequest: public Message {$/;"	s	namespace:eclipse::messages
+FileUpdate	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FileUpdate);$/;"	v
+FileUpdate	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::FileUpdate);$/;"	v
+FileUpdate	messages/fileupdate.hh	/^struct FileUpdate: public Message {$/;"	s	namespace:eclipse::messages
+FormatRequest	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FormatRequest);$/;"	v
+FormatRequest	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::FormatRequest);$/;"	v
+FormatRequest	messages/formatrequest.hh	/^struct FormatRequest: public Message {$/;"	s	namespace:eclipse::messages
+GET_BOOL	common/context_singleton.hh	15;"	d
+GET_DIST_LOCK	taskmanager/task_manager.hh	/^		GET_DIST_LOCK,$/;"	e	enum:DistLockStatus
+GET_INDEX	common/context_singleton.hh	16;"	d
+GET_INDEX_IN_BOUNDARY	common/context_singleton.hh	17;"	d
+GET_INT	common/context_singleton.hh	12;"	d
+GET_STR	common/context_singleton.hh	13;"	d
+GET_VEC_STR	common/context_singleton.hh	14;"	d
+HASHLENGTH	common/hash.hh	7;"	d
+Histogram	common/histogram.cc	/^Histogram::Histogram (int numserver, int numbin)$/;"	f	class:Histogram
+Histogram	common/histogram.cc	/^Histogram::Histogram()$/;"	f	class:Histogram
+Histogram	common/histogram.hh	/^class Histogram$/;"	c
+INFO	common/context_singleton.hh	9;"	d
+IO_STAT_SCRIPT	stats/io_monitor_invoker.cc	8;"	d	file:
+IOoperation	messages/IOoperation.hh	/^struct IOoperation: public Message {$/;"	s	namespace:eclipse::messages
+IOoperation	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::IOoperation);$/;"	v
+IOoperation	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::IOoperation);$/;"	v
+Java_com_dicl_velox_VeloxDFS_close	java/jni/VeloxDFS.cc	/^JNIEXPORT jboolean JNICALL Java_com_dicl_velox_VeloxDFS_close$/;"	f
+Java_com_dicl_velox_VeloxDFS_constructVeloxDFS	java/jni/VeloxDFS.cc	/^JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_constructVeloxDFS$/;"	f
+Java_com_dicl_velox_VeloxDFS_destructVeloxDFS	java/jni/VeloxDFS.cc	/^JNIEXPORT void JNICALL Java_com_dicl_velox_VeloxDFS_destructVeloxDFS$/;"	f
+Java_com_dicl_velox_VeloxDFS_exists	java/jni/VeloxDFS.cc	/^JNIEXPORT jboolean JNICALL Java_com_dicl_velox_VeloxDFS_exists$/;"	f
+Java_com_dicl_velox_VeloxDFS_getMetadata	java/jni/VeloxDFS.cc	/^JNIEXPORT jobject JNICALL Java_com_dicl_velox_VeloxDFS_getMetadata$/;"	f
+Java_com_dicl_velox_VeloxDFS_isOpen	java/jni/VeloxDFS.cc	/^JNIEXPORT jboolean JNICALL Java_com_dicl_velox_VeloxDFS_isOpen$/;"	f
+Java_com_dicl_velox_VeloxDFS_list	java/jni/VeloxDFS.cc	/^JNIEXPORT jobjectArray JNICALL Java_com_dicl_velox_VeloxDFS_list$/;"	f
+Java_com_dicl_velox_VeloxDFS_open	java/jni/VeloxDFS.cc	/^JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_open$/;"	f
+Java_com_dicl_velox_VeloxDFS_read	java/jni/VeloxDFS.cc	/^JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_read$/;"	f
+Java_com_dicl_velox_VeloxDFS_readChunk	java/jni/VeloxDFS.cc	/^JNIEXPORT jint JNICALL Java_com_dicl_velox_VeloxDFS_readChunk$/;"	f
+Java_com_dicl_velox_VeloxDFS_remove	java/jni/VeloxDFS.cc	/^JNIEXPORT jboolean JNICALL Java_com_dicl_velox_VeloxDFS_remove$/;"	f
+Java_com_dicl_velox_VeloxDFS_rename	java/jni/VeloxDFS.cc	/^JNIEXPORT jboolean JNICALL Java_com_dicl_velox_VeloxDFS_rename$/;"	f
+Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJ	java/jni/VeloxDFS.cc	/^JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJ$/;"	f
+Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJJ	java/jni/VeloxDFS.cc	/^JNIEXPORT jlong JNICALL Java_com_dicl_velox_VeloxDFS_write__JJ_3BJJJ$/;"	f
+Java_com_dicl_velox_VeloxDFS_write_file	java/jni/VeloxDFS.cc	/^JNIEXPORT void JNICALL Java_com_dicl_velox_VeloxDFS_write_file$/;"	f
+KERNELWIDTH	common/histogram.hh	15;"	d
+LBLOCK_MANAGER_INIT	messages/IOoperation.hh	/^	LBLOCK_MANAGER_INIT,$/;"	m	class:eclipse::messages::IOoperation::OpType
+LBLOCK_MANAGER_READ	messages/IOoperation.hh	/^	LBLOCK_MANAGER_READ,$/;"	m	class:eclipse::messages::IOoperation::OpType
+LBLOCK_STOP	messages/IOoperation.hh	/^	LBLOCK_STOP,$/;"	m	class:eclipse::messages::IOoperation::OpType
+LOGICAL_BLOCK_REQUEST	messages/IOoperation.hh	/^	LOGICAL_BLOCK_REQUEST,$/;"	m	class:eclipse::messages::IOoperation::OpType
+Local_io	blocknode/local_io.cc	/^Local_io::Local_io() {$/;"	f	class:Local_io
+Local_io	blocknode/local_io.hh	/^class Local_io {$/;"	c	namespace:eclipse
+Logger	common/logger.cc	/^Logger::Logger (char* title, const string& type, string mask_) { $/;"	f	class:Logger
+Logger	common/logger.hh	/^class Logger {$/;"	c
+MAX_UINT	common/histogram.hh	7;"	d
+MIN_BLOCK_SIZE	stats/scheduler_multiwave.cc	/^const uint32_t MIN_BLOCK_SIZE = GET_INT("addons.min_block_size"); \/\/#33554432;$/;"	m	namespace:__anon5	file:
+MIN_BLOCK_SIZE	stats/scheduler_vlmb.cc	11;"	d	file:
+Machine	nodes/machine.cc	/^Machine::Machine(int id_) : id(id_) { }$/;"	f	class:eclipse::Machine
+Machine	nodes/machine.hh	/^class Machine {$/;"	c	namespace:eclipse
+Message	messages/message.cc	/^Message::Message(int o, int d) : origin(o), destination(d) { }$/;"	f	class:eclipse::messages::Message
+Message	messages/message.hh	/^struct Message {$/;"	s	namespace:eclipse::messages
+MetaData	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::MetaData);$/;"	v
+MetaData	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::MetaData);$/;"	v
+MetaData	messages/metadata.hh	/^  struct MetaData: public Message {$/;"	s	namespace:eclipse::messages
+Metadata	java/velox/model/Metadata.java	/^  public Metadata(String _name, long _hashKey, long _size, int _numBlock, int _type, int _replica, int numChunks, int numStaticBlocks, BlockMetadata[] _blocks) {$/;"	m	class:Metadata
+Metadata	java/velox/model/Metadata.java	/^public class Metadata {$/;"	c
+NUM_NODES	client/dfs.hh	/^    uint32_t NUM_NODES;$/;"	m	class:velox::DFS
+NetObserver	network/netobserver.hh	/^struct NetObserver {$/;"	s	namespace:eclipse::network
+Node	nodes/node.cc	/^Node::Node() : $/;"	f	class:eclipse::Node
+Node	nodes/node.hh	/^class Node: public Machine {$/;"	c	namespace:eclipse
+OUTPUT_LEN	stats/scheduler_python.cc	15;"	d	file:
+OpType	messages/IOoperation.hh	/^  enum class OpType {$/;"	c	struct:eclipse::messages::IOoperation
+OpType	messages/task_operation.hh	/^  enum class OpType {$/;"	c	struct:eclipse::messages::TaskOperation
+PANIC	common/context_singleton.hh	6;"	d
+PRIMARY	taskmanager/task_manager.cc	/^enum READ_FILE { PRIMARY, REPLICA1, REPLICA2 };$/;"	e	enum:eclipse::READ_FILE	file:
+READ	stats/scheduler_python.cc	14;"	d	file:
+READ_FILE	taskmanager/task_manager.cc	/^enum READ_FILE { PRIMARY, REPLICA1, REPLICA2 };$/;"	g	namespace:eclipse	file:
+REPLICA1	taskmanager/task_manager.cc	/^enum READ_FILE { PRIMARY, REPLICA1, REPLICA2 };$/;"	e	enum:eclipse::READ_FILE	file:
+REPLICA2	taskmanager/task_manager.cc	/^enum READ_FILE { PRIMARY, REPLICA1, REPLICA2 };$/;"	e	enum:eclipse::READ_FILE	file:
+Reply	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::Reply);$/;"	v
+Reply	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::Reply);$/;"	v
+Reply	messages/reply.hh	/^struct Reply: public Message {$/;"	s	namespace:eclipse::messages
+Router	network/router.hh	/^class Router: public NetObserver {$/;"	c	namespace:eclipse
+RouterDecorator	network/router_decorator.cc	/^RouterDecorator::RouterDecorator(Router* _router) : router(_router){ }$/;"	f	class:RouterDecorator
+RouterDecorator	network/router_decorator.hh	/^class RouterDecorator: public Router {$/;"	c	namespace:eclipse
+SCHEDULER_OPTS	stats/logical_blocks_scheduler.hh	/^typedef std::map<std::string, std::string> SCHEDULER_OPTS;$/;"	t	namespace:eclipse::logical_blocks_schedulers
+SLOTS	stats/scheduler_multiwave.cc	/^const uint32_t SLOTS = GET_INT("addons.cores");$/;"	m	namespace:__anon5	file:
+SYSLOG_NAMES	common/logger.cc	8;"	d	file:
+Server	network/server.cc	/^Server::Server(NetObserver* node_) :$/;"	f	class:Server
+Server	network/server.hh	/^class Server: public AsyncChannel {$/;"	c	namespace:eclipse::network
+ServerHandler	network/server_handler.cc	/^ServerHandler::ServerHandler (uint32_t p):$/;"	f	class:ServerHandler
+ServerHandler	network/server_handler.hh	/^class ServerHandler {$/;"	c	namespace:eclipse::network
+Settings	common/settings.cc	/^Settings::Settings() : impl {new SettingsImpl()} { }$/;"	f	class:Settings
+Settings	common/settings.cc	/^Settings::Settings(Settings&& that) { this->impl = std::move(that.impl); }$/;"	f	class:Settings
+Settings	common/settings.cc	/^Settings::Settings(string in) : impl {new SettingsImpl(in)} { }$/;"	f	class:Settings
+Settings	common/settings.hh	/^class Settings $/;"	c
+SettingsImpl	common/settings.cc	/^    SettingsImpl(string in) : input (in), nofile (true) { }$/;"	f	class:Settings::SettingsImpl
+SettingsImpl	common/settings.cc	/^class Settings::SettingsImpl {$/;"	c	class:Settings	file:
+SimpleRouter	network/simple_router.hh	/^class SimpleRouter: public Router {$/;"	c	namespace:eclipse
+TASK_INIT	messages/task_operation.hh	/^	TASK_INIT,$/;"	m	class:eclipse::messages::TaskOperation::OpType
+TRY_NEXT_DIST_LOCK	taskmanager/task_manager.hh	/^		TRY_NEXT_DIST_LOCK,$/;"	e	enum:DistLockStatus
+TaskManager	taskmanager/task_manager.cc	/^TaskManager::TaskManager (ClientHandler* net) : Node() {$/;"	f	class:eclipse::TaskManager
+TaskManager	taskmanager/task_manager.hh	/^class TaskManager : public Node {$/;"	c	namespace:eclipse
+TaskManagerRouter	taskmanager/task_manager_router.cc	/^TaskManagerRouter::TaskManagerRouter (TaskManager* t_node, Router* router) : RouterDecorator(router) {$/;"	f	class:TaskManagerRouter
+TaskManagerRouter	taskmanager/task_manager_router.hh	/^class TaskManagerRouter: public RouterDecorator {$/;"	c	namespace:eclipse
+TaskOperation	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::TaskOperation);$/;"	v
+TaskOperation	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::TaskOperation);$/;"	v
+TaskOperation	messages/task_operation.hh	/^struct TaskOperation : public Message {$/;"	s	namespace:eclipse::messages
+VELOX_LOGICAL_DISABLE	client/dfs.hh	11;"	d
+VELOX_LOGICAL_GENERATE	client/dfs.hh	14;"	d
+VELOX_LOGICAL_NOOP	client/dfs.hh	13;"	d
+VELOX_LOGICAL_OUTPUT	client/dfs.hh	12;"	d
+VeloxDFS	java/velox/VeloxDFS.java	/^  public VeloxDFS(String mr_job_id, long tid, boolean initializer) {$/;"	m	class:VeloxDFS
+VeloxDFS	java/velox/VeloxDFS.java	/^public class VeloxDFS {$/;"	c
+WARN	common/context_singleton.hh	8;"	d
+WRITE	stats/scheduler_python.cc	13;"	d	file:
+ZK_BUFFER_LEN	stats/zk_listener.cc	7;"	d	file:
+ZOO_CREATE_ERROR	taskmanager/task_manager.hh	/^		ZOO_CREATE_ERROR$/;"	e	enum:DistLockStatus
+__HISTOGRAM__	common/histogram.hh	2;"	d
+__LOGGER_HH__	common/logger.hh	16;"	d
+__MODEL_BLOCK_METADATA_HH__	client/model/block_metadata.hh	2;"	d
+__SETTINGS_HH_	common/settings.hh	39;"	d
+addblock	stats/scheduler_python.cc	/^void addblock(FileDescription& file_desc, std::vector<std::string> nodes, std::vector<int> sblock, $/;"	f
+append	blocknode/local_io.cc	/^void Local_io::append (const std::string& name, const std::string& v, uint64_t len) {$/;"	f	class:Local_io
+append	client/dfs.cc	/^	int DFS::append(string file_name, string buf) {$/;"	f	class:velox::DFS
+append	client/vdfs.cc	/^void file::append(std::string content) {$/;"	f	class:file
+append	client/vdfs.cc	/^void vdfs::append (std::string name, std::string content) {$/;"	f	class:vdfs
+assign_chunks_to_slots	stats/scheduler_multiwave.cc	/^void assign_chunks_to_slots(CHUNKS chunks, FD& fd, std::vector<std::string> nodes) {$/;"	f	namespace:__anon5
+assigned_chunks	blocknode/lblock_manager.hh	/^	std::vector<eclipse::messages::BlockInfo> assigned_chunks;$/;"	m	struct:task
+attach	network/client_handler.cc	/^void ClientHandler::attach(NetObserver* n) {$/;"	f	class:ClientHandler
+attach	network/server_handler.cc	/^void ServerHandler::attach (NetObserver* node_) {$/;"	f	class:ServerHandler
+attributes	client/cli_driver.cc	/^void cli_driver::attributes(std::string file) {$/;"	f	class:cli_driver
+batch_read	blocknode/local_io.cc	/^std::string Local_io::batch_read(const string& name, uint32_t totalLen, vector< pair<uint64_t, uint64_t > > &block_info ){$/;"	f	class:Local_io
+bestFit	stats/scheduler.py	/^def bestFit(nodes, io, chunks, tasksPerNode):$/;"	f
+block	messages/IOoperation.hh	/^  Block block;$/;"	m	struct:eclipse::messages::IOoperation
+blockSize	java/velox/Configuration.java	/^    public long blockSize() {$/;"	m	class:Configuration
+block_callback	fileleader/directory.cc	/^static int block_callback(void *block_info, int argc, char **argv, char **azColName) {$/;"	f	file:
+block_data	client/model/metadata.hh	/^    std::vector<block_metadata> block_data;$/;"	m	class:velox::model::metadata
+block_delete_local	blocknode/block_node.cc	/^bool BlockNode::block_delete_local(Block& block, bool replicate) {$/;"	f	class:eclipse::BlockNode
+block_hosts	messages/filedescription.hh	/^  std::vector<std::string> block_hosts;$/;"	m	struct:eclipse::messages::FileDescription
+block_insert_local	blocknode/block_node.cc	/^bool BlockNode::block_insert_local(Block& block, bool replicate) {$/;"	f	class:eclipse::BlockNode
+block_list_callback	fileleader/directory.cc	/^static int block_list_callback(void *list, int argc, char **argv, char **azColName) {$/;"	f	file:
+block_metadata	client/model/block_metadata.hh	/^    class block_metadata { \/\/logical_block$/;"	c	namespace:velox::model
+block_metadata	messages/IOoperation.hh	/^  BlockMetadata block_metadata;$/;"	m	struct:eclipse::messages::IOoperation
+block_node	blocknode/block_node_router.hh	/^    BlockNode* block_node = nullptr;$/;"	m	class:eclipse::BlockNodeRouter
+block_read_local	blocknode/block_node.cc	/^bool BlockNode::block_read_local(Block& block, uint64_t off, uint64_t len, bool ignore_params) {$/;"	f	class:eclipse::BlockNode
+block_size	client/model/metadata.hh	/^    std::vector<uint64_t> block_size;$/;"	m	class:velox::model::metadata
+block_size	messages/filedescription.hh	/^  std::vector<uint64_t> block_size;$/;"	m	struct:eclipse::messages::FileDescription
+block_table_delete	fileleader/directory.cc	/^void Directory::block_table_delete(string file_name, unsigned int seq) {$/;"	f	class:Directory
+block_table_delete_all	fileleader/directory.cc	/^void Directory::block_table_delete_all(string file_name) {$/;"	f	class:Directory
+block_table_insert	fileleader/directory.cc	/^void Directory::block_table_insert(BlockMetadata& metadata) {$/;"	f	class:Directory
+block_table_insert_all	fileleader/directory.cc	/^void Directory::block_table_insert_all(std::vector<BlockMetadata>& metadata) {$/;"	f	class:Directory
+block_table_select	fileleader/directory.cc	/^void Directory::block_table_select(string file_name, std::vector<BlockMetadata>& blocks) {$/;"	f	class:Directory
+block_table_select_all	fileleader/directory.cc	/^void Directory::block_table_select_all(vector<BlockMetadata> &block_info) {$/;"	f	class:Directory
+block_table_select_by_index	fileleader/directory.cc	/^void Directory::block_table_select_by_index(string file_name, unsigned int block_seq, BlockMetadata *block_info) {$/;"	f	class:Directory
+block_table_update	fileleader/directory.cc	/^void Directory::block_table_update(string file_name, uint32_t size, uint32_t seq) {$/;"	f	class:Directory
+block_update_local	blocknode/block_node.cc	/^bool BlockNode::block_update_local(Block& block, uint64_t pos, uint64_t len, bool replicate) {$/;"	f	class:eclipse::BlockNode
+blocks	client/model/metadata.hh	/^    std::vector<std::string> blocks;$/;"	m	class:velox::model::metadata
+blocks	java/velox/model/Metadata.java	/^  public BlockMetadata[] blocks;$/;"	f	class:Metadata
+blocks	messages/filedescription.hh	/^  std::vector<std::string> blocks;$/;"	m	struct:eclipse::messages::FileDescription
+blocks_metadata	messages/fileinfo.hh	/^  std::vector<BlockMetadata> blocks_metadata;$/;"	m	struct:eclipse::messages::FileInfo
+blocks_metadata	messages/fileupdate.hh	/^  std::vector<BlockMetadata> blocks_metadata;$/;"	m	struct:eclipse::messages::FileUpdate
+boost	messages/boost_impl.cc	/^namespace boost {$/;"	n	file:
+boost	messages/boost_impl.hh	/^namespace boost{$/;"	n
+boundaries	common/histogram.hh	/^        uint32_t* boundaries; \/\/ the index of end point of each node$/;"	m	class:Histogram
+boundaries	fileleader/file_leader.hh	/^    std::unique_ptr<Histogram> boundaries;$/;"	m	class:eclipse::FileLeader
+boundaries	stats/logical_blocks_scheduler.hh	/^    Histogram* boundaries;$/;"	m	class:eclipse::logical_blocks_schedulers::scheduler
+buf	blocknode/lblock_manager.hh	/^	char buf[BLOCK_SIZE];$/;"	m	struct:shm_info
+buf	common/shared_memory.hh	/^	char* buf;$/;"	m	struct:shm_buf
+chunk_callback	fileleader/directory.cc	/^static int chunk_callback(void *chunk_info, int argc, char **argv, char **azColName) {$/;"	f	file:
+chunk_index	blocknode/lblock_manager.hh	/^	uint32_t chunk_index;$/;"	m	struct:shm_info
+chunk_index	common/shared_memory.hh	/^	uint32_t chunk_index;$/;"	m	struct:shm_buf
+chunk_list_callback	fileleader/directory.cc	/^static int chunk_list_callback(void *list, int argc, char **argv, char **azColName) {$/;"	f	file:
+chunk_seq	client/model/block_metadata.hh	/^			uint32_t chunk_seq; \/\/ added$/;"	m	class:velox::model::block_metadata
+chunk_seq	common/blockmetadata.hh	/^	uint32_t chunk_seq;$/;"	m	struct:eclipse::ChunkMetadata
+chunk_sequences	messages/filedescription.hh	/^  std::vector<uint32_t> chunk_sequences;$/;"	m	struct:eclipse::messages::FileDescription
+chunk_size	blocknode/lblock_manager.hh	/^	uint64_t chunk_size;$/;"	m	struct:shm_info
+chunk_size	common/shared_memory.hh	/^	uint64_t chunk_size;$/;"	m	struct:shm_buf
+chunk_table_delete	fileleader/directory.cc	/^void Directory::chunk_table_delete(std::string primary_file, uint32_t seq){$/;"	f	class:Directory
+chunk_table_delete_all	fileleader/directory.cc	/^void Directory::chunk_table_delete_all(std::string File){$/;"	f	class:Directory
+chunk_table_insert	fileleader/directory.cc	/^void Directory::chunk_table_insert(ChunkMetadata& metadata, std::string file_name){$/;"	f	class:Directory
+chunk_table_insert_all	fileleader/directory.cc	/^void Directory::chunk_table_insert_all(std::vector<ChunkMetadata>& metadata, std::string file_name){$/;"	f	class:Directory
+chunk_table_select	fileleader/directory.cc	/^void Directory::chunk_table_select(std::string primary_file, std::vector<ChunkMetadata>& blocks){$/;"	f	class:Directory
+chunk_table_select_all	fileleader/directory.cc	/^void Directory::chunk_table_select_all(std::vector<ChunkMetadata>& block_info){$/;"	f	class:Directory
+chunk_table_select_by_index	fileleader/directory.cc	/^void Directory::chunk_table_select_by_index(std::string primary_file, uint32_t block_seq, ChunkMetadata* block_info){$/;"	f	class:Directory
+chunk_table_update	fileleader/directory.cc	/^void Directory::chunk_table_update(std::string primary_file, uint32_t size, uint32_t seq){$/;"	f	class:Directory
+chunks	client/model/block_metadata.hh	/^      std::vector<block_metadata> chunks; \/\/physical_blocks$/;"	m	class:velox::model::block_metadata
+chunks	common/blockmetadata.hh	/^  std::vector<ChunkMetadata> chunks;$/;"	m	struct:eclipse::BlockMetadata
+chunks	java/velox/model/BlockMetadata.java	/^  public BlockMetadata[] chunks = null;$/;"	f	class:BlockMetadata
+cli_driver	client/cli_driver.cc	/^cli_driver::cli_driver() { $/;"	f	class:cli_driver
+cli_driver	client/cli_driver.hh	/^class cli_driver {$/;"	c
+close	client/vdfs.cc	/^bool vdfs::close(long fid) {$/;"	f	class:vdfs
+close	client/vdfs.cc	/^void file::close() {$/;"	f	class:file
+close	java/velox/VeloxDFS.java	/^  public native boolean close(long fid);$/;"	m	class:VeloxDFS
+close	network/server_handler.cc	/^bool ServerHandler::close () {$/;"	f	class:ServerHandler
+com.dicl.velox	java/velox/Configuration.java	/^package com.dicl.velox;$/;"	p
+com.dicl.velox	java/velox/VeloxDFS.java	/^package com.dicl.velox;$/;"	p
+com.dicl.velox.model	java/velox/model/BlockMetadata.java	/^package com.dicl.velox.model;$/;"	p
+com.dicl.velox.model	java/velox/model/Metadata.java	/^package com.dicl.velox.model;$/;"	p
+commit	blocknode/lblock_manager.hh	/^	bool commit;$/;"	m	struct:shm_info
+commit	common/shared_memory.hh	/^	bool commit;$/;"	m	struct:shm_buf
+commit	network/asyncchannel.cc	/^void AsyncChannel::commit(std::shared_ptr<std::string>& str_p) {$/;"	f	class:AsyncChannel
+conf	java/velox/Configuration.java	/^    private JSONObject conf;$/;"	f	class:Configuration	file:
+config_path	common/settings.cc	/^    string config_path, input;$/;"	m	class:Settings::SettingsImpl	file:
+connect	client/dfs.cc	/^	static unique_ptr<tcp::socket> connect(uint32_t hash_value) { $/;"	f	namespace:velox
+connect	common/context.cc	/^Context* Context::connect () {$/;"	f	class:Context
+connect	common/context.cc	/^Context* Context::connect (string title) {$/;"	f	class:Context
+connect	common/logger.cc	/^Logger* Logger::connect (string title, string type, string mask) {$/;"	f	class:Logger
+connect	network/client_handler.cc	/^void ClientHandler::connect(uint32_t i, shared_ptr<Server> server) {$/;"	f	class:ClientHandler
+connect_host	client/dfs.cc	/^	static unique_ptr<tcp::socket> connect_host(string host) { $/;"	f	namespace:velox
+connect_to_zk	stats/zk_listener.cc	/^zhandle_t* connect_to_zk (string host, int port) {$/;"	f	namespace:__anon1
+constructVeloxDFS	java/velox/VeloxDFS.java	/^  private native long constructVeloxDFS(String mr_job_id, long tid, boolean initializer);$/;"	m	class:VeloxDFS	file:
+content	messages/blockinfo.hh	/^	  std::string content;$/;"	m	struct:eclipse::messages::BlockInfo
+content	messages/metadata.hh	/^    std::string content;$/;"	m	struct:eclipse::messages::MetaData
+context	common/context_singleton.cc	/^Context& context = *Context::connect();$/;"	v
+convert_jmetadata	java/jni/VeloxDFS.cc	/^jobject convert_jmetadata(JNIEnv* env, jobject& obj, velox::model::metadata& md) {$/;"	f
+cores	client/dfs.hh	/^	int cores; \/\/ GET_INT("addons.cores");$/;"	m	class:velox::DFS
+count_query	common/histogram.cc	/^int Histogram::count_query (unsigned query)$/;"	f	class:Histogram
+create_tables	fileleader/directory.cc	/^void Directory::create_tables() {$/;"	f	class:Directory
+current_file_arrangements	fileleader/file_leader.hh	/^    std::map<std::string, std::shared_ptr<messages::FileDescription>> current_file_arrangements;$/;"	m	class:eclipse::FileLeader
+current_servers	network/client_handler.hh	/^    std::map<uint32_t, std::weak_ptr<Server>> current_servers;$/;"	m	class:eclipse::network::ClientHandler
+data	messages/filelist.hh	/^  std::vector<FileInfo> data;$/;"	m	struct:eclipse::messages::FileList
+debug	common/logger.cc	/^void Logger::debug (const char* fmt, ...) { $/;"	f	class:Logger
+default_shm_id	blocknode/lblock_manager.hh	/^const int default_shm_id = 85549;$/;"	v
+delete_file	fileleader/file_leader_router.cc	/^void FileLeaderRouter::delete_file (messages::Message* m_, Channel* tcp_connection) {$/;"	f	class:FileLeaderRouter
+destination	messages/message.hh	/^  int origin, destination;$/;"	m	struct:eclipse::messages::Message
+destroy	java/velox/VeloxDFS.java	/^  public void destroy() {$/;"	m	class:VeloxDFS
+destructVeloxDFS	java/velox/VeloxDFS.java	/^  private native void destructVeloxDFS();$/;"	m	class:VeloxDFS	file:
+details	messages/reply.hh	/^  std::string details;$/;"	m	struct:eclipse::messages::Reply
+dfs	client/cli_driver.hh	/^    velox::DFS *dfs;$/;"	m	class:cli_driver
+dfs	client/vdfs.hh	/^    DFS* dfs;$/;"	m	class:velox::vdfs
+die	stats/read_io_stats.sh	/^die() { echo "$* $VARERR" && exit 2; }$/;"	f
+directory	fileleader/file_leader.hh	/^    Directory directory;$/;"	m	class:eclipse::FileLeader
+disconnect	common/logger.cc	/^void Logger::disconnect (Logger* in) {$/;"	f	class:Logger
+disk_path	blocknode/local_io.hh	/^    std::string disk_path;$/;"	m	class:eclipse::Local_io
+do_read	network/asyncchannel.cc	/^void AsyncChannel::do_read () {$/;"	f	class:AsyncChannel
+do_write	network/asyncchannel.cc	/^void AsyncChannel::do_write(Message* m) {$/;"	f	class:AsyncChannel
+do_write	network/asyncchannel.cc	/^void AsyncChannel::do_write(std::shared_ptr<std::string>& str_p) {$/;"	f	class:AsyncChannel
+do_write_buffer	network/asyncchannel.cc	/^void AsyncChannel::do_write_buffer() {$/;"	f	class:AsyncChannel
+do_write_impl	network/asyncchannel.cc	/^void AsyncChannel::do_write_impl() {$/;"	f	class:AsyncChannel
+down	targets/veloxd	/^function down {$/;"	f
+download	client/dfs.cc	/^	int DFS::download(std::string file_name) {$/;"	f	class:velox::DFS
+dump_metadata	client/dfs.cc	/^	std::string DFS::dump_metadata(std::string& fname) {$/;"	f	class:velox::DFS
+eclipse	blocknode/block_node.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	blocknode/block_node.hh	/^namespace eclipse {$/;"	n
+eclipse	blocknode/block_node_router.hh	/^namespace eclipse {$/;"	n
+eclipse	blocknode/local_io.hh	/^namespace eclipse {$/;"	n
+eclipse	common/blockmetadata.hh	/^namespace eclipse {$/;"	n
+eclipse	common/logical_block_metadata.hh	/^namespace eclipse {$/;"	n
+eclipse	fileleader/directory.hh	/^namespace eclipse {$/;"	n
+eclipse	fileleader/file_leader.hh	/^namespace eclipse {$/;"	n
+eclipse	fileleader/file_leader_router.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/IOoperation.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/blockinfo.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/blockrequest.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	messages/blockrequest.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/factory.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	messages/factory.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/filedel.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	messages/filedel.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/filedescription.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/fileexist.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	messages/fileexist.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/fileinfo.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	messages/fileinfo.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/filelist.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	messages/filelist.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/filerequest.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	messages/filerequest.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/fileupdate.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	messages/fileupdate.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/formatrequest.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	messages/formatrequest.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/message.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	messages/message.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/metadata.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/reply.hh	/^namespace eclipse {$/;"	n
+eclipse	messages/task_operation.hh	/^namespace eclipse {$/;"	n
+eclipse	network/asyncchannel.hh	/^namespace eclipse {$/;"	n
+eclipse	network/channel.hh	/^namespace eclipse {$/;"	n
+eclipse	network/client_handler.hh	/^namespace eclipse {$/;"	n
+eclipse	network/netobserver.hh	/^namespace eclipse {$/;"	n
+eclipse	network/router.hh	/^namespace eclipse {$/;"	n
+eclipse	network/router_decorator.hh	/^namespace eclipse {$/;"	n
+eclipse	network/server.hh	/^namespace eclipse {$/;"	n
+eclipse	network/server_handler.hh	/^namespace eclipse {$/;"	n
+eclipse	network/simple_router.hh	/^namespace eclipse {$/;"	n
+eclipse	nodes/machine.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	nodes/machine.hh	/^namespace eclipse {$/;"	n
+eclipse	nodes/node.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	nodes/node.hh	/^namespace eclipse {$/;"	n
+eclipse	stats/logical_blocks_scheduler.hh	/^namespace eclipse {$/;"	n
+eclipse	stats/scheduler_factory.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	stats/stats_listener.hh	/^namespace eclipse {$/;"	n
+eclipse	stats/zk_listener.hh	/^namespace eclipse {$/;"	n
+eclipse	taskmanager/task_manager.cc	/^namespace eclipse {$/;"	n	file:
+eclipse	taskmanager/task_manager.hh	/^namespace eclipse {$/;"	n
+eclipse	taskmanager/task_manager_router.hh	/^namespace eclipse {$/;"	n
+err_report	stats/read_io_stats.sh	/^err_report() { echo "Critical error at line: $(caller)"; }$/;"	f
+error	common/logger.cc	/^void Logger::error (const char* fmt, ...) { $/;"	f	class:Logger
+error_if	common/logger.cc	/^void Logger::error_if (bool cmp, const char* fmt, ...) {$/;"	f	class:Logger
+establish	network/server_handler.cc	/^bool ServerHandler::establish () {$/;"	f	class:ServerHandler
+exec_cmd	targets/veloxd	/^function exec_cmd {$/;"	f
+exist_callback	fileleader/directory.cc	/^static int exist_callback(void *result, int argc, char **argv, char **azColName) {$/;"	f	file:
+exists	client/dfs.cc	/^	bool DFS::exists(std::string name) {$/;"	f	class:velox::DFS
+exists	client/vdfs.cc	/^bool vdfs::exists(std::string name) {$/;"	f	class:vdfs
+exists	java/velox/VeloxDFS.java	/^  public native boolean exists(String name);$/;"	m	class:VeloxDFS
+fd	blocknode/lblock_manager.hh	/^	std::shraed_ptr<std::ifstream> fd;$/;"	m	struct:task
+file	client/vdfs.cc	/^file::file(const file& that) {$/;"	f	class:file
+file	client/vdfs.cc	/^file::file(vdfs* vdfs_, std::string name_) {$/;"	f	class:file
+file	client/vdfs.cc	/^file::file(vdfs* vdfs_, std::string name_, bool opened_) {$/;"	f	class:file
+file	client/vdfs.hh	/^class file {$/;"	c	namespace:velox
+file	messages/task_operation.hh	/^  std::string file;$/;"	m	struct:eclipse::messages::TaskOperation
+fileName	java/velox/model/BlockMetadata.java	/^  public String fileName;$/;"	f	class:BlockMetadata
+file_callback	fileleader/directory.cc	/^static int file_callback(void *file_info, int argc, char **argv, char **azColName) {$/;"	f	file:
+file_cat	client/cli_driver.cc	/^void cli_driver::file_cat (std::string file) {$/;"	f	class:cli_driver
+file_delete	fileleader/file_leader.cc	/^bool FileLeader::file_delete(messages::FileDel* f) {$/;"	f	class:FileLeader
+file_description_cache	client/dfs.cc	/^	std::map<std::string, std::shared_ptr<FileDescription>> file_description_cache;$/;"	m	namespace:velox	file:
+file_download	client/cli_driver.cc	/^void cli_driver::file_download (std::string file) {$/;"	f	class:cli_driver
+file_exist	fileleader/file_leader.cc	/^bool FileLeader::file_exist (std::string file_name) {$/;"	f	class:FileLeader
+file_exist	fileleader/file_leader_router.cc	/^void FileLeaderRouter::file_exist (messages::Message* m_, Channel* tcp_connection) {$/;"	f	class:FileLeaderRouter
+file_exists_local	client/dfs.cc	/^	static bool file_exists_local(std::string filename) {$/;"	f	namespace:velox
+file_insert	fileleader/file_leader.cc	/^unique_ptr<Message> FileLeader::file_insert(messages::FileInfo* f) {$/;"	f	class:FileLeader
+file_insert_confirm	fileleader/file_leader.cc	/^bool FileLeader::file_insert_confirm(messages::FileInfo* f) {$/;"	f	class:FileLeader
+file_leader	fileleader/file_leader_router.hh	/^    FileLeader* file_leader;$/;"	m	class:eclipse::FileLeaderRouter
+file_list_callback	fileleader/directory.cc	/^static int file_list_callback(void *list, int argc, char **argv, char **azColName) {$/;"	f	file:
+file_metadata_append	client/dfs.cc	/^	void DFS::file_metadata_append(std::string name, size_t size, model::metadata& blocks) {$/;"	f	class:velox::DFS
+file_name	client/model/block_metadata.hh	/^      std::string file_name;$/;"	m	class:velox::model::block_metadata
+file_name	common/blockmetadata.hh	/^  std::string file_name;$/;"	m	struct:eclipse::BlockMetadata
+file_name	common/logical_block_metadata.hh	/^  std::string file_name;$/;"	m	struct:eclipse::logical_block_metadata
+file_name	messages/blockinfo.hh	/^	  std::string file_name;$/;"	m	struct:eclipse::messages::BlockInfo
+file_remove	client/cli_driver.cc	/^void cli_driver::file_remove (std::string file) {$/;"	f	class:cli_driver
+file_rename	client/cli_driver.cc	/^void cli_driver::file_rename(std::string src, std::string dst) {$/;"	f	class:cli_driver
+file_request	fileleader/file_leader.cc	/^shared_ptr<Message> FileLeader::file_request(messages::FileRequest* m) {$/;"	f	class:FileLeader
+file_show	client/cli_driver.cc	/^void cli_driver::file_show (std::string file) {$/;"	f	class:cli_driver
+file_show_optimized	client/cli_driver.cc	/^void cli_driver::file_show_optimized(std::string file, int type) {$/;"	f	class:cli_driver
+file_table_confirm_upload	fileleader/directory.cc	/^void Directory::file_table_confirm_upload (std::string file_name, uint32_t num_block, uint32_t num_primary_file) {$/;"	f	class:Directory
+file_table_delete	fileleader/directory.cc	/^void Directory::file_table_delete(string name) {$/;"	f	class:Directory
+file_table_exists	fileleader/directory.cc	/^bool Directory::file_table_exists(string name) {$/;"	f	class:Directory
+file_table_insert	fileleader/directory.cc	/^void Directory::file_table_insert (FileInfo &file_info) {$/;"	f	class:Directory
+file_table_select	fileleader/directory.cc	/^void Directory::file_table_select(string name, FileInfo *file_info) {$/;"	f	class:Directory
+file_table_select_all	fileleader/directory.cc	/^void Directory::file_table_select_all(vector<FileInfo> &file_list) {$/;"	f	class:Directory
+file_table_update	fileleader/directory.cc	/^void Directory::file_table_update(string file_name, uint64_t size, uint32_t num_block, uint32_t num_primary_file) {$/;"	f	class:Directory
+file_update	fileleader/file_leader.cc	/^bool FileLeader::file_update(messages::FileUpdate* f) {$/;"	f	class:FileLeader
+file_upload	client/cli_driver.cc	/^void cli_driver::file_upload (std::string file, uint64_t block_size) {$/;"	f	class:cli_driver
+find_best_arrangement	fileleader/file_leader.cc	/^void FileLeader::find_best_arrangement(messages::FileDescription* file_desc) {$/;"	f	class:FileLeader
+foffset	client/model/block_metadata.hh	/^			uint64_t foffset; \/\/ added$/;"	m	class:velox::model::block_metadata
+foffset	common/blockmetadata.hh	/^	uint64_t foffset;$/;"	m	struct:eclipse::ChunkMetadata
+foffset	java/velox/model/BlockMetadata.java	/^  public long  foffset;$/;"	f	class:BlockMetadata
+foffset	messages/blockinfo.hh	/^	  uint64_t foffset;$/;"	m	struct:eclipse::messages::BlockInfo
+format	blocknode/local_io.cc	/^bool Local_io::format () {$/;"	f	class:Local_io
+format	client/cli_driver.cc	/^void cli_driver::format () {$/;"	f	class:cli_driver
+format	client/dfs.cc	/^	int DFS::format() {$/;"	f	class:velox::DFS
+format	client/vdfs.cc	/^bool vdfs::format () {$/;"	f	class:vdfs
+format	fileleader/file_leader.cc	/^bool FileLeader::format () {$/;"	f	class:FileLeader
+generate	messages/filerequest.hh	/^  bool generate = false;$/;"	m	struct:eclipse::messages::FileRequest
+generate	stats/scheduler_base.cc	/^void scheduler_base::generate(FileDescription& file_desc, std::vector<std::string> nodes) {$/;"	f	class:scheduler_base
+generate	stats/scheduler_lean.cc	/^void scheduler_lean::generate(FileDescription& file_desc, std::vector<std::string> nodes) {$/;"	f	class:scheduler_lean
+generate	stats/scheduler_multiwave.cc	/^void scheduler_multiwave::generate(FD& fd, VEC_STR nodes) {$/;"	f	class:scheduler_multiwave
+generate	stats/scheduler_python.cc	/^void scheduler_python::generate(FileDescription& file_desc, std::vector<std::string> nodes) {$/;"	f	class:scheduler_python
+generate	stats/scheduler_score_based.cc	/^void scheduler_score_based::generate(FileDescription& file_desc, std::vector<std::string> nodes) {$/;"	f	class:scheduler_score_based
+generate	stats/scheduler_simple.cc	/^void scheduler_simple::generate(FileDescription& file_desc, std::vector<std::string> nodes) {$/;"	f	class:scheduler_simple
+generate	stats/scheduler_steal.cc	/^void scheduler_steal::generate(FileDescription& file_desc, std::vector<std::string> nodes) {$/;"	f	class:scheduler_steal
+generate	stats/scheduler_vlmb.cc	/^void scheduler_vlmb::generate(FileDescription& file_desc, std::vector<std::string> nodes) {$/;"	f	class:scheduler_vlmb
+generate_fid	client/vdfs.cc	/^long file::generate_fid() {$/;"	f	class:file
+get	client/vdfs.cc	/^std::string file::get() {$/;"	f	class:file
+get	common/settings.cc	/^template<> int    Settings::SettingsImpl::get (string& str) {$/;"	f	class:Settings::SettingsImpl
+get	common/settings.cc	/^template<> string Settings::SettingsImpl::get (string& str) {$/;"	f	class:Settings::SettingsImpl
+get	common/settings.cc	/^template<> vector<string> Settings::SettingsImpl::get (string& str) {$/;"	f	class:Settings::SettingsImpl
+get	common/settings.cc	/^template<typename T> T Settings::get (string str) const {$/;"	f	class:Settings
+get16bits	common/hash.hh	12;"	d
+get16bits	common/hash.hh	16;"	d
+get16bits	common/hash.hh	9;"	d
+getMetadata	java/velox/VeloxDFS.java	/^  public native Metadata getMetadata(long fid, byte type);$/;"	m	class:VeloxDFS
+getVeloxDFS	java/velox/VeloxDFS.java	/^  public long getVeloxDFS() { return mVeloxDFS; }$/;"	m	class:VeloxDFS
+get_boundary	common/histogram.cc	/^unsigned Histogram::get_boundary (int index)     \/\/ the index starts from 0$/;"	f	class:Histogram
+get_count	common/histogram.cc	/^double Histogram::get_count (int index)$/;"	f	class:Histogram
+get_destination	messages/message.cc	/^int  Message::get_destination() const { return destination; }$/;"	f	class:eclipse::messages::Message
+get_dist_lock	taskmanager/task_manager.cc	/^DistLockStatus get_dist_lock(zhandle_t * zh, string znode, bool isPrimary){$/;"	f	namespace:eclipse
+get_env	common/settings.cc	/^char* get_env (std::string in) {$/;"	f
+get_file	client/vdfs.cc	/^velox::file* vdfs::get_file(long fid) {$/;"	f	class:vdfs
+get_file_description	client/dfs.cc	/^	shared_ptr<FileDescription> get_file_description$/;"	f	namespace:velox
+get_highest_id	stats/scheduler_vlmb.cc	/^int get_highest_id(VEC_STATS& stats, VEC_DOUBLE& usage, VEC_STR hosts,$/;"	f
+get_id	client/vdfs.cc	/^long file::get_id() {$/;"	f	class:file
+get_id	nodes/machine.cc	/^int Machine::get_id() const { return id; }$/;"	f	class:eclipse::Machine
+get_index	common/histogram.cc	/^int Histogram::get_index (unsigned query)     \/\/ return the server index range of which includes the input query$/;"	f	class:Histogram
+get_io_stats	stats/zk_listener.cc	/^std::vector<pair<double,int>> zk_listener::get_io_stats() {$/;"	f	class:zk_listener
+get_ip	nodes/node.cc	/^string Node::get_ip() const { return ip_of_this; }$/;"	f	class:eclipse::Node
+get_metadata	client/dfs.cc	/^	model::metadata DFS::get_metadata(std::string& fname) {$/;"	f	class:velox::DFS
+get_metadata	client/vdfs.cc	/^model::metadata vdfs::get_metadata(long fid, int type = 0) {$/;"	f	class:vdfs
+get_metadata_all	client/dfs.cc	/^	vector<model::metadata> DFS::get_metadata_all() {$/;"	f	class:velox::DFS
+get_metadata_optimized	client/dfs.cc	/^	model::metadata DFS::get_metadata_optimized(std::string& fname, int type) {$/;"	f	class:velox::DFS
+get_name	client/vdfs.cc	/^std::string file::get_name() {$/;"	f	class:file
+get_number_of_phy_blocks	common/logical_block_metadata.hh	/^  inline uint32_t get_number_of_phy_blocks() { return physical_blocks.size(); }$/;"	f	struct:eclipse::logical_block_metadata
+get_numbin	common/histogram.cc	/^int Histogram::get_numbin()$/;"	f	class:Histogram
+get_numserver	common/histogram.cc	/^int Histogram::get_numserver()$/;"	f	class:Histogram
+get_opt	stats/read_io_stats.sh	/^function get_opt() {$/;"	f
+get_origin	messages/message.cc	/^int  Message::get_origin()      const { return origin; }$/;"	f	class:eclipse::messages::Message
+get_project_path	common/settings.cc	/^bool Settings::SettingsImpl::get_project_path ()$/;"	f	class:Settings::SettingsImpl
+get_replicas_id	stats/scheduler_base.cc	/^	vector<uint32_t> get_replicas_id(VEC_STR nodes, string node) {$/;"	f	namespace:__anon4
+get_replicas_id	stats/scheduler_lean.cc	/^vector<uint32_t> get_replicas_id(VEC_STR nodes, string node) {$/;"	f	namespace:__anon2
+get_replicas_id	stats/scheduler_multiwave.cc	/^vector<uint32_t> get_replicas_id(VEC_STR nodes, string node) {$/;"	f	namespace:__anon5
+get_replicas_id	stats/scheduler_steal.cc	/^	vector<uint32_t> get_replicas_id(VEC_STR nodes, string node) {$/;"	f	namespace:__anon3
+get_replicas_id	stats/scheduler_vlmb.cc	/^vector<uint32_t> get_replicas_id(VEC_STR nodes, string node) {$/;"	f
+get_size	client/vdfs.cc	/^long file::get_size() {$/;"	f	class:file
+get_socket	network/asyncchannel.cc	/^tcp::socket& AsyncChannel::get_socket() {$/;"	f	class:AsyncChannel
+get_tmg_id	client/vdfs.cc	/^int vdfs::get_tmg_id(){$/;"	f	class:vdfs
+get_type	messages/IOoperation.cc	/^std::string IOoperation::get_type() const { return "IOoperation"; }$/;"	f	class:IOoperation
+get_type	messages/blockinfo.cc	/^std::string BlockInfo::get_type() const { return "BlockInfo"; }$/;"	f	class:BlockInfo
+get_type	messages/blockrequest.cc	/^std::string BlockRequest::get_type() const { return "BlockRequest"; }$/;"	f	class:eclipse::messages::BlockRequest
+get_type	messages/filedel.cc	/^std::string FileDel::get_type() const { return "FileDel"; }$/;"	f	class:eclipse::messages::FileDel
+get_type	messages/filedescription.cc	/^std::string FileDescription::get_type() const { return "FileDescription"; }$/;"	f	class:FileDescription
+get_type	messages/fileexist.cc	/^std::string FileExist::get_type() const { return "FileExist"; }$/;"	f	class:eclipse::messages::FileExist
+get_type	messages/fileinfo.cc	/^std::string FileInfo::get_type() const { return "FileInfo"; }$/;"	f	class:eclipse::messages::FileInfo
+get_type	messages/filelist.cc	/^std::string FileList::get_type() const { return "FileList"; }$/;"	f	class:eclipse::messages::FileList
+get_type	messages/filerequest.cc	/^std::string FileRequest::get_type() const { return "FileRequest"; }$/;"	f	class:eclipse::messages::FileRequest
+get_type	messages/fileupdate.cc	/^std::string FileUpdate::get_type() const { return "FileUpdate"; }$/;"	f	class:eclipse::messages::FileUpdate
+get_type	messages/formatrequest.cc	/^std::string FormatRequest::get_type() const { return "FormatRequest"; }$/;"	f	class:eclipse::messages::FormatRequest
+get_type	messages/metadata.cc	/^std::string MetaData::get_type() const { return "MetaData"; }$/;"	f	class:MetaData
+get_type	messages/reply.cc	/^std::string Reply::get_type() const { return "Reply"; }$/;"	f	class:Reply
+get_type	messages/task_operation.cc	/^std::string TaskOperation::get_type() const { return "TaskOperation"; }$/;"	f	class:TaskOperation
+get_vdfs	java/jni/VeloxDFS.cc	/^velox::vdfs* get_vdfs(JNIEnv* env, jobject& obj) {$/;"	f
+getip	common/settings.cc	/^string Settings::SettingsImpl::getip () const$/;"	f	class:Settings::SettingsImpl
+getip	common/settings.cc	/^string Settings::getip () const { return impl->getip(); }$/;"	f	class:Settings
+h	common/hash.cc	/^uint32_t h (const char * data, size_t len)$/;"	f
+h	common/hash.cc	/^uint32_t h (std::string input) {$/;"	f
+hard	targets/veloxd	/^function hard-down {$/;"	f
+has_block_data	client/model/metadata.hh	/^    bool has_block_data = true;$/;"	m	class:velox::model::metadata
+hashKey	java/velox/model/Metadata.java	/^  public long hashKey;$/;"	f	class:Metadata
+hash_key	client/model/metadata.hh	/^    uint32_t hash_key = 0;$/;"	m	class:velox::model::metadata
+hash_key	common/blockmetadata.hh	/^  uint32_t hash_key;$/;"	m	struct:eclipse::BlockMetadata
+hash_key	common/logical_block_metadata.hh	/^  uint64_t hash_key = 0L; \/\/$/;"	m	struct:eclipse::logical_block_metadata
+hash_key	messages/blockinfo.hh	/^	  uint32_t hash_key;$/;"	m	struct:eclipse::messages::BlockInfo
+hash_key	messages/blockrequest.hh	/^  uint32_t hash_key;$/;"	m	struct:eclipse::messages::BlockRequest
+hash_key	messages/fileinfo.hh	/^  uint32_t hash_key = 0;$/;"	m	struct:eclipse::messages::FileInfo
+hash_keys	client/model/metadata.hh	/^    std::vector<uint32_t> hash_keys;$/;"	m	class:velox::model::metadata
+hash_keys	messages/filedescription.hh	/^  std::vector<uint32_t> hash_keys;$/;"	m	struct:eclipse::messages::FileDescription
+hash_ruby	common/hash.cc	/^uint32_t hash_ruby (const char * data) {$/;"	f
+header_size	network/channel.hh	/^const int header_size = 16;$/;"	m	namespace:eclipse::network
+help	client/cli_driver.cc	/^const string help = R"($/;"	v
+histogram	common/context.hh	/^    std::unique_ptr<Histogram> histogram;$/;"	m	class:Context
+host	client/model/block_metadata.hh	/^      std::string host;$/;"	m	class:velox::model::block_metadata
+host	java/velox/model/BlockMetadata.java	/^  public String host;$/;"	f	class:BlockMetadata
+host	network/asyncchannel.hh	/^    std::string host;$/;"	m	class:eclipse::network::AsyncChannel
+host_name	common/logical_block_metadata.hh	/^  std::string host_name;$/;"	m	struct:eclipse::logical_block_metadata
+id	client/vdfs.hh	/^    long id;$/;"	m	class:velox::file
+id	common/context.hh	/^    int id;$/;"	m	class:Context
+id	network/client_handler.hh	/^    uint32_t id;$/;"	m	class:eclipse::network::ClientHandler
+id	nodes/machine.hh	/^    int id;$/;"	m	class:eclipse::Machine
+impl	common/settings.hh	/^    std::unique_ptr<SettingsImpl> impl;$/;"	m	class:Settings
+index	client/model/block_metadata.hh	/^      int index; \/\/ chunk_seq$/;"	m	class:velox::model::block_metadata
+index	java/velox/model/BlockMetadata.java	/^  public int index;$/;"	f	class:BlockMetadata
+info	common/logger.cc	/^void Logger::info (const char* fmt, ...) {$/;"	f	class:Logger
+init	common/context.cc	/^void Context::init() {$/;"	f	class:Context
+init_count	common/histogram.cc	/^void Histogram::init_count()$/;"	f	class:Histogram
+initialize	common/histogram.cc	/^void Histogram::initialize()$/;"	f	class:Histogram
+initializer	client/dfs.hh	/^	bool initializer;$/;"	m	class:velox::DFS
+initializer	client/vdfs.hh	/^	bool initializer;$/;"	m	class:velox::vdfs
+input	common/settings.cc	/^    string config_path, input;$/;"	m	class:Settings::SettingsImpl	file:
+insert_file	fileleader/file_leader_router.cc	/^void FileLeaderRouter::insert_file (messages::Message* m_, Channel* tcp_connection) {$/;"	f	class:FileLeaderRouter
+intended_block_size	messages/fileinfo.hh	/^  uint64_t intended_block_size = 0;$/;"	m	struct:eclipse::messages::FileInfo
+invoke_io_reporter	stats/io_monitor_invoker.cc	/^void invoke_io_reporter() {$/;"	f
+io	common/context.hh	/^    boost::asio::io_service io;$/;"	m	class:Context
+io_operation	blocknode/block_node_router.cc	/^void BlockNodeRouter::io_operation (messages::Message* m_, Channel* tcp_connection) {$/;"	f	class:BlockNodeRouter
+iosvc	network/asyncchannel.hh	/^    boost::asio::io_service& iosvc;$/;"	m	class:eclipse::network::AsyncChannel
+ip_of_this	nodes/node.hh	/^    std::string ip_of_this;$/;"	m	class:eclipse::Node
+isOpen	java/velox/VeloxDFS.java	/^  public native boolean isOpen(long fid);$/;"	m	class:VeloxDFS
+is_append	messages/fileupdate.hh	/^  bool is_append = false;$/;"	m	struct:eclipse::messages::FileUpdate
+is_committed	common/blockmetadata.hh	/^  unsigned int is_committed;$/;"	m	struct:eclipse::BlockMetadata
+is_committed	messages/blockinfo.hh	/^	  unsigned int is_committed;$/;"	m	struct:eclipse::messages::BlockInfo
+is_input	messages/fileinfo.hh	/^  bool is_input = false;$/;"	m	struct:eclipse::messages::FileInfo
+is_likely_finish	client/dfs.cc	/^	bool is_likely_finish;$/;"	m	namespace:velox	file:
+is_multiple	network/server.cc	/^bool Server::is_multiple () { return false; }$/;"	f	class:Server
+is_open	client/vdfs.cc	/^bool file::is_open() {$/;"	f	class:file
+is_open	client/vdfs.cc	/^bool vdfs::is_open(long fid) {$/;"	f	class:vdfs
+is_writing	network/asyncchannel.hh	/^    std::atomic<bool> is_writing;$/;"	m	class:eclipse::network::AsyncChannel
+job_id	client/vdfs.hh	/^	std::string job_id;$/;"	m	class:velox::vdfs
+job_id	messages/fileinfo.hh	/^  uint32_t job_id = 0;$/;"	m	struct:eclipse::messages::FileInfo
+job_id	messages/task_operation.hh	/^  std::string job_id;$/;"	m	struct:eclipse::messages::TaskOperation
+join	common/context.cc	/^bool Context::join () {$/;"	f	class:Context
+l_node	common/blockmetadata.hh	/^  std::string l_node;$/;"	m	struct:eclipse::BlockMetadata
+l_node	messages/blockinfo.hh	/^	  std::string l_node;$/;"	m	struct:eclipse::messages::BlockInfo
+lblock_manager	blocknode/lblock_manager.hh	/^class lblock_manager {$/;"	c
+lblock_metadata	messages/task_operation.hh	/^  struct logical_block_metadata lblock_metadata;$/;"	m	struct:eclipse::messages::TaskOperation	typeref:struct:eclipse::messages::TaskOperation::logical_block_metadata
+lbm_id	client/model/metadata.hh	/^	int lbm_id;$/;"	m	class:velox::model::metadata
+lbm_id	java/velox/model/Metadata.java	/^  public int lbm_id;$/;"	f	class:Metadata
+lbm_master	blocknode/lblock_manager.hh	/^	std::thread lbm_master;$/;"	m	class:lblock_manager
+lbm_workers	blocknode/lblock_manager.hh	/^	std::vector<std::thread> lbm_workers;$/;"	m	class:lblock_manager
+len	messages/blockrequest.hh	/^  uint64_t len;$/;"	m	struct:eclipse::messages::BlockRequest
+length	messages/IOoperation.hh	/^  uint64_t length = 0;$/;"	m	struct:eclipse::messages::IOoperation
+list	client/cli_driver.cc	/^void cli_driver::list (bool human_readable) {$/;"	f	class:cli_driver
+list	client/vdfs.cc	/^std::vector<model::metadata> vdfs::list(bool all, std::string name) {$/;"	f	class:vdfs
+list	fileleader/file_leader.cc	/^bool FileLeader::list (messages::FileList* m) {$/;"	f	class:FileLeader
+list	java/velox/VeloxDFS.java	/^  public native Metadata[] list(boolean all, String name);$/;"	m	class:VeloxDFS
+listener	stats/logical_blocks_scheduler.hh	/^    std::shared_ptr<stats_listener> listener;$/;"	m	class:eclipse::logical_blocks_schedulers::scheduler
+load	client/vdfs.cc	/^std::string vdfs::load(std::string name) { $/;"	f	class:vdfs
+load	common/settings.cc	/^Settings& Settings::load () & { $/;"	f	class:Settings
+load	common/settings.cc	/^Settings&& Settings::load () && {$/;"	f	class:Settings
+load	common/settings.cc	/^bool Settings::SettingsImpl::load ()$/;"	f	class:Settings::SettingsImpl
+load_message	messages/factory.cc	/^Message* load_message (boost::asio::streambuf& buf) {$/;"	f	namespace:eclipse::messages
+load_message	messages/factory.cc	/^Message* load_message (std::string& str) {$/;"	f	namespace:eclipse::messages
+local_io	blocknode/block_node.hh	/^    Local_io local_io;$/;"	m	class:eclipse::BlockNode
+local_io	fileleader/file_leader.hh	/^    Local_io local_io;$/;"	m	class:eclipse::FileLeader
+local_router	network/client_handler.hh	/^    NetObserver* local_router = nullptr;$/;"	m	class:eclipse::network::ClientHandler
+lock	common/shared_memory.hh	/^	pthread_mutex_t lock;$/;"	m	struct:shm_buf
+locks	blocknode/lblock_manager.hh	/^	std::vector<std::shread_ptr<std::mutex> > locks;$/;"	m	class:lblock_manager
+log	common/logger.cc	/^void Logger::log (int type, const char* fmt, va_list ap) { $/;"	f	class:Logger
+logger	nodes/node.hh	/^    Logger* logger;$/;"	m	class:eclipse::Node
+logical_block_metadata	common/logical_block_metadata.hh	/^struct logical_block_metadata {$/;"	s	namespace:eclipse
+logical_block_metadata	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::logical_block_metadata);$/;"	v
+logical_block_metadata	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::logical_block_metadata);$/;"	v
+logical_blocks	messages/filedescription.hh	/^  std::vector<logical_block_metadata> logical_blocks; \/\/ TODO, refactor this hell$/;"	m	struct:eclipse::messages::FileDescription
+logical_blocks_schedulers	stats/logical_blocks_scheduler.hh	/^namespace logical_blocks_schedulers {$/;"	n	namespace:eclipse
+logical_blocks_schedulers	stats/scheduler_factory.cc	/^namespace logical_blocks_schedulers {$/;"	n	namespace:eclipse	file:
+mVeloxDFS	java/velox/VeloxDFS.java	/^  private long mVeloxDFS = 0;$/;"	f	class:VeloxDFS	file:
+main	targets/client.cc	/^int main(int argc, char** argv) {$/;"	f
+main	targets/node_main.cc	/^int main (int argc, char ** argv) {$/;"	f
+main	targets/velox_get_config.cc	/^int main(int argc, char** argv) {$/;"	f
+main	test.cc	/^int main(){$/;"	f
+make_metadata	client/dfs.cc	/^	model::metadata make_metadata(FileInfo* fi) {$/;"	f	namespace:velox
+message	messages/reply.hh	/^  std::string message;$/;"	m	struct:eclipse::messages::Reply
+messages	messages/IOoperation.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/blockinfo.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/blockrequest.cc	/^namespace messages {$/;"	n	namespace:eclipse	file:
+messages	messages/blockrequest.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/factory.cc	/^namespace messages {$/;"	n	namespace:eclipse	file:
+messages	messages/factory.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/filedel.cc	/^namespace messages {$/;"	n	namespace:eclipse	file:
+messages	messages/filedel.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/filedescription.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/fileexist.cc	/^namespace messages {$/;"	n	namespace:eclipse	file:
+messages	messages/fileexist.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/fileinfo.cc	/^namespace messages {$/;"	n	namespace:eclipse	file:
+messages	messages/fileinfo.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/filelist.cc	/^namespace messages {$/;"	n	namespace:eclipse	file:
+messages	messages/filelist.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/filerequest.cc	/^namespace messages {$/;"	n	namespace:eclipse	file:
+messages	messages/filerequest.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/fileupdate.cc	/^namespace messages {$/;"	n	namespace:eclipse	file:
+messages	messages/fileupdate.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/formatrequest.cc	/^namespace messages {$/;"	n	namespace:eclipse	file:
+messages	messages/formatrequest.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/message.cc	/^namespace messages {$/;"	n	namespace:eclipse	file:
+messages	messages/message.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/metadata.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/reply.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages	messages/task_operation.hh	/^namespace messages {$/;"	n	namespace:eclipse
+messages_queue	network/asyncchannel.hh	/^    std::queue<std::shared_ptr<std::string>> messages_queue;$/;"	m	class:eclipse::network::AsyncChannel
+metadata	client/model/metadata.hh	/^class metadata {$/;"	c	namespace:velox::model
+metadata_save	fileleader/file_leader.cc	/^void FileLeader::metadata_save(MetaData* m) {$/;"	f	class:FileLeader
+model	client/model/block_metadata.hh	/^  namespace model {$/;"	n	namespace:velox
+model	client/model/metadata.hh	/^namespace model {$/;"	n	namespace:velox
+mr_job_id	client/dfs.hh	/^	std::string mr_job_id;$/;"	m	class:velox::DFS
+n_lblock	messages/fileinfo.hh	/^  unsigned int n_lblock = 0;$/;"	m	struct:eclipse::messages::FileInfo
+name	client/model/block_metadata.hh	/^      std::string name; \/\/Chunk_name$/;"	m	class:velox::model::block_metadata
+name	client/model/metadata.hh	/^    std::string name;$/;"	m	class:velox::model::metadata
+name	client/vdfs.hh	/^    std::string name;$/;"	m	class:velox::file
+name	common/blockmetadata.hh	/^	std::string name;$/;"	m	struct:eclipse::ChunkMetadata
+name	common/blockmetadata.hh	/^  std::string name;$/;"	m	struct:eclipse::BlockMetadata
+name	common/logical_block_metadata.hh	/^  std::string name;$/;"	m	struct:eclipse::logical_block_metadata
+name	java/velox/model/BlockMetadata.java	/^  public String name;$/;"	f	class:BlockMetadata
+name	java/velox/model/Metadata.java	/^  public String name;$/;"	f	class:Metadata
+name	messages/blockinfo.hh	/^	  std::string name;$/;"	m	struct:eclipse::messages::BlockInfo
+name	messages/blockrequest.hh	/^  std::string name;$/;"	m	struct:eclipse::messages::BlockRequest
+name	messages/filedel.hh	/^  std::string name;$/;"	m	struct:eclipse::messages::FileDel
+name	messages/fileexist.hh	/^  std::string name;$/;"	m	struct:eclipse::messages::FileExist
+name	messages/fileinfo.hh	/^  std::string name;$/;"	m	struct:eclipse::messages::FileInfo
+name	messages/filerequest.hh	/^  std::string name;$/;"	m	struct:eclipse::messages::FileRequest
+name	messages/fileupdate.hh	/^  std::string name;$/;"	m	struct:eclipse::messages::FileUpdate
+name	messages/metadata.hh	/^    std::string name;$/;"	m	struct:eclipse::messages::MetaData
+network	network/asyncchannel.hh	/^namespace network {$/;"	n	namespace:eclipse
+network	network/channel.hh	/^namespace network {$/;"	n	namespace:eclipse
+network	network/client_handler.hh	/^namespace network {$/;"	n	namespace:eclipse
+network	network/netobserver.hh	/^namespace network {$/;"	n	namespace:eclipse
+network	network/server.hh	/^namespace network {$/;"	n	namespace:eclipse
+network	network/server_handler.hh	/^namespace network {$/;"	n	namespace:eclipse
+network	nodes/node.hh	/^    network::ClientHandler* network;$/;"	m	class:eclipse::Node
+network_size	blocknode/block_node.hh	/^    int network_size;$/;"	m	class:eclipse::BlockNode
+network_size	fileleader/file_leader.hh	/^    int network_size;$/;"	m	class:eclipse::FileLeader
+network_size	taskmanager/task_manager.hh	/^	int network_size;$/;"	m	class:eclipse::TaskManager
+node	common/blockmetadata.hh	/^  std::string node;$/;"	m	struct:eclipse::BlockMetadata
+node	messages/blockinfo.hh	/^	  std::string node;$/;"	m	struct:eclipse::messages::BlockInfo
+node	messages/metadata.hh	/^    std::string node;$/;"	m	struct:eclipse::messages::MetaData
+node	network/asyncchannel.hh	/^    NetObserver* node = nullptr;$/;"	m	class:eclipse::network::AsyncChannel
+node	network/server_handler.hh	/^    NetObserver* node;$/;"	m	class:eclipse::network::ServerHandler
+nodes	client/dfs.hh	/^    std::vector<std::string> nodes;$/;"	m	class:velox::DFS
+nodes	network/client_handler.hh	/^    std::vector<std::string> nodes;$/;"	m	class:eclipse::network::ClientHandler
+nofile	common/settings.cc	/^    bool nofile = false;$/;"	m	class:Settings::SettingsImpl	file:
+notice	common/logger.cc	/^void Logger::notice (const char* fmt, ...) { $/;"	f	class:Logger
+numBlock	java/velox/model/Metadata.java	/^  public int numBlock;$/;"	f	class:Metadata
+numChunks	java/velox/model/BlockMetadata.java	/^  public long numChunks; $/;"	f	class:BlockMetadata
+numChunks	java/velox/model/Metadata.java	/^  public int numChunks;$/;"	f	class:Metadata
+numOfReplications	java/velox/Configuration.java	/^    public long numOfReplications() {$/;"	m	class:Configuration
+numStaticBlocks	java/velox/model/Metadata.java	/^  public int numStaticBlocks;$/;"	f	class:Metadata
+num_block	client/model/metadata.hh	/^    unsigned int num_block = 0;$/;"	m	class:velox::model::metadata
+num_block	messages/fileinfo.hh	/^  unsigned int num_block = 0;$/;"	m	struct:eclipse::messages::FileInfo
+num_block	messages/fileupdate.hh	/^  unsigned int num_block;$/;"	m	struct:eclipse::messages::FileUpdate
+num_chunks	client/model/metadata.hh	/^    unsigned int num_chunks = 0;$/;"	m	class:velox::model::metadata
+num_primary_file	messages/fileinfo.hh	/^  unsigned int num_primary_file = 0;$/;"	m	struct:eclipse::messages::FileInfo
+num_primary_file	messages/fileupdate.hh	/^  unsigned int num_primary_file;$/;"	m	struct:eclipse::messages::FileUpdate
+num_static_blocks	client/model/metadata.hh	/^    unsigned int num_static_blocks = 0;$/;"	m	class:velox::model::metadata
+num_static_blocks	messages/filedescription.hh	/^  uint32_t num_static_blocks = 0;$/;"	m	struct:eclipse::messages::FileDescription
+numbin	common/histogram.hh	/^        int numbin; \/\/ number of bin -> number of histogram bin$/;"	m	class:Histogram
+numserver	common/histogram.hh	/^        int numserver; \/\/ number of server$/;"	m	class:Histogram
+off	messages/blockrequest.hh	/^  uint64_t off;$/;"	m	struct:eclipse::messages::BlockRequest
+offset	client/model/block_metadata.hh	/^			uint64_t offset; \/\/ added$/;"	m	class:velox::model::block_metadata
+offset	common/blockmetadata.hh	/^	uint64_t offset;$/;"	m	struct:eclipse::ChunkMetadata
+offset	java/velox/model/BlockMetadata.java	/^	public long  offset; \/\/ added$/;"	f	class:BlockMetadata
+offset	messages/blockinfo.hh	/^	  uint64_t offset;$/;"	m	struct:eclipse::messages::BlockInfo
+offsets	messages/filedescription.hh	/^  std::vector<uint64_t> offsets;$/;"	m	struct:eclipse::messages::FileDescription
+offsets_in_file	messages/filedescription.hh	/^  std::vector<uint64_t> offsets_in_file;$/;"	m	struct:eclipse::messages::FileDescription
+on_read	network/router_decorator.cc	/^void RouterDecorator::on_read(messages::Message* m, Channel* c) {$/;"	f	class:RouterDecorator
+on_read	network/simple_router.cc	/^void SimpleRouter::on_read (Message* m, Channel* s) {$/;"	f	class:SimpleRouter
+on_write	network/asyncchannel.cc	/^void AsyncChannel::on_write(const boost::system::error_code& ec, $/;"	f	class:AsyncChannel
+open	client/vdfs.cc	/^file vdfs::open(std::string name) {$/;"	f	class:vdfs
+open	client/vdfs.cc	/^void file::open() {$/;"	f	class:file
+open	fileleader/directory.cc	/^static sqlite3* open(string path) {$/;"	f	file:
+open	java/velox/VeloxDFS.java	/^  public native long open(String name);$/;"	m	class:VeloxDFS
+open_file	client/vdfs.cc	/^long vdfs::open_file(std::string fname) {$/;"	f	class:vdfs
+opened	client/vdfs.hh	/^    bool opened;$/;"	m	class:velox::file
+opened_files	client/vdfs.hh	/^    std::vector<velox::file>* opened_files;$/;"	m	class:velox::vdfs
+operation	messages/IOoperation.hh	/^  OpType operation;$/;"	m	struct:eclipse::messages::IOoperation
+operation	messages/task_operation.hh	/^  OpType operation;$/;"	m	struct:eclipse::messages::TaskOperation
+operator =	client/vdfs.cc	/^file& file::operator=(const file& rhs) {$/;"	f	class:file
+operator =	client/vdfs.cc	/^vdfs& vdfs::operator=(vdfs& rhs) {$/;"	f	class:vdfs
+operator =	common/settings.cc	/^void Settings::operator=(Settings&& that) { $/;"	f	class:Settings
+operator =	messages/filedescription.cc	/^FileDescription& FileDescription::operator=(FileDescription& rhs) {$/;"	f	class:FileDescription
+option	messages/IOoperation.hh	/^  std::string option;$/;"	m	struct:eclipse::messages::IOoperation
+options	stats/logical_blocks_scheduler.hh	/^    std::map<std::string, std::string> options;$/;"	m	class:eclipse::logical_blocks_schedulers::scheduler
+origin	messages/message.hh	/^  int origin, destination;$/;"	m	struct:eclipse::messages::Message
+override	messages/IOoperation.hh	/^  std::string get_type() const override;$/;"	m	struct:eclipse::messages::IOoperation
+override	messages/blockinfo.hh	/^	  std::string get_type() const override;$/;"	m	struct:eclipse::messages::BlockInfo
+override	messages/blockrequest.hh	/^  std::string get_type() const override;$/;"	m	struct:eclipse::messages::BlockRequest
+override	messages/filedel.hh	/^  std::string get_type() const override;$/;"	m	struct:eclipse::messages::FileDel
+override	messages/filedescription.hh	/^  std::string get_type() const override;$/;"	m	struct:eclipse::messages::FileDescription
+override	messages/fileexist.hh	/^  std::string get_type() const override;$/;"	m	struct:eclipse::messages::FileExist
+override	messages/fileinfo.hh	/^  std::string get_type() const override;$/;"	m	struct:eclipse::messages::FileInfo
+override	messages/filelist.hh	/^  std::string get_type() const override;$/;"	m	struct:eclipse::messages::FileList
+override	messages/filerequest.hh	/^  std::string get_type() const override;$/;"	m	struct:eclipse::messages::FileRequest
+override	messages/fileupdate.hh	/^  std::string get_type() const override;$/;"	m	struct:eclipse::messages::FileUpdate
+override	messages/formatrequest.hh	/^  std::string get_type() const override;$/;"	m	struct:eclipse::messages::FormatRequest
+override	messages/metadata.hh	/^    std::string get_type() const override;$/;"	m	struct:eclipse::messages::MetaData
+override	messages/reply.hh	/^  std::string get_type() const override;$/;"	m	struct:eclipse::messages::Reply
+override	messages/task_operation.hh	/^  std::string get_type() const override;$/;"	m	struct:eclipse::messages::TaskOperation
+override	network/asyncchannel.hh	/^    void do_write(messages::Message*) override; $/;"	m	class:eclipse::network::AsyncChannel
+override	network/simple_router.hh	/^    void on_read(messages::Message*, Channel*) override;$/;"	m	class:eclipse::SimpleRouter
+override	nodes/node.hh	/^    std::string get_ip () const override;$/;"	m	class:eclipse::Node
+override	stats/logical_blocks_scheduler.hh	/^    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;$/;"	m	class:eclipse::logical_blocks_schedulers::scheduler_base
+override	stats/logical_blocks_scheduler.hh	/^    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;$/;"	m	class:eclipse::logical_blocks_schedulers::scheduler_lean
+override	stats/logical_blocks_scheduler.hh	/^    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;$/;"	m	class:eclipse::logical_blocks_schedulers::scheduler_multiwave
+override	stats/logical_blocks_scheduler.hh	/^    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;$/;"	m	class:eclipse::logical_blocks_schedulers::scheduler_python
+override	stats/logical_blocks_scheduler.hh	/^    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;$/;"	m	class:eclipse::logical_blocks_schedulers::scheduler_score_based
+override	stats/logical_blocks_scheduler.hh	/^    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;$/;"	m	class:eclipse::logical_blocks_schedulers::scheduler_simple
+override	stats/logical_blocks_scheduler.hh	/^    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;$/;"	m	class:eclipse::logical_blocks_schedulers::scheduler_steal
+override	stats/logical_blocks_scheduler.hh	/^    virtual void generate(messages::FileDescription& file_desc, std::vector<std::string> nodes) override;$/;"	m	class:eclipse::logical_blocks_schedulers::scheduler_vlmb
+override	stats/zk_listener.hh	/^    virtual std::vector<std::pair<double, int>> get_io_stats() override;$/;"	m	class:eclipse::zk_listener
+override	stats/zk_listener.hh	/^    virtual ~zk_listener () override = default;$/;"	m	class:eclipse::zk_listener
+panic	common/logger.cc	/^void Logger::panic (const char* fmt, ...) { $/;"	f	class:Logger
+panic_if	common/logger.cc	/^void Logger::panic_if (bool cmp, const char* fmt, ...) { $/;"	f	class:Logger
+parse_args	client/cli_driver.cc	/^bool cli_driver::parse_args (int argc, char** argv) {$/;"	f	class:cli_driver
+parsing_input	client/dfs.cc	/^	uint64_t parsing_input(const char* buf, uint64_t to_write_bytes, uint64_t written_bytes, bool is_equal_sized){$/;"	f	namespace:velox
+path	fileleader/directory.hh	/^    std::string path;$/;"	m	class:eclipse::Directory
+physical_blocks	common/logical_block_metadata.hh	/^  std::vector<messages::BlockInfo> physical_blocks;$/;"	m	struct:eclipse::logical_block_metadata
+port	network/asyncchannel.hh	/^    uint32_t port;$/;"	m	class:eclipse::network::AsyncChannel
+port	network/client_handler.hh	/^    uint32_t port;$/;"	m	class:eclipse::network::ClientHandler
+port	network/server_handler.hh	/^    uint32_t port;$/;"	m	class:eclipse::network::ServerHandler
+port	nodes/node.hh	/^    int port;$/;"	m	class:eclipse::Node
+pos	messages/IOoperation.hh	/^  uint64_t pos = 0;$/;"	m	struct:eclipse::messages::IOoperation
+primary_chunk_num	client/model/block_metadata.hh	/^      int primary_chunk_num; \/\/ chunk_seq$/;"	m	class:velox::model::block_metadata
+primary_chunk_num	common/logical_block_metadata.hh	/^  int primary_chunk_num = 0; \/\/ the number of my chunk in Stealing scheduler$/;"	m	struct:eclipse::logical_block_metadata
+primary_fd	client/dfs.cc	/^	std::map<std::string, std::shared_ptr<ifstream> > primary_fd;$/;"	m	namespace:velox	file:
+primary_file	client/model/block_metadata.hh	/^			std::string primary_file; \/\/ added$/;"	m	class:velox::model::block_metadata
+primary_file	common/blockmetadata.hh	/^	std::string primary_file;$/;"	m	struct:eclipse::ChunkMetadata
+primary_file	java/velox/model/BlockMetadata.java	/^	public String primary_file; \/\/ added$/;"	f	class:BlockMetadata
+primary_file	messages/blockinfo.hh	/^	  std::string primary_file;$/;"	m	struct:eclipse::messages::BlockInfo
+primary_files	messages/filedescription.hh	/^  std::vector<std::string> primary_files;$/;"	m	struct:eclipse::messages::FileDescription
+primary_seq	client/model/block_metadata.hh	/^			uint64_t primary_seq; \/\/ added$/;"	m	class:velox::model::block_metadata
+primary_seq	common/blockmetadata.hh	/^    unsigned int primary_seq;$/;"	m	struct:eclipse::ChunkMetadata
+primary_seq	java/velox/model/BlockMetadata.java	/^	public int  primary_seq;$/;"	f	class:BlockMetadata
+primary_seq	messages/blockinfo.hh	/^	  uint32_t primary_seq;$/;"	m	struct:eclipse::messages::BlockInfo
+primary_sequences	messages/filedescription.hh	/^  std::vector<uint32_t> primary_sequences;$/;"	m	struct:eclipse::messages::FileDescription
+processed_chunk	client/dfs.cc	/^	int processed_chunk;$/;"	m	namespace:velox	file:
+processing	blocknode/lblock_manager.hh	/^	bool processing;$/;"	m	class:lblock_manager
+pt	common/settings.cc	/^    ptree pt;$/;"	m	class:Settings::SettingsImpl	file:
+query_exec_simple	fileleader/directory.cc	/^bool Directory::query_exec_simple(char* query, int (*fn)(void*,int,char**,char**) = NULL, void* argv = NULL) {$/;"	f	class:Directory
+querycount	common/histogram.hh	/^        double* querycount; \/\/ the data access count to each$/;"	m	class:Histogram
+queue_mutex	network/asyncchannel.hh	/^    std::mutex queue_mutex;$/;"	m	class:eclipse::network::AsyncChannel
+r_node	common/blockmetadata.hh	/^  std::string r_node;$/;"	m	struct:eclipse::BlockMetadata
+r_node	messages/blockinfo.hh	/^	  std::string r_node;$/;"	m	struct:eclipse::messages::BlockInfo
+random_within_boundaries	common/histogram.cc	/^uint32_t Histogram::random_within_boundaries (uint32_t index) {$/;"	f	class:Histogram
+read	blocknode/local_io.cc	/^std::string Local_io::read (const string& name) {$/;"	f	class:Local_io
+read	blocknode/local_io.cc	/^std::string Local_io::read (const string& name, uint64_t off, uint64_t len) {$/;"	f	class:Local_io
+read	blocknode/local_io.cc	/^std::string Local_io::read (const string& name, uint64_t off, uint64_t len, bool is_whole = false) {$/;"	f	class:Local_io
+read	client/dfs.cc	/^	uint64_t DFS::read(std::string& file_name, char* buf, uint64_t off, uint64_t len) {$/;"	f	class:velox::DFS
+read	client/vdfs.cc	/^uint32_t vdfs::read(long fid, char *buf, uint64_t off, uint64_t len) {$/;"	f	class:vdfs
+read	java/velox/VeloxDFS.java	/^  public native long read(long fid, long pos, byte[] buf, long off, long len);$/;"	m	class:VeloxDFS
+readChunk	java/velox/VeloxDFS.java	/^  public native int readChunk(byte[] buf, int boff);$/;"	m	class:VeloxDFS
+read_all	client/dfs.cc	/^	std::string DFS::read_all(std::string file) {$/;"	f	class:velox::DFS
+read_chunk	client/dfs.cc	/^	uint64_t DFS::read_chunk(char* buf, uint32_t buffer_offset) {$/;"	f	class:velox::DFS
+read_chunk	client/vdfs.cc	/^uint32_t vdfs::read_chunk(char *buf, uint32_t boff) {$/;"	f	class:vdfs
+read_coroutine	network/asyncchannel.cc	/^void AsyncChannel::read_coroutine (yield_context yield) {$/;"	f	class:AsyncChannel
+read_from_disk	client/dfs.cc	/^	void read_from_disk(char* buf, BlockInfo chunk, uint64_t* read_bytes, uint64_t cursor, uint64_t length) {$/;"	f	namespace:velox
+read_from_remote	client/dfs.cc	/^	void read_from_remote(char* buf, BlockInfo chunk, uint64_t* read_bytes, uint64_t cursor, uint64_t length, int which_node) {$/;"	f	namespace:velox
+read_input	stats/scheduler.py	/^def read_input():$/;"	f
+read_logical	client/dfs.cc	/^	uint64_t read_logical(std::string& file_name, char* buf, uint64_t off, $/;"	f	namespace:velox
+read_metadata	blocknode/local_io.cc	/^std::string Local_io::read_metadata() {$/;"	f	class:Local_io
+read_physical	client/dfs.cc	/^	uint64_t read_physical(std::string& file_name, char* buf, uint64_t off, uint64_t len, $/;"	f	namespace:velox
+read_reply	messages/factory.hh	/^auto read_reply(boost::asio::ip::tcp::socket* socket) {$/;"	f	namespace:eclipse::messages
+reducer_output	messages/fileinfo.hh	/^  bool reducer_output = false;$/;"	m	struct:eclipse::messages::FileInfo
+remove	blocknode/local_io.cc	/^void Local_io::remove (const std::string& k) {$/;"	f	class:Local_io
+remove	client/dfs.cc	/^	int DFS::remove(std::string file_name) {$/;"	f	class:velox::DFS
+remove	java/velox/VeloxDFS.java	/^  public native boolean remove(String name);$/;"	m	class:VeloxDFS
+rename	client/dfs.cc	/^	bool DFS::rename(std::string src, std::string dst) {$/;"	f	class:velox::DFS
+rename	client/vdfs.cc	/^bool vdfs::rename(std::string src, std::string dst) {$/;"	f	class:vdfs
+rename	java/velox/VeloxDFS.java	/^  public native boolean rename(String src, String dst);$/;"	m	class:VeloxDFS
+replica	client/dfs.hh	/^    int replica;$/;"	m	class:velox::DFS
+replica	client/model/metadata.hh	/^    unsigned int replica;$/;"	m	class:velox::model::metadata
+replica	common/blockmetadata.hh	/^  int replica;$/;"	m	struct:eclipse::BlockMetadata
+replica	java/velox/model/Metadata.java	/^  public int replica;$/;"	f	class:Metadata
+replica	messages/blockinfo.hh	/^	  int replica;$/;"	m	struct:eclipse::messages::BlockInfo
+replica	messages/fileinfo.hh	/^  unsigned int replica = 0;$/;"	m	struct:eclipse::messages::FileInfo
+replica_chunk_num	common/logical_block_metadata.hh	/^  int replica_chunk_num[2];$/;"	m	struct:eclipse::logical_block_metadata
+replicate_message	blocknode/block_node.cc	/^void BlockNode::replicate_message(IOoperation* m) {$/;"	f	class:eclipse::BlockNode
+replicate_metadata	fileleader/file_leader.cc	/^void FileLeader::replicate_metadata() {$/;"	f	class:FileLeader
+replicate_metadata	fileleader/file_leader_router.cc	/^void FileLeaderRouter::replicate_metadata(messages::Message* m_, Channel* tcp_connection) {$/;"	f	class:FileLeaderRouter
+report_error	stats/zk_listener.cc	/^void report_error(string path, int rc) {$/;"	f	namespace:__anon1
+request_file	fileleader/file_leader_router.cc	/^void FileLeaderRouter::request_file (messages::Message* m_, Channel* tcp_connection) {$/;"	f	class:FileLeaderRouter
+request_format	fileleader/file_leader_router.cc	/^void FileLeaderRouter::request_format (messages::Message* m_, Channel* tcp_connection) {$/;"	f	class:FileLeaderRouter
+request_ls	fileleader/file_leader_router.cc	/^void FileLeaderRouter::request_ls (messages::Message* m_, Channel* tcp_connection) {$/;"	f	class:FileLeaderRouter
+rm	client/vdfs.cc	/^bool vdfs::rm (long fid) {$/;"	f	class:vdfs
+rm	client/vdfs.cc	/^bool vdfs::rm (std::string name) {$/;"	f	class:vdfs
+router	network/router_decorator.hh	/^    std::unique_ptr<Router> router;$/;"	m	class:eclipse::RouterDecorator
+routing_table	network/router.hh	/^    std::map<std::string, std::function<void(messages::Message*, Channel*)>> routing_table;$/;"	m	class:eclipse::Router
+run	common/context.cc	/^void Context::run (){ $/;"	f	class:Context
+rw_lock	network/client_handler.hh	/^    boost::shared_mutex rw_lock;$/;"	m	class:eclipse::network::ClientHandler
+save_message	messages/factory.cc	/^std::string* save_message (Message* m) {$/;"	f	namespace:eclipse::messages
+schedule	stats/scheduler_multiwave.cc	/^bool schedule(CHUNKS chunks, FD& fd, std::vector<std::string> nodes) {$/;"	f	namespace:__anon5
+scheduleBasedOnIO	stats/scheduler.py	/^def scheduleBasedOnIO(nodes, io_stats, chunks, chunksPerBlock):$/;"	f
+scheduler	stats/logical_blocks_scheduler.hh	/^class scheduler {$/;"	c	namespace:eclipse::logical_blocks_schedulers
+scheduler_base	stats/logical_blocks_scheduler.hh	/^class scheduler_base: public scheduler{$/;"	c	namespace:eclipse::logical_blocks_schedulers
+scheduler_factory	stats/scheduler_factory.cc	/^shared_ptr<scheduler> scheduler_factory(string type, Histogram* boundaries, SCHEDULER_OPTS options) {$/;"	f	namespace:eclipse::logical_blocks_schedulers
+scheduler_lean	stats/logical_blocks_scheduler.hh	/^class scheduler_lean: public scheduler{$/;"	c	namespace:eclipse::logical_blocks_schedulers
+scheduler_multiwave	stats/logical_blocks_scheduler.hh	/^class scheduler_multiwave: public scheduler{$/;"	c	namespace:eclipse::logical_blocks_schedulers
+scheduler_python	stats/logical_blocks_scheduler.hh	/^class scheduler_python: public scheduler{$/;"	c	namespace:eclipse::logical_blocks_schedulers
+scheduler_score_based	stats/logical_blocks_scheduler.hh	/^class scheduler_score_based: public scheduler{$/;"	c	namespace:eclipse::logical_blocks_schedulers
+scheduler_simple	stats/logical_blocks_scheduler.hh	/^class scheduler_simple: public scheduler{$/;"	c	namespace:eclipse::logical_blocks_schedulers
+scheduler_steal	stats/logical_blocks_scheduler.hh	/^class scheduler_steal: public scheduler{$/;"	c	namespace:eclipse::logical_blocks_schedulers
+scheduler_vlmb	stats/logical_blocks_scheduler.hh	/^class scheduler_vlmb: public scheduler{$/;"	c	namespace:eclipse::logical_blocks_schedulers
+score	stats/scheduler_vlmb.cc	/^double score(VEC_STATS& stats, VEC_DOUBLE& usage, double alpha, int id) {$/;"	f
+select_last_block_metadata	fileleader/directory.cc	/^void Directory::select_last_block_metadata(string file_name, $/;"	f	class:Directory
+select_last_chunk_metadata	fileleader/directory.cc	/^void Directory::select_last_chunk_metadata(std::string primary_file, ChunkMetadata* block_info){$/;"	f	class:Directory
+send	network/client_handler.cc	/^bool ClientHandler::send(uint32_t i, messages::Message* m) {$/;"	f	class:ClientHandler
+send	network/client_handler.cc	/^bool ClientHandler::send(uint32_t i, shared_ptr<string> str) {$/;"	f	class:ClientHandler
+send_and_replicate	network/client_handler.cc	/^bool ClientHandler::send_and_replicate(std::vector<int> node_indices, messages::Message* m) {$/;"	f	class:ClientHandler
+send_message	messages/factory.cc	/^void send_message(boost::asio::ip::tcp::socket* socket, $/;"	f	namespace:eclipse::messages
+seq	common/blockmetadata.hh	/^  unsigned int seq;$/;"	m	struct:eclipse::BlockMetadata
+seq	common/logical_block_metadata.hh	/^  uint64_t seq = 0L;$/;"	m	struct:eclipse::logical_block_metadata
+seq	messages/blockinfo.hh	/^	  unsigned int seq;$/;"	m	struct:eclipse::messages::BlockInfo
+serialization	messages/boost_impl.cc	/^namespace serialization {$/;"	n	namespace:boost	file:
+serialization	messages/boost_impl.hh	/^namespace serialization{$/;"	n	namespace:boost
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::BlockMetadata& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::ChunkMetadata& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::logical_block_metadata& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::BlockInfo& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::BlockRequest& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::FileDel& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::FileDescription& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::FileExist& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::FileInfo& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::FileList& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::FileRequest& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::FileUpdate& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::FormatRequest& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::IOoperation& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::Message& m, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::MetaData& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::Reply& c, unsigned int) {$/;"	f	namespace:boost::serialization
+serialize	messages/boost_impl.cc	/^  void serialize (Archive& ar, eclipse::messages::TaskOperation& c, unsigned int) {$/;"	f	namespace:boost::serialization
+set_boundary	common/histogram.cc	/^void Histogram::set_boundary (int index, unsigned boundary)$/;"	f	class:Histogram
+set_count	common/histogram.cc	/^void Histogram::set_count (int index, double count)$/;"	f	class:Histogram
+set_destination	messages/message.cc	/^Message& Message::set_destination(int d) { destination = d; return *this; }$/;"	f	class:eclipse::messages::Message
+set_numbin	common/histogram.cc	/^void Histogram::set_numbin (int num)$/;"	f	class:Histogram
+set_numserver	common/histogram.cc	/^void Histogram::set_numserver (int num)$/;"	f	class:Histogram
+set_origin	messages/message.cc	/^Message& Message::set_origin(int o)      { origin = o; return *this; }$/;"	f	class:eclipse::messages::Message
+settings	common/context.hh	/^    Settings settings;$/;"	m	class:Context
+shared_memory	client/dfs.hh	/^  	void* shared_memory;$/;"	m	class:velox::DFS
+shm_base_chunk_addr	client/dfs.hh	/^	uint64_t shm_base_chunk_addr;$/;"	m	class:velox::DFS
+shm_buf	common/shared_memory.hh	/^struct shm_buf{$/;"	s
+shm_buf_depth	client/dfs.hh	/^	int shm_buf_depth;$/;"	m	class:velox::DFS
+shm_buf_idx	client/dfs.hh	/^	int shm_buf_idx;$/;"	m	class:velox::DFS
+shm_idx_addr	client/dfs.hh	/^	uint64_t shm_idx_addr;$/;"	m	class:velox::DFS
+shm_info	blocknode/lblock_manager.hh	/^struct shm_info {$/;"	s
+shm_status_addr	client/dfs.hh	/^	uint64_t shm_status_addr;$/;"	m	class:velox::DFS
+shmid	client/dfs.hh	/^	int shmid;$/;"	m	class:velox::DFS
+should_read_partially	messages/blockrequest.hh	/^  bool should_read_partially = false;$/;"	m	struct:eclipse::messages::BlockRequest
+singleton	common/context.hh	/^    static Context* singleton;$/;"	m	class:Context
+singleton	common/logger.cc	/^Logger* Logger::singleton = nullptr;$/;"	m	class:Logger	file:
+singleton	common/logger.hh	/^    static Logger* singleton;$/;"	m	class:Logger
+size	client/model/block_metadata.hh	/^      uint64_t size;$/;"	m	class:velox::model::block_metadata
+size	client/model/metadata.hh	/^    uint64_t size = 0;$/;"	m	class:velox::model::metadata
+size	client/vdfs.hh	/^    long size;$/;"	m	class:velox::file
+size	common/blockmetadata.hh	/^	uint32_t size;$/;"	m	struct:eclipse::ChunkMetadata
+size	common/blockmetadata.hh	/^  uint64_t size;$/;"	m	struct:eclipse::BlockMetadata
+size	common/logical_block_metadata.hh	/^  uint64_t size     = 0L;$/;"	m	struct:eclipse::logical_block_metadata
+size	java/velox/model/BlockMetadata.java	/^  public long size;$/;"	f	class:BlockMetadata
+size	java/velox/model/Metadata.java	/^  public long size;$/;"	f	class:Metadata
+size	messages/blockinfo.hh	/^	  uint64_t size;$/;"	m	struct:eclipse::messages::BlockInfo
+size	messages/fileinfo.hh	/^  uint64_t size = 0;$/;"	m	struct:eclipse::messages::FileInfo
+size	messages/fileupdate.hh	/^  uint64_t size;$/;"	m	struct:eclipse::messages::FileUpdate
+socket	network/asyncchannel.hh	/^    tcp::socket socket; $/;"	m	class:eclipse::network::AsyncChannel
+soft	targets/veloxd	/^function soft-down {$/;"	f
+splitRegions	stats/scheduler.py	/^def splitRegions(nodes, regionIO):$/;"	f
+split_blocks	stats/scheduler_multiwave.cc	/^std::pair<CHUNKS, CHUNKS> split_blocks(CHUNKS chunks) {$/;"	f	namespace:__anon5
+stats	targets/veloxd	/^function stats {$/;"	f
+stats_listener	stats/stats_listener.hh	/^class stats_listener {$/;"	c	namespace:eclipse
+storagePath	java/velox/Configuration.java	/^    public String storagePath() {$/;"	m	class:Configuration
+task	blocknode/lblock_manager.hh	/^struct task {$/;"	s
+task_init	taskmanager/task_manager.cc	/^void TaskManager::task_init(std::string file, struct logical_block_metadata& metadata, string job_id, int _task_id){$/;"	f	class:eclipse::TaskManager
+task_manager	taskmanager/task_manager_router.hh	/^    TaskManager* task_manager = nullptr;$/;"	m	class:eclipse::TaskManagerRouter
+task_operation	taskmanager/task_manager_router.cc	/^void TaskManagerRouter::task_operation(messages::Message* _m, Channel* tcp_connection){$/;"	f	class:TaskManagerRouter
+task_worker	taskmanager/task_manager.cc	/^void task_worker(std::string file, struct logical_block_metadata& lblock_metadata, string _job_id, int _task_id){$/;"	f	namespace:eclipse
+tasks	blocknode/lblock_manager.hh	/^	std::vector<struct task> tasks;$/;"	m	class:lblock_manager
+tasks	taskmanager/task_manager_router.hh	/^	std::map<std::string, struct logical_block_metadata> tasks;$/;"	m	class:eclipse::TaskManagerRouter
+test_vdfs_read_io	client/cli_driver.cc	/^void cli_driver::test_vdfs_read_io(std::string file){$/;"	f	class:cli_driver
+test_vdfs_write_io	client/cli_driver.cc	/^void cli_driver::test_vdfs_write_io(std::string file ) {$/;"	f	class:cli_driver
+threads	common/context.hh	/^    std::vector<std::unique_ptr<std::thread>> threads;$/;"	m	class:Context
+title	common/logger.hh	/^    std::string title;$/;"	m	class:Logger
+tmg_id	client/dfs.hh	/^	int tmg_id;$/;"	m	class:velox::DFS
+tmg_id	client/vdfs.hh	/^	int tmg_id;$/;"	m	class:velox::vdfs
+tmg_id	messages/task_operation.hh	/^  int tmg_id = 0;$/;"	m	struct:eclipse::messages::TaskOperation
+to_process_file	taskmanager/task_manager.hh	/^	std::map <int, shared_ptr<int> > to_process_file;$/;"	m	class:eclipse::TaskManager
+tokenize	common/settings.cc	/^static vector<string> tokenize(std::string str_separated_by_colons) {$/;"	f	file:
+total_read_time	client/dfs.cc	/^	double total_read_time = 0.0;$/;"	m	namespace:velox	file:
+total_shm_buf_num	client/dfs.hh	/^	int total_shm_buf_num;$/;"	m	class:velox::DFS
+touch	client/dfs.cc	/^	bool DFS::touch(std::string file_name) {$/;"	f	class:velox::DFS
+try_reuse_client	network/client_handler.cc	/^bool ClientHandler::try_reuse_client(uint32_t i, shared_ptr<std::string> str) {$/;"	f	class:ClientHandler
+type	client/model/metadata.hh	/^    unsigned int type;$/;"	m	class:velox::model::metadata
+type	common/blockmetadata.hh	/^  unsigned int type;$/;"	m	struct:eclipse::BlockMetadata
+type	common/logger.hh	/^    int type;$/;"	m	class:Logger
+type	java/velox/model/Metadata.java	/^  public int type;$/;"	f	class:Metadata
+type	messages/blockinfo.hh	/^	  unsigned int type;$/;"	m	struct:eclipse::messages::BlockInfo
+type	messages/fileinfo.hh	/^  unsigned int type;$/;"	m	struct:eclipse::messages::FileInfo
+type	messages/filerequest.hh	/^  std::string type;$/;"	m	struct:eclipse::messages::FileRequest
+up	targets/veloxd	/^function up {$/;"	f
+update	blocknode/local_io.cc	/^void Local_io::update (const std::string& name, const std::string& v, uint64_t pos, uint64_t len) {$/;"	f	class:Local_io
+update_file	fileleader/file_leader_router.cc	/^void FileLeaderRouter::update_file (messages::Message* m_, Channel* tcp_connection) {$/;"	f	class:FileLeaderRouter
+updateboundary	common/histogram.cc	/^void Histogram::updateboundary()   \/\/ update the boundary according to the query counts$/;"	f	class:Histogram
+upload	client/dfs.cc	/^	int DFS::upload(std::string file_name, bool is_binary, uint64_t block_size) {$/;"	f	class:velox::DFS
+upload	client/vdfs.cc	/^file vdfs::upload(std::string name) {$/;"	f	class:vdfs
+uploading	messages/fileinfo.hh	/^  int uploading = 1;$/;"	m	struct:eclipse::messages::FileInfo
+vdfs	client/vdfs.cc	/^vdfs::vdfs(std::string job_id, int tid, bool initializer) {$/;"	f	class:vdfs
+vdfs	client/vdfs.cc	/^vdfs::vdfs(vdfs& that) {$/;"	f	class:vdfs
+vdfs	client/vdfs.hh	/^class vdfs {$/;"	c	namespace:velox
+vdfs_	client/vdfs.hh	/^    vdfs* vdfs_;$/;"	m	class:velox::file
+velox	client/dfs.cc	/^namespace velox {$/;"	n	file:
+velox	client/dfs.hh	/^namespace velox {$/;"	n
+velox	client/model/block_metadata.hh	/^namespace velox {$/;"	n
+velox	client/model/metadata.hh	/^namespace velox {$/;"	n
+velox	client/vdfs.hh	/^namespace velox {$/;"	n
+warn	common/logger.cc	/^void Logger::warn (const char* fmt, ...) { $/;"	f	class:Logger
+work	common/context.hh	/^    boost::asio::io_service::work work;$/;"	m	class:Context
+write	blocknode/local_io.cc	/^void Local_io::write (const std::string& name, const std::string& v) {$/;"	f	class:Local_io
+write	client/dfs.cc	/^	uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint64_t len) {$/;"	f	class:velox::DFS
+write	client/dfs.cc	/^	uint64_t DFS::write(std::string& file_name, const char* buf, uint64_t off, uint64_t len, uint64_t block_size) {$/;"	f	class:velox::DFS
+write	client/vdfs.cc	/^uint32_t vdfs::write(long fid, const char *buf, uint32_t off, uint32_t len) {$/;"	f	class:vdfs
+write	client/vdfs.cc	/^uint32_t vdfs::write(long fid, const char *buf, uint32_t off, uint32_t len, uint64_t block_size) {$/;"	f	class:vdfs
+write	java/velox/VeloxDFS.java	/^  public native long write(long fid, long pos, byte[] buf, long off, long len);$/;"	m	class:VeloxDFS
+write	java/velox/VeloxDFS.java	/^  public native long write(long fid, long pos, byte[] buf, long off, long len, long blockSize);$/;"	m	class:VeloxDFS
+write_chunk	client/dfs.cc	/^	uint64_t DFS::write_chunk(std::string& file_name, const char* buf, uint64_t off, uint64_t len, uint64_t block_size, uint32_t sblock_seq) {$/;"	f	class:velox::DFS
+write_file	client/dfs.cc	/^	int DFS::write_file(std::string file_name, bool is_binary, const std::string& buf, uint64_t len) {$/;"	f	class:velox::DFS
+write_file	client/vdfs.cc	/^file vdfs::write_file(std::string name, const std::string& buf, uint64_t len) {$/;"	f	class:vdfs
+write_file	java/velox/VeloxDFS.java	/^  public native void write_file(String file_name, String buf, long len);$/;"	m	class:VeloxDFS
+zk_listener	stats/zk_listener.cc	/^zk_listener::zk_listener() {$/;"	f	class:zk_listener
+zk_listener	stats/zk_listener.hh	/^class zk_listener: public stats_listener {$/;"	c	namespace:eclipse
+zk_query	stats/read_io_stats.sh	/^function zk_query() {$/;"	f
+zk_server_addr	stats/zk_listener.hh	/^    std::string zk_server_addr;$/;"	m	class:eclipse::zk_listener
+zk_server_port	stats/zk_listener.hh	/^    int zk_server_port;$/;"	m	class:eclipse::zk_listener
+~AsyncChannel	network/asyncchannel.cc	/^AsyncChannel::~AsyncChannel() {$/;"	f	class:AsyncChannel
+~BlockNode	blocknode/block_node.cc	/^BlockNode::~BlockNode() { }$/;"	f	class:eclipse::BlockNode
+~Context	common/context.cc	/^Context::~Context() {$/;"	f	class:Context
+~DFS	client/dfs.cc	/^	DFS::~DFS(){$/;"	f	class:velox::DFS
+~FileLeader	fileleader/file_leader.cc	/^FileLeader::~FileLeader() { }$/;"	f	class:FileLeader
+~Histogram	common/histogram.cc	/^Histogram::~Histogram()$/;"	f	class:Histogram
+~Logger	common/logger.cc	/^Logger::~Logger () { closelog (); }$/;"	f	class:Logger
+~Machine	nodes/machine.hh	/^    virtual ~Machine() { } \/* Polymorphic class *\/$/;"	f	class:eclipse::Machine
+~Message	messages/message.hh	/^  virtual ~Message () {}$/;"	f	struct:eclipse::messages::Message
+~NetObserver	network/netobserver.hh	/^  virtual ~NetObserver() { };$/;"	f	struct:eclipse::network::NetObserver
+~Node	nodes/node.cc	/^Node::~Node() { }$/;"	f	class:eclipse::Node
+~Settings	common/settings.cc	/^Settings::~Settings() {  }$/;"	f	class:Settings
+~TaskManager	taskmanager/task_manager.cc	/^TaskManager::~TaskManager(){}$/;"	f	class:eclipse::TaskManager
+~vdfs	client/vdfs.cc	/^vdfs::~vdfs() {$/;"	f	class:vdfs

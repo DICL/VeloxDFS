@@ -4,6 +4,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/map.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
@@ -27,6 +28,7 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.hash_key);
     ar & BOOST_SERIALIZATION_NVP(c.size);
     ar & BOOST_SERIALIZATION_NVP(c.num_block);
+    ar & BOOST_SERIALIZATION_NVP(c.num_primary_file);
     ar & BOOST_SERIALIZATION_NVP(c.type);
     ar & BOOST_SERIALIZATION_NVP(c.replica);
     ar & BOOST_SERIALIZATION_NVP(c.uploading);
@@ -42,6 +44,7 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.name);
     ar & BOOST_SERIALIZATION_NVP(c.size);
     ar & BOOST_SERIALIZATION_NVP(c.num_block);
+    ar & BOOST_SERIALIZATION_NVP(c.num_primary_file);
     ar & BOOST_SERIALIZATION_NVP(c.blocks_metadata);
   }
 
@@ -49,12 +52,16 @@ template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::BlockInfo& c, unsigned int) {
     ar & BASE_OBJECT(Message, c);
     ar & BOOST_SERIALIZATION_NVP(c.name); 
+    ar & BOOST_SERIALIZATION_NVP(c.primary_file); 
     ar & BOOST_SERIALIZATION_NVP(c.file_name);  
     ar & BOOST_SERIALIZATION_NVP(c.seq);  
     ar & BOOST_SERIALIZATION_NVP(c.hash_key); 
     ar & BOOST_SERIALIZATION_NVP(c.size);     
     ar & BOOST_SERIALIZATION_NVP(c.type);   
     ar & BOOST_SERIALIZATION_NVP(c.replica);   
+    ar & BOOST_SERIALIZATION_NVP(c.primary_seq);   
+    ar & BOOST_SERIALIZATION_NVP(c.offset);   
+    ar & BOOST_SERIALIZATION_NVP(c.foffset);   
     ar & BOOST_SERIALIZATION_NVP(c.node);        
     ar & BOOST_SERIALIZATION_NVP(c.l_node);      
     ar & BOOST_SERIALIZATION_NVP(c.r_node);      
@@ -96,9 +103,14 @@ template <typename Archive>
   void serialize (Archive& ar, eclipse::messages::FileDescription& c, unsigned int) {
     using eclipse::messages::FileInfo;
     ar & BASE_OBJECT(FileInfo, c);
+    ar & BOOST_SERIALIZATION_NVP(c.primary_files);
     ar & BOOST_SERIALIZATION_NVP(c.blocks);
     ar & BOOST_SERIALIZATION_NVP(c.hash_keys);
     ar & BOOST_SERIALIZATION_NVP(c.block_size);
+    ar & BOOST_SERIALIZATION_NVP(c.offsets);
+    ar & BOOST_SERIALIZATION_NVP(c.offsets_in_file);
+    ar & BOOST_SERIALIZATION_NVP(c.chunk_sequences);
+    ar & BOOST_SERIALIZATION_NVP(c.primary_sequences);
     ar & BOOST_SERIALIZATION_NVP(c.block_hosts);
     ar & BOOST_SERIALIZATION_NVP(c.logical_blocks);
     ar & BOOST_SERIALIZATION_NVP(c.num_static_blocks);
@@ -128,6 +140,18 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.node);
     ar & BOOST_SERIALIZATION_NVP(c.content);
   }
+
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::ChunkMetadata& c, unsigned int) {
+    ar & BOOST_SERIALIZATION_NVP(c.name); 
+    ar & BOOST_SERIALIZATION_NVP(c.primary_file);  
+    ar & BOOST_SERIALIZATION_NVP(c.chunk_seq);  
+    ar & BOOST_SERIALIZATION_NVP(c.size);     
+    ar & BOOST_SERIALIZATION_NVP(c.offset);   
+    ar & BOOST_SERIALIZATION_NVP(c.foffset);   
+    ar & BOOST_SERIALIZATION_NVP(c.primary_seq);   
+  }
+
 template <typename Archive>
   void serialize (Archive& ar, eclipse::BlockMetadata& c, unsigned int) {
     ar & BOOST_SERIALIZATION_NVP(c.name); 
@@ -141,6 +165,7 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.l_node);      
     ar & BOOST_SERIALIZATION_NVP(c.r_node);      
     ar & BOOST_SERIALIZATION_NVP(c.is_committed);  
+    ar & BOOST_SERIALIZATION_NVP(c.chunks);  
   }
 
 template <typename Archive>
@@ -161,7 +186,19 @@ template <typename Archive>
     ar & BOOST_SERIALIZATION_NVP(c.host_name);
     ar & BOOST_SERIALIZATION_NVP(c.size);
     ar & BOOST_SERIALIZATION_NVP(c.hash_key);
+    ar & BOOST_SERIALIZATION_NVP(c.primary_chunk_num);
+    ar & BOOST_SERIALIZATION_NVP(c.replica_chunk_num);
     ar & BOOST_SERIALIZATION_NVP(c.physical_blocks);
+  }
+
+template <typename Archive>
+  void serialize (Archive& ar, eclipse::messages::TaskOperation& c, unsigned int) {
+    ar & BASE_OBJECT(Message, c);
+    ar & BOOST_SERIALIZATION_NVP(c.operation);
+    ar & BOOST_SERIALIZATION_NVP(c.job_id);
+    ar & BOOST_SERIALIZATION_NVP(c.file);
+    ar & BOOST_SERIALIZATION_NVP(c.tmg_id);
+    ar & BOOST_SERIALIZATION_NVP(c.lblock_metadata);
   }
 
 using namespace eclipse::messages;
@@ -246,6 +283,12 @@ template void serialize (boost::archive::xml_iarchive&,  eclipse::BlockMetadata&
 template void serialize (boost::archive::binary_iarchive&,  eclipse::BlockMetadata&, unsigned);
 template void serialize (boost::archive::binary_oarchive&,  eclipse::BlockMetadata&, unsigned);
 
+template void serialize (boost::archive::xml_oarchive&, eclipse::ChunkMetadata&, unsigned);
+template void serialize (boost::archive::xml_iarchive&,  eclipse::ChunkMetadata&, unsigned);
+template void serialize (boost::archive::binary_iarchive&,  eclipse::ChunkMetadata&, unsigned);
+template void serialize (boost::archive::binary_oarchive&,  eclipse::ChunkMetadata&, unsigned);
+
+
 template void serialize (boost::archive::xml_oarchive&, IOoperation&, unsigned);
 template void serialize (boost::archive::xml_iarchive&,  IOoperation&, unsigned);
 template void serialize (boost::archive::binary_iarchive&,  IOoperation&, unsigned);
@@ -255,6 +298,14 @@ template void serialize (boost::archive::xml_oarchive&, eclipse::logical_block_m
 template void serialize (boost::archive::xml_iarchive&, eclipse::logical_block_metadata&, unsigned);
 template void serialize (boost::archive::binary_iarchive&,  eclipse::logical_block_metadata&, unsigned);
 template void serialize (boost::archive::binary_oarchive&,  eclipse::logical_block_metadata&, unsigned);
+
+
+template void serialize (boost::archive::xml_oarchive&, TaskOperation&, unsigned);
+template void serialize (boost::archive::xml_iarchive&,  TaskOperation&, unsigned);
+template void serialize (boost::archive::binary_iarchive&,  TaskOperation&, unsigned);
+template void serialize (boost::archive::binary_oarchive&,  TaskOperation&, unsigned);
+
+
 }
 }
 
@@ -273,5 +324,7 @@ BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FormatRequest);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::FileExist);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::MetaData);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::BlockMetadata);
+BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::ChunkMetadata);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::IOoperation);
 BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::logical_block_metadata);
+BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::TaskOperation);

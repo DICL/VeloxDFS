@@ -6,6 +6,10 @@
 #include <string>
 #include <memory>
 
+#include <iostream>
+using namespace std;
+
+
 namespace eclipse {
 namespace messages {
 

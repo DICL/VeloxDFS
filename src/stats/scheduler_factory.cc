@@ -30,6 +30,12 @@ shared_ptr<scheduler> scheduler_factory(string type, Histogram* boundaries, SCHE
 
   } else if (type == "scheduler_lean") {
     sch = make_shared<scheduler_lean>();
+  
+  } else if (type == "scheduler_steal") {
+  	sch = make_shared<scheduler_steal>();
+
+  } else if (type == "scheduler_base") {
+  	sch = make_shared<scheduler_base>();
 
   } else {
     ERROR("No file scheduler chosen, EXITING");

@@ -3,6 +3,7 @@
 #include "../messages/boost_impl.hh"
 #include <functional>
 #include <map>
+#include <iostream>
 
 using namespace std;
 using namespace eclipse;
@@ -25,6 +26,7 @@ void BlockNodeRouter::io_operation (messages::Message* m_, Channel* tcp_connecti
   auto m = dynamic_cast<messages::IOoperation*> (m_);
 
   if (m->operation == messages::IOoperation::OpType::BLOCK_INSERT) {
+
     auto ret = block_node->block_insert_local(m->block);
     Reply reply;
 
@@ -75,6 +77,6 @@ void BlockNodeRouter::io_operation (messages::Message* m_, Channel* tcp_connecti
   
   } else if (m->operation == messages::IOoperation::OpType::BLOCK_UPDATE_REPLICA) {
     block_node->block_update_local(m->block, m->pos, m->length, false);
-  }
+  } 
 }
 // }}}

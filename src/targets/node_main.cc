@@ -5,18 +5,19 @@
 #include <network/simple_router.hh>
 #include <fileleader/file_leader_router.hh>
 #include <blocknode/block_node_router.hh>
+#include <taskmanager/task_manager_router.hh>
 
 #ifdef LOGICAL_BLOCKS_FEATURE
 #include <src/stats/io_monitor_invoker.hh>
 #endif
 
 #include <memory>
+#include <cstdio>
 
 using namespace eclipse;
 using namespace std;
 
 int main (int argc, char ** argv) {
-
   struct rlimit core_limits;
   core_limits.rlim_cur = core_limits.rlim_max = RLIM_INFINITY;
   setrlimit(RLIMIT_CORE, &core_limits);
@@ -28,9 +29,12 @@ int main (int argc, char ** argv) {
 
   FileLeader file_leader(internal_net.get());
   BlockNode block_node(internal_net.get());
+  TaskManager task_manager(internal_net.get());
 
   // Decorator pattern: I want FileLeader and Block node on the same network
-  auto router = make_unique<FileLeaderRouter>(&file_leader, new BlockNodeRouter(&block_node, new SimpleRouter()));
+  //auto router = make_unique<FileLeaderRouter>(&file_leader, new BlockNodeRouter(&block_node, new SimpleRouter()));
+  //auto router = make_unique<FileLeaderRouter>(&file_leader, new BlockNodeRouter(&block_node, new SimpleRouter()), new TaskManagerRouter(&task_manager, new SimpleRouter()));
+  auto router = make_unique<FileLeaderRouter>(&file_leader, new BlockNodeRouter(&block_node, new TaskManagerRouter(&task_manager, new SimpleRouter())));
 
   external_net->attach(router.get());
 

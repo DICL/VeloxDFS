@@ -9,8 +9,14 @@ public class BlockMetadata {
   public String fileName;
   public long size;
   public long numChunks; 
-  public BlockMetadata[] chunks = null;
 
+	public String primary_file; // added
+	public long  offset; // added
+  public long  foffset;
+	public int  primary_seq;
+
+
+  public BlockMetadata[] chunks = null;
   public BlockMetadata() { }
 
   public BlockMetadata(BlockMetadata that) {
@@ -20,6 +26,12 @@ public class BlockMetadata {
     this.fileName = that.fileName;
     this.size = that.size;
     this.numChunks = that.numChunks;
+
+		this.primary_file = that.primary_file;
+		this.offset = that.offset;
+		this.foffset = that.foffset;
+		this.primary_seq = that.primary_seq;
+
     if (that.chunks != null) {
         this.chunks = that.chunks.clone();
     }

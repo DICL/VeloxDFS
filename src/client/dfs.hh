@@ -1,10 +1,13 @@
 #pragma once
 
 #include "model/metadata.hh"
-
+#include <iostream>
+#include <cstdio>
 #include <string>
 #include <vector>
 #include <stdint.h>
+#include <atomic>
+#include "../common/context_singleton.hh"
 #define VELOX_LOGICAL_DISABLE  0
 #define VELOX_LOGICAL_OUTPUT   1
 #define VELOX_LOGICAL_NOOP     2
@@ -16,8 +19,8 @@ using vec_str = std::vector<std::string>;
 
 class DFS {
   public:
-    DFS();
-
+    DFS(string _mr_job_id, int _tmb_id, bool initializer);
+	~DFS();
     //! Write the contents into a remote file.
     //!
     //! @param file_name  File to peform the operation 
@@ -104,13 +107,35 @@ class DFS {
     std::string dump_metadata(std::string& fname);
 
     //! Read a chunk directly
-    uint64_t read_chunk(std::string& fname, std::string host, char* buf, 
-        uint64_t buffer_offset, uint64_t off, uint64_t len);
+    //uint64_t read_chunk(std::string& fname, std::string host, char* buf, uint32_t buffer_offset, uint64_t off, uint64_t len, int _tmb_id);
+    uint64_t read_chunk(char* buf, uint32_t buffer_offset);
 
+		uint64_t write_chunk(std::string& file_name, const char* buf, uint64_t off, uint64_t len, uint64_t block_size, uint32_t sblock_seq);
+
+		int write_file(std::string file_name, bool, const std::string& buf, uint64_t len);
+	
+	int tmg_id;
+	int shmid;
+  	void* shared_memory;
+	std::string mr_job_id;
   private:
+
     uint32_t NUM_NODES;
     int replica;
     std::vector<std::string> nodes;
+
+	int cores; // GET_INT("addons.cores");
+	int shm_buf_depth;
+	int shm_buf_width;
+	int shm_buf_idx;
+	int total_shm_buf_num;
+	char* to_del_buf;
+
+	uint64_t shm_idx_addr;
+	uint64_t shm_base_chunk_addr;
+	uint64_t shm_status_addr;
+	bool initializer;
+	
 };
 
 }

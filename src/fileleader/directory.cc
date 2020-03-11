@@ -16,6 +16,7 @@ static int file_callback(void *file_info, int argc, char **argv, char **azColNam
   file->hash_key      = atoi(argv[i++]);
   file->size          = atoll(argv[i++]);
   file->num_block     = atoi(argv[i++]);
+  file->num_primary_file     = atoi(argv[i++]);
   file->n_lblock      = atoi(argv[i++]);
   file->type          = atoi(argv[i++]);
   file->replica       = atoi(argv[i++]);
@@ -44,6 +45,21 @@ static int block_callback(void *block_info, int argc, char **argv, char **azColN
   return 0;
 }
 
+static int chunk_callback(void *chunk_info, int argc, char **argv, char **azColName) {
+  //int i = 0;
+  int i = 1;
+  auto block = reinterpret_cast<ChunkMetadata*>(chunk_info);
+  block->name         = argv[i++];
+  block->primary_file    		= argv[i++];
+  block->chunk_seq     = atoi(argv[i++]);
+  block->size         = atoi(argv[i++]);
+  block->offset				= atoll(argv[i++]);
+  block->foffset  = atoll(argv[i++]);
+	block->primary_seq = atoi(argv[i++]);
+
+  return 0;
+}
+
 
 static int file_list_callback(void *list, int argc, char **argv, char **azColName) {
   auto file_list = reinterpret_cast<vector<FileInfo>*>(list);
@@ -53,6 +69,7 @@ static int file_list_callback(void *list, int argc, char **argv, char **azColNam
     tmp_file.hash_key  = atoi(argv[i++]);
     tmp_file.size      = atoll(argv[i++]);
     tmp_file.num_block = atoi(argv[i++]);
+    tmp_file.num_primary_file = atoi(argv[i++]);
     tmp_file.n_lblock  = atoi(argv[i++]);
     tmp_file.type      = atoi(argv[i++]);
     tmp_file.replica   = atoi(argv[i++]);
@@ -86,8 +103,26 @@ static int block_list_callback(void *list, int argc, char **argv, char **azColNa
   return 0;
 }
 
+static int chunk_list_callback(void *list, int argc, char **argv, char **azColName) {
+  auto block_list = reinterpret_cast<vector<ChunkMetadata>*>(list);
+  for (int i=1; i<argc; i++) {
+    ChunkMetadata tmp_block;
+//    tmp_block.file_name      = argv[i++];
+    tmp_block.name      = argv[i++];
+    tmp_block.primary_file 		= argv[i++];
+    tmp_block.chunk_seq  = atoi(argv[i++]);
+    tmp_block.size      = atoi(argv[i++]);
+    tmp_block.offset		= atoll(argv[i++]);
+    tmp_block.foffset = atoll(argv[i++]);
+	tmp_block.primary_seq= atoi(argv[i++]);
+
+    block_list->push_back(tmp_block);
+  }
+  return 0;
+}
+
 static int exist_callback(void *result, int argc, char **argv, char **azColName) {
-  *reinterpret_cast<bool*>(result) = argv[0] ? true : false;
+  *reinterpret_cast<bool*>(result) = (atoi(argv[0])) ? false : true;
   return 0;
 }
 // }}}
@@ -132,7 +167,6 @@ bool Directory::query_exec_simple(char* query, int (*fn)(void*,int,char**,char**
         break;
     }
   } while (SQLITE_OK != rc);
-
   sqlite3_close(db);
 
   return rc;
@@ -141,12 +175,13 @@ bool Directory::query_exec_simple(char* query, int (*fn)(void*,int,char**,char**
 // create_tables {{{
 void Directory::create_tables() {
   char sql[DEFAULT_QUERY_SIZE];
-
+	
   sprintf(sql, "CREATE TABLE IF NOT EXISTS file_table( \
       name       TEXT  NOT NULL, \
       hash_key   INT   NOT NULL, \
       size       INT   NOT NULL, \
       num_block  INT   NOT NULL, \
+      num_primary_file  INT   NOT NULL, \
       n_lblock   INT   NOT NULL, \
       type       INT   NOT NULL, \
       replica    INT   NOT NULL, \
@@ -174,20 +209,36 @@ void Directory::create_tables() {
 
   if (query_exec_simple(sql))
     DEBUG("block_table created successfully");
+
+	sprintf(sql, "CREATE TABLE IF NOT EXISTS chunk_table( \
+			file_name 		TEXT 			NOT NULL, \
+      name          TEXT      NOT NULL, \
+      primary_file				TEXT      NOT NULL, \
+      chunk_seq      INT       NOT NULL, \
+      size          INT       NOT NULL, \
+      offset        INT       NOT NULL, \
+      foffset		INT       NOT NULL, \
+			primary_seq INT 			NOT NULL, \
+      PRIMARY KEY (name));"); 
+
+  if (query_exec_simple(sql))
+    DEBUG("block_table created successfully");
+
 }
 // }}}
 
 // file_table_insert {{{
 void Directory::file_table_insert (FileInfo &file_info) {
   char sql[DEFAULT_QUERY_SIZE];
-  
+	
   sprintf(sql, "INSERT INTO file_table (\
-    name, hash_key, size, num_block, n_lblock, type, replica, uploading, is_input, intended_block_size)\
-    VALUES('%s', %" PRIu32 ", %" PRIu64 ", %u, %u, %u, %u, %u, %u, %" PRIu64 ");",
+    name, hash_key, size, num_block, num_primary_file, n_lblock, type, replica, uploading, is_input, intended_block_size)\
+    VALUES('%s', %" PRIu32 ", %" PRIu64 ", %u, %u, %u, %u, %u, %u, %u, %" PRIu64 ");",
       file_info.name.c_str(),
       file_info.hash_key,
       file_info.size,
       file_info.num_block,
+      file_info.num_primary_file,
       file_info.n_lblock,
       file_info.type,
       file_info.replica,
@@ -216,12 +267,12 @@ void Directory::file_table_select_all(vector<FileInfo> &file_list) {
 }
 // }}}
 // file_table_update {{{
-void Directory::file_table_update(string file_name, uint64_t size, uint32_t num_block) {
+void Directory::file_table_update(string file_name, uint64_t size, uint32_t num_block, uint32_t num_primary_file) {
   char sql[DEFAULT_QUERY_SIZE];
 
   sprintf(sql, "UPDATE file_table set \
-      size=%" PRIu64 ", num_block=%u where name='%s';",
-      size, num_block, file_name.c_str());
+      size=%" PRIu64 ", num_block=%u, num_primary_file=%u where name='%s';",
+      size, num_block, num_primary_file, file_name.c_str());
 
   if (query_exec_simple(sql))
     DEBUG("file_metadata updated successfully");
@@ -242,7 +293,8 @@ bool Directory::file_table_exists(string name) {
   char sql[DEFAULT_QUERY_SIZE];
   bool result = false;
 
-  sprintf(sql, "SELECT name from file_table where name='%s';", name.c_str());
+  //sprintf(sql, "SELECT name from file_table where name='%s';", name.c_str());
+  sprintf(sql, "SELECT uploading from file_table where name='%s';", name.c_str());
   if (query_exec_simple(sql, exist_callback, &result))
     DEBUG("file_exist executed successfully");
 
@@ -250,10 +302,9 @@ bool Directory::file_table_exists(string name) {
 }
 // }}}
 // file_table_confirm_upload  {{{
-void Directory::file_table_confirm_upload (std::string file_name, uint32_t num_block) {
+void Directory::file_table_confirm_upload (std::string file_name, uint32_t num_block, uint32_t num_primary_file) {
   char sql[DEFAULT_QUERY_SIZE];
-
-  sprintf(sql, "UPDATE file_table set uploading=0, num_block=%u where name='%s';", num_block,
+  sprintf(sql, "UPDATE file_table set uploading=0, num_block=%u, num_primary_file=%u where name='%s';", num_block, num_primary_file,
       file_name.c_str());
   query_exec_simple(sql);
 }
@@ -265,7 +316,7 @@ void Directory::block_table_insert(BlockMetadata& metadata) {
 
   sprintf(sql, "INSERT OR REPLACE INTO block_table (\
     name, file_name, seq, hash_key, size, type, replica, node, l_node, r_node, is_committed)\
-    VALUES ('%s', '%s', %u, %" PRIu32 ", %" PRIu32 ", %u, %u, '%s', '%s', '%s', %u);",
+    VALUES ('%s', '%s', %u, %" PRIu32 ", %" PRIu64 ", %u, %u, '%s', '%s', '%s', %u);",
       metadata.name.c_str(),
       metadata.file_name.c_str(),
       metadata.seq,
@@ -295,7 +346,6 @@ void Directory::block_table_insert_all(std::vector<BlockMetadata>& metadata) {
   sqlite3_prepare_v2(db,  sql, DEFAULT_QUERY_SIZE, &stmt, &tail);
 
   sqlite3_exec(db, "BEGIN TRANSACTION", NULL, NULL, &zErrMsg);
-
   for (auto& block : metadata) {
     sqlite3_bind_text  (stmt, 1, block.name.c_str()     , -1, SQLITE_TRANSIENT);
     sqlite3_bind_text  (stmt, 2, block.file_name.c_str(), -1, SQLITE_TRANSIENT);
@@ -390,3 +440,131 @@ void Directory::select_last_block_metadata(string file_name,
     DEBUG("The last block_metadata selected successfully");
 }
 // }}}
+
+void Directory::chunk_table_insert(ChunkMetadata& metadata, std::string file_name){
+	char sql[DEFAULT_QUERY_SIZE];
+	
+/*	printf("INSERT OR REPLACE INTO chunk_table \
+    ['%s', '%s', '%s', %u,  %llu,  %llu, %llu, %u ];\n",
+      file_name.c_str(),
+			metadata.name.c_str(),
+      metadata.primary_file.c_str(),
+      metadata.chunk_seq,
+      metadata.size,
+      metadata.offset,
+      metadata.foffset,
+			metadata.primary_seq);
+*/
+  sprintf(sql, "INSERT OR REPLACE INTO chunk_table (\
+    file_name, name, primary_file, chunk_seq,  size, offset, foffset, primary_seq)\
+    VALUES ('%s', '%s', '%s', %u,  %llu,  %llu, %llu, %u);",
+      file_name.c_str(),
+			metadata.name.c_str(),
+      metadata.primary_file.c_str(),
+      metadata.chunk_seq,
+      metadata.size,
+      metadata.offset,
+      metadata.foffset,
+			metadata.primary_seq);
+
+  if (query_exec_simple(sql))
+    DEBUG("block_metadata inserted successfully");
+
+}
+void Directory::chunk_table_insert_all(std::vector<ChunkMetadata>& metadata, std::string file_name){
+	char *zErrMsg = nullptr;
+  sqlite3* db = nullptr;
+  sqlite3_stmt * stmt;
+  const char * tail = 0;
+  db = open(path);
+
+  char sql[DEFAULT_QUERY_SIZE];
+  sprintf(sql, "INSERT OR REPLACE INTO chunk_table VALUES (@FNAME, @NAME, @PRIMARYNAME, @SEQ,  @SZ , @OFFSET, @FOFFSET, @PRIMARYSEQ);");
+  sqlite3_prepare_v2(db, sql, DEFAULT_QUERY_SIZE, &stmt, &tail);
+  sqlite3_exec(db, "BEGIN TRANSACTION", NULL, NULL, &zErrMsg);
+	
+		
+  for (auto& block : metadata) {
+    sqlite3_bind_text  (stmt, 1, file_name.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text  (stmt, 2, block.name.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text  (stmt, 3, block.primary_file.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int   (stmt, 4, block.chunk_seq);
+    sqlite3_bind_int64 (stmt, 5, block.size);
+    sqlite3_bind_int64 (stmt, 6, block.offset);
+    sqlite3_bind_int64 (stmt, 7, block.foffset);
+    sqlite3_bind_int   (stmt, 8, block.primary_seq);
+
+    sqlite3_step(stmt);        
+
+    sqlite3_clear_bindings(stmt);
+    sqlite3_reset(stmt);
+  }
+  sqlite3_exec(db, "END TRANSACTION", NULL, NULL, &zErrMsg);
+
+  sqlite3_finalize(stmt);
+  sqlite3_close(db);
+
+}
+void Directory::chunk_table_select(std::string primary_file, std::vector<ChunkMetadata>& blocks){
+	char sql[DEFAULT_QUERY_SIZE];
+
+  sprintf(sql, "SELECT * from chunk_table where (primary_file ='%s');", primary_file.c_str());
+
+  query_exec_simple(sql, chunk_list_callback, (void*)&blocks);
+
+}
+void Directory::chunk_table_select_by_index(std::string primary_file, uint32_t block_seq, ChunkMetadata* block_info){
+	char sql[DEFAULT_QUERY_SIZE];
+
+  sprintf(sql, "SELECT * from chunk_table where (primary_file='%s') and \
+      (chunk_seq=%u);", primary_file.c_str(), block_seq);
+
+  query_exec_simple(sql, chunk_callback, (void*)block_info);
+}
+
+void Directory::chunk_table_select_all(std::vector<ChunkMetadata>& block_info){
+	char sql[DEFAULT_QUERY_SIZE];
+
+  sprintf(sql, "SELECT * from chunk_table;");
+  query_exec_simple(sql, chunk_list_callback, (void*)&block_info);
+}
+
+void Directory::chunk_table_update(std::string primary_file, uint32_t size, uint32_t seq){
+	char sql[DEFAULT_QUERY_SIZE];
+
+  sprintf(sql, "UPDATE block_table set \
+      size=%" PRIu32 " where (primary_file='%s') and (seq=%u);",
+      size, primary_file.c_str(), seq);
+
+  if (query_exec_simple(sql))
+    DEBUG("block_metadata updated successfully");
+
+}
+void Directory::chunk_table_delete(std::string primary_file, uint32_t seq){
+	char sql[DEFAULT_QUERY_SIZE];
+
+  sprintf(sql, "DELETE from chunk_table where (primary_file='%s') and (chunk_seq=%u);", primary_file.c_str(), seq);
+  if (query_exec_simple(sql))
+    DEBUG("block_metadata deleted successfully");
+
+}
+void Directory::chunk_table_delete_all(std::string File){
+	char sql[DEFAULT_QUERY_SIZE];
+
+  sprintf(sql, "DELETE from chunk_table where (file_name='%s');", File.c_str());
+  if (query_exec_simple(sql))
+    DEBUG("block_metadata deleted successfully");
+
+}
+void Directory::select_last_chunk_metadata(std::string primary_file, ChunkMetadata* block_info){
+	char sql[DEFAULT_QUERY_SIZE];
+
+  sprintf(sql, "SELECT * FROM block_table WHERE (primary_file='%s') \
+      ORDER BY chunk_seq DESC LIMIT 1;", primary_file.c_str());
+
+  if (query_exec_simple(sql, chunk_callback, (void*)block_info))
+    DEBUG("The last block_metadata selected successfully");
+
+}
+
+

@@ -23,7 +23,8 @@ messages_files =   src/messages/message.cc         \
                    src/messages/formatrequest.cc   \
                    src/messages/fileexist.cc       \
                    src/messages/metadata.cc        \
-                   src/messages/IOoperation.cc
+                   src/messages/IOoperation.cc	   \
+				   src/messages/task_operation.cc
 
 
 # libs -----
@@ -34,10 +35,10 @@ libvdfs_la_SOURCES  = $(messages_files) \
                       src/common/hash.cc src/common/settings.cc \
                       src/common/logger.cc src/common/histogram.cc \
                       src/common/context.cc \
-                      src/common/context_singleton.cc
+                      src/common/context_singleton.cc 
 
 libvdfs_la_LDFLAGS  = $(BOOST_LDFLAGS) -version-info 0:0:0
-libvdfs_la_LIBADD   = -lboost_system -lboost_serialization -lboost_coroutine -lboost_thread -lboost_context -ldl
+libvdfs_la_LIBADD   = -lboost_system -lboost_serialization -lboost_coroutine -lboost_thread -lboost_context -lzookeeper_mt -ldl
 
 # BOOST_STATIC only for environments where we cannot install all the dependencies in every node
 if BOOST_STATIC
@@ -64,7 +65,9 @@ eclipse_node_SOURCES = $(eclipse_node_main) \
                        src/blocknode/block_node_router.cc \
                        src/fileleader/directory.cc \
                        src/fileleader/file_leader.cc \
-                       src/fileleader/file_leader_router.cc
+                       src/fileleader/file_leader_router.cc \
+					   src/taskmanager/task_manager.cc \
+					   src/taskmanager/task_manager_router.cc 
 
 eclipse_node_LDADD   = $(LDADD)
 
@@ -101,8 +104,10 @@ eclipse_node_SOURCES+= src/stats/io_monitor_invoker.cc \
                        src/stats/scheduler_python.cc \
                        src/stats/scheduler_vlmb.cc \
                        src/stats/scheduler_multiwave.cc \
-                       src/stats/scheduler_lean.cc
-
+                       src/stats/scheduler_lean.cc \
+					   src/stats/scheduler_steal.cc \
+					   src/stats/scheduler_base.cc
+						
 eclipse_node_LDADD  +=  -lzookeeper_mt
 
 # Compile JAVA classes ==============================================
