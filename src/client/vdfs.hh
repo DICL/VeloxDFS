@@ -53,7 +53,7 @@ class vdfs {
     bool is_open(long);
 
     velox::file upload(std::string);
-
+	velox::file upload_idv(std::string);
     bool rm(std::string);
     bool rm(long);
     bool format();

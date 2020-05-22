@@ -106,10 +106,12 @@ bool cli_driver::parse_args (int argc, char** argv) {
           attributes(args.at(optind));
 
         } else if (cmd == "wt") {
-					test_vdfs_write_io(args.at(optind));
-				} else if (cmd == "rt") {
-					test_vdfs_read_io(args.at(optind));
-				} else {
+			test_vdfs_write_io(args.at(optind));
+		} else if (cmd == "rt") {
+			test_vdfs_read_io(args.at(optind));
+		} else if (cmd == "put_idv"){
+			file_upload_idv(args.at(optind), block_size);
+		} else {
           throw(std::invalid_argument("ERROR: <ACTION> = <" + string(cmd) +">  is not supported"));
         } 
       } catch (std::out_of_range& e) {
@@ -350,7 +352,10 @@ void cli_driver::test_vdfs_write_io(std::string file ) {
 	
 }
 
-
 void cli_driver::test_vdfs_read_io(std::string file){
 	dfs->download(file);
+}
+
+void cli_driver::file_upload_idv(std::string file, uint64_t block_size) {
+  dfs->upload_by_individual_block(file, false, block_size);
 }

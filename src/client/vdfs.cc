@@ -211,6 +211,11 @@ file vdfs::upload(std::string name) {
   dfs->upload(name, false);
   return velox::file(this, name);
 }
+
+file vdfs::upload_idv(std::string name) {
+  dfs->upload_by_individual_block(name, false);
+  return velox::file(this, name);
+}
 // }}}
 // append {{{
 void vdfs::append (std::string name, std::string content) {

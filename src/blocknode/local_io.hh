@@ -23,7 +23,7 @@ class Local_io {
     //std::string read(const std::string&, uint32_t, uint32_t);
     std::string read(const std::string&, uint64_t, uint64_t);
     //std::string read(const std::string&, uint32_t, uint32_t, bool);
-	void append(const std::string& name, const std::string& v, uint64_t len);
+	void append(const std::string&, const std::string&, uint64_t);
     std::string read(const std::string&, uint64_t, uint64_t, bool);
     std::string batch_read(const std::string&, uint32_t, std::vector< std::pair<uint64_t, uint64_t> >& );
     std::string read_metadata();

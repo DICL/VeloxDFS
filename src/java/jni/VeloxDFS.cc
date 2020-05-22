@@ -1,5 +1,4 @@
 #include <jni.h>
-
 #include "../../client/vdfs.hh"
 #include "../../client/model/metadata.hh"
 #include "../../client/model/block_metadata.hh"
@@ -400,7 +399,8 @@ JNIEXPORT jint JNICALL Java_com_dicl_velox_VeloxDFS_readChunk
   //const char* chunk_name_ = env->GetStringUTFChars(chunk_name, 0);
   //const char* host_ = env->GetStringUTFChars(host, 0);
 	
-  int len = 8388608;
+  //int len = 8388608;
+  int len = context.settings.get<int>("filesystem.block");
   char* c_buf = new char[len+1];
   //bzero(c_buf, len+1);
   memset(c_buf, 0, len+1);

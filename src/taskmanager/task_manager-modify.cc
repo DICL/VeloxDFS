@@ -95,7 +95,7 @@ DistLockStatus get_dist_lock(zhandle_t * zh, string target_node, string znode, b
 }
 
 //bool produce(ifstream& ifs, messages::BlockInfo& md, struct shm_buf** cur_chunk, int idx){
-bool produce(ifstream& ifs, struct semaphore* semap, messages::BlockInfo& md, struct shm_buf** shm){
+bool produce(ifstream& ifs, semaphore_t* semap, messages::BlockInfo& md, struct shm_buf** shm){
 
 	pthread_mutex_lock(&semap->lock);
 
@@ -114,31 +114,6 @@ bool produce(ifstream& ifs, struct semaphore* semap, messages::BlockInfo& md, st
 	
 	semap->tail++;
 	pthread_mutex_unlock(&semap->lock);
-	
-}
-
-bool produce2(string disk_path, struct semaphore* semap, messages::BlockInfo& md, struct shm_buf** shm){
-	
-	ifstream ifs(disk_path + md.name, ios::binary | ios::in);
-	pthread_mutex_lock(&semap->lock);
-
-	if((semap->tail - semap->head) < semap->queue_size){
-		pthread_cond_signal(&semap->nonzero);
-	} else {
-		pthread_cond_wait(&semap->nonzero, &semap->lock);
-	}
-
-	gettimeofday(&io_start, NULL);
-
-	ifs.read(&(shm[semap->tail % semap->queue_size]->buf[0]), (long)md.size);
-	gettimeofday(&io_end, NULL);
-	io_time += (io_end.tv_sec - io_start.tv_sec) + ((double)(io_end.tv_usec - io_start.tv_usec) / 1000000);
-	shm[semap->tail % semap->queue_size]->chunk_size = md.size;
-	shm[semap->tail % semap->queue_size]->chunk_index = md.seq;
-	
-	semap->tail++;
-	pthread_mutex_unlock(&semap->lock);
-	ifs.close();
 	
 }
 
@@ -197,7 +172,7 @@ void task_worker(std::string file, struct logical_block_metadata& lblock_metadat
 	}
 
 	/* For User level semaphore */
-	struct semaphore *sema;
+	semaphore_t *sema;
 	string sema_path = "/tmp/semaphore" + to_string(task_id);
 
 	sema = semaphore_create(sema_path.c_str(), (shm_buf_depth * shm_buf_width) );
@@ -226,6 +201,8 @@ void task_worker(std::string file, struct logical_block_metadata& lblock_metadat
 	while( processed_file_cnt < replica_num ) {
 
 		while(md_index < input_block_num){
+			int index_to_copy;
+			uint64_t replica_offset = 0;
 
 			string zk_path = zk_prefix + to_string(md[md_index].seq);
 
@@ -276,7 +253,7 @@ void task_worker(std::string file, struct logical_block_metadata& lblock_metadat
 	
 	pthread_mutex_lock(&sema->lock);
 	*(bool*)shm_status_addr = true;	
-	pthread_cond_broadcast(&sema->nonzero);
+	pthread_mutex_cond_broadcast(&semap->nonzero);
 	pthread_mutex_unlock(&sema->lock);
 
 	gettimeofday(&total_end, NULL);
@@ -334,12 +311,6 @@ void static_worker(std::string file, struct logical_block_metadata& lblock_metad
 		cout << "shmat failed" << endl;
 		exit(1);
 	}
-
-	struct semaphore *sema;
-	string sema_path = "/tmp/semaphore" + to_string(task_id);
-
-	sema = semaphore_create(sema_path.c_str(), (shm_buf_depth * shm_buf_width) );
-
 	memset(shared_memory, 0, buf_pool_size);
 	shm_status_addr = (uint64_t)shared_memory;
 	shm_base_addr = (uint64_t)shared_memory + sizeof(bool);
@@ -347,8 +318,12 @@ void static_worker(std::string file, struct logical_block_metadata& lblock_metad
 	int shm_buf_num = shm_buf_width * shm_buf_depth;
 
 	/* Init Mutex Locks for each shm_buf && store chunk addr*/
+	pthread_mutexattr_t lock_attr;
+	pthread_mutexattr_init(&lock_attr);
+	pthread_mutexattr_setpshared(&lock_attr, PTHREAD_PROCESS_SHARED);
 	for(int i = 0; i < shm_buf_num; i++){
 		chunk_index[i] = (struct shm_buf*)(shm_base_addr + sizeof(struct shm_buf) * i);
+		pthread_mutex_init(&(chunk_index[i]->lock), &lock_attr);
 		chunk_index[i]->buf = (char*)(shm_chunk_base_addr + BLOCK_SIZE * i);
 	}
 	
@@ -365,11 +340,7 @@ void static_worker(std::string file, struct logical_block_metadata& lblock_metad
 
 	ifs.close();	
 
-	pthread_mutex_lock(&sema->lock);
 	*(bool*)shm_status_addr = true;	
-	pthread_cond_broadcast(&sema->nonzero);
-	pthread_mutex_unlock(&sema->lock);
-
 	gettimeofday(&total_end, NULL);
 	total_time = (total_end.tv_sec - total_start.tv_sec) + ((double)(total_end.tv_usec - total_start.tv_usec) / 1000000);
 	cout << "Total time: " << total_time << " zk_time: " << zk_time << " io_time: " << io_time << endl;
@@ -381,98 +352,9 @@ void static_worker(std::string file, struct logical_block_metadata& lblock_metad
 	shmdt(shared_memory);
 	shmctl(shmid, IPC_RMID, 0);
 		
-	return;
-}
-
-/* For Expriment */
-void static_worker_by_idv(std::string file, struct logical_block_metadata& lblock_metadata, string _job_id, int _task_id){
-	gettimeofday(&total_start, NULL);
-	string job_id = _job_id;
-
-	/* For Shared Memory */
-	uint64_t BLOCK_SIZE = context.settings.get<int>("filesystem.block");
-	int shm_buf_depth = context.settings.get<int>("addons.shm_buf_depth");
-	int shm_buf_width = context.settings.get<int>("addons.shm_buf_width");
-	uint64_t buf_pool_size = sizeof(bool) + (sizeof(struct shm_buf) + BLOCK_SIZE) * shm_buf_depth * shm_buf_width;
-	string disk_path = context.settings.get<string>("path.scratch") + "/";
-
-	int input_block_num = lblock_metadata.primary_chunk_num;
-	auto& md = lblock_metadata.physical_blocks;
-	int task_id = _task_id;	
-
-	int shmid;
-	void* shared_memory; 
-	uint64_t shm_status_addr;
-	uint64_t shm_base_addr;
-	uint64_t shm_chunk_base_addr;
-	
-	/* Get Shared Memory Pool */
-	struct shm_buf** chunk_index = new struct shm_buf*[shm_buf_width * shm_buf_depth]; 
-	shmid = shmget((key_t)(DEFAULT_KEY + task_id), buf_pool_size, 0666|IPC_CREAT);
-
-	if(shmid == -1){
-		cout << "shmget failed" << endl;
-		exit(1);
-	}
-
-	shared_memory = shmat(shmid, NULL, 0);
-	if(shared_memory == (void*)-1){
-		cout << "shmat failed" << endl;
-		exit(1);
-	}
-	
-	struct semaphore *sema;
-	string sema_path = "/tmp/semaphore" + to_string(task_id);
-
-	sema = semaphore_create(sema_path.c_str(), (shm_buf_depth * shm_buf_width) );
-
-	memset(shared_memory, 0, buf_pool_size);
-	shm_status_addr = (uint64_t)shared_memory;
-	shm_base_addr = (uint64_t)shared_memory + sizeof(bool);
-	shm_chunk_base_addr = shm_base_addr + sizeof(struct shm_buf) * shm_buf_width * shm_buf_depth;
-	int shm_buf_num = shm_buf_width * shm_buf_depth;
-
-	/* Init Mutex Locks for each shm_buf && store chunk addr*/
-	for(int i = 0; i < shm_buf_num; i++){
-		chunk_index[i] = (struct shm_buf*)(shm_base_addr + sizeof(struct shm_buf) * i);
-		chunk_index[i]->buf = (char*)(shm_chunk_base_addr + BLOCK_SIZE * i);
-	}
-	
-	int md_index = 0;
-	uint64_t input_file_offset = 0, read_bytes = 0;
-	bool isPrimary = true;
-
-	int processed_file_cnt = 0, r_idx = 0, replica_num = 1, shm_idx = 0;
-	
-	int chunk_cnt = 0;
-	while(md_index < input_block_num){
-		produce2(disk_path, sema, md[md_index], chunk_index);
-		chunk_cnt++;
-		md_index++;
-	}
-
-	//ifs.close();	
-
-	pthread_mutex_lock(&sema->lock);
-	*(bool*)shm_status_addr = true;	
-	pthread_cond_broadcast(&sema->nonzero);
-	pthread_mutex_unlock(&sema->lock);
-
-	gettimeofday(&total_end, NULL);
-	total_time = (total_end.tv_sec - total_start.tv_sec) + ((double)(total_end.tv_usec - total_start.tv_usec) / 1000000);
-	cout << "Total time: " << total_time << " zk_time: " << zk_time << " io_time: " << io_time << " chunk_cnt: " << chunk_cnt << endl;
-
-	sleep(1000);
-
-	/* Close Task */
-	delete[] chunk_index;
-	shmdt(shared_memory);
-	shmctl(shmid, IPC_RMID, 0);
-		
 
 	return;
 }
-
 void TaskManager::task_init(std::string file, struct logical_block_metadata& metadata, string job_id, int _task_id){
 	string policy = GET_STR("addons.job_policy");
 	cout << "Policy : " << policy << endl;
@@ -482,17 +364,14 @@ void TaskManager::task_init(std::string file, struct logical_block_metadata& met
 	} else if(policy == "steal"){
 		std::thread worker = thread(&task_worker, file, std::ref(metadata), job_id, _task_id);
 		worker.detach();
-	} else if(policy == "static_by_idv"){
-		std::thread worker = thread(&static_worker_by_idv, file, std::ref(metadata), job_id, _task_id);
-		worker.detach();
 	} else {
-		cout << policy << " is not existed " << endl;
-		exit(1);
+		
 	}
 }
 
 //bool TaskManager::destroy_TaskManager(){
 
 //}
+	
 
 }

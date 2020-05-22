@@ -53,7 +53,7 @@ void scheduler_base::generate(FileDescription& file_desc, std::vector<std::strin
 	file_desc.num_static_blocks = nChunks;
 
 	vector<int> node_chunks_counter(nodes.size(), 0);
-
+	
 	for (int i = 0; i < nChunks; i++) {
 		auto& host = file_desc.block_hosts[i];
 		auto replicas = get_replicas_id(nodes, host);
@@ -73,7 +73,7 @@ void scheduler_base::generate(FileDescription& file_desc, std::vector<std::strin
 		int target_node_id = replicas[0];	// primary node 
 		auto& lblock = lblocks_dist[target_node_id];
 
-		physical_block.node      =  lblock.host_name;
+		physical_block.node  =  lblock.host_name;
 
 		lblock.size += physical_block.size;
 		lblock.primary_chunk_num += 1;
@@ -95,7 +95,6 @@ void scheduler_base::generate(FileDescription& file_desc, std::vector<std::strin
 				iter->second.physical_blocks.insert(iter->second.physical_blocks.end(), riter_begin, riter_end);
 			}
 		}
-		cout << endl;
 	}
 
 

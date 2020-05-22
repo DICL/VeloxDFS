@@ -16,6 +16,7 @@ enum DistLockStatus {
 		TRY_NEXT_DIST_LOCK,
 		ZOO_CREATE_ERROR
 	};
+
 namespace eclipse {
 
 using vec_str = std::vector<std::string>;

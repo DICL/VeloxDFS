@@ -77,7 +77,10 @@ class DFS {
     //! @retval 0          SUCCESS
     //! @retval 1          FAILURE 
     int upload(std::string file_name, bool is_binary, uint64_t block_size = 0);
-
+	
+	//! For the Experiment
+	//! Upload a local file to the veloxdfs instance by individual file
+	int upload_by_individual_block(std::string file_name, bool is_binary, uint64_t block_size = 0);
     //! Download a remote file to your current local directory.
     //!
     //! @param file_name   File to peform the operation.
@@ -135,6 +138,7 @@ class DFS {
 	uint64_t shm_base_chunk_addr;
 	uint64_t shm_status_addr;
 	bool initializer;
+
 	
 };
 

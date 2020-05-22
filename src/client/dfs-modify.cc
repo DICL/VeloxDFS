@@ -51,8 +51,9 @@ namespace velox {
 
 	double total_read_time = 0.0;
 	uint64_t BLOCK_SIZE;
+	bool is_likely_finish;
 	int processed_chunk;
-	struct semaphore * sema;
+	int failed_cnt, likely;
 
 	//std::map<std::string, ifstream* > primary_fd;
 	// Static functions {{{
@@ -530,7 +531,6 @@ namespace velox {
 		mr_job_id = _mr_job_id;
 
 		if(!initializer){
-			cout << "Cliend job id : " << _mr_job_id << " , " << _tmg_id << endl;
 			uint64_t total_buf_size = sizeof(bool) + (sizeof(struct shm_buf) + BLOCK_SIZE) * shm_buf_depth * shm_buf_width;
 			shmid = shmget((key_t)(tmg_id + DEFAULT_KEY), total_buf_size, 0666);
 			if(shmid == -1) {
@@ -550,7 +550,10 @@ namespace velox {
 			shm_status_addr = (uint64_t)shared_memory;	
 			shm_idx_addr = (uint64_t)shared_memory + sizeof(bool);
 			shm_base_chunk_addr = shm_idx_addr + sizeof(struct shm_buf) * shm_buf_width * shm_buf_depth;
+			is_likely_finish = false;
 			processed_chunk = 0;
+			failed_cnt = 0; 
+			likely = (shm_buf_width * shm_buf_depth - 1) <= 0 ? 1 : shm_buf_width * shm_buf_depth - 1;
 
 			to_del_buf = NULL;
 		}
@@ -778,217 +781,6 @@ namespace velox {
 	}
 
 
-	int DFS::upload_by_individual_block(std::string file_name, bool is_binary, uint64_t block_size) {
-		uint64_t BLOCK_SIZE = block_size;
-		if (block_size == 0) {
-			BLOCK_SIZE = context.settings.get<int>("filesystem.block");
-		}
-
-		int replica = GET_INT("filesystem.replica");
-		bool is_equal_sized_blocks = (GET_STR("filesystem.equal_sized_blocks") == "true");
-
-		if (is_binary) {
-			replica = NUM_NODES;
-		}
-
-		uint32_t file_hash_key = h(file_name);
-		if (not file_exists_local(file_name)) {
-			cerr << "[ERR] " << file_name << " cannot be found in your machine." << endl;
-			return EXIT_FAILURE;
-		}
-
-		//! Does the file exists
-		//
-		/* file_info.uploading == 0 이어야 exists를반환하게 해야 함*/
-		if (this->exists(file_name)) {
-			cerr << "[ERR] " << file_name << " already exists in VeloxDFS." << endl;
-			return EXIT_FAILURE;
-		}
-
-		//! Insert the file
-		int fd = open(file_name.c_str(), 0);
-
-		__gnu_cxx::stdio_filebuf<char> filebuf(fd, std::ios::in | std::ios::binary);
-		istream myfile(&filebuf);
-
-		FileInfo file_info;
-		file_info.name = file_name;
-		file_info.hash_key = file_hash_key;
-		file_info.replica = replica;
-		myfile.seekg(0, ios_base::end);
-		file_info.size = myfile.tellg();
-		file_info.is_input = true;
-		file_info.uploading = 1;
-		file_info.intended_block_size = BLOCK_SIZE;
-
-		//! Send file to be submitted;
-		auto socket = connect(file_hash_key);
-		send_message(socket.get(), &file_info);
-
-		//! Get information of where to send the file
-		auto description = read_reply<FileDescription>(socket.get());
-		socket->close();
-
-		uint64_t start = 0;
-		uint64_t end = start + BLOCK_SIZE;
-		uint64_t current_block_size = 0;
-		unsigned int block_seq = 0;
-
-		//! Insert the blocks
-		uint32_t i = 0;
-
-		//vector<BlockMetadata> blocks_metadata;
-		Block blocks[NUM_NODES]; 
-		std::map<int, BlockMetadata> blocks_metadata;	
-		std::map<int, BlockMetadata>::iterator iter;
-		vector<future<bool>> slave_sockets;
-		vector<char> chunk(BLOCK_SIZE);
-		unsigned int Primary_seq = 0;
-
-		while (true) {
-			if (end < file_info.size) {
-				myfile.seekg(start+BLOCK_SIZE, ios_base::beg);
-
-				if (is_equal_sized_blocks == false) {
-					while (myfile.peek() != '\n') {
-						myfile.seekg(-1, ios_base::cur);
-						end--;
-					}
-				}
-			} else {
-				end = file_info.size;
-			}
-
-			BlockMetadata metadata;
-			Block block;
-			ChunkMetadata Chunk;
-			IOoperation io_ops;
-
-			bool is_first_block = bool((i == 0) && !is_equal_sized_blocks);
-			//current_block_size = (uint32_t) end - start + bool(is_first_block);
-			current_block_size = end - start + bool(is_first_block);
-			//bzero(chunk.data(), BLOCK_SIZE);
-			memset(chunk.data(), 0, BLOCK_SIZE);
-			myfile.seekg(start, myfile.beg);
-			block.second.reserve(current_block_size);
-
-			if (is_first_block) {
-				chunk[0] = '\n';
-			}
-
-			myfile.read(chunk.data() + is_first_block, current_block_size - bool(is_first_block));
-			block.second = move(chunk.data());
-			posix_fadvise(fd, end, current_block_size, POSIX_FADV_WILLNEED);
-
-			//cout << "IT" << block_seq << "START: " << start << " END: " << end << " bs " << current_block_size << endl;
-
-			//! Load block metadata info
-			int which_server = ((file_hash_key % NUM_NODES) + i) % NUM_NODES;
-			iter = blocks_metadata.find(which_server);
-			if(iter == blocks_metadata.end()){ //first block 
-				blocks_metadata.insert({which_server, metadata});
-
-				blocks_metadata[which_server].name = string("Primary_") + to_string(which_server) + string("_") + file_name;
-				blocks_metadata[which_server].file_name = file_name;
-				blocks_metadata[which_server].hash_key = GET_INDEX_IN_BOUNDARY(which_server);
-				blocks_metadata[which_server].seq = Primary_seq++;
-				blocks_metadata[which_server].size = current_block_size;
-				blocks_metadata[which_server].replica = replica;
-				blocks_metadata[which_server].node = nodes[which_server];
-				blocks_metadata[which_server].l_node = nodes[(which_server-1+NUM_NODES)%NUM_NODES];
-				blocks_metadata[which_server].r_node = nodes[(which_server+1+NUM_NODES)%NUM_NODES];
-				blocks_metadata[which_server].is_committed = 1;
-
-				Chunk.offset = 0; 
-				Chunk.foffset = 0; 
-				Chunk.size = current_block_size;
-				Chunk.chunk_seq = block_seq;
-				Chunk.primary_seq = blocks_metadata[which_server].seq;
-				Chunk.name = file_name + string("_") + to_string(block_seq);
-				Chunk.primary_file = blocks_metadata[which_server].name;
-
-				blocks_metadata[which_server].chunks.push_back(Chunk);
-				
-				block.first = Chunk.name;
-				io_ops.operation = eclipse::messages::IOoperation::OpType::BLOCK_INSERT;
-				io_ops.block = move(block);
-				iter = blocks_metadata.find(which_server);
-			} else{
-				Chunk.offset = 0;
-				Chunk.foffset = 0;
-				Chunk.size = current_block_size;
-				Chunk.chunk_seq = block_seq;
-				Chunk.primary_seq = iter->second.seq;
-				Chunk.name = file_name + string("_Chunk_") + to_string(block_seq);
-				Chunk.primary_file = iter->second.name;
-
-				block.first = Chunk.name;
-				iter->second.chunks.push_back(Chunk);
-				iter->second.size += current_block_size;
-
-				io_ops.operation = eclipse::messages::IOoperation::OpType::BLOCK_INSERT;
-				io_ops.block = move(block);
-			}
-
-			auto socket = connect(GET_INDEX(iter->second.hash_key));
-			send_message(socket.get(), &io_ops);
-
-			auto future = async(launch::async, [](unique_ptr<tcp::socket> socket) -> bool {
-
-					auto reply = read_reply<Reply> (socket.get());
-					socket->close();
-
-					if (reply->message != "TRUE") {
-					cerr << "[ERR] Failed to upload block . Details: " << reply->details << endl;
-					return false;
-					}
-
-					return true;
-					}, move(socket));
-
-			slave_sockets.push_back(move(future));
-
-			cout << "IT2 " << block_seq << "START: " << start << "END: " << end << " bs: " << current_block_size <<  " Chunk : " << block.first << endl;
-			if (end >= file_info.size) {
-				break;
-			}
-			start = end;
-			end = start + BLOCK_SIZE;
-			block_seq++;
-			i++;
-
-			//cout << "IT2 " << block_seq << "START: " << start << " END: " << end << " bs " << current_block_size << endl;
-		}
-
-		std::vector<BlockMetadata> blocksMetadata;
-		for(iter = blocks_metadata.begin() ; iter != blocks_metadata.end(); iter++){
-			blocksMetadata.push_back(iter->second);
-		}
-
-		for (auto& future: slave_sockets)
-			future.get();
-
-		file_info.num_primary_file = Primary_seq;
-		file_info.num_block = block_seq;
-		file_info.blocks_metadata = blocksMetadata;
-		file_info.uploading = 0;
-
-		socket = connect(file_hash_key);
-		send_message(socket.get(), &file_info);
-		auto reply = read_reply<Reply> (socket.get());
-
-		if (reply->message != "TRUE") {
-			cerr << "[ERR] Failed to upload file. Details: " << reply->details << endl;
-			return EXIT_FAILURE;
-		}
-
-		socket->close();
-		close(fd);
-
-		cout << "[INFO] " << file_name << " is uploaded." << endl;
-		cout << "[INFO] file size : " << file_info.size << endl;
-		return EXIT_SUCCESS;
-	}
 
 	// }}}
 	// download {{{
@@ -1641,6 +1433,7 @@ namespace velox {
 
 				pos_to_update = fd->offsets[sblock_seq] + fd->block_size[sblock_seq] + written_bytes;
 
+				cout << "Update >> ";
 				//! Update Huge Block
 				if(!updated_meta[which_server]){
 					primary_metadata[which_server].name = fd->primary_files[sblock_seq];
@@ -1672,6 +1465,7 @@ namespace velox {
 				//! Update Huge Block
 				uint32_t primary_seq;
 				if(sblock_num >= NUM_NODES) { // If Primary for curruent sblock exists, just update primary metadata.
+					cout << "Insert1>> ";
 					primary_seq = (sblock_num - primary_num) % NUM_NODES;
 					uint32_t prev_sblock_seq = sblock_num - primary_num;
 					which_server = GET_INDEX(fd->hash_keys[primary_seq]);
@@ -1702,6 +1496,7 @@ namespace velox {
 					primary_metadata[which_server].size = fd->offsets_in_file[prev_sblock_seq] + fd->block_size[prev_sblock_seq] + len_to_write;
 					primary_metadata[which_server].chunks.push_back(sblock_metadata);
 				} else { // If not, make a new primary.
+					cout << "Insert2>> ";
 					primary_seq = primary_num + updated_primary_num;
 					//	which_server = (GET_INDEX(fd->hash_keys[sblock_num -1]) + updated_sblock_num) % NUM_NODES;
 					which_server = (which_server + 1) % NUM_NODES;
@@ -2072,25 +1867,22 @@ namespace velox {
 		while(sema->tail - sema->head == 0){
 			if(*(bool*)shm_status_addr){
 				pthread_mutex_unlock(&sema->lock);
-				cout << "Task Process Chunk : " << processed_chunk << endl;
 				return 0;
 			}
-			pthread_cond_wait(&sema->nonzero, &sema->lock);
+			pthread_cond_wait(&semap->nonzero, &semap->lock);
 		}
 
-		pthread_cond_signal(&sema->nonzero);
+		pthread_cond_signal(&semap->nonzero);
 
-		cur_index = (struct shm_buf*)(shm_idx_addr + sizeof(struct shm_buf) * (sema->head % sema->queue_size) );
-		char* buf_addr = (char*)(shm_base_chunk_addr + BLOCK_SIZE * (sema->head % sema->queue_size) );
+		cur_index = (struct shm_buf*)(shm_idx_addr + sizeof(struct shm_buf) * (semap->head % semap->queue_size) );
+		char* buf_addr = (char*)(shm_base_chunk_addr + BLOCK_SIZE * (semap->head % semap->queue_size) );
 		strncpy(buf, &(buf_addr[0]), cur_index->chunk_size);
 		read_bytes = cur_index->chunk_size;
 		memset(&(buf_addr[0]), 0, cur_index->chunk_size);
-			
-		cout << "Get Chunk From SM : " << cur_index->chunk_index << endl;
+		
 		sema->head++;
-
 		pthread_mutex_unlock(&sema->lock);
-	
+
 		processed_chunk++;
 		if(to_del_buf != NULL) delete[] to_del_buf;
 		to_del_buf = buf;

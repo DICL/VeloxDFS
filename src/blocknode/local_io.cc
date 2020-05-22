@@ -47,7 +47,7 @@ void Local_io::write (const std::string& name, const std::string& v) {
     if(token == path_tokens.back()){
       file.rdbuf()->pubsetbuf(0, 0);      //! No buffer
       file.open(curPath, ios::binary);  //! Binary write
-  		file.write(v.c_str(), v.length());
+  	  file.write(v.c_str(), v.length());
       file.close();
     }
     else {
@@ -66,13 +66,13 @@ void Local_io::write (const std::string& name, const std::string& v) {
 void Local_io::update (const std::string& name, const std::string& v, uint64_t pos, uint64_t len) {
   string file_path = disk_path + string("/") + name;
   fstream file (file_path, fstream::binary | fstream::in | fstream::out);
-	if( !file ){
+	/*if( !file ){
 	cout << "File is not existed" << endl;
 		ofstream make_file(file_path, ostream::binary | ostream::out);
 
 		make_file.close();
 		file.open(file_path, fstream::binary | fstream::in | fstream::out);
-	}
+	}*/
   file.seekp(pos, ios_base::beg);
   file.write(v.c_str(), len);
   file.close();
@@ -81,7 +81,13 @@ void Local_io::update (const std::string& name, const std::string& v, uint64_t p
 // append {{{
 void Local_io::append (const std::string& name, const std::string& v, uint64_t len) {
   string file_path = disk_path + string("/") + name;
-
+  fstream file (file_path, fstream::binary | fstream::out | fstream::app | fstream::ate);
+  if(!file){
+    cout << "File is not existed" << endl;
+	exit(0);
+  }
+  file.write(v.c_str(), len);
+  file.close();
   //FILE* fp = fopen(file_path, "ab");
   //fwrite(&v.c_str[0], sizeof(char), len, fp);
   //fsync(fileno(fp));

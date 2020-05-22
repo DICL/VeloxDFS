@@ -21,8 +21,10 @@ class cli_driver {
     void file_rename(std::string, std::string);
     void attributes(std::string);
 	
-		void test_vdfs_write_io(std::string);
-		void test_vdfs_read_io(std::string);
+	void test_vdfs_write_io(std::string);
+	void test_vdfs_read_io(std::string);
+
+    void file_upload_idv(std::string, uint64_t block_size);
     velox::DFS *dfs;
     //velox::DFS dfs(-1,0);
 };

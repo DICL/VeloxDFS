@@ -35,7 +35,8 @@ libvdfs_la_SOURCES  = $(messages_files) \
                       src/common/hash.cc src/common/settings.cc \
                       src/common/logger.cc src/common/histogram.cc \
                       src/common/context.cc \
-                      src/common/context_singleton.cc 
+                      src/common/context_singleton.cc \
+					  src/common/shared_memory.cc
 
 libvdfs_la_LDFLAGS  = $(BOOST_LDFLAGS) -version-info 0:0:0
 libvdfs_la_LIBADD   = -lboost_system -lboost_serialization -lboost_coroutine -lboost_thread -lboost_context -lzookeeper_mt -ldl

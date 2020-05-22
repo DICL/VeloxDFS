@@ -30,13 +30,18 @@ class BlockNode: public Node {
 
     //! @brief Read block from the local node.
     bool block_read_local(Block& block, uint64_t off = 0, uint64_t len = 0, bool ignore_params = true);
+	
+	bool block_append_local(Block& block, uint64_t len);
 
+//	bool send_primary_to_replica(std::string file, std::string node);
 
   protected:
     void replicate_message(messages::IOoperation*);
 
     Local_io local_io;
     int network_size;
+//	std::string disk_path;
+//	std::vector<int> replica_nodes;
 };
 
 }

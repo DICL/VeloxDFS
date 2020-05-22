@@ -32,8 +32,6 @@ int main (int argc, char ** argv) {
   TaskManager task_manager(internal_net.get());
 
   // Decorator pattern: I want FileLeader and Block node on the same network
-  //auto router = make_unique<FileLeaderRouter>(&file_leader, new BlockNodeRouter(&block_node, new SimpleRouter()));
-  //auto router = make_unique<FileLeaderRouter>(&file_leader, new BlockNodeRouter(&block_node, new SimpleRouter()), new TaskManagerRouter(&task_manager, new SimpleRouter()));
   auto router = make_unique<FileLeaderRouter>(&file_leader, new BlockNodeRouter(&block_node, new TaskManagerRouter(&task_manager, new SimpleRouter())));
 
   external_net->attach(router.get());

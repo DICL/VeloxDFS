@@ -146,11 +146,7 @@ OUTPUT_LEN	stats/scheduler_python.cc	15;"	d	file:
 OpType	messages/IOoperation.hh	/^  enum class OpType {$/;"	c	struct:eclipse::messages::IOoperation
 OpType	messages/task_operation.hh	/^  enum class OpType {$/;"	c	struct:eclipse::messages::TaskOperation
 PANIC	common/context_singleton.hh	6;"	d
-PRIMARY	taskmanager/task_manager.cc	/^enum READ_FILE { PRIMARY, REPLICA1, REPLICA2 };$/;"	e	enum:eclipse::READ_FILE	file:
 READ	stats/scheduler_python.cc	14;"	d	file:
-READ_FILE	taskmanager/task_manager.cc	/^enum READ_FILE { PRIMARY, REPLICA1, REPLICA2 };$/;"	g	namespace:eclipse	file:
-REPLICA1	taskmanager/task_manager.cc	/^enum READ_FILE { PRIMARY, REPLICA1, REPLICA2 };$/;"	e	enum:eclipse::READ_FILE	file:
-REPLICA2	taskmanager/task_manager.cc	/^enum READ_FILE { PRIMARY, REPLICA1, REPLICA2 };$/;"	e	enum:eclipse::READ_FILE	file:
 Reply	messages/boost_impl.cc	/^BOOST_CLASS_EXPORT_IMPLEMENT(eclipse::messages::Reply);$/;"	v
 Reply	messages/boost_impl.hh	/^BOOST_CLASS_EXPORT_KEY(eclipse::messages::Reply);$/;"	v
 Reply	messages/reply.hh	/^struct Reply: public Message {$/;"	s	namespace:eclipse::messages
@@ -245,6 +241,7 @@ chunk_callback	fileleader/directory.cc	/^static int chunk_callback(void *chunk_i
 chunk_index	blocknode/lblock_manager.hh	/^	uint32_t chunk_index;$/;"	m	struct:shm_info
 chunk_index	common/shared_memory.hh	/^	uint32_t chunk_index;$/;"	m	struct:shm_buf
 chunk_list_callback	fileleader/directory.cc	/^static int chunk_list_callback(void *list, int argc, char **argv, char **azColName) {$/;"	f	file:
+chunk_offset	common/shared_memory.hh	/^	uint32_t chunk_offset;$/;"	m	struct:shm_buf
 chunk_seq	client/model/block_metadata.hh	/^			uint32_t chunk_seq; \/\/ added$/;"	m	class:velox::model::block_metadata
 chunk_seq	common/blockmetadata.hh	/^	uint32_t chunk_seq;$/;"	m	struct:eclipse::ChunkMetadata
 chunk_sequences	messages/filedescription.hh	/^  std::vector<uint32_t> chunk_sequences;$/;"	m	struct:eclipse::messages::FileDescription
@@ -379,6 +376,7 @@ exist_callback	fileleader/directory.cc	/^static int exist_callback(void *result,
 exists	client/dfs.cc	/^	bool DFS::exists(std::string name) {$/;"	f	class:velox::DFS
 exists	client/vdfs.cc	/^bool vdfs::exists(std::string name) {$/;"	f	class:vdfs
 exists	java/velox/VeloxDFS.java	/^  public native boolean exists(String name);$/;"	m	class:VeloxDFS
+failed_cnt	client/dfs.cc	/^	int failed_cnt, likely;$/;"	m	namespace:velox	file:
 fd	blocknode/lblock_manager.hh	/^	std::shraed_ptr<std::ifstream> fd;$/;"	m	struct:task
 file	client/vdfs.cc	/^file::file(const file& that) {$/;"	f	class:file
 file	client/vdfs.cc	/^file::file(vdfs* vdfs_, std::string name_) {$/;"	f	class:file
@@ -450,7 +448,7 @@ getVeloxDFS	java/velox/VeloxDFS.java	/^  public long getVeloxDFS() { return mVel
 get_boundary	common/histogram.cc	/^unsigned Histogram::get_boundary (int index)     \/\/ the index starts from 0$/;"	f	class:Histogram
 get_count	common/histogram.cc	/^double Histogram::get_count (int index)$/;"	f	class:Histogram
 get_destination	messages/message.cc	/^int  Message::get_destination() const { return destination; }$/;"	f	class:eclipse::messages::Message
-get_dist_lock	taskmanager/task_manager.cc	/^DistLockStatus get_dist_lock(zhandle_t * zh, string znode, bool isPrimary){$/;"	f	namespace:eclipse
+get_dist_lock	taskmanager/task_manager.cc	/^DistLockStatus get_dist_lock(zhandle_t * zh, string znode, bool isPrimary, bool &Stealing){$/;"	f	namespace:eclipse
 get_env	common/settings.cc	/^char* get_env (std::string in) {$/;"	f
 get_file	client/vdfs.cc	/^velox::file* vdfs::get_file(long fid) {$/;"	f	class:vdfs
 get_file_description	client/dfs.cc	/^	shared_ptr<FileDescription> get_file_description$/;"	f	namespace:velox
@@ -535,7 +533,10 @@ insert_file	fileleader/file_leader_router.cc	/^void FileLeaderRouter::insert_fil
 intended_block_size	messages/fileinfo.hh	/^  uint64_t intended_block_size = 0;$/;"	m	struct:eclipse::messages::FileInfo
 invoke_io_reporter	stats/io_monitor_invoker.cc	/^void invoke_io_reporter() {$/;"	f
 io	common/context.hh	/^    boost::asio::io_service io;$/;"	m	class:Context
+io_end	taskmanager/task_manager.cc	/^	struct timeval io_start, io_end;$/;"	m	namespace:eclipse	typeref:struct:eclipse::	file:
 io_operation	blocknode/block_node_router.cc	/^void BlockNodeRouter::io_operation (messages::Message* m_, Channel* tcp_connection) {$/;"	f	class:BlockNodeRouter
+io_start	taskmanager/task_manager.cc	/^	struct timeval io_start, io_end;$/;"	m	namespace:eclipse	typeref:struct:eclipse::timeval	file:
+io_time	taskmanager/task_manager.cc	/^	double io_time = 0.0;$/;"	m	namespace:eclipse	file:
 iosvc	network/asyncchannel.hh	/^    boost::asio::io_service& iosvc;$/;"	m	class:eclipse::network::AsyncChannel
 ip_of_this	nodes/node.hh	/^    std::string ip_of_this;$/;"	m	class:eclipse::Node
 isOpen	java/velox/VeloxDFS.java	/^  public native boolean isOpen(long fid);$/;"	m	class:VeloxDFS
@@ -562,6 +563,7 @@ lbm_master	blocknode/lblock_manager.hh	/^	std::thread lbm_master;$/;"	m	class:lb
 lbm_workers	blocknode/lblock_manager.hh	/^	std::vector<std::thread> lbm_workers;$/;"	m	class:lblock_manager
 len	messages/blockrequest.hh	/^  uint64_t len;$/;"	m	struct:eclipse::messages::BlockRequest
 length	messages/IOoperation.hh	/^  uint64_t length = 0;$/;"	m	struct:eclipse::messages::IOoperation
+likely	client/dfs.cc	/^	int failed_cnt, likely;$/;"	m	namespace:velox	file:
 list	client/cli_driver.cc	/^void cli_driver::list (bool human_readable) {$/;"	f	class:cli_driver
 list	client/vdfs.cc	/^std::vector<model::metadata> vdfs::list(bool all, std::string name) {$/;"	f	class:vdfs
 list	fileleader/file_leader.cc	/^bool FileLeader::list (messages::FileList* m) {$/;"	f	class:FileLeader
@@ -590,7 +592,6 @@ mVeloxDFS	java/velox/VeloxDFS.java	/^  private long mVeloxDFS = 0;$/;"	f	class:V
 main	targets/client.cc	/^int main(int argc, char** argv) {$/;"	f
 main	targets/node_main.cc	/^int main (int argc, char ** argv) {$/;"	f
 main	targets/velox_get_config.cc	/^int main(int argc, char** argv) {$/;"	f
-main	test.cc	/^int main(){$/;"	f
 make_metadata	client/dfs.cc	/^	model::metadata make_metadata(FileInfo* fi) {$/;"	f	namespace:velox
 message	messages/reply.hh	/^  std::string message;$/;"	m	struct:eclipse::messages::Reply
 messages	messages/IOoperation.hh	/^namespace messages {$/;"	n	namespace:eclipse
@@ -772,6 +773,7 @@ readChunk	java/velox/VeloxDFS.java	/^  public native int readChunk(byte[] buf, i
 read_all	client/dfs.cc	/^	std::string DFS::read_all(std::string file) {$/;"	f	class:velox::DFS
 read_chunk	client/dfs.cc	/^	uint64_t DFS::read_chunk(char* buf, uint32_t buffer_offset) {$/;"	f	class:velox::DFS
 read_chunk	client/vdfs.cc	/^uint32_t vdfs::read_chunk(char *buf, uint32_t boff) {$/;"	f	class:vdfs
+read_chunk_to_shm	taskmanager/task_manager.cc	/^bool read_chunk_to_shm(ifstream& ifs, messages::BlockInfo& md, struct shm_buf** cur_chunk, int idx){$/;"	f	namespace:eclipse
 read_coroutine	network/asyncchannel.cc	/^void AsyncChannel::read_coroutine (yield_context yield) {$/;"	f	class:AsyncChannel
 read_from_disk	client/dfs.cc	/^	void read_from_disk(char* buf, BlockInfo chunk, uint64_t* read_bytes, uint64_t cursor, uint64_t length) {$/;"	f	namespace:velox
 read_from_remote	client/dfs.cc	/^	void read_from_remote(char* buf, BlockInfo chunk, uint64_t* read_bytes, uint64_t cursor, uint64_t length, int which_node) {$/;"	f	namespace:velox
@@ -862,6 +864,7 @@ shm_base_chunk_addr	client/dfs.hh	/^	uint64_t shm_base_chunk_addr;$/;"	m	class:v
 shm_buf	common/shared_memory.hh	/^struct shm_buf{$/;"	s
 shm_buf_depth	client/dfs.hh	/^	int shm_buf_depth;$/;"	m	class:velox::DFS
 shm_buf_idx	client/dfs.hh	/^	int shm_buf_idx;$/;"	m	class:velox::DFS
+shm_buf_width	client/dfs.hh	/^	int shm_buf_width;$/;"	m	class:velox::DFS
 shm_idx_addr	client/dfs.hh	/^	uint64_t shm_idx_addr;$/;"	m	class:velox::DFS
 shm_info	blocknode/lblock_manager.hh	/^struct shm_info {$/;"	s
 shm_status_addr	client/dfs.hh	/^	uint64_t shm_status_addr;$/;"	m	class:velox::DFS
@@ -885,6 +888,7 @@ socket	network/asyncchannel.hh	/^    tcp::socket socket; $/;"	m	class:eclipse::n
 soft	targets/veloxd	/^function soft-down {$/;"	f
 splitRegions	stats/scheduler.py	/^def splitRegions(nodes, regionIO):$/;"	f
 split_blocks	stats/scheduler_multiwave.cc	/^std::pair<CHUNKS, CHUNKS> split_blocks(CHUNKS chunks) {$/;"	f	namespace:__anon5
+static_worker	taskmanager/task_manager.cc	/^void static_worker(std::string file, struct logical_block_metadata& lblock_metadata, string _job_id, int _task_id){$/;"	f	namespace:eclipse
 stats	targets/veloxd	/^function stats {$/;"	f
 stats_listener	stats/stats_listener.hh	/^class stats_listener {$/;"	c	namespace:eclipse
 storagePath	java/velox/Configuration.java	/^    public String storagePath() {$/;"	m	class:Configuration
@@ -902,6 +906,7 @@ title	common/logger.hh	/^    std::string title;$/;"	m	class:Logger
 tmg_id	client/dfs.hh	/^	int tmg_id;$/;"	m	class:velox::DFS
 tmg_id	client/vdfs.hh	/^	int tmg_id;$/;"	m	class:velox::vdfs
 tmg_id	messages/task_operation.hh	/^  int tmg_id = 0;$/;"	m	struct:eclipse::messages::TaskOperation
+to_del_buf	client/dfs.hh	/^	char* to_del_buf;$/;"	m	class:velox::DFS
 to_process_file	taskmanager/task_manager.hh	/^	std::map <int, shared_ptr<int> > to_process_file;$/;"	m	class:eclipse::TaskManager
 tokenize	common/settings.cc	/^static vector<string> tokenize(std::string str_separated_by_colons) {$/;"	f	file:
 total_read_time	client/dfs.cc	/^	double total_read_time = 0.0;$/;"	m	namespace:velox	file:
@@ -944,11 +949,14 @@ write_chunk	client/dfs.cc	/^	uint64_t DFS::write_chunk(std::string& file_name, c
 write_file	client/dfs.cc	/^	int DFS::write_file(std::string file_name, bool is_binary, const std::string& buf, uint64_t len) {$/;"	f	class:velox::DFS
 write_file	client/vdfs.cc	/^file vdfs::write_file(std::string name, const std::string& buf, uint64_t len) {$/;"	f	class:vdfs
 write_file	java/velox/VeloxDFS.java	/^  public native void write_file(String file_name, String buf, long len);$/;"	m	class:VeloxDFS
+zk_end	taskmanager/task_manager.cc	/^	struct timeval zk_start, zk_end;$/;"	m	namespace:eclipse	typeref:struct:eclipse::	file:
 zk_listener	stats/zk_listener.cc	/^zk_listener::zk_listener() {$/;"	f	class:zk_listener
 zk_listener	stats/zk_listener.hh	/^class zk_listener: public stats_listener {$/;"	c	namespace:eclipse
 zk_query	stats/read_io_stats.sh	/^function zk_query() {$/;"	f
 zk_server_addr	stats/zk_listener.hh	/^    std::string zk_server_addr;$/;"	m	class:eclipse::zk_listener
 zk_server_port	stats/zk_listener.hh	/^    int zk_server_port;$/;"	m	class:eclipse::zk_listener
+zk_start	taskmanager/task_manager.cc	/^	struct timeval zk_start, zk_end;$/;"	m	namespace:eclipse	typeref:struct:eclipse::timeval	file:
+zk_time	taskmanager/task_manager.cc	/^	double zk_time = 0.0;$/;"	m	namespace:eclipse	file:
 ~AsyncChannel	network/asyncchannel.cc	/^AsyncChannel::~AsyncChannel() {$/;"	f	class:AsyncChannel
 ~BlockNode	blocknode/block_node.cc	/^BlockNode::~BlockNode() { }$/;"	f	class:eclipse::BlockNode
 ~Context	common/context.cc	/^Context::~Context() {$/;"	f	class:Context
