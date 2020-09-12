@@ -29,10 +29,11 @@ config.h.in~
 config.log
 config.status
 configure
-./Makefile
+Makefile
 autom4te.cache/*
 configure.scan
 autoscan.log
+libtool
 src/common/settings.hh.gch
 
 #Build
@@ -52,3 +53,5 @@ m4/pkg.m4
 #Docs
 doc/html
 java/
+classjava.stamp
+stamp-h1

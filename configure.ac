@@ -1,8 +1,9 @@
-AC_INIT([VeloxDFS], 
+AC_INIT([VeloxDFS],
     [1.10.0],
-    [vicente.bolea@gmail.com], 
-    [], [dicl.unist.ac.kr])
+    [vicente.bolea@gmail.com],
+    [], [dicl.skku.edu])
 AC_CONFIG_AUX_DIR([./.autotools_aux])
+AC_PREFIX_DEFAULT(./build)
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 AM_SILENT_RULES([yes])
 LT_INIT([dlopen])
@@ -82,7 +83,7 @@ AH_TEMPLATE([PY_SCHEDULER_SCRIPT],[PY scheduler path])
 AC_DEFINE_UNQUOTED([PY_SCHEDULER_SCRIPT], ["${bindirfull}/scheduler.py"])
 
 AS_IF([test "x$enable_lblocks" = xyes], [
-      AH_TEMPLATE([LOGICAL_BLOCKS_FEATURE],["Enables logical blocks feature" ]) 
+      AH_TEMPLATE([LOGICAL_BLOCKS_FEATURE],["Enables logical blocks feature" ])
       AC_DEFINE_UNQUOTED([LOGICAL_BLOCKS_FEATURE], [1])
      ])
 #}}}
@@ -111,10 +112,10 @@ WARN([\
 
  [Optional]
  Have UnitTest++?.: $have_unittest
- 
+
  Next, type:
  AS_HELP_STRING([make @<:@-j<processors>@:>@], [Processors indicate how many threads you want to use])
  AS_HELP_STRING([make install],                [Will install the project in: $prefix])
-    
+
 -------------------------------------------------]) #}}}
 # vim: foldmethod=marker
