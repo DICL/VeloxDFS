@@ -8,7 +8,7 @@ VeloxDFS {#mainpage}
 ---
 <!-- @endcond -->
 
-_VeloxDFS_ is a decentralized distributed file system for ETL MapReduce frmaeworks, which has compatible APIs with HDFS.
+_VeloxDFS_ is a decentralized Hadoop compatible distributed file system for ETL (Extract, transform, and load) MapReduce frameworks.
 
 This distributed file system serves as the foundation and essential component of the _Velox Big Data Framework (VBDF)_, 
 however, it can be used independently of the other components such as _VeloxMR_ (MapReduce Framework).
