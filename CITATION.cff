@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "VeloxDFS: Streaming Access to Distributed Datasets to Reduce Disk Seeks"
+authors:
+- given-names: "Sunghwan"
+  family-names: "Ahn"
+- given-names: "Hyeongjun"
+  family-names: "Park"
+- given-names: "V. A."
+  family-names: "Bolea Sanchez"
+- given-names: "Deukyeon"
+  family-names: "Hwang"
+- given-names: "Wonbae"
+  family-names: "Kim"
+- given-names: "Alan"
+  family-names: "Sussman"
+- given-names: "Beomseok"
+  family-names: "Nam"
+date-released: 2022-06-16 # Update based on actual release date or paper publication
+url: "http://dicl.skku.edu/papers/VeloxDFS.pd" # Link to the paper (adjust if a specific implementation exists)
+doi: 10.1109/CCGrid54584.2022.00012
