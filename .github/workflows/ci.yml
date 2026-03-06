@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-22.04
+
+    strategy:
+      matrix:
+        compiler:
+          - gcc-11
+          - gcc-12
+        include:
+          - compiler: gcc-11
+            cxx: g++-11
+          - compiler: gcc-12
+            cxx: g++-12
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          ${{ matrix.compiler }} \
+          ${{ matrix.cxx }} \
+          libboost-all-dev \
+          libunittest++-dev \
+          doxygen \
+          gdb \
+          libzookeeper-mt-dev \
+          ccache
+
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ matrix.compiler }}
+
+    - name: Configure ccache
+      run: |
+        export PATH="/usr/lib/ccache:$PATH"
+        export CXX=${{ matrix.cxx }}
+        export CC=${{ matrix.compiler }}
+        ccache --set-config=max_size=500M
+
+    - name: Generate build files
+      run: |
+        export CXX=${{ matrix.cxx }}
+        export CC=${{ matrix.compiler }}
+        sh autogen.sh
+
+    - name: Configure
+      run: |
+        export CXX=${{ matrix.cxx }}
+        export CC=${{ matrix.compiler }}
+        mkdir -p build
+        cd build
+        sh ../configure --prefix=$(pwd)
+
+    - name: Build
+      run: |
+        export CXX=${{ matrix.cxx }}
+        export CC=${{ matrix.compiler }}
+        cd build
+        make -j$(nproc)
+
+    - name: Install
+      run: |
+        cd build
+        make install
+
+    - name: Run tests
+      run: |
+        cd build
+        make -j$(nproc) check
+
+    - name: Show ccache statistics
+      run: ccache --show-stats
