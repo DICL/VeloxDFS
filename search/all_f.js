@@ -1,10 +1,21 @@
 var searchData=
 [
-  ['panic',['panic',['../classLogger.html#a710182d1db7ef9ef63215fe18102b5fb',1,'Logger::panic()'],['../context__singleton_8hh.html#aa2755903450eab37fb70db6696910714',1,'PANIC():&#160;context_singleton.hh']]],
-  ['panic_5fif',['panic_if',['../classLogger.html#a55c9a9b7761cab432cefed938e2fd5ec',1,'Logger']]],
-  ['parse_5fargs',['parse_args',['../classcli__driver.html#a6b583f396464f42ac0782a215f825c9a',1,'cli_driver']]],
-  ['physical_5fblocks',['physical_blocks',['../structeclipse_1_1logical__block__metadata.html#a4f80ae19dd39952e95094bdf64861743',1,'eclipse::logical_block_metadata']]],
-  ['port',['port',['../classeclipse_1_1Node.html#a5548301fa0b3ff2adc5a36f67addaf5f',1,'eclipse::Node']]],
-  ['pos',['pos',['../structeclipse_1_1messages_1_1IOoperation.html#a9f90aba7c34558501e27233f876f7439',1,'eclipse::messages::IOoperation']]],
-  ['pt',['pt',['../classSettings_1_1SettingsImpl.html#a4ffbbf2bcc90ffaa8491ad670df21602',1,'Settings::SettingsImpl']]]
+  ['panic_426',['panic',['../classLogger.html#a710182d1db7ef9ef63215fe18102b5fb',1,'Logger']]],
+  ['panic_427',['PANIC',['../context__singleton_8hh.html#aa2755903450eab37fb70db6696910714',1,'context_singleton.hh']]],
+  ['panic_5fif_428',['panic_if',['../classLogger.html#a55c9a9b7761cab432cefed938e2fd5ec',1,'Logger']]],
+  ['parse_5fargs_429',['parse_args',['../classcli__driver.html#a6b583f396464f42ac0782a215f825c9a',1,'cli_driver']]],
+  ['parsing_5finput_430',['parsing_input',['../namespacevelox.html#ab707210e6fc7ff27aa0e18de5dcc3325',1,'velox']]],
+  ['physical_5fblocks_431',['physical_blocks',['../structeclipse_1_1logical__block__metadata.html#a4f80ae19dd39952e95094bdf64861743',1,'eclipse::logical_block_metadata']]],
+  ['port_432',['port',['../classeclipse_1_1Node.html#a5548301fa0b3ff2adc5a36f67addaf5f',1,'eclipse::Node']]],
+  ['pos_433',['pos',['../structeclipse_1_1messages_1_1IOoperation.html#a9f90aba7c34558501e27233f876f7439',1,'eclipse::messages::IOoperation']]],
+  ['primary_5fchunk_5fnum_434',['primary_chunk_num',['../classvelox_1_1model_1_1block__metadata.html#a763893fab5e6975084fd17fdb70eb3ff',1,'velox::model::block_metadata::primary_chunk_num()'],['../structeclipse_1_1logical__block__metadata.html#a2dce1853b2e81c6044e5946a7279d8b8',1,'eclipse::logical_block_metadata::primary_chunk_num()']]],
+  ['primary_5ffd_435',['primary_fd',['../namespacevelox.html#aa0638b0f3b0b073f5e9bc4dad4ffb014',1,'velox']]],
+  ['primary_5ffile_436',['primary_file',['../classvelox_1_1model_1_1block__metadata.html#ac69e48ef1eabd1daa0925733f4c9f272',1,'velox::model::block_metadata::primary_file()'],['../structeclipse_1_1ChunkMetadata.html#a2f8f07aa0f00a2f6179c52bd45c10774',1,'eclipse::ChunkMetadata::primary_file()'],['../classcom_1_1dicl_1_1velox_1_1model_1_1BlockMetadata.html#aa14e8016471d0d2dfa0a4d21ee4ab362',1,'com.dicl.velox.model.BlockMetadata.primary_file()'],['../structeclipse_1_1messages_1_1BlockInfo.html#a95106b8d0f4ae2c6c3d34c86cd6e8d5f',1,'eclipse::messages::BlockInfo::primary_file()']]],
+  ['primary_5ffiles_437',['primary_files',['../structeclipse_1_1messages_1_1FileDescription.html#ada489e1601cda9af7314f61ac1f41933',1,'eclipse::messages::FileDescription']]],
+  ['primary_5fseq_438',['primary_seq',['../structeclipse_1_1messages_1_1BlockInfo.html#a88dfbb082e05d7bc79e7c865f95075b4',1,'eclipse::messages::BlockInfo::primary_seq()'],['../classcom_1_1dicl_1_1velox_1_1model_1_1BlockMetadata.html#ae81f6b39e829e91e88dfa63ab9f971fc',1,'com.dicl.velox.model.BlockMetadata.primary_seq()'],['../structeclipse_1_1ChunkMetadata.html#ad1b016612c84cbb2629208677bbd8ed6',1,'eclipse::ChunkMetadata::primary_seq()'],['../classvelox_1_1model_1_1block__metadata.html#a4be52de0f6bdddcd9f49603f92b14bb7',1,'velox::model::block_metadata::primary_seq()']]],
+  ['primary_5fsequences_439',['primary_sequences',['../structeclipse_1_1messages_1_1FileDescription.html#a521021b6a9ed3d27e30143bb6f5634e4',1,'eclipse::messages::FileDescription']]],
+  ['processed_5fchunk_440',['processed_chunk',['../namespacevelox.html#a17e26a7c61a62f3e214b0a24d77f0282',1,'velox']]],
+  ['produce_441',['produce',['../namespaceeclipse.html#ac5c89e9faefa4b10e23335fb7acbcc70',1,'eclipse']]],
+  ['produce2_442',['produce2',['../namespaceeclipse.html#af1657940748ea5af4c3ced6fa6c04fd0',1,'eclipse']]],
+  ['pt_443',['pt',['../classSettings_1_1SettingsImpl.html#a4ffbbf2bcc90ffaa8491ad670df21602',1,'Settings::SettingsImpl']]]
 ];

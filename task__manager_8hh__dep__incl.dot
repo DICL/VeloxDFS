@@ -1,0 +1,25 @@
+digraph "/home/runner/work/VeloxDFS/VeloxDFS/src/taskmanager/task_manager.hh"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/taskmanager\l/task_manager.hh",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/taskmanager\l/backup/task_manager.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$backup_2task__manager_8cc.html",tooltip=" "];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/taskmanager\l/task_manager-modify.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$task__manager-modify_8cc.html",tooltip=" "];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/taskmanager\l/task_manager.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$task__manager_8cc.html",tooltip=" "];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/taskmanager\l/task_manager_bak.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$task__manager__bak_8cc.html",tooltip=" "];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/taskmanager\l/task_manager_original.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$task__manager__original_8cc.html",tooltip=" "];
+  Node1 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/taskmanager\l/task_manager_router.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$task__manager__router_8hh.html",tooltip=" "];
+  Node7 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/targets/node\l_main.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$node__main_8cc.html",tooltip=" "];
+  Node7 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/taskmanager\l/task_manager_router.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$task__manager__router_8cc.html",tooltip=" "];
+  Node1 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/taskmanager\l/task_manager_version1.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$task__manager__version1_8cc.html",tooltip=" "];
+}

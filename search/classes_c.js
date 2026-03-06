@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['vdfs',['vdfs',['../classvelox_1_1vdfs.html',1,'velox']]],
-  ['veloxdfs',['VeloxDFS',['../classcom_1_1dicl_1_1velox_1_1VeloxDFS.html',1,'com::dicl::velox']]]
+  ['task_729',['task',['../structtask.html',1,'']]],
+  ['taskmanager_730',['TaskManager',['../classeclipse_1_1TaskManager.html',1,'eclipse']]],
+  ['taskmanagerrouter_731',['TaskManagerRouter',['../classeclipse_1_1TaskManagerRouter.html',1,'eclipse']]],
+  ['taskoperation_732',['TaskOperation',['../structeclipse_1_1messages_1_1TaskOperation.html',1,'eclipse::messages']]]
 ];

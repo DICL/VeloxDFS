@@ -1,8 +1,9 @@
 digraph "velox::model::block_metadata"
 {
+ // LATEX_PDF_SIZE
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{velox::model::block\l_metadata\n|+ size\l+ index\l+ chunks\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
-  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +host\n+name\n+file_name" ,arrowhead="odiamond",fontname="Helvetica"];
-  Node2 [label="{string\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node1 [label="{velox::model::block\l_metadata\n|+ size\l+ index\l+ primary_chunk_num\l+ offset\l+ foffset\l+ chunk_seq\l+ primary_seq\l+ chunks\l|}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +file_name\n+host\n+name\n+primary_file" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{string\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
 }

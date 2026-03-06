@@ -1,25 +1,26 @@
-digraph "/home/travis/build/DICL/VeloxDFS/src/network/router_decorator.cc"
+digraph "/home/runner/work/VeloxDFS/VeloxDFS/src/network/router_decorator.cc"
 {
+ // LATEX_PDF_SIZE
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="/home/travis/build\l/DICL/VeloxDFS/src/network\l/router_decorator.cc",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/network/router\l_decorator.cc",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
   Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="router_decorator.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$router__decorator_8hh.html"];
+  Node2 [label="router_decorator.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$router__decorator_8hh.html",tooltip=" "];
   Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node3 [label="router.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$router_8hh.html"];
+  Node3 [label="router.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$router_8hh.html",tooltip=" "];
   Node3 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node4 [label="../network/netobserver.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$netobserver_8hh.html"];
+  Node4 [label="../network/netobserver.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$netobserver_8hh.html",tooltip=" "];
   Node4 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node5 [label="../messages/message.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$message_8hh.html"];
+  Node5 [label="../messages/message.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$message_8hh.html",tooltip=" "];
   Node5 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node6 [label="string",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node6 [label="string",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node4 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node7 [label="channel.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$channel_8hh.html"];
+  Node7 [label="channel.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$channel_8hh.html",tooltip=" "];
   Node7 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node3 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node8 [label="functional",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node8 [label="functional",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node3 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node9 [label="map",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node9 [label="map",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node2 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node10 [label="memory",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node10 [label="memory",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
 }

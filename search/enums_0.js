@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['optype',['OpType',['../structeclipse_1_1messages_1_1IOoperation.html#a32aae2ef42f59505f54bb16af1baa117',1,'eclipse::messages::IOoperation']]]
+  ['distlockstatus_1313',['DistLockStatus',['../task__manager_8hh.html#ae8e406a32a37bad08f029a45caa77c80',1,'task_manager.hh']]]
 ];

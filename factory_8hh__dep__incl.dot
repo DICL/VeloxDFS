@@ -1,14 +1,19 @@
-digraph "/home/travis/build/DICL/VeloxDFS/src/messages/factory.hh"
+digraph "/home/runner/work/VeloxDFS/VeloxDFS/src/messages/factory.hh"
 {
+ // LATEX_PDF_SIZE
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="/home/travis/build\l/DICL/VeloxDFS/src/messages\l/factory.hh",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/messages/factory.hh",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
   Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="/home/travis/build\l/DICL/VeloxDFS/src/client\l/dfs.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$dfs_8cc.html"];
+  Node2 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/client/dfs\l-backup.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$dfs-backup_8cc.html",tooltip=" "];
   Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node3 [label="/home/travis/build\l/DICL/VeloxDFS/src/messages\l/factory.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$factory_8cc.html"];
+  Node3 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/client/dfs\l-modify.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$dfs-modify_8cc.html",tooltip=" "];
   Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node4 [label="/home/travis/build\l/DICL/VeloxDFS/src/network\l/asyncchannel.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$asyncchannel_8cc.html"];
+  Node4 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/client/dfs.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$dfs_8cc.html",tooltip=" "];
   Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node5 [label="/home/travis/build\l/DICL/VeloxDFS/src/network\l/client_handler.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$client__handler_8cc.html"];
+  Node5 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/messages/factory.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$factory_8cc.html",tooltip=" "];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/network/asyncchannel.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$asyncchannel_8cc.html",tooltip=" "];
+  Node1 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/network/client\l_handler.cc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$client__handler_8cc.html",tooltip=" "];
 }

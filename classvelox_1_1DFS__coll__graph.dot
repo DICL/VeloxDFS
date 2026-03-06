@@ -1,6 +1,9 @@
 digraph "velox::DFS"
 {
+ // LATEX_PDF_SIZE
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{velox::DFS\n||+ DFS()\l+ write()\l+ write()\l+ read()\l+ read_all()\l+ append()\l+ upload()\l+ download()\l+ exists()\l+ touch()\land 9 more...\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 [label="{velox::DFS\n|+ tmg_id\l+ shmid\l+ shared_memory\l|+ DFS()\l+ ~DFS()\l+ write()\l+ write()\l+ read()\l+ read_all()\l+ append()\l+ upload()\l+ upload_by_individual\l_block()\l+ download()\land 13 more...\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +mr_job_id" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{string\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
 }

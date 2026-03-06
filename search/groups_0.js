@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['routerdecorator',['RouterDecorator',['../group__RouterDecorator.html',1,'']]]
+  ['routerdecorator_1367',['RouterDecorator',['../group__RouterDecorator.html',1,'']]]
 ];

@@ -1,38 +1,39 @@
-digraph "/home/travis/build/DICL/VeloxDFS/src/common/context.cc"
+digraph "/home/runner/work/VeloxDFS/VeloxDFS/src/common/context.cc"
 {
+ // LATEX_PDF_SIZE
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="/home/travis/build\l/DICL/VeloxDFS/src/common\l/context.cc",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 [label="/home/runner/work/VeloxDFS\l/VeloxDFS/src/common/context.cc",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
   Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="context.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$context_8hh.html"];
+  Node2 [label="context.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$context_8hh.html",tooltip=" "];
   Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node3 [label="settings.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$settings_8hh.html"];
+  Node3 [label="settings.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$settings_8hh.html",tooltip=" "];
   Node3 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node4 [label="string",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node4 [label="string",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node3 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node5 [label="memory",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node5 [label="memory",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node2 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node6 [label="logger.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$logger_8hh.html"];
+  Node6 [label="logger.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$logger_8hh.html",tooltip=" "];
   Node6 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node2 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node7 [label="histogram.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$histogram_8hh.html"];
+  Node7 [label="histogram.hh",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$histogram_8hh.html",tooltip=" "];
   Node7 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node8 [label="iostream",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node8 [label="iostream",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node7 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node9 [label="ctime",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node9 [label="ctime",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node2 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node10 [label="boost/asio.hpp",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node10 [label="boost/asio.hpp",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node2 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node2 -> Node11 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node11 [label="vector",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node11 [label="vector",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node2 -> Node12 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node12 [label="thread",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node12 [label="thread",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node1 -> Node13 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node13 [label="algorithm",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node13 [label="algorithm",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node1 -> Node14 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node14 [label="boost/exception/exception.hpp",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node14 [label="boost/exception/exception.hpp",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node1 -> Node15 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node15 [label="exception",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node15 [label="exception",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node1 -> Node16 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node16 [label="boost/exception/all.hpp",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node16 [label="boost/exception/all.hpp",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
 }

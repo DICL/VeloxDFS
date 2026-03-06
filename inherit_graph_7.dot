@@ -1,7 +1,8 @@
 digraph "Graphical Class Hierarchy"
 {
+ // LATEX_PDF_SIZE
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="eclipse::Directory",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classeclipse_1_1Directory.html"];
+  Node0 [label="eclipse::ChunkMetadata",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structeclipse_1_1ChunkMetadata.html",tooltip=" "];
 }
